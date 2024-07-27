@@ -3,106 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Venture Research Institute</title>
+    <title>VRI Research Labs | Venture Research Institute</title>
     <link rel="icon" type="image/svg+xml" href="logo1.svg">
     <link rel="stylesheet" href="home.css">
-    <link rel="stylesheet" href="vri.css">
+    <link rel="stylesheet" href="vri-research.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/berkeley-mono/1.0.0/berkeley-mono.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Trajan+Pro:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body class="day-mode">
     <header>
-        <a href="index.html" class="logo-link">
-            <img src="logo1.svg" alt="Venture Research Institute Logo" class="logo">
-        </a>
-        <div class="mode-toggle" onclick="toggleMode()">
-            <svg class="mode-icon" width="24" height="24" viewBox="0 0 24 24">
-                <!-- SVG content for mode toggle icon will be here -->
-            </svg>
+        <div class="header-content">
+            <a href="index.html" class="logo-link">
+                <img src="logo1.svg" alt="VRI Logo" class="logo">
+            </a>
+            <h1 class="page-title">Research Labs</h1>
+            <div class="mode-toggle" onclick="toggleMode()">
+                <i class="fas fa-moon"></i>
+            </div>
         </div>
     </header>
-    <div class="page-wrapper">
-        <main class="container">
-            <h1 class="main-title">Revolutionizing the Venture Ecosystem</h1>
-            
-            <section id="overview" class="section-card">
-                <h2><i class="fas fa-rocket"></i> Our Mission</h2>
-                <p>The Venture Research Institute (VRI) is at the forefront of innovation, combining cutting-edge research, strategic investments, and comprehensive support for founders. We're dedicated to accelerating the growth of AI and blockchain technologies, reshaping the future of FinTech and beyond.</p>
-                <a href="#" class="cta-button">Join Our Ecosystem</a>
-            </section>
-            
-            <div class="grid-container">
-                <section id="for-founders" class="section-card">
-                    <h2><i class="fas fa-users"></i> For Founders</h2>
-                    <ul>
-                        <li>Access to cutting-edge AI and blockchain research</li>
-                        <li>Mentorship from industry leaders</li>
-                        <li>Tailored incubation programs</li>
-                        <li>Funding opportunities</li>
-                    </ul>
-                    <a href="#" class="cta-button">Start Your Journey</a>
-                </section>
-                
-                <section id="for-governments" class="section-card">
-                    <h2><i class="fas fa-landmark"></i> For Governments</h2>
-                    <ul>
-                        <li>Boost local tech ecosystems</li>
-                        <li>Accelerate AI and blockchain adoption</li>
-                        <li>Customized programs for economic growth</li>
-                        <li>Partnership in innovation hubs</li>
-                    </ul>
-                    <a href="#" class="cta-button">Explore Partnerships</a>
-                </section>
+    
+    <main class="container">
+        <section id="labs-overview" class="card">
+            <h2>Commercial Research Groups</h2>
+            <p>The Venture Research Institute (VRI) has established seven specialized Commercial Research Groups, each operating as a "Lab" focused on a key vertical. These labs are dedicated to addressing industry-specific challenges through advanced AI and decentralized compute technologies.</p>
+            <p>Our labs collaborate closely with industry partners to ensure their research is grounded in real-world needs and drives commercial success. Each lab generates output in the form of Minimum Viable Products (MVPs) and leverages expertise for strategic Go-To-Market (GTM) placement.</p>
+        </section>
+
+        <section id="labs-grid">
+            <!-- Lab cards will be dynamically inserted here -->
+        </section>
+
+        <section id="lab-details" class="card">
+            <h2>Lab Details</h2>
+            <div id="lab-content">
+                <!-- Detailed lab information will be dynamically inserted here -->
             </div>
-            
-            <section id="core-tech" class="section-card">
-                <h2><i class="fas fa-microchip"></i> Core Technologies</h2>
-                <div class="tech-grid">
-                    <div class="tech-item" onclick="expandTech('ai-saas')">
-                        <h3>AI SaaS</h3>
-                        <p id="ai-saas" class="tech-details">Cutting-edge AI solutions delivered as scalable, efficient services.</p>
-                    </div>
-                    <div class="tech-item" onclick="expandTech('blockchain')">
-                        <h3>Blockchain</h3>
-                        <p id="blockchain" class="tech-details">Decentralized computing powering the next generation of secure, transparent applications.</p>
-                    </div>
-                    <div class="tech-item" onclick="expandTech('smart-contracts')">
-                        <h3>Smart Contracts</h3>
-                        <p id="smart-contracts" class="tech-details">Automated, self-executing contracts with the terms directly written into code.</p>
-                    </div>
-                    <div class="tech-item" onclick="expandTech('defi')">
-                        <h3>DeFi</h3>
-                        <p id="defi" class="tech-details">Revolutionizing financial services through decentralized protocols and applications.</p>
-                    </div>
-                </div>
-            </section>
-            
-            <section id="impact" class="section-card">
-                <h2><i class="fas fa-chart-line"></i> Our Impact</h2>
-                <div class="impact-stats">
-                    <div class="stat">
-                        <span class="stat-number" id="startups-launched">50+</span>
-                        <span class="stat-label">Startups Launched</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-number" id="funds-raised">$100M+</span>
-                        <span class="stat-label">Funds Raised</span>
-                    </div>
-                    <div class="stat">
-                        <span class="stat-number" id="government-partners">10+</span>
-                        <span class="stat-label">Government Partners</span>
-                    </div>
-                </div>
-            </section>
-            
-            <section id="cta" class="section-card">
-                <h2>Ready to Shape the Future?</h2>
-                <p>Whether you're a visionary founder or a government looking to boost your tech ecosystem, we're here to fuel your success.</p>
-                <a href="#" class="cta-button">Get in Touch</a>
-            </section>
-        </main>
-    </div>
+        </section>
+
+        <section id="commercialization" class="card">
+            <h2>From Research to Market</h2>
+            <p>Our unique approach ensures that cutting-edge research translates into real-world solutions:</p>
+            <ul>
+                <li><strong>MVP Development:</strong> Each lab focuses on creating tangible Minimum Viable Products.</li>
+                <li><strong>Industry Collaboration:</strong> We work closely with sector leaders to refine our solutions.</li>
+                <li><strong>GTM Strategy:</strong> Leveraging our expertise and network for optimal market entry.</li>
+                <li><strong>Continuous Innovation:</strong> Iterative development based on real-world feedback and emerging technologies.</li>
+            </ul>
+        </section>
+
+        <section id="get-involved" class="card">
+            <h2>Get Involved</h2>
+            <p>Are you an industry leader, researcher, or innovator interested in shaping the future of technology? Explore opportunities to collaborate with our research labs:</p>
+            <a href="#" class="cta-button">Partner with VRI</a>
+        </section>
+    </main>
+
     <footer>
         <nav class="footer-nav">
             <a href="index.html">Home</a>
@@ -113,7 +70,8 @@
         </nav>
         <p class="copyright">&copy; 2024 Venture Research Institute</p>
     </footer>
+
     <script src="script.js"></script>
-    <script src="vri.js"></script>
+    <script src="vri-research.js"></script>
 </body>
 </html>
