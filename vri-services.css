@@ -11,72 +11,54 @@
     --accent-color-dark: #b22222;
 }
 
-body {
-    font-family: 'Berkeley Mono', monospace;
-    margin: 0;
-    padding: 0;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-body.day-mode {
-    background-color: var(--bg-color-light);
-    color: var(--text-color-light);
-}
-
-body.night-mode {
-    background: linear-gradient(to bottom, var(--bg-color-dark-start), var(--bg-color-dark-end));
-    color: var(--text-color-dark);
-}
-
-.vri-services-container {
+.research-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
 }
 
-.vri-section {
+.main-title {
+    font-family: 'Trajan Pro', serif;
+    text-align: center;
+    color: var(--accent-color-light);
     margin-bottom: 40px;
 }
 
-.service-grid {
+.research-section {
+    margin-bottom: 40px;
+    padding: 20px;
+    background-color: var(--panel-bg-light);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.labs-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
-    margin-top: 20px;
 }
 
-.service-card {
-    background-color: var(--panel-bg-light);
+.lab-card {
+    background-color: white;
     border-radius: 8px;
     padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease;
 }
 
-body.night-mode .service-card {
-    background: linear-gradient(to bottom, var(--panel-bg-dark-start), var(--panel-bg-dark-end));
-    color: #000000;
-}
-
-.service-card:hover {
+.lab-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.service-card h3 {
+.lab-card h3 {
     color: var(--accent-color-light);
     margin-bottom: 10px;
 }
 
-.service-details {
-    display: none;
-    margin-top: 10px;
-    padding-top: 10px;
-    border-top: 1px solid #ddd;
-}
-
-.service-details.active {
-    display: block;
+.lab-card i {
+    color: var(--accent-color-light);
+    margin-bottom: 15px;
 }
 
 .cta-button {
@@ -145,76 +127,40 @@ form textarea {
     border-radius: 4px;
 }
 
-footer {
-    padding: 20px;
-    background-color: var(--panel-bg-light);
-    border-top: 1px solid #ddd;
-}
-
-body.night-mode footer {
-    background: linear-gradient(to bottom, var(--panel-bg-dark-start), var(--panel-bg-dark-end));
-}
-
-.footer-nav {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: nowrap;
-    margin-bottom: 10px;
-}
-
-.footer-nav a {
-    display: flex;
-    align-items: center;
-    margin: 0 15px;
-    text-decoration: none;
-    color: inherit;
-    font-size: 14px;
-    white-space: nowrap;
-}
-
-body.night-mode .footer-nav a {
-    color: var(--text-color-light);
-}
-
-.footer-nav svg {
-    width: 20px;
-    height: 20px;
-    margin-right: 5px;
-}
-
-.copyright {
-    text-align: center;
-    font-size: 12px;
-    color: #666;
-}
-
-body.night-mode .copyright {
-    color: var(--text-color-light);
-}
-.footer-nav svg {
-    width: 20px;
-    height: 20px;
-    margin-right: 5px;
-}
-
-.copyright {
-    text-align: center;
-    font-size: 12px;
-    color: #666;
-}
-
 @media (max-width: 768px) {
-    .service-grid {
+    .labs-container {
         grid-template-columns: 1fr;
     }
-    
-    .footer-nav {
-        flex-direction: column;
-        align-items: flex-start;
-    }
+}
 
-    .footer-nav a {
-        margin: 5px 0;
-    }
+body.night-mode {
+    background: linear-gradient(to bottom, var(--bg-color-dark-start), var(--bg-color-dark-end));
+    color: var(--text-color-dark);
+}
+
+body.night-mode .research-section {
+    background: linear-gradient(to bottom, var(--panel-bg-dark-start), var(--panel-bg-dark-end));
+    color: var(--text-color-light);
+}
+
+body.night-mode .lab-card {
+    background: linear-gradient(to bottom, var(--panel-bg-dark-start), var(--panel-bg-dark-end));
+    color: var(--text-color-light);
+}
+
+body.night-mode .modal-content {
+    background-color: var(--bg-color-dark-start);
+    color: var(--text-color-dark);
+}
+
+body.night-mode .close-button {
+    color: var(--text-color-dark);
+}
+
+body.night-mode form input,
+body.night-mode form select,
+body.night-mode form textarea {
+    background-color: var(--bg-color-dark-end);
+    color: var(--text-color-dark);
+    border-color: var(--text-color-dark);
 }
