@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courier Ventures Fund</title>
+    <link rel="icon" type="image/svg+xml" href="logo1.svg">
+    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="fund.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/berkeley-mono/1.0.0/berkeley-mono.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Trajan+Pro:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="day-mode">
+    <header>
+        <a href="index.html" class="logo-link">
+            <img src="logo1.svg" alt="Courier Logo" class="logo">
+        </a>
+        <div class="mode-toggle" onclick="toggleMode()">
+            <svg class="mode-icon" width="24" height="24" viewBox="0 0 24 24">
+                <!-- SVG content for mode toggle icon will be here -->
+            </svg>
+        </div>
+    </header>
+    <main class="container fund-container">
+        <h1>Courier Ventures Fund</h1>
+        
+        <section id="fund-overview" class="fund-section">
+            <h2>Fund Overview</h2>
+            <p>Courier Ventures Fund is a boutique investment vehicle designed to support cutting-edge research in commercialization and venture opportunities. We focus on transformative technologies that are shaping the future of computing and finance.</p>
+            <div class="fund-stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="fund-size">$50M</span>
+                    <span class="stat-label">Target Fund Size</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="investment-range">$500K - $5M</span>
+                    <span class="stat-label">Investment Range</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="portfolio-companies">15-20</span>
+                    <span class="stat-label">Target Portfolio Companies</span>
+                </div>
+            </div>
+        </section>
+        
+        <section id="investment-verticals" class="fund-section">
+            <h2>Investment Verticals</h2>
+            <div class="vertical-cards">
+                <div class="vertical-card" id="ai-saas">
+                    <h3>AI SaaS</h3>
+                    <ul>
+                        <li>Machine Learning Platforms</li>
+                        <li>Natural Language Processing</li>
+                        <li>Computer Vision Applications</li>
+                        <li>Predictive Analytics</li>
+                        <li>AI-driven Business Intelligence</li>
+                    </ul>
+                </div>
+                <div class="vertical-card" id="blockchain">
+                    <h3>Decentralized Computing / Blockchain</h3>
+                    <ul>
+                        <li>Smart Contract Platforms</li>
+                        <li>Decentralized Finance (DeFi)</li>
+                        <li>Tokenomics and Digital Assets</li>
+                        <li>Decentralized Sequencing</li>
+                        <li>Blockchain Scalability Solutions</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <section id="investment-thesis" class="fund-section">
+            <h2>Investment Thesis</h2>
+            <p>Our investment thesis is rooted in the belief that AI and blockchain technologies will fundamentally reshape industries and create new market opportunities. We seek to invest in companies that:</p>
+            <ul>
+                <li>Leverage AI to create scalable, high-margin SaaS solutions</li>
+                <li>Develop novel blockchain applications that decentralize traditional systems</li>
+                <li>Combine AI and blockchain to create innovative, hybrid solutions</li>
+                <li>Demonstrate a clear path to commercialization and market adoption</li>
+            </ul>
+        </section>
+        
+        <section id="lp-information" class="fund-section">
+            <h2>Limited Partner Information</h2>
+            <p>We're seeking forward-thinking Limited Partners who share our vision for a tech-driven future. Our LPs benefit from:</p>
+            <ul>
+                <li>Access to cutting-edge technology investments</li>
+                <li>Quarterly reports on portfolio performance and market trends</li>
+                <li>Annual LP meeting with portfolio company showcases</li>
+                <li>Opportunity to co-invest in select deals</li>
+            </ul>
+            <button class="cta-button" onclick="showLPModal()">Request LP Information</button>
+        </section>
+        
+        <section id="team" class="fund-section">
+            <h2>Investment Team</h2>
+            <div class="team-grid" id="team-grid">
+                <!-- Team member cards will be dynamically inserted here -->
+            </div>
+        </section>
+        
+        <section id="portfolio" class="fund-section">
+            <h2>Portfolio Highlights</h2>
+            <div class="portfolio-slider" id="portfolio-slider">
+                <!-- Portfolio company slides will be dynamically inserted here -->
+            </div>
+        </section>
+    </main>
+    <footer>
+        <nav class="footer-nav">
+            <a href="about.html"><svg><use xlink:href="#icon-about"/></svg>About</a>
+            <a href="programs.html"><svg><use xlink:href="#icon-programs"/></svg>Programs</a>
+            <a href="fund.html"><svg><use xlink:href="#icon-fund"/></svg>Fund</a>
+            <a href="products.html"><svg><use xlink:href="#icon-products"/></svg>Products</a>
+            <a href="events.html"><svg><use xlink:href="#icon-events"/></svg>Events</a>
+        </nav>
+        <p class="copyright">&copy; 2024 Courier</p>
+    </footer>
+    
+    <!-- LP Information Modal -->
+    <div id="lp-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeLPModal()">&times;</span>
+            <h2>Request LP Information</h2>
+            <form id="lp-form" onsubmit="return submitLPForm()">
+                <input type="text" id="name" name="name" placeholder="Full Name" required>
+                <input type="email" id="email" name="email" placeholder="Email Address" required>
+                <input type="text" id="organization" name="organization" placeholder="Organization">
+                <textarea id="message" name="message" placeholder="Message (Optional)"></textarea>
+                <button type="submit" class="cta-button">Submit Request</button>
+            </form>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+    <script src="fund.js"></script>
+</body>
+</html>
