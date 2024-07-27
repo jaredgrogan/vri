@@ -1,41 +1,144 @@
-function expandTech(techId) {
-    const techDetails = document.getElementById(techId);
-    techDetails.style.display = techDetails.style.display === 'none' ? 'block' : 'none';
+:root {
+    --accent-color: #ff2a2a;
+    --accent-color-dark: #b22222;
+    --bg-color-light: #ffffff;
+    --bg-color-dark: #111111;
+    --text-color-light: #000000;
+    --text-color-dark: #ffffff;
 }
 
-function animateStats() {
-    const stats = [
-        { id: 'startups-launched', end: 50, duration: 2000 },
-        { id: 'funds-raised', end: 100, duration: 2500, prefix: '$', suffix: 'M+' },
-        { id: 'government-partners', end: 10, duration: 1500, suffix: '+' }
-    ];
+body {
+    font-family: 'Berkeley Mono', monospace;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.main-title {
+    font-family: 'Trajan Pro', serif;
+    text-align: center;
+    color: var(--accent-color);
+    margin-bottom: 40px;
+}
+
+.section-card {
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.section-card:hover {
+    transform: translateY(-5px);
+}
+
+.section-card h2 {
+    color: var(--accent-color);
+    border-bottom: 2px solid var(--accent-color);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.cta-button {
+    display: inline-block;
+    background-color: var(--accent-color);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+    background-color: var(--accent-color-dark);
+}
+
+.tech-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.tech-item {
+    background-color: white;
+    border-radius: 8px;
+    padding: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.tech-item:hover {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.tech-details {
+    display: none;
+    margin-top: 10px;
+}
+
+.impact-stats {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: var(--accent-color);
+}
+
+.stat-label {
+    font-size: 0.9em;
+}
+
+@media (max-width: 768px) {
+    .grid-container {
+        grid-template-columns: 1fr;
+    }
     
-    stats.forEach(stat => {
-        const element = document.getElementById(stat.id);
-        let start = 0;
-        const increment = stat.end / (stat.duration / 16);
-        
-        const timer = setInterval(() => {
-            start += increment;
-            if (start >= stat.end) {
-                clearInterval(timer);
-                start = stat.end;
-            }
-            element.textContent = `${stat.prefix || ''}${Math.floor(start)}${stat.suffix || ''}`;
-        }, 16);
-    });
+    .impact-stats {
+        flex-direction: column;
+    }
+    
+    .stat {
+        margin-bottom: 20px;
+    }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    animateStats();
-});
+body.night-mode {
+    background-color: var(--bg-color-dark);
+    color: var(--text-color-dark);
+}
 
-// Smooth scrolling for anchor links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        document.querySelector(this.getAttribute('href')).scrollIntoView({
-            behavior: 'smooth'
-        });
-    });
-});
+body.night-mode .section-card {
+    background-color: #222;
+}
+
+body.night-mode .tech-item {
+    background-color: #333;
+}
+
+body.night-mode .cta-button {
+    background-color: var(--accent-color-dark);
+}
+
+body.night-mode .cta-button:hover {
+    background-color: var(--accent-color);
+}
