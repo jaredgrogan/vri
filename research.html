@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Research Labs | Venture Research Institute</title>
+    <title>VRI Research Labs | Venture Research Institute</title>
     <link rel="icon" type="image/svg+xml" href="logo1.svg">
     <link rel="stylesheet" href="home.css">
     <link rel="stylesheet" href="vri-research.css">
@@ -13,32 +13,36 @@
 </head>
 <body class="day-mode">
     <header>
-        <a href="index.html" class="logo-link">
-            <img src="logo1.svg" alt="VRI Logo" class="logo">
-        </a>
-        <div class="mode-toggle" onclick="toggleMode()">
-            <svg class="mode-icon" width="24" height="24" viewBox="0 0 24 24">
-                <!-- SVG content for mode toggle icon will be here -->
-            </svg>
+        <div class="header-content">
+            <a href="index.html" class="logo-link">
+                <img src="logo1.svg" alt="VRI Logo" class="logo">
+            </a>
+            <h1 class="page-title">Research Labs</h1>
+            <div class="mode-toggle" onclick="toggleMode()">
+                <i class="fas fa-moon"></i>
+            </div>
         </div>
     </header>
     
-    <main class="container research-container">
-        <h1 class="main-title">VRI Research Labs</h1>
-        
-        <section id="labs-overview" class="research-section">
+    <main class="container">
+        <section id="labs-overview" class="card">
             <h2>Commercial Research Groups</h2>
-            <p>The Venture Research Institute (VRI) has established seven specialized Commercial Research Groups, each operating as a "Lab" focused on a key vertical. These labs address industry-specific challenges through advanced AI and decentralized compute technologies, generating MVPs and leveraging expertise for strategic Go-To-Market placement.</p>
+            <p>The Venture Research Institute (VRI) has established seven specialized Commercial Research Groups, each operating as a "Lab" focused on a key vertical. These labs are dedicated to addressing industry-specific challenges through advanced AI and decentralized compute technologies.</p>
+            <p>Our labs collaborate closely with industry partners to ensure their research is grounded in real-world needs and drives commercial success. Each lab generates output in the form of Minimum Viable Products (MVPs) and leverages expertise for strategic Go-To-Market (GTM) placement.</p>
         </section>
 
-        <section id="labs-grid" class="research-section">
-            <h2>Our Labs</h2>
-            <div class="labs-container">
-                <!-- Lab cards will be dynamically inserted here by JavaScript -->
+        <section id="labs-grid">
+            <!-- Lab cards will be dynamically inserted here -->
+        </section>
+
+        <section id="lab-details" class="card">
+            <h2>Lab Details</h2>
+            <div id="lab-content">
+                <!-- Detailed lab information will be dynamically inserted here -->
             </div>
         </section>
 
-        <section id="commercialization" class="research-section">
+        <section id="commercialization" class="card">
             <h2>From Research to Market</h2>
             <p>Our unique approach ensures that cutting-edge research translates into real-world solutions:</p>
             <ul>
@@ -49,61 +53,23 @@
             </ul>
         </section>
 
-        <section id="get-involved" class="research-section">
+        <section id="get-involved" class="card">
             <h2>Get Involved</h2>
             <p>Are you an industry leader, researcher, or innovator interested in shaping the future of technology? Explore opportunities to collaborate with our research labs:</p>
-            <button class="cta-button" onclick="showContactModal()">Partner with VRI</button>
+            <a href="#" class="cta-button">Partner with VRI</a>
         </section>
     </main>
 
     <footer>
         <nav class="footer-nav">
-            <a href="vri.html"><svg><use xlink:href="#icon-about"/></svg>About</a>
-            <a href="programs.html"><svg><use xlink:href="#icon-programs"/></svg>Programs</a>
-            <a href="fund.html"><svg><use xlink:href="#icon-fund"/></svg>Fund</a>
-            <a href="products.html"><svg><use xlink:href="#icon-products"/></svg>Products</a>
-            <a href="events.html"><svg><use xlink:href="#icon-events"/></svg>Events</a>
+            <a href="index.html">Home</a>
+            <a href="programs.html">Programs</a>
+            <a href="fund.html">Fund</a>
+            <a href="products.html">Products</a>
+            <a href="events.html">Events</a>
         </nav>
         <p class="copyright">&copy; 2024 Venture Research Institute</p>
     </footer>
-
-    <!-- Contact Modal -->
-    <div id="contact-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-button" onclick="closeContactModal()">&times;</span>
-            <h2>Partner with VRI</h2>
-            <form id="partner-form" onsubmit="return submitPartnerForm()">
-                <input type="text" id="name" name="name" placeholder="Full Name" required>
-                <input type="email" id="email" name="email" placeholder="Email Address" required>
-                <input type="text" id="company" name="company" placeholder="Company Name">
-                <select id="lab-interest" name="lab-interest" required>
-                    <option value="">Select Lab of Interest</option>
-                    <!-- Options will be dynamically populated by JavaScript -->
-                </select>
-                <textarea id="message" name="message" placeholder="Your Message" required></textarea>
-                <button type="submit" class="cta-button">Submit</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- SVG Icons for footer -->
-    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-        <symbol id="icon-about" viewBox="0 0 24 24">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </symbol>
-        <symbol id="icon-programs" viewBox="0 0 24 24">
-            <path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
-        </symbol>
-        <symbol id="icon-fund" viewBox="0 0 24 24">
-            <path d="M4 10h3v7H4v-7zm6.5-7l-1.96 2.36L11.18 3H4v3h17V3h-7.18L10.5 3zm9.5 7h-3v7h3v-7zm-13 7h3v-7H7v7z"/>
-        </symbol>
-        <symbol id="icon-products" viewBox="0 0 24 24">
-            <path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
-        </symbol>
-        <symbol id="icon-events" viewBox="0 0 24 24">
-            <path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/>
-        </symbol>
-    </svg>
 
     <script src="script.js"></script>
     <script src="vri-research.js"></script>
