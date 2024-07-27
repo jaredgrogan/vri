@@ -1,0 +1,45 @@
+.three-column {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px;
+}
+
+.left-panel, .right-panel {
+    flex: 1;
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.main-content {
+    flex: 3;
+}
+
+.left-panel ul, .right-panel ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.left-panel li, .right-panel li {
+    margin-bottom: 10px;
+}
+
+.left-panel a, .right-panel a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.left-panel a:hover, .right-panel a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .three-column {
+        flex-direction: column;
+    }
+
+    .left-panel, .right-panel, .main-content {
+        flex: auto;
+    }
+}
