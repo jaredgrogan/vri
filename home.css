@@ -1,12 +1,14 @@
 :root {
     --bg-color-light-start: #f5f5f5;
     --bg-color-light-end: #ffffff;
+    --bg-color-dark-start: #444444;
+    --bg-color-dark-end: #111111;
     --text-color-light: #000000;
-    --bg-color-dark: #111111;
     --text-color-dark: #ffffff;
     --accent-color-light: #ff2a2a;
     --accent-color-dark: #b22222;
 }
+
 
 body {
     font-family: 'Berkeley Mono', monospace;
@@ -24,7 +26,7 @@ body.day-mode {
 }
 
 body.night-mode {
-    background: var(--bg-color-dark);
+    background: linear-gradient(to bottom, var(--bg-color-dark-start), var(--bg-color-dark-end));
     color: var(--text-color-dark);
 }
 
