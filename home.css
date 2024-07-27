@@ -100,20 +100,31 @@ footer {
     background-color: darken(var(--accent-color), 10%);
 }
 
-.footer-nav {
-    margin-bottom: 1rem;
-}
-
 .footer-nav a {
     margin: 0 10px;
     color: inherit;
     text-decoration: none;
-    transition: font-size 0.3s ease;
+    transition: transform 0.3s ease, font-size 0.3s ease;
 }
 
 .footer-nav a:hover {
-    text-decoration: underline;
+    transform: scale(1.1);
     font-size: 1.1em;
+}
+
+.enter-btn {
+    font-size: 1rem;
+    padding: 10px 20px;
+    background: linear-gradient(to bottom, var(--accent-color-light), var(--accent-color-dark));
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.enter-btn:hover {
+    transform: scale(1.1);
+    background: linear-gradient(to bottom, var(--accent-color-dark), var(--accent-color-light));
 }
 
 #center-logo {
