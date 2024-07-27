@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events - Courier</title>
+    <link rel="icon" type="image/svg+xml" href="logo1.svg">
+    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="events.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/berkeley-mono/1.0.0/berkeley-mono.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Trajan+Pro:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="day-mode">
+    <header>
+        <a href="index.html" class="logo-link">
+            <img src="logo1.svg" alt="Courier Logo" class="logo">
+        </a>
+        <div class="mode-toggle" onclick="toggleMode()">
+            <svg class="mode-icon" width="24" height="24" viewBox="0 0 24 24">
+                <!-- SVG content for mode toggle icon will be here -->
+            </svg>
+        </div>
+    </header>
+    <main class="container events-container">
+        <h1>Upcoming Events</h1>
+        
+        <section id="featured-event" class="event-section">
+            <h2>Featured Event</h2>
+            <div class="event-card featured">
+                <img src="demo-day.jpg" alt="Demo Day" class="event-image">
+                <div class="event-details">
+                    <h3>Spring 2024 Demo Day</h3>
+                    <p class="event-date">June 15, 2024</p>
+                    <p>Join us for an exciting showcase of innovative projects from our latest cohort of startups!</p>
+                    <button class="cta-button" onclick="registerEvent('Spring 2024 Demo Day')">Register Now</button>
+                </div>
+            </div>
+        </section>
+        
+        <section id="event-calendar" class="event-section">
+            <h2>Event Calendar</h2>
+            <div id="calendar"></div>
+        </section>
+        
+        <section id="event-categories" class="event-section">
+            <h2>Event Categories</h2>
+            <div class="category-grid">
+                <div class="category-card" onclick="filterEvents('hackathons')">
+                    <h3>Hackathons</h3>
+                    <p>48-hour coding challenges to solve real-world problems</p>
+                </div>
+                <div class="category-card" onclick="filterEvents('investor-salons')">
+                    <h3>Investor Salons</h3>
+                    <p>Exclusive networking events connecting startups with potential investors</p>
+                </div>
+                <div class="category-card" onclick="filterEvents('panels')">
+                    <h3>Expert Panels</h3>
+                    <p>Insightful discussions with industry leaders on emerging trends</p>
+                </div>
+                <div class="category-card" onclick="filterEvents('fireside-chats')">
+                    <h3>Fireside Chats</h3>
+                    <p>Intimate conversations with successful founders and innovators</p>
+                </div>
+                <div class="category-card" onclick="filterEvents('partner-events')">
+                    <h3>Partner Events</h3>
+                    <p>Collaborative events showcasing the latest in AI and blockchain</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="event-highlights" class="event-section">
+            <h2>Event Highlights</h2>
+            <div class="highlight-slider">
+                <!-- Highlight slides will be inserted here dynamically -->
+            </div>
+        </section>
+        
+        <section id="newsletter-signup" class="event-section">
+            <h2>Stay Updated</h2>
+            <p>Subscribe to our newsletter for the latest event announcements and tech insights.</p>
+            <form id="newsletter-form" onsubmit="return subscribeNewsletter()">
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                <button type="submit" class="cta-button">Subscribe</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <nav class="footer-nav">
+            <a href="about.html"><svg><use xlink:href="#icon-about"/></svg>About</a>
+            <a href="programs.html"><svg><use xlink:href="#icon-programs"/></svg>Programs</a>
+            <a href="fund.html"><svg><use xlink:href="#icon-fund"/></svg>Fund</a>
+            <a href="products.html"><svg><use xlink:href="#icon-products"/></svg>Products</a>
+            <a href="events.html"><svg><use xlink:href="#icon-events"/></svg>Events</a>
+        </nav>
+        <p class="copyright">&copy; 2024 Courier</p>
+    </footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.js"></script>
+    <script src="script.js"></script>
+    <script src="events.js"></script>
+</body>
+</html>
