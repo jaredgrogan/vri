@@ -1,140 +1,71 @@
-:root {
-    --bg-color-light: #ffffff;
-    --text-color-light: #000000;
-    --bg-color-dark: #111111;
-    --text-color-dark: #ffffff;
-    --accent-color: #ff4500;
-}
+document.addEventListener('DOMContentLoaded', () => {
+    const body = document.body;
+    const modeToggle = document.querySelector('.mode-toggle');
+    const modeIcon = document.querySelector('.mode-icon');
+    const typingText = document.getElementById('typing-text');
+    const launchBtn = document.getElementById('launch-btn');
+    const centerLogo = document.getElementById('center-logo');
 
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-body.night-mode {
-    background-color: var(--bg-color-dark);
-    color: var(--text-color-dark);
-}
-
-body.day-mode {
-    background-color: var(--bg-color-light);
-    color: var(--text-color-light);
-}
-
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-}
-
-footer {
-    padding: 20px;
-    text-align: center;
-}
-
-.logo-link {
-    display: inline-block;
-    transition: transform 0.3s ease;
-}
-
-.logo-link:hover {
-    transform: scale(1.5);
-}
-
-.logo {
-    width: 40px;
-    height: 40px;
-}
-
-.mode-toggle {
-    cursor: pointer;
-}
-
-.mode-icon {
-    fill: currentColor;
-}
-
-.container {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    position: relative;
-}
-
-.title {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
-    transition: font-size 0.3s ease;
-}
-
-.title:hover {
-    font-size: 3.25rem;
-}
-
-.subtitle {
-    font-family: 'Berkeley Mono', monospace;
-    font-size: 1.5rem;
-    margin-bottom: 2rem;
-}
-
-.enter-btn {
-    font-size: 1rem;
-    padding: 10px 20px;
-    background-color: var(--accent-color);
-    color: white;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.enter-btn:hover {
-    background-color: darken(var(--accent-color), 10%);
-}
-
-.copyright {
-    font-family: 'Berkeley Mono', monospace;
-}
-
-.footer-nav {
-    margin-bottom: 1rem;
-    font-family: 'Roboto', sans-serif;
-}
-
-.footer-nav a {
-    margin: 0 10px;
-    color: inherit;
-    text-decoration: none;
-}
-
-.footer-nav a:hover {
-    text-decoration: underline;
-}
-
-#center-logo {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.hidden {
-    display: none;
-}
-
-@media (max-width: 600px) {
-    .title {
-        font-size: 2rem;
+    function toggleMode() {
+        body.classList.toggle('night-mode');
+        body.classList.toggle('day-mode');
+        updateModeIcon();
+        updateCenterLogo();
     }
-    .subtitle {
-        font-size: 1.2rem;
+
+    function updateModeIcon() {
+        const isNightMode = body.classList.contains('night-mode');
+        modeIcon.innerHTML = isNightMode ? getSunIcon() : getMoonIcon();
+        modeIcon.style.fill = isNightMode ? 'white' : 'black';
     }
+
+    function getSunIcon() {
+        return `<circle cx="12" cy="12" r="5" /><line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" /><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" /><line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" /><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />`;
+    }
+
+    function getMoonIcon() {
+        return `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />`;
+    }
+
+    function updateCenterLogo() {
+        const isNightMode = body.classList.contains('night-mode');
+        const vColor = isNightMode ? 'white' : 'black';
+        centerLogo.innerHTML = `
+            <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="45" fill="#b22222" />
+                <text x="50" y="70" font-family="'Courier New', monospace" font-size="78" font-weight="bold" fill="${vColor}" text-anchor="middle">V</text>
+            </svg>
+        `;
+    }
+
+    modeToggle.addEventListener('click', toggleMode);
+    updateModeIcon();
+    updateCenterLogo();
+
+    function typeText(text, element, speed = 100) {
+        let i = 0;
+        function type() {
+            if (i < text.length) {
+                element.textContent += text.charAt(i);
+                i++;
+                setTimeout(type, speed);
+            }
+        }
+        type();
+    }
+
+    typeText('blockchaintech.ai', typingText);
+
+    launchBtn.addEventListener('mouseenter', () => {
+        centerLogo.classList.remove('hidden');
+    });
+
+    launchBtn.addEventListener('mouseleave', () => {
+        centerLogo.classList.add('hidden');
+    });
+});
+
+function launchApp() {
+    // Add your app launch logic here
+    console.log('Launching app...');
 }
