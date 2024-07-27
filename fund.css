@@ -11,6 +11,11 @@
     --accent-color-dark: #b22222;
 }
 
+body.night-mode {
+    background: linear-gradient(to bottom, var(--bg-color-dark-start), var(--bg-color-dark-end));
+    color: var(--text-color-dark);
+}
+
 .fund-container {
     max-width: 1200px;
     margin: 0 auto;
