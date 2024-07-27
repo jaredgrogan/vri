@@ -1,5 +1,6 @@
 :root {
-    --bg-color-light: #ffffff;
+    --bg-color-light-start: #f5f5f5;
+    --bg-color-light-end: #ffffff;
     --text-color-light: #000000;
     --bg-color-dark: #111111;
     --text-color-dark: #ffffff;
@@ -14,17 +15,17 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-body.night-mode {
-    background-color: var(--bg-color-dark);
-    color: var(--text-color-dark);
+    transition: background 0.3s, color 0.3s;
 }
 
 body.day-mode {
-    background-color: var(--bg-color-light);
+    background: linear-gradient(to bottom, var(--bg-color-light-start), var(--bg-color-light-end));
     color: var(--text-color-light);
+}
+
+body.night-mode {
+    background: var(--bg-color-dark);
+    color: var(--text-color-dark);
 }
 
 header {
@@ -89,15 +90,20 @@ footer {
 .enter-btn {
     font-size: 1rem;
     padding: 10px 20px;
-    background-color: var(--accent-color);
+    background: linear-gradient(to bottom, var(--accent-color-light), var(--accent-color-dark));
     color: white;
     border: none;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: transform 0.3s ease, background 0.3s ease;
 }
 
 .enter-btn:hover {
-    background-color: darken(var(--accent-color), 10%);
+    transform: scale(1.1);
+    background: linear-gradient(to bottom, var(--accent-color-dark), var(--accent-color-light));
+}
+
+.footer-nav {
+    margin-bottom: 1rem;
 }
 
 .footer-nav a {
@@ -110,21 +116,6 @@ footer {
 .footer-nav a:hover {
     transform: scale(1.1);
     font-size: 1.1em;
-}
-
-.enter-btn {
-    font-size: 1rem;
-    padding: 10px 20px;
-    background: linear-gradient(to bottom, var(--accent-color-light), var(--accent-color-dark));
-    color: white;
-    border: none;
-    cursor: pointer;
-    transition: transform 0.3s ease, background 0.3s ease;
-}
-
-.enter-btn:hover {
-    transform: scale(1.1);
-    background: linear-gradient(to bottom, var(--accent-color-dark), var(--accent-color-light));
 }
 
 #center-logo {
