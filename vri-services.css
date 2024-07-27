@@ -11,6 +11,23 @@
     --accent-color-dark: #b22222;
 }
 
+body {
+    font-family: 'Berkeley Mono', monospace;
+    margin: 0;
+    padding: 0;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+body.day-mode {
+    background-color: var(--bg-color-light);
+    color: var(--text-color-light);
+}
+
+body.night-mode {
+    background: linear-gradient(to bottom, var(--bg-color-dark-start), var(--bg-color-dark-end));
+    color: var(--text-color-dark);
+}
+
 .research-container {
     max-width: 1200px;
     margin: 0 auto;
@@ -32,6 +49,11 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+body.night-mode .research-section {
+    background: linear-gradient(to bottom, var(--panel-bg-dark-start), var(--panel-bg-dark-end));
+    color: var(--text-color-light);
+}
+
 .labs-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -44,11 +66,17 @@
     padding: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     cursor: pointer;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .lab-card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+body.night-mode .lab-card {
+    background: linear-gradient(to bottom, var(--panel-bg-dark-start), var(--panel-bg-dark-end));
+    color: var(--text-color-light);
 }
 
 .lab-card h3 {
@@ -59,6 +87,17 @@
 .lab-card i {
     color: var(--accent-color-light);
     margin-bottom: 15px;
+}
+
+.lab-details {
+    display: none;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #ddd;
+}
+
+.lab-details.active {
+    display: block;
 }
 
 .cta-button {
@@ -97,6 +136,11 @@
     border-radius: 8px;
 }
 
+body.night-mode .modal-content {
+    background-color: var(--bg-color-dark-start);
+    color: var(--text-color-dark);
+}
+
 .close-button {
     color: #aaa;
     float: right;
@@ -127,40 +171,16 @@ form textarea {
     border-radius: 4px;
 }
 
-@media (max-width: 768px) {
-    .labs-container {
-        grid-template-columns: 1fr;
-    }
-}
-
-body.night-mode {
-    background: linear-gradient(to bottom, var(--bg-color-dark-start), var(--bg-color-dark-end));
-    color: var(--text-color-dark);
-}
-
-body.night-mode .research-section {
-    background: linear-gradient(to bottom, var(--panel-bg-dark-start), var(--panel-bg-dark-end));
-    color: var(--text-color-light);
-}
-
-body.night-mode .lab-card {
-    background: linear-gradient(to bottom, var(--panel-bg-dark-start), var(--panel-bg-dark-end));
-    color: var(--text-color-light);
-}
-
-body.night-mode .modal-content {
-    background-color: var(--bg-color-dark-start);
-    color: var(--text-color-dark);
-}
-
-body.night-mode .close-button {
-    color: var(--text-color-dark);
-}
-
 body.night-mode form input,
 body.night-mode form select,
 body.night-mode form textarea {
     background-color: var(--bg-color-dark-end);
     color: var(--text-color-dark);
     border-color: var(--text-color-dark);
+}
+
+@media (max-width: 768px) {
+    .labs-container {
+        grid-template-columns: 1fr;
+    }
 }
