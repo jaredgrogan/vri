@@ -34,7 +34,7 @@ body.night-mode {
     padding: 20px;
 }
 
-header {
+eader {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -48,11 +48,6 @@ body.night-mode header {
 
 .logo-link {
     display: inline-block;
-    transition: transform 0.3s ease;
-}
-
-.logo-link:hover {
-    transform: scale(1.1);
 }
 
 .logo {
@@ -68,8 +63,18 @@ body.night-mode header {
     fill: currentColor;
 }
 
+.center-logo {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.main-logo {
+    width: 50px;
+    height: 50px;
+}
+
 .main-title {
-    font-family: 'Trajan Pro', serif;
+    font-family: 'Courier New', monospace;
     text-align: center;
     color: var(--accent-color-light);
     margin-bottom: 40px;
