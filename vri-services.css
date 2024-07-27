@@ -1,3 +1,32 @@
+:root {
+    --bg-color-light: #ffffff;
+    --text-color-light: #000000;
+    --bg-color-dark: #111111;
+    --text-color-dark: #ffffff;
+    --panel-bg-light: #f5f5f5;
+    --panel-bg-dark-start: #888888;
+    --panel-bg-dark-end: #999999;
+    --accent-color-light: #ff2a2a;
+    --accent-color-dark: #b22222;
+}
+
+body {
+    font-family: 'Berkeley Mono', monospace;
+    margin: 0;
+    padding: 0;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+body.day-mode {
+    background-color: var(--bg-color-light);
+    color: var(--text-color-light);
+}
+
+body.night-mode {
+    background-color: var(--bg-color-dark);
+    color: var(--text-color-dark);
+}
+
 .vri-services-container {
     max-width: 1200px;
     margin: 0 auto;
@@ -16,11 +45,16 @@
 }
 
 .service-card {
-    background-color: #f5f5f5;
+    background-color: var(--panel-bg-light);
     border-radius: 8px;
     padding: 20px;
     cursor: pointer;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+body.night-mode .service-card {
+    background: linear-gradient(to bottom, var(--panel-bg-dark-start), var(--panel-bg-dark-end));
+    color: #000000;
 }
 
 .service-card:hover {
@@ -110,8 +144,52 @@ form textarea {
     border-radius: 4px;
 }
 
+footer {
+    padding: 20px;
+    background-color: #f5f5f5;
+    border-top: 1px solid #ddd;
+}
+
+.footer-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.footer-nav a {
+    display: flex;
+    align-items: center;
+    margin: 0 15px;
+    text-decoration: none;
+    color: inherit;
+    font-size: 14px;
+}
+
+.footer-nav svg {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+.copyright {
+    text-align: center;
+    font-size: 12px;
+    color: #666;
+}
+
 @media (max-width: 768px) {
     .service-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .footer-nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .footer-nav a {
+        margin: 5px 0;
     }
 }
