@@ -34,14 +34,7 @@
         <section id="labs-grid" class="research-section">
             <h2>Our Labs</h2>
             <div class="labs-container">
-                <!-- Lab cards will be dynamically inserted here -->
-            </div>
-        </section>
-
-        <section id="lab-details" class="research-section">
-            <h2>Lab Details</h2>
-            <div id="lab-content">
-                <!-- Detailed lab information will be dynamically inserted here -->
+                <!-- Lab cards will be dynamically inserted here by JavaScript -->
             </div>
         </section>
 
@@ -65,7 +58,7 @@
 
     <footer>
         <nav class="footer-nav">
-            <a href="about.html"><svg><use xlink:href="#icon-about"/></svg>About</a>
+            <a href="vri.html"><svg><use xlink:href="#icon-about"/></svg>About</a>
             <a href="programs.html"><svg><use xlink:href="#icon-programs"/></svg>Programs</a>
             <a href="fund.html"><svg><use xlink:href="#icon-fund"/></svg>Fund</a>
             <a href="products.html"><svg><use xlink:href="#icon-products"/></svg>Products</a>
@@ -85,13 +78,32 @@
                 <input type="text" id="company" name="company" placeholder="Company Name">
                 <select id="lab-interest" name="lab-interest" required>
                     <option value="">Select Lab of Interest</option>
-                    <!-- Options will be dynamically populated -->
+                    <!-- Options will be dynamically populated by JavaScript -->
                 </select>
                 <textarea id="message" name="message" placeholder="Your Message" required></textarea>
                 <button type="submit" class="cta-button">Submit</button>
             </form>
         </div>
     </div>
+
+    <!-- SVG Icons for footer -->
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+        <symbol id="icon-about" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </symbol>
+        <symbol id="icon-programs" viewBox="0 0 24 24">
+            <path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
+        </symbol>
+        <symbol id="icon-fund" viewBox="0 0 24 24">
+            <path d="M4 10h3v7H4v-7zm6.5-7l-1.96 2.36L11.18 3H4v3h17V3h-7.18L10.5 3zm9.5 7h-3v7h3v-7zm-13 7h3v-7H7v7z"/>
+        </symbol>
+        <symbol id="icon-products" viewBox="0 0 24 24">
+            <path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/>
+        </symbol>
+        <symbol id="icon-events" viewBox="0 0 24 24">
+            <path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/>
+        </symbol>
+    </svg>
 
     <script src="script.js"></script>
     <script src="vri-research.js"></script>
