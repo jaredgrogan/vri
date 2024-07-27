@@ -28,10 +28,44 @@ body.night-mode {
     color: var(--text-color-dark);
 }
 
-.research-container {
+.container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: var(--bg-color-light);
+}
+
+body.night-mode header {
+    background-color: var(--bg-color-dark-start);
+}
+
+.logo-link {
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.logo-link:hover {
+    transform: scale(1.1);
+}
+
+.logo {
+    width: 40px;
+    height: 40px;
+}
+
+.mode-toggle {
+    cursor: pointer;
+}
+
+.mode-icon {
+    fill: currentColor;
 }
 
 .main-title {
@@ -65,8 +99,9 @@ body.night-mode .research-section {
     border-radius: 8px;
     padding: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
 }
 
 .lab-card:hover {
@@ -96,8 +131,9 @@ body.night-mode .lab-card {
     border-top: 1px solid #ddd;
 }
 
-.lab-details.active {
-    display: block;
+.expand-btn {
+    margin-top: auto;
+    align-self: flex-start;
 }
 
 .cta-button {
@@ -179,8 +215,60 @@ body.night-mode form textarea {
     border-color: var(--text-color-dark);
 }
 
+footer {
+    background-color: var(--panel-bg-light);
+    padding: 20px 0;
+    margin-top: 40px;
+}
+
+body.night-mode footer {
+    background: linear-gradient(to bottom, var(--panel-bg-dark-start), var(--panel-bg-dark-end));
+}
+
+.footer-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.footer-nav a {
+    display: flex;
+    align-items: center;
+    margin: 0 15px;
+    text-decoration: none;
+    color: inherit;
+    font-size: 14px;
+}
+
+.footer-nav svg {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+.copyright {
+    text-align: center;
+    font-size: 12px;
+    color: #666;
+}
+
+body.night-mode .copyright {
+    color: var(--text-color-light);
+}
+
 @media (max-width: 768px) {
     .labs-container {
         grid-template-columns: 1fr;
+    }
+
+    .footer-nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .footer-nav a {
+        margin: 5px 0;
     }
 }
