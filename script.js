@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     modeToggle.addEventListener('click', toggleMode);
-    updateModeIcon();
+    updateModeIcon(); // This will set the initial icon to moon (night mode icon)
 
     function typeText(text, element, speed = 100) {
         let i = 0;
