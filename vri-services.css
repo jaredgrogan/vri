@@ -28,75 +28,54 @@ body.night-mode {
     color: var(--text-color-dark);
 }
 
-.research-container {
+.vri-services-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
 }
 
-.main-title {
-    font-family: 'Trajan Pro', serif;
-    text-align: center;
-    color: var(--accent-color-light);
+.vri-section {
     margin-bottom: 40px;
 }
 
-.research-section {
-    margin-bottom: 40px;
-    padding: 20px;
-    background-color: var(--panel-bg-light);
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-body.night-mode .research-section {
-    background: linear-gradient(to bottom, var(--panel-bg-dark-start), var(--panel-bg-dark-end));
-    color: var(--text-color-light);
-}
-
-.labs-container {
+.service-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
+    margin-top: 20px;
 }
 
-.lab-card {
-    background-color: white;
+.service-card {
+    background-color: var(--panel-bg-light);
     border-radius: 8px;
     padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.lab-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-body.night-mode .lab-card {
+body.night-mode .service-card {
     background: linear-gradient(to bottom, var(--panel-bg-dark-start), var(--panel-bg-dark-end));
-    color: var(--text-color-light);
+    color: #000000;
 }
 
-.lab-card h3 {
+.service-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.service-card h3 {
     color: var(--accent-color-light);
     margin-bottom: 10px;
 }
 
-.lab-card i {
-    color: var(--accent-color-light);
-    margin-bottom: 15px;
-}
-
-.lab-details {
+.service-details {
     display: none;
-    margin-top: 15px;
-    padding-top: 15px;
+    margin-top: 10px;
+    padding-top: 10px;
     border-top: 1px solid #ddd;
 }
 
-.lab-details.active {
+.service-details.active {
     display: block;
 }
 
@@ -136,11 +115,6 @@ body.night-mode .lab-card {
     border-radius: 8px;
 }
 
-body.night-mode .modal-content {
-    background-color: var(--bg-color-dark-start);
-    color: var(--text-color-dark);
-}
-
 .close-button {
     color: #aaa;
     float: right;
@@ -160,27 +134,4 @@ form {
     display: flex;
     flex-direction: column;
     gap: 15px;
-}
-
-form input,
-form select,
-form textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
-
-body.night-mode form input,
-body.night-mode form select,
-body.night-mode form textarea {
-    background-color: var(--bg-color-dark-end);
-    color: var(--text-color-dark);
-    border-color: var(--text-color-dark);
-}
-
-@media (max-width: 768px) {
-    .labs-container {
-        grid-template-columns: 1fr;
-    }
 }
