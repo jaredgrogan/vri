@@ -147,15 +147,19 @@ form textarea {
 
 footer {
     padding: 20px;
-    background-color: #f5f5f5;
+    background-color: var(--panel-bg-light);
     border-top: 1px solid #ddd;
+}
+
+body.night-mode footer {
+    background: linear-gradient(to bottom, var(--panel-bg-dark-start), var(--panel-bg-dark-end));
 }
 
 .footer-nav {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     margin-bottom: 10px;
 }
 
@@ -166,8 +170,28 @@ footer {
     text-decoration: none;
     color: inherit;
     font-size: 14px;
+    white-space: nowrap;
 }
 
+body.night-mode .footer-nav a {
+    color: var(--text-color-light);
+}
+
+.footer-nav svg {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+.copyright {
+    text-align: center;
+    font-size: 12px;
+    color: #666;
+}
+
+body.night-mode .copyright {
+    color: var(--text-color-light);
+}
 .footer-nav svg {
     width: 20px;
     height: 20px;
