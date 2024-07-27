@@ -24,7 +24,7 @@ body.day-mode {
 }
 
 body.night-mode {
-    background-color: var(--bg-color-dark);
+    background: linear-gradient(to bottom, var(--bg-color-dark-start), var(--bg-color-dark-end));
     color: var(--text-color-dark);
 }
 
