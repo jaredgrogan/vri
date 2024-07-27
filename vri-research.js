@@ -45,39 +45,45 @@ const labs = [
 
 function populateLabsGrid() {
     const labsContainer = document.querySelector('.labs-container');
-    labs.forEach(lab => {
+    labs.forEach((lab, index) => {
         const labCard = document.createElement('div');
         labCard.className = 'lab-card';
         labCard.innerHTML = `
             <i class="fas ${lab.icon} fa-3x"></i>
             <h3>${lab.name}</h3>
             <p>${lab.focus}</p>
+            <div class="lab-details" id="lab-details-${index}">
+                <p>${lab.description}</p>
+                <h4>Key Problem Statements:</h4>
+                <ul>
+                    <li>Integration of AI and blockchain technologies in ${lab.focus.toLowerCase()}</li>
+                    <li>Scalability and security challenges in the ${lab.focus.toLowerCase()} sector</li>
+                    <li>Industry-specific optimization and efficiency improvements</li>
+                </ul>
+                <h4>Commercialization Potential:</h4>
+                <ul>
+                    <li>AI-powered analytics and optimization tools for ${lab.focus.toLowerCase()}</li>
+                    <li>Blockchain-based transparency and security solutions</li>
+                    <li>Decentralized platforms for industry-specific applications</li>
+                </ul>
+            </div>
+            <button class="cta-button expand-btn" onclick="toggleLabDetails(${index})">Learn More</button>
         `;
-        labCard.addEventListener('click', () => showLabDetails(lab));
         labsContainer.appendChild(labCard);
     });
 }
 
-function showLabDetails(lab) {
-    const labContent = document.getElementById('lab-content');
-    labContent.innerHTML = `
-        <h3>${lab.name}</h3>
-        <p><strong>Focus:</strong> ${lab.focus}</p>
-        <p>${lab.description}</p>
-        <h4>Key Problem Statements:</h4>
-        <ul>
-            <li>Integration of AI and blockchain technologies in ${lab.focus.toLowerCase()}</li>
-            <li>Scalability and security challenges in the ${lab.focus.toLowerCase()} sector</li>
-            <li>Industry-specific optimization and efficiency improvements</li>
-        </ul>
-        <h4>Commercialization Potential:</h4>
-        <ul>
-            <li>AI-powered analytics and optimization tools for ${lab.focus.toLowerCase()}</li>
-            <li>Blockchain-based transparency and security solutions</li>
-            <li>Decentralized platforms for industry-specific applications</li>
-        </ul>
-    `;
-    document.getElementById('lab-details').scrollIntoView({ behavior: 'smooth' });
+function toggleLabDetails(index) {
+    const labDetails = document.getElementById(`lab-details-${index}`);
+    const expandBtn = labDetails.nextElementSibling;
+    
+    if (labDetails.classList.contains('active')) {
+        labDetails.classList.remove('active');
+        expandBtn.textContent = 'Learn More';
+    } else {
+        labDetails.classList.add('active');
+        expandBtn.textContent = 'Show Less';
+    }
 }
 
 function showContactModal() {
@@ -90,26 +96,4 @@ function closeContactModal() {
 }
 
 function populateLabOptions() {
-    const labSelect = document.getElementById('lab-interest');
-    labSelect.innerHTML = '<option value="">Select Lab of Interest</option>';
-    labs.forEach(lab => {
-        const option = document.createElement('option');
-        option.value = lab.name;
-        option.textContent = lab.name;
-        labSelect.appendChild(option);
-    });
-}
-
-function submitPartnerForm() {
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const company = document.getElementById('company').value;
-    const labInterest = document.getElementById('lab-interest').value;
-    const message = document.getElementById('message').value;
-
-    // Here you would typically send this data to a server
-    console.log('Partner Form Submission:', { name, email, company, labInterest, message });
-
-    alert('Thank you for your interest in partnering with VRI. We will be in touch shortly.');
-    closeContactModal();
-    return false; // Prevent form submission
+    const labSelect = document.getElementById('lab
