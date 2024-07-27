@@ -11,6 +11,18 @@
     --accent-color-dark: #b22222;
 }
 
+body {
+    font-family: 'Berkeley Mono', monospace;
+    margin: 0;
+    padding: 0;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+body.day-mode {
+    background-color: var(--bg-color-light);
+    color: var(--text-color-light);
+}
+
 body.night-mode {
     background: linear-gradient(to bottom, var(--bg-color-dark-start), var(--bg-color-dark-end));
     color: var(--text-color-dark);
@@ -55,11 +67,16 @@ body.night-mode {
 
 .vertical-card {
     flex: 1;
-    background-color: #f5f5f5;
+    background-color: var(--panel-bg-light);
     border-radius: 8px;
     padding: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
+}
+
+body.night-mode .vertical-card {
+    background: linear-gradient(to bottom, var(--panel-bg-dark-start), var(--panel-bg-dark-end));
+    color: var(--text-color-light);
 }
 
 .vertical-card:hover {
@@ -83,11 +100,16 @@ body.night-mode {
 }
 
 .team-member {
-    background-color: #f5f5f5;
+    background-color: var(--panel-bg-light);
     border-radius: 8px;
     padding: 20px;
     text-align: center;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+body.night-mode .team-member {
+    background: linear-gradient(to bottom, var(--panel-bg-dark-start), var(--panel-bg-dark-end));
+    color: var(--text-color-light);
 }
 
 .team-member img {
@@ -108,10 +130,15 @@ body.night-mode {
 .portfolio-slide {
     flex: 0 0 300px;
     scroll-snap-align: start;
-    background-color: #f5f5f5;
+    background-color: var(--panel-bg-light);
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+body.night-mode .portfolio-slide {
+    background: linear-gradient(to bottom, var(--panel-bg-dark-start), var(--panel-bg-dark-end));
+    color: var(--text-color-light);
 }
 
 .portfolio-slide img {
@@ -189,6 +216,51 @@ form textarea {
     border-radius: 4px;
 }
 
+footer {
+    padding: 20px;
+    background-color: var(--panel-bg-light);
+    border-top: 1px solid #ddd;
+}
+
+body.night-mode footer {
+    background: linear-gradient(to bottom, var(--panel-bg-dark-start), var(--panel-bg-dark-end));
+    color: var(--text-color-light);
+}
+
+.footer-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    margin-bottom: 10px;
+}
+
+.footer-nav a {
+    display: flex;
+    align-items: center;
+    margin: 0 15px;
+    text-decoration: none;
+    color: inherit;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.footer-nav svg {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+.copyright {
+    text-align: center;
+    font-size: 12px;
+    color: #666;
+}
+
+body.night-mode .copyright {
+    color: var(--text-color-light);
+}
+
 @media (max-width: 768px) {
     .fund-stats,
     .vertical-cards {
@@ -198,5 +270,13 @@ form textarea {
     .stat-item,
     .vertical-card {
         margin-bottom: 20px;
+    }
+
+    .footer-nav {
+        flex-wrap: wrap;
+    }
+
+    .footer-nav a {
+        margin: 5px 10px;
     }
 }
