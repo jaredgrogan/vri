@@ -26,7 +26,14 @@ body.day-mode {
     color: var(--text-color-light);
 }
 
-header, footer {
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+footer {
     padding: 20px;
 }
 
@@ -37,6 +44,19 @@ header, footer {
 
 .logo-link:hover {
     transform: scale(1.5);
+}
+
+.logo {
+    width: 40px;
+    height: 40px;
+}
+
+.mode-toggle {
+    cursor: pointer;
+}
+
+.mode-icon {
+    fill: currentColor;
 }
 
 .container {
@@ -71,11 +91,6 @@ header, footer {
 
 .enter-btn:hover {
     background-color: darken(var(--accent-color), 10%);
-}
-
-.mode-toggle {
-    margin-top: 20px;
-    cursor: pointer;
 }
 
 .copyright {
