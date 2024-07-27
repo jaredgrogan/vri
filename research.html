@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VRI Research Labs | Venture Research Institute</title>
+    <title>Research Labs | Venture Research Institute</title>
     <link rel="icon" type="image/svg+xml" href="logo1.svg">
     <link rel="stylesheet" href="home.css">
     <link rel="stylesheet" href="vri-research.css">
@@ -13,30 +13,39 @@
 </head>
 <body class="day-mode">
     <header>
-        <!-- Header content (same as other pages) -->
+        <a href="index.html" class="logo-link">
+            <img src="logo1.svg" alt="VRI Logo" class="logo">
+        </a>
+        <div class="mode-toggle" onclick="toggleMode()">
+            <svg class="mode-icon" width="24" height="24" viewBox="0 0 24 24">
+                <!-- SVG content for mode toggle icon will be here -->
+            </svg>
+        </div>
     </header>
     
-    <main class="container">
+    <main class="container research-container">
         <h1 class="main-title">VRI Research Labs</h1>
         
-        <section id="labs-overview">
+        <section id="labs-overview" class="research-section">
             <h2>Commercial Research Groups</h2>
-            <p>The Venture Research Institute (VRI) has established seven specialized Commercial Research Groups, each operating as a "Lab" focused on a key vertical. These labs are dedicated to addressing industry-specific challenges through advanced AI and decentralized compute technologies.</p>
-            <p>Our labs collaborate closely with industry partners to ensure their research is grounded in real-world needs and drives commercial success. Each lab generates output in the form of Minimum Viable Products (MVPs) and leverages expertise for strategic Go-To-Market (GTM) placement.</p>
+            <p>The Venture Research Institute (VRI) has established seven specialized Commercial Research Groups, each operating as a "Lab" focused on a key vertical. These labs address industry-specific challenges through advanced AI and decentralized compute technologies, generating MVPs and leveraging expertise for strategic Go-To-Market placement.</p>
         </section>
 
-        <section id="labs-grid">
-            <!-- Lab cards will be dynamically inserted here -->
+        <section id="labs-grid" class="research-section">
+            <h2>Our Labs</h2>
+            <div class="labs-container">
+                <!-- Lab cards will be dynamically inserted here -->
+            </div>
         </section>
 
-        <section id="lab-details">
+        <section id="lab-details" class="research-section">
             <h2>Lab Details</h2>
             <div id="lab-content">
                 <!-- Detailed lab information will be dynamically inserted here -->
             </div>
         </section>
 
-        <section id="commercialization">
+        <section id="commercialization" class="research-section">
             <h2>From Research to Market</h2>
             <p>Our unique approach ensures that cutting-edge research translates into real-world solutions:</p>
             <ul>
@@ -47,16 +56,42 @@
             </ul>
         </section>
 
-        <section id="get-involved">
+        <section id="get-involved" class="research-section">
             <h2>Get Involved</h2>
             <p>Are you an industry leader, researcher, or innovator interested in shaping the future of technology? Explore opportunities to collaborate with our research labs:</p>
-            <a href="#" class="cta-button">Partner with VRI</a>
+            <button class="cta-button" onclick="showContactModal()">Partner with VRI</button>
         </section>
     </main>
 
     <footer>
-        <!-- Footer content (same as other pages) -->
+        <nav class="footer-nav">
+            <a href="about.html"><svg><use xlink:href="#icon-about"/></svg>About</a>
+            <a href="programs.html"><svg><use xlink:href="#icon-programs"/></svg>Programs</a>
+            <a href="fund.html"><svg><use xlink:href="#icon-fund"/></svg>Fund</a>
+            <a href="products.html"><svg><use xlink:href="#icon-products"/></svg>Products</a>
+            <a href="events.html"><svg><use xlink:href="#icon-events"/></svg>Events</a>
+        </nav>
+        <p class="copyright">&copy; 2024 Venture Research Institute</p>
     </footer>
+
+    <!-- Contact Modal -->
+    <div id="contact-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeContactModal()">&times;</span>
+            <h2>Partner with VRI</h2>
+            <form id="partner-form" onsubmit="return submitPartnerForm()">
+                <input type="text" id="name" name="name" placeholder="Full Name" required>
+                <input type="email" id="email" name="email" placeholder="Email Address" required>
+                <input type="text" id="company" name="company" placeholder="Company Name">
+                <select id="lab-interest" name="lab-interest" required>
+                    <option value="">Select Lab of Interest</option>
+                    <!-- Options will be dynamically populated -->
+                </select>
+                <textarea id="message" name="message" placeholder="Your Message" required></textarea>
+                <button type="submit" class="cta-button">Submit</button>
+            </form>
+        </div>
+    </div>
 
     <script src="script.js"></script>
     <script src="vri-research.js"></script>
