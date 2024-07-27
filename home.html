@@ -1,12 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Venture Research</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/berkeley-mono/1.0.0/berkeley-mono.min.css">
-</head>
 <body class="night-mode">
     <header>
         <a href="index.html" class="logo-link">
@@ -19,11 +10,21 @@
         </div>
     </header>
     <main class="container">
-        <h1 class="title">Venture Research</h1>
+        <h1 class="title" id="expandable-title">Venture Research</h1>
         <h2 class="subtitle" id="typing-text"></h2>
-        <button class="enter-btn" onclick="launchApp()">Discover</button>
+        <button class="enter-btn" onclick="launchApp()" id="launch-btn">Discover</button>
+        <div id="center-logo" class="hidden">
+            <!-- SVG content for center logo will be here -->
+        </div>
     </main>
     <footer>
+        <nav class="footer-nav">
+            <a href="about.html">About</a>
+            <a href="programs.html">Programs</a>
+            <a href="fund.html">Fund</a>
+            <a href="products.html">Products</a>
+            <a href="events.html">Events</a>
+        </nav>
         <p class="copyright">&copy; 2024 Venture Research</p>
     </footer>
     <script src="script.js"></script>
