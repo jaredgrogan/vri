@@ -1,3 +1,16 @@
+:root {
+    --bg-color-light: #ffffff;
+    --text-color-light: #000000;
+    --bg-color-dark-start: #222222;
+    --bg-color-dark-end: #111111;
+    --text-color-dark: #ffffff;
+    --panel-bg-light: #f5f5f5;
+    --panel-bg-dark-start: #ffffff;
+    --panel-bg-dark-end: #9f9f9f;
+    --accent-color-light: #ff2a2a;
+    --accent-color-dark: #b22222;
+}
+
 .events-container {
     max-width: 1200px;
     margin: 0 auto;
