@@ -22,7 +22,7 @@ body {
 }
 
 .main-title {
-    font-family: 'Trajan Pro', serif;
+    font-family: 'Courier New', serif;
     text-align: center;
     color: var(--accent-color);
     margin-bottom: 40px;
