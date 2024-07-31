@@ -10,6 +10,25 @@
 <body>
     <!-- Header -->
     <header>
+<main class="container">
+        <div id="center-logo" class="expandable-logo">
+            <!-- Center logo SVG content -->
+            <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="button-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#ff2a2a;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#b22222;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                <circle cx="50" cy="50" r="45" fill="url(#button-gradient)" />
+                <text x="50" y="70" font-family="'Courier New', monospace" font-size="78" font-weight="bold" fill="white" text-anchor="middle">V</text>
+            </svg>
+        </div>
+        <h1 class="title" id="expandable-title">Venture Research</h1>
+        <h2 class="subtitle" id="typing-text"></h2>
+        <button class="enter-btn" onclick="launchApp()" id="launch-btn">Discover</button>
+    </main>
+
         <div class="container">
             <div class="logo">AI Venture Bootcamp</div>
             <nav>
