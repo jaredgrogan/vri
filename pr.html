@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Press Releases - Venture Research Institute</title>
+    <link rel="icon" type="image/svg+xml" href="logo1.svg">
+    <link rel="stylesheet" href="home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/berkeley-mono/1.0.0/berkeley-mono.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Trajan+Pro:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        body.day-mode {
+            background-color: #ffffff;
+            color: #000000;
+        }
+        body.night-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        .logo {
+            filter: invert(0);
+            transition: filter 0.3s;
+        }
+        .night-mode .logo {
+            filter: invert(1);
+        }
+        .mode-toggle .mode-icon {
+            fill: #000000;
+            transition: fill 0.3s;
+        }
+        .night-mode .mode-toggle .mode-icon {
+            fill: #e0e0e0;
+        }
+        .footer-nav a {
+            color: #000000;
+            transition: color 0.3s;
+        }
+        .night-mode .footer-nav a {
+            color: #e0e0e0;
+        }
+        .press-release-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .press-release {
+            margin-bottom: 40px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        .night-mode .press-release {
+            border-color: #444;
+        }
+        .press-release h2 {
+            font-family: 'Trajan Pro', serif;
+            margin-bottom: 10px;
+        }
+        .press-release p {
+            line-height: 1.6;
+        }
+        .press-release .date {
+            font-style: italic;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .night-mode .press-release .date {
+            color: #aaa;
+        }
+    </style>
+</head>
+<body class="day-mode">
+    <header>
+        <a href="index.html" class="logo-link">
+            <img src="logo1.svg" alt="Venture Research Logo" class="logo">
+        </a>
+        <div class="mode-toggle" onclick="toggleMode()">
+            <svg class="mode-icon" width="24" height="24" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z"/>
+            </svg>
+        </div>
+    </header>
+    
+    <main class="press-release-container">
+        <h1>Press Releases</h1>
+        
+        <div class="press-release">
+            <h2>Venture Research Institute Launches $50M Fund for AI and Blockchain Startups</h2>
+            <p class="date">August 7, 2024</p>
+            <p>Venture Research Institute (VRI) today announced the launch of a $50 million fund aimed at supporting early-stage startups in the artificial intelligence and blockchain sectors. The fund will focus on companies developing innovative solutions in AI SaaS and decentralized computing.</p>
+            <p>"We're excited to support the next generation of tech entrepreneurs who are pushing the boundaries of what's possible with AI and blockchain," said Jane Doe, Managing Partner at VRI. "This fund represents our commitment to fostering innovation in these transformative technologies."</p>
+        </div>
+        
+        <div class="press-release">
+            <h2>VRI Partners with Leading Universities to Accelerate AI Research</h2>
+            <p class="date">July 15, 2024</p>
+            <p>Venture Research Institute has announced partnerships with five top universities to accelerate AI research and development. The collaboration aims to bridge the gap between academic research and commercial applications in machine learning and natural language processing.</p>
+            <p>"By combining the expertise of academia with our industry knowledge, we're creating a powerful ecosystem for AI innovation," said John Smith, Head of Research at VRI. "This partnership will help bring cutting-edge AI technologies to market faster."</p>
+        </div>
+        
+        <!-- Add more press releases as needed -->
+    </main>
+
+    <footer>
+        <nav class="footer-nav">
+            <a href="about.html">About</a>
+            <a href="programs.html">Programs</a>
+            <a href="fund.html">Fund</a>
+            <a href="products.html">Products</a>
+            <a href="events.html">Events</a>
+        </nav>
+        <p class="copyright">&copy; 2024 Venture Research Institute</p>
+    </footer>
+
+    <script>
+        function toggleMode() {
+            const body = document.body;
+            body.classList.toggle('day-mode');
+            body.classList.toggle('night-mode');
+        }
+    </script>
+</body>
+</html>
