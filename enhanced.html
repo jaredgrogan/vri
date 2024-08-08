@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venture Research Institute Services</title>
+    <link rel="icon" type="image/svg+xml" href="logo1.svg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/berkeley-mono/1.0.0/berkeley-mono.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Trajan+Pro:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --accent-color: #ffc107;
+            --background-color: #f8f9fa;
+            --text-color: #333;
+        }
+
+        body {
+            font-family: 'Berkeley Mono', monospace;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAAZSURBVHjaYmBgYPj//z8DAwMDAxMDDAAAwAMBAdO0BxsAAAAASUVORK5CYII=');
+            background-repeat: repeat;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+        }
+
+        .logo-link {
+            display: inline-block;
+        }
+
+        .logo {
+            height: 50px;
+            width: auto;
+        }
+
+        .mode-toggle {
+            float: right;
+            cursor: pointer;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Trajan Pro', serif;
+            color: var(--primary-color);
+        }
+
+        h1 { font-size: 2.5rem; }
+        h2 { font-size: 2rem; }
+        h3 { font-size: 1.75rem; }
+        p { font-size: 1rem; }
+
+        .service-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .service-card {
+            flex-basis: calc(33.333% - 20px);
+            margin-bottom: 30px;
+            background-color: #fff;
+            border: 1px solid var(--secondary-color);
+            border-radius: 5px;
+            padding: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-card h3 {
+            margin-top: 0;
+            transition: color 0.3s ease;
+        }
+
+        .service-card:hover h3 {
+            color: var(--accent-color);
+        }
+
+        .service-details {
+            display: none;
+        }
+
+        .service-details.active {
+            display: block;
+        }
+
+        .cta-button {
+            background-color: var(--accent-color);
+            color: var(--text-color);
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background-color: #e0a800;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1rem 0;
+            margin-top: 2rem;
+        }
+
+        .footer-nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+        }
+
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        #contact-form input,
+        #contact-form select,
+        #contact-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .faq-section {
+            margin-top: 2rem;
+        }
+
+        .faq-item {
+            margin-bottom: 1rem;
+        }
+
+        .faq-question {
+            background-color: #f1f1f1;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .faq-answer {
+            display: none;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+        }
+
+        #service-finder {
+            margin-top: 2rem;
+            padding: 1rem;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .service-card {
+                flex-basis: calc(50% - 15px);
+            }
+            html {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .service-card {
+                flex-basis: 100%;
+            }
+            html {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html" class="logo-link">
+                <img src="logo1.svg" srcset="logo1-small.svg 300w, logo1-medium.svg 600w, logo1.svg 1200w" alt="Venture Research Institute Logo" class="logo">
+            </a>
+            <div class="mode-toggle" onclick="toggleMode()">
+                <i class="fas fa-adjust"></i>
+            </div>
+        </div>
+    </header>
+    
+    <main class="container">
+        <h1>Venture Research Institute Services</h1>
+        
+        <section id="services-overview">
+            <p>The Venture Research Institute offers a wide range of cutting-edge services to support innovation in blockchain, AI, and decentralized technologies. Our expert team is dedicated to helping businesses, startups, and investors navigate the complex landscape of emerging technologies.</p>
+        </section>
+        
+        <section id="blockchain-services">
+            <h2><i class="fas fa-link"></i> Blockchain Development Services</h2>
+            <div class="service-grid">
+                <div class="service-card" onclick="toggleServiceDetails('custom-blockchain')">
+                    <h3>Custom Blockchain Development</h3>
+                    <div id="custom-blockchain" class="service-details">
+                        <p>Tailored blockchain solutions to meet your specific business needs, including private and consortium blockchains.</p>
+                    </div>
+                </div>
+                <div class="service-card" onclick="toggleServiceDetails('smart-contracts')">
+                    <h3>Smart Contract Services</h3>
+                    <div id="smart-contracts" class="service-details">
+                        <p>Design, development, and auditing of smart contracts for various blockchain platforms, ensuring security and efficiency.</p>
+                    </div>
+                </div>
+                <div class="service-card" onclick="toggleServiceDetails('dapp-development')">
+                    <h3>Decentralized App Development</h3>
+                    <div id="dapp-development" class="service-details">
+                        <p>End-to-end development of decentralized applications (DApps) for Web3 and blockchain ecosystems.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="ai-integration">
+            <h2><i class="fas fa-brain"></i> AI and Blockchain Integration</h2>
+            <p>We specialize in combining the power of AI with blockchain technology to create innovative solutions:</p>
+            <ul>
+                <li>AI-driven smart contract optimization</li>
+                <li>Machine learning for blockchain data analysis</li>
+                <li>Predictive models for cryptocurrency markets</li>
+                <li>AI-enhanced security for blockchain networks</li>
+            </ul>
+        </section>
+        
+        <section id="education-consulting">
+            <h2><i class="fas fa-graduation-cap"></i> Education and Consulting</h2>
+            <div class="service-grid">
+                <div class="service-card" onclick="toggleServiceDetails('custom-bootcamps')">
+                    <h3>Custom Bootcamps</h3>
+                    <div id="custom-bootcamps" class="service-details">
+                        <p>Tailored intensive training programs for teams and organizations on blockchain, AI, and decentralized technologies.</p>
+                    </div>
+                </div>
+                <div class="service-card" onclick="toggleServiceDetails('family-office-advising')">
+                    <h3>Family Office Advising</h3>
+                    <div id="family-office-advising" class="service-details">
+                        <p>Strategic guidance for family offices on blockchain investments, cryptocurrency portfolio management, and tech-driven wealth preservation strategies.</p>
+                    </div>
+                </div>
+                <div class="service-card" onclick="toggleServiceDetails('corporate-consulting')">
+                    <h3>Corporate Consulting</h3>
+                    <div id="corporate-consulting" class="service-details">
+                        <p>Expert consulting services to help corporations integrate blockchain and AI technologies into their existing business models and operations.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="faq" class="faq-section">
+            <h2><i class="fas fa-question-circle"></i> Frequently Asked Questions</h2>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">What industries can benefit from blockchain technology?</div>
+                <div class="faq-answer">Blockchain technology can benefit a wide range of industries, including finance, supply chain management, healthcare, real estate, and more. Any industry that requires secure, transparent, and immutable record-keeping can potentially benefit from blockchain integration.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">How long does it typically take to develop a custom blockchain solution?</div>
+                <div class="faq-answer">The development time for a custom blockchain solution can vary greatly depending on the complexity of the project. Simple projects might take a few months, while more complex enterprise-level solutions could take 6-12 months or more. We provide detailed timelines during our initial consultation.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">What's the difference between a public and private blockchain?</div>
+                <div class="faq-answer">A public blockchain, like Bitcoin or Ethereum, is open for anyone to participate in and view transactions. A private blockchain, on the other hand, is permissioned and only allows selected participants to join the network. Private blockchains are often used by enterprises for better control and privacy.</div>
+            </div>
+        </section>
+        
+        <section id="service-finder">
+            <h2><i class="fas fa-search"></i> Find the Right Service for You</h2>
+            <p>Answer a few questions to help us recommend the best services for your needs:</p>
+            <form id="service-finder-form">
+                <select name="industry" required>
+                    <option value="">Select your industry</option>
+                    <option value="finance">Finance</option>
+                    <option value="healthcare">Healthcare</option>
+                    <option value="supply-chain">Supply Chain</option>
+                    <option value="real-estate">Real Estate</option>
+                    <option value="other">Other</option>
+                </select>
+                <select name="project-type" required>
+                    <option value="">Select your project type</option>
+                    <option value="blockchain">Blockchain Development</option>
+                    <option value="ai">AI Integration</option>
+                    <option value="consulting">Consulting</option>
+                    <option value="education">Education</option>
+                </select>
+                <select name="company-size" required>
+                    <option value="">Select your company size</option>
+                    <option value="startup">Startup</option>
+                    <option value="sme">Small to Medium Enterprise</option>
+                    <option value="large">Large Corporation</option>
+                </select>
+                <button type="submit" class="cta-button">Find Services</button>
+            </form>
+            <div id="service-recommendations"></div>
+        </section>
+        
+        <section id="contact-us">
+            <h2><i class="fas fa-envelope"></i> Get in Touch</h2>
+            <p>Ready to leverage our expertise for your blockchain or AI project? Contact us to discuss how we can help you innovate and grow.</p>
+            <button class="cta-button" onclick="showContactModal()">Contact Us</button>
+        </section>
+    </main>
+    
+    <footer>
+        <nav class="footer-nav">
+            <a href="about.html"><i class="fas fa-info-circle"></i> About</a>
+            <a href="programs.html"><i class="fas fa-project-diagram"></i> Programs</a>
+            <a href="fund.html"><i class="fas fa-money-bill-wave"></i> Fund</a>
+ <a href="products.html"><i class="fas fa-cube"></i> Products</a>
+            <a href="events.html"><i class="fas fa-calendar-alt"></i> Events</a>
+        </nav>
+        <p class="copyright">&copy; 2024 Venture Research Institute</p>
+    </footer>
+    
+    <!-- Contact Modal -->
+    <div id="contact-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeContactModal()">&times;</span>
+            <h2>Contact Venture Research Institute</h2>
+            <form id="contact-form" onsubmit="return submitContactForm()">
+                <input type="text" id="name" name="name" placeholder="Full Name" required>
+                <input type="email" id="email" name="email" placeholder="Email Address" required>
+                <input type="text" id="company" name="company" placeholder="Company Name">
+                <select id="service-interest" name="service-interest" required>
+                    <option value="">Select Service of Interest</option>
+                    <option value="blockchain-development">Blockchain Development</option>
+                    <option value="ai-integration">AI Integration</option>
+                    <option value="consulting">Consulting Services</option>
+                    <option value="education">Education & Bootcamps</option>
+                    <option value="business-services">Business Services</option>
+                </select>
+                <textarea id="message" name="message" placeholder="Your Message" required></textarea>
+                <button type="submit" class="cta-button">Send Message</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Toggle dark/light mode
+        function toggleMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        // Toggle service details
+        function toggleServiceDetails(id) {
+            const detailsElement = document.getElementById(id);
+            detailsElement.classList.toggle('active');
+        }
+
+        // Toggle FAQ answers
+        function toggleFAQ(element) {
+            const answer = element.nextElementSibling;
+            answer.style.display = answer.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // Show contact modal
+        function showContactModal() {
+            document.getElementById('contact-modal').style.display = 'block';
+        }
+
+        // Close contact modal
+        function closeContactModal() {
+            document.getElementById('contact-modal').style.display = 'none';
+        }
+
+        // Submit contact form
+        function submitContactForm() {
+            // Here you would typically send the form data to a server
+            // For this example, we'll just log to console and show an alert
+            console.log('Form submitted');
+            alert('Thank you for your message. We will get back to you soon!');
+            closeContactModal();
+            return false; // Prevent form from submitting normally
+        }
+
+        // Service finder functionality
+        document.getElementById('service-finder-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const industry = this.industry.value;
+            const projectType = this.project_type.value;
+            const companySize = this.company_size.value;
+
+            // This is a simple recommendation system. In a real-world scenario,
+            // you might want to use a more sophisticated algorithm or API call.
+            let recommendation = 'Based on your selections, we recommend: ';
+
+            if (projectType === 'blockchain') {
+                recommendation += 'Our Custom Blockchain Development services. ';
+            } else if (projectType === 'ai') {
+                recommendation += 'Our AI and Blockchain Integration services. ';
+            } else if (projectType === 'consulting') {
+                if (companySize === 'large') {
+                    recommendation += 'Our Corporate Consulting services. ';
+                } else {
+                    recommendation += 'Our Family Office Advising services. ';
+                }
+            } else if (projectType === 'education') {
+                recommendation += 'Our Custom Bootcamps. ';
+            }
+
+            recommendation += 'Please contact us for a personalized consultation.';
+
+            document.getElementById('service-recommendations').textContent = recommendation;
+        });
+
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('contact-modal')) {
+                closeContactModal();
+            }
+        }
+    </script>
+</body>
+</html>
