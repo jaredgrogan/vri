@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programs - Venture Research Institute</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/berkeley-mono/1.0.0/berkeley-mono.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color-light-start: #f5f5f5;
+            --bg-color-light-end: #ffffff;
+            --bg-color-dark-start: #222222;
+            --bg-color-dark-end: #111111;
+            --text-color-light: #000000;
+            --text-color-dark: #ffffff;
+            --accent-color-light: #ff2a2a;
+            --accent-color-dark: #b22222;
+        }
+
+        body {
+            font-family: 'Berkeley Mono', monospace;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        body.light-mode {
+            background: linear-gradient(to bottom, var(--bg-color-light-start), var(--bg-color-light-end));
+            color: var(--text-color-light);
+        }
+
+        body.dark-mode {
+            background: linear-gradient(to bottom, var(--bg-color-dark-start), var(--bg-color-dark-end));
+            color: var(--text-color-dark);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .program-section {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .program-content {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .program-image {
+            max-width: 300px;
+            border-radius: 8px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: linear-gradient(to bottom, var(--accent-color-light), var(--accent-color-dark));
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: transform 0.3s, background 0.3s;
+            border: none;
+            cursor: pointer;
+            font-family: 'Berkeley Mono', monospace;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            background: linear-gradient(to bottom, var(--accent-color-dark), var(--accent-color-light));
+        }
+
+        .custom-program-types {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .program-type {
+            flex: 1;
+            padding: 1rem;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .support-features {
+            columns: 2;
+            margin-top: 1rem;
+        }
+
+        #mode-toggle {
+            background: none;
+            border: none;
+            color: inherit;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            transition: background-color 0.3s;
+        }
+
+        #mode-toggle:hover {
+            background-color: rgba(128, 128, 128, 0.2);
+        }
+
+        #mode-toggle svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .light-mode #moon-icon,
+        .dark-mode #sun-icon {
+            display: none;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 8px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        @media (max-width: 768px) {
+            .program-content {
+                flex-direction: column;
+            }
+
+            .program-image {
+                max-width: 100%;
+            }
+
+            .custom-program-types {
+                flex-direction: column;
+            }
+
+            .support-features {
+                columns: 1;
+            }
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <header>
+        <svg class="logo" width="50" height="50" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="button-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:#ff2a2a;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#b22222;stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            <circle cx="50" cy="50" r="45" fill="url(#button-gradient)" />
+            <text x="50" y="70" font-family="'Courier New', monospace" font-size="78" font-weight="bold" fill="white" text-anchor="middle">V</text>
+        </svg>
+        <button id="mode-toggle" aria-label="Toggle dark mode">
+            <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"/>
+                <line x1="12" y1="1" x2="12" y2="3"/>
+                <line x1="12" y1="21" x2="12" y2="23"/>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                <line x1="1" y1="12" x2="3" y2="12"/>
+                <line x1="21" y1="12" x2="23" y2="12"/>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+            <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+        </button>
+    </header>
+    
+    <main>
+        <h1>Our Programs</h1>
+        
+        <section id="boot-camp" class="program-section">
+            <h2>2-Week Intensive Boot Camp</h2>
+            <div class="program-content">
+                <img src="bootcamp-image.jpg" alt="Boot Camp Participants" class="program-image">
+                <div>
+                    <p>Jump-start your journey in AI and blockchain with our intensive 2-week boot camp. Culminating in an exciting demo day, this program is designed to accelerate your learning and project development.</p>
+                    <button class="cta-button" onclick="showModal('boot-camp-modal')">Learn More</button>
+                </div>
+            </div>
+        </section>
+        
+        <section id="custom-programs" class="program-section">
+            <h2>Custom Programs</h2>
+            <p>We offer tailored programs for both B2B and B2G clients, designed to meet your specific needs and goals in the rapidly evolving tech landscape.</p>
+            <div class="custom-program-types">
+                <div class="program-type">
+                    <h3>B2B Solutions</h3>
+                    <p>Empower your business with cutting-edge AI and blockchain solutions.</p>
+                </div>
+                <div class="program-type">
+                    <h3>B2G Innovations</h3>
+                    <p>Bringing next-gen technology to government and public sector projects.</p>
+                </div>
+            </div>
+            <button class="cta-button" onclick="showModal('custom-program-modal')">Request a Custom Program</button>
+        </section>
+        
+        <section id="incubator-support" class="program-section">
+            <h2>Incubator Support</h2>
+            <p>Our incubator program provides comprehensive support for startups in the AI and blockchain space. From mentorship to resources, we're here to help you grow.</p>
+            <ul class="support-features">
+                <li>Expert Mentorship</li>
+                <li>Resource Access</li>
+                <li>Networking Opportunities</li>
+                <li>Funding Guidance</li>
+            </ul>
+            <button class="cta-button" onclick="showModal('incubator-modal')">Apply for Incubator</button>
+        </section>
+    </main>
+
+    <!-- Modals -->
+    <div id="boot-camp-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>2-Week Intensive Boot Camp</h2>
+            <p>Our boot camp covers cutting-edge topics in AI and blockchain, including:</p>
+            <ul>
+                <li>Machine Learning Fundamentals</li>
+                <li>Blockchain Architecture</li>
+                <li>Smart Contract Development</li>
+                <li>AI Ethics and Governance</li>
+            </ul>
+            <p>Culminating in a demo day where you'll showcase your projects to industry experts and potential investors.</p>
+            <button class="cta-button">Register Now</button>
+        </div>
+    </div>
+
+    <div id="custom-program-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Request a Custom Program</h2>
+            <form id="custom-program-form">
+                <input type="text" placeholder="Company Name" required>
+                <select required>
+                    <option value="">Select Program Type</option>
+                    <option value="b2b">B2B</option>
+                    <option value="b2g">B2G</option>
+                </select>
+                <textarea placeholder="Program Goals" required></textarea>
+                <button type="submit" class="cta-button">Submit Request</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="incubator-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Apply for Incubator Program</h2>
+            <form id="incubator-form">
+                <input type="text" placeholder="Startup Name" required>
+                <input type="number" placeholder="Founding Year" required>
+                <select required>
+                    <option value="">Select Primary Technology Focus</option>
+                    <option value="ai">Artificial Intelligence</option>
+                    <option value="blockchain">Blockchain</option>
+                    <option value="both">Both AI and Blockchain</option>
+                </select>
+                <textarea placeholder="Elevator Pitch" required></textarea>
+                <button type="submit" class="cta-button">Submit Application</button>
+            </form>
+        </div>
+    </div>
+
+   <script>
+    const modeToggle = document.getElementById('mode-toggle');
+    const body = document.body;
+
+    modeToggle.addEventListener('click', () => {
+        body.classList.toggle('light-mode');
+        body.classList.toggle('dark-mode');
+        updateAriaLabel();
+        // Save the mode preference to localStorage
+        localStorage.setItem('mode', body.classList.contains('dark-mode') ? 'dark' : 'light');
+    });
+
+    function updateAriaLabel() {
+        const isDarkMode = body.classList.contains('dark-mode');
+        modeToggle.setAttribute('aria-label', isDarkMode ? 'Toggle light mode' : 'Toggle dark mode');
+    }
+
+    // Set initial mode based on user's previous preference or system preference
+    function setInitialMode() {
+        const savedMode = localStorage.getItem('mode');
+        if (savedMode) {
+            body.classList.toggle('dark-mode', savedMode === 'dark');
+            body.classList.toggle('light-mode', savedMode === 'light');
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            body.classList.add('dark-mode');
+            body.classList.remove('light-mode');
+        }
+        updateAriaLabel();
+    }
+
+    // Call setInitialMode when the page loads
+    setInitialMode();
+
+    // Modal functionality
+    const modals = document.querySelectorAll('.modal');
+    const closeButtons = document.querySelectorAll('.close');
+
+    function showModal(modalId) {
+        document.getElementById(modalId).style.display = 'block';
+    }
+
+    closeButtons.forEach(button => {
+        button.onclick = function() {
+            this.closest('.modal').style.display = 'none';
+        }
+    });
+
+    window.onclick = function(event) {
+        if (event.target.classList.contains('modal')) {
+            event.target.style.display = 'none';
+        }
+    }
+
+    // Form submission
+    document.querySelectorAll('form').forEach(form => {
+        form.onsubmit = function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const formObject = {};
+            formData.forEach((value, key) => { formObject[key] = value });
+
+            // Here you would typically send the form data to your server
+            // For this example, we'll log it to the console and show a success message
+            console.log('Form submitted:', formObject);
+
+            // Show success message
+            const successMessage = document.createElement('div');
+            successMessage.textContent = 'Form submitted successfully!';
+            successMessage.style.color = 'green';
+            successMessage.style.marginTop = '10px';
+            this.appendChild(successMessage);
+
+            // Reset form and remove success message after 3 seconds
+            setTimeout(() => {
+                this.reset();
+                successMessage.remove();
+                this.closest('.modal').style.display = 'none';
+            }, 3000);
+        }
+    });
+
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+
+    // Lazy loading for images
+    document.addEventListener("DOMContentLoaded", function() {
+        var lazyImages = [].slice.call(document.querySelectorAll("img.lazy"));
+
+        if ("IntersectionObserver" in window) {
+            let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        let lazyImage = entry.target;
+                        lazyImage.src = lazyImage.dataset.src;
+                        lazyImage.classList.remove("lazy");
+                        lazyImageObserver.unobserve(lazyImage);
+                    }
+                });
+            });
+
+            lazyImages.forEach(function(lazyImage) {
+                lazyImageObserver.observe(lazyImage);
+            });
+        } else {
+            // Fallback for browsers that don't support IntersectionObserver
+            let active = false;
+
+            const lazyLoad = function() {
+                if (active === false) {
+                    active = true;
+
+                    setTimeout(function() {
+                        lazyImages.forEach(function(lazyImage) {
+                            if ((lazyImage.getBoundingClientRect().top <= window.innerHeight && lazyImage.getBoundingClientRect().bottom >= 0) && getComputedStyle(lazyImage).display !== "none") {
+                                lazyImage.src = lazyImage.dataset.src;
+                                lazyImage.classList.remove("lazy");
+
+                                lazyImages = lazyImages.filter(function(image) {
+                                    return image !== lazyImage;
+                                });
+
+                                if (lazyImages.length === 0) {
+                                    document.removeEventListener("scroll", lazyLoad);
+                                    window.removeEventListener("resize", lazyLoad);
+                                    window.removeEventListener("orientationchange", lazyLoad);
+                                }
+                            }
+                        });
+
+                        active = false;
+                    }, 200);
+                }
+            };
+
+         document.addEventListener("scroll", lazyLoad);
+            window.addEventListener("resize", lazyLoad);
+            window.addEventListener("orientationchange", lazyLoad);
+        }
+    });
+
+    // Add animation on scroll
+    const animateOnScroll = function() {
+        const elements = document.querySelectorAll('.program-section');
+        elements.forEach(element => {
+            const elementTop = element.getBoundingClientRect().top;
+            const elementBottom = element.getBoundingClientRect().bottom;
+            if (elementTop < window.innerHeight && elementBottom > 0) {
+                element.classList.add('animate');
+            }
+        });
+    };
+
+    window.addEventListener('scroll', animateOnScroll);
+    window.addEventListener('load', animateOnScroll);
+
+    // Implement a simple countdown timer for the boot camp
+    function startCountdown(targetDate) {
+        const countdownElement = document.getElementById('bootcamp-countdown');
+        if (!countdownElement) return;
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            countdownElement.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+            if (distance < 0) {
+                clearInterval(countdownInterval);
+                countdownElement.innerHTML = "Boot Camp has started!";
+            }
+        }
+
+        updateCountdown(); // Run once immediately
+        const countdownInterval = setInterval(updateCountdown, 1000); // Then every second
+    }
+
+    // Set the target date for the next boot camp (adjust as needed)
+    const nextBootCamp = new Date("2023-12-01T00:00:00").getTime();
+    startCountdown(nextBootCamp);
+</script>
+</body>
+</html>
