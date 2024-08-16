@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homes by Stella - Investor Deck</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Reset and base styles */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { width: 90%; max-width: 1200px; margin: 0 auto; padding: 20px; }
+        h1, h2, h3 { margin-bottom: 20px; }
+        
+        /* Slide styles */
+        .slide { display: none; padding: 40px 0; }
+        .slide.active { display: block; }
+        
+        /* Button styles */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .btn:hover { background-color: #45a049; }
+        
+        /* Navigation */
+        .nav { position: fixed; top: 20px; right: 20px; }
+        .nav button { margin-left: 10px; }
+        
+        /* Charts */
+        .chart-container { height: 300px; margin-bottom: 20px; }
+        
+        /* Team */
+        .team-member { display: inline-block; margin: 10px; text-align: center; }
+        .team-member img { width: 100px; height: 100px; border-radius: 50%; }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container { width: 95%; }
+            .chart-container { height: 200px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="opening-slide" class="slide active">
+            <h1>Homes by Stella</h1>
+            <p>Revolutionizing FSBO with AI</p>
+            <button class="btn" onclick="startPresentation()">Start Presentation</button>
+        </div>
+
+        <div id="problem" class="slide">
+            <h2>The Problem</h2>
+            <p>Traditional real estate transactions are costly and inefficient.</p>
+            <div class="chart-container">
+                <canvas id="problem-chart"></canvas>
+            </div>
+        </div>
+
+        <div id="solution" class="slide">
+            <h2>Our Solution</h2>
+            <p>Homes by Stella: AI-powered FSBO platform</p>
+            <div id="ai-demo">
+                <h3>AI Property Description Generator</h3>
+                <button onclick="generateDescription()">Generate Description</button>
+                <p id="generated-description"></p>
+            </div>
+        </div>
+
+        <div id="market-opportunity" class="slide">
+            <h2>Market Opportunity</h2>
+            <div class="chart-container">
+                <canvas id="market-chart"></canvas>
+            </div>
+        </div>
+
+        <div id="business-model" class="slide">
+            <h2>Business Model</h2>
+            <div id="pricing-tiers">
+                <div class="tier">
+                    <h3>Basic</h3>
+                    <p>$99/month</p>
+                    <ul>
+                        <li>AI-generated listing</li>
+                        <li>Basic marketing tools</li>
+                    </ul>
+                </div>
+                <div class="tier">
+                    <h3>Pro</h3>
+                    <p>$199/month</p>
+                    <ul>
+                        <li>All Basic features</li>
+                        <li>Advanced AI insights</li>
+                        <li>24/7 chat support</li>
+                    </ul>
+                </div>
+                <div class="tier">
+                    <h3>Premium</h3>
+                    <p>$499/month</p>
+                    <ul>
+                        <li>All Pro features</li>
+                        <li>Personalized AI marketing</li>
+                        <li>Legal document review</li>
+                    </ul>
+                </div>
+            </div>
+            <div id="savings-calculator">
+                <h3>Savings Calculator</h3>
+                <input type="range" id="home-value" min="100000" max="1000000" value="300000" step="10000">
+                <p>Home Value: $<span id="home-value-display">300,000</span></p>
+                <select id="plan-select">
+                    <option value="basic">Basic Plan</option>
+                    <option value="pro">Pro Plan</option>
+                    <option value="premium">Premium Plan</option>
+                </select>
+                <p>Estimated Savings: $<span id="savings-display">17,901</span></p>
+            </div>
+        </div>
+
+        <div id="technology" class="slide">
+            <h2>Our Technology</h2>
+            <div class="tech-stack">
+                <div class="tech-item">
+                    <h3>Natural Language Processing</h3>
+                    <p>Generates compelling property descriptions</p>
+                </div>
+                <div class="tech-item">
+                    <h3>Computer Vision</h3>
+                    <p>Analyzes and enhances property photos</p>
+                </div>
+                <div class="tech-item">
+                    <h3>Predictive Analytics</h3>
+                    <p>Provides accurate home valuations</p>
+                </div>
+            </div>
+            <div class="integrations">
+                <h3>Key Integrations</h3>
+                <ul>
+                    <li>DocuSign for e-signatures</li>
+                    <li>Zillow for market data</li>
+                    <li>Google Cloud for AI and ML capabilities</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="competitive-advantage" class="slide">
+            <h2>Our Competitive Advantage</h2>
+            <div class="chart-container">
+                <canvas id="competitive-chart"></canvas>
+            </div>
+            <div class="unique-features">
+                <h3>Unique AI-Powered Features</h3>
+                <ul>
+                    <li>Real-time market analysis</li>
+                    <li>Automated buyer matching</li>
+                    <li>AI-driven negotiation assistance</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="traction" class="slide">
+            <h2>Our Traction</h2>
+            <div class="chart-container">
+                <canvas id="traction-chart"></canvas>
+            </div>
+            <div class="metrics">
+                <div class="metric">
+                    <h3>3,000</h3>
+                    <p>Active Users</p>
+                </div>
+                <div class="metric">
+                    <h3>1,500</h3>
+                    <p>Listings</p>
+                </div>
+                <div class="metric">
+                    <h3>500</h3>
+                    <p>Successful Sales</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="team" class="slide">
+            <h2>Our Team</h2>
+            <div class="team-members">
+                <div class="team-member">
+                    <img src="https://via.placeholder.com/100" alt="CEO">
+                    <h3>Jane Doe</h3>
+                    <p>CEO, Former Zillow Executive</p>
+                </div>
+                <div class="team-member">
+                    <img src="https://via.placeholder.com/100" alt="CTO">
+                    <h3>John Smith</h3>
+                    <p>CTO, AI Expert from Google</p>
+                </div>
+                <div class="team-member">
+                    <img src="https://via.placeholder.com/100" alt="COO">
+                    <h3>Emily Brown</h3>
+                    <p>COO, 15 years in Real Estate</p>
+                </div>
+            </div>
+            <div class="advisors">
+                <h3>Advisors</h3>
+                <ul>
+                    <li>Michael Johnson, Former NAR President</li>
+                    <li>Sarah Lee, PropTech Investor</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="financials" class="slide">
+            <h2>Financials</h2>
+            <div class="chart-container">
+                <canvas id="financials-chart"></canvas>
+            </div>
+            <div class="scenario-selector">
+                <button onclick="updateFinancials('conservative')">Conservative</button>
+                <button onclick="updateFinancials('base')">Base Case</button>
+                <button onclick="updateFinancials('optimistic')">Optimistic</button>
+            </div>
+            <div class="financial-metrics">
+                <div class="metric">
+                    <h3>Break-even</h3>
+                    <p id="breakeven">Q4 2025</p>
+                </div>
+                <div class="metric">
+                    <h3>2027 Revenue</h3>
+                    <p id="revenue-2027">$40M</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="go-to-market" class="slide">
+            <h2>Go-to-Market Strategy</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h3>Phase 1: Launch (Aug 2024 - Feb 2025)</h3>
+                    <ul>
+                        <li>Launch in LA, SF, and San Diego</li>
+                        <li>Targeted digital marketing campaigns</li>
+                        <li>Virtual educational events for FSBO sellers</li>
+                    </ul>
+                </div>
+                <div class="timeline-item">
+                    <h3>Phase 2: Expansion (Feb 2025 - Aug 2025)</h3>
+                    <ul>
+                        <li>Expand to additional California cities</li>
+                        <li>Increase marketing budget</li>
+                        <li>Launch partnerships with home services</li>
+                    </ul>
+                </div>
+                <div class="timeline-item">
+                    <h3>Phase 3: National Rollout (Aug 2025 - Aug 2026)</h3>
+                    <ul>
+                        <li>Launch in major US metropolitan areas</li>
+                        <li>National advertising campaign</li>
+                        <li>Introduce advanced AI features</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="investment-opportunity" class="slide">
+            <h2>Investment Opportunity</h2>
+            <div class="funding-details">
+                <h3>Funding Sought: $<span id="funding-amount">2.0</span>M</h3>
+                <input type="range" id="funding-slider" min="1" max="5" step="0.1" value="2">
+            </div>
+            <div class="chart-container">
+                <canvas id="funding-chart"></canvas>
+            </div>
+            <div class="roi">
+                <h3>Potential ROI</h3>
+                <p>5x return in 5 years based on conservative projections</p>
+                <p>10x return in 5 years based on optimistic projections</p>
+            </div>
+        </div>
+
+        <div id="vision" class="slide">
+            <h2>Vision for the Future</h2>
+            <div class="long-term-goals">
+                <h3>Long-Term Goals</h3>
+                <ul>
+                    <li>Capture 20% of the FSBO market by 2030</li>
+                    <li>Expand services to include buying assistance</li>
+                    <li>Integrate blockchain for secure, transparent transactions</li>
+                    <li>Develop AI-powered property management tools</li>
+                </ul>
+            </div>
+            <div class="industry-transformation">
+                <h3>Transforming Real Estate</h3>
+                <p>Homes by Stella aims to democratize real estate transactions, making them more accessible, efficient, and cost-effective for everyone. By leveraging AI and machine learning, we're not just changing how homes are sold, but reimagining the entire real estate experience.</p>
+            </div>
+            <div class="exit-strategy">
+                <h3>Potential Exits</h3>
+                <ul>
+                    <li>IPO within 5-7 years</li>
+                    <li>Acquisition by major tech or real estate company</li>
+                    <li>Merger with complementary PropTech firm</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="nav">
+        <button onclick="prevSlide()">Previous</button>
+        <button onclick="nextSlide()">Next</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + slides.length) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function prevSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        function startPresentation() {
+            document.getElementById('opening-slide').classList.remove('active');
+            showSlide(1);
+        }
+
+        function generateDescription() {
+            const descriptions = [
+                "This charming 3-bedroom home features a spacious living room, updated kitchen, and a beautiful backyard perfect for entertaining.",
+                "Elegant 4-bedroom house with modern amenities, including a gourmet kitchen and a luxurious master suite with a spa-like bathroom.",
+                "Cozy 2-bedroom condo in the heart of the city, offering stunning views and easy access to public transportation and local attractions."
+            ];
+            document.getElementById('generated-description').textContent = descriptions[Math.floor(Math.random() * descriptions.length)];
+        }
+
+       function updateSavingsCalculator() {
+            const homeValue = document.getElementById('home-value').value;
+            const plan = document.getElementById('plan-select').value;
+            const traditionalCommission = homeValue * 0.06;
+            const stellaCost = plan === 'basic' ? 99 : plan === 'pro' ? 199 : 499;
+            const savings = traditionalCommission - stellaCost;
+            document.getElementById('home-value-display').textContent = Number(homeValue).toLocaleString();
+            document.getElementById('savings-display').textContent = Math.round(savings).toLocaleString();
+        }
+
+        document.getElementById('home-value').addEventListener('input', updateSavingsCalculator);
+        document.getElementById('plan-select').addEventListener('change', updateSavingsCalculator);
+
+        function updateFinancials(scenario) {
+            const breakeven = document.getElementById('breakeven');
+            const revenue2027 = document.getElementById('revenue-2027');
+            
+            switch(scenario) {
+                case 'conservative':
+                    breakeven.textContent = 'Q1 2026';
+                    revenue2027.textContent = '$30M';
+                    break;
+                case 'base':
+                    breakeven.textContent = 'Q4 2025';
+                    revenue2027.textContent = '$40M';
+                    break;
+                case 'optimistic':
+                    breakeven.textContent = 'Q3 2025';
+                    revenue2027.textContent = '$50M';
+                    break;
+            }
+            
+            updateFinancialsChart(scenario);
+        }
+
+        function updateFundingAmount() {
+            const amount = document.getElementById('funding-slider').value;
+            document.getElementById('funding-amount').textContent = amount;
+            updateFundingChart(amount);
+        }
+
+        document.getElementById('funding-slider').addEventListener('input', updateFundingAmount);
+
+        // Chart initializations
+        let problemChart, marketChart, competitiveChart, tractionChart, financialsChart, fundingChart;
+
+        function initCharts() {
+            problemChart = new Chart(document.getElementById('problem-chart').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ['Traditional', 'Homes by Stella'],
+                    datasets: [{
+                        label: 'Average Commission (%)',
+                        data: [6, 1],
+                        backgroundColor: ['#FFA726', '#66BB6A']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Commission Comparison'
+                        }
+                    }
+                }
+            });
+
+            marketChart = new Chart(document.getElementById('market-chart').getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: ['2020', '2021', '2022', '2023', '2024', '2025'],
+                    datasets: [{
+                        label: 'FSBO Market Size ($B)',
+                        data: [14, 15, 16, 17, 18, 20],
+                        borderColor: '#4CAF50',
+                        backgroundColor: 'rgba(76, 175, 80, 0.1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'FSBO Market Size Projection'
+                        }
+                    }
+                }
+            });
+
+            competitiveChart = new Chart(document.getElementById('competitive-chart').getContext('2d'), {
+                type: 'radar',
+                data: {
+                    labels: ['Commission', 'AI Support', 'Marketing Reach', 'Closing Time'],
+                    datasets: [
+                        {
+                            label: 'Homes by Stella',
+                            data: [95, 90, 85, 80],
+                            backgroundColor: 'rgba(33, 150, 243, 0.2)',
+                            borderColor: '#2196F3'
+                        },
+                        {
+                            label: 'Traditional Realtors',
+                            data: [40, 50, 70, 60],
+                            backgroundColor: 'rgba(255, 152, 0, 0.2)',
+                            borderColor: '#FF9800'
+                        },
+                        {
+                            label: 'Other FSBO Platforms',
+                            data: [80, 40, 50, 70],
+                            backgroundColor: 'rgba(76, 175, 80, 0.2)',
+                            borderColor: '#4CAF50'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Competitive Comparison'
+                        }
+                    }
+                }
+            });
+
+            tractionChart = new Chart(document.getElementById('traction-chart').getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: ['Q4 2024', 'Q1 2025', 'Q2 2025', 'Q3 2025', 'Q4 2025'],
+                    datasets: [
+                        {
+                            label: 'Users',
+                            data: [500, 1000, 1500, 2000, 3000],
+                            borderColor: '#2196F3',
+                            yAxisID: 'y-users'
+                        },
+                        {
+                            label: 'Revenue ($K)',
+                            data: [300, 600, 900, 1200, 1800],
+                            borderColor: '#4CAF50',
+                            yAxisID: 'y-revenue'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    scales: {
+                        'y-users': {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                        },
+                        'y-revenue': {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            grid: {
+                                drawOnChartArea: false,
+                            },
+                        },
+                    }
+                }
+            });
+
+            financialsChart = new Chart(document.getElementById('financials-chart').getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: ['2024', '2025', '2026', '2027'],
+                    datasets: [
+                        {
+                            label: 'Conservative',
+                            data: [1.2, 5, 15, 30],
+                            borderColor: '#FFA726'
+                        },
+                        {
+                            label: 'Base Case',
+                            data: [1.2, 5, 15, 40],
+                            borderColor: '#66BB6A'
+                        },
+                        {
+                            label: 'Optimistic',
+                            data: [1.5, 7, 20, 50],
+                            borderColor: '#29B6F6'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Revenue Projections ($ Million)'
+                        }
+                    }
+                }
+            });
+
+            fundingChart = new Chart(document.getElementById('funding-chart').getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Product Development', 'Marketing', 'Operations', 'Legal & Admin'],
+                    datasets: [{
+                        data: [40, 30, 20, 10],
+                        backgroundColor: ['#42A5F5', '#66BB6A', '#FFA726', '#EF5350']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Use of Funds'
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateFinancialsChart(scenario) {
+            const data = {
+                conservative: [1.2, 5, 15, 30],
+                base: [1.2, 5, 15, 40],
+                optimistic: [1.5, 7, 20, 50]
+            };
+            financialsChart.data.datasets.forEach((dataset, index) => {
+                dataset.data = data[Object.keys(data)[index]];
+            });
+            financialsChart.update();
+        }
+
+        function updateFundingChart(amount) {
+            const total = amount * 1000000;
+            fundingChart.data.datasets[0].data = [
+                total * 0.4,
+                total * 0.3,
+                total * 0.2,
+                total * 0.1
+            ];
+            fundingChart.update();
+        }
+
+        // Initialize everything when the page loads
+        window.onload = function() {
+            initCharts();
+            updateSavingsCalculator();
+            updateFundingAmount();
+        };
+    </script>
+</body>
+</html>
