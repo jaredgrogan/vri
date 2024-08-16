@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homes by Stella - Your AI Realtor</title>
+    <style>
+        /* Reset and base styles */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { width: 90%; max-width: 1200px; margin: 0 auto; }
+        
+        /* Hero Section */
+        .hero { 
+            background: linear-gradient(120deg, #3498db, #8e44ad);
+            color: white; 
+            padding: 4rem 0; 
+            text-align: center;
+            animation: gradientShift 10s ease infinite;
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .hero p { font-size: 1.2rem; margin-bottom: 2rem; }
+        
+        /* Button styles */
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(to right, #4CAF50, #2196F3);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .btn:hover { 
+            background: linear-gradient(to right, #45a049, #1e87db);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Benefits Section */
+        .benefits { padding: 4rem 0; background-color: #f4f4f4; }
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        .benefit-item {
+            text-align: center;
+            padding: 1rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .benefit-item:hover { transform: translateY(-5px); }
+        .benefit-item i { font-size: 2.5rem; color: #3498db; margin-bottom: 1rem; }
+        
+        /* How It Works Section */
+        .how-it-works { padding: 4rem 0; }
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+        .step-item {
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .step-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .step-item i { 
+            font-size: 2rem; 
+            color: #3498db; 
+            background-color: #e3f2fd;
+            width: 80px;
+            height: 80px;
+            line-height: 80px;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+        }
+        
+        /* Testimonials Section */
+        .testimonials { 
+            padding: 4rem 0; 
+            background-color: #f4f4f4;
+            position: relative;
+            overflow: hidden;
+        }
+        .testimonial-container {
+            position: relative;
+            height: 200px;
+        }
+        .testimonial {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .testimonial.active { opacity: 1; }
+        
+        /* AI Demo Section */
+        .ai-demo { padding: 4rem 0; }
+        .typewriter { 
+            overflow: hidden;
+            border-right: .15em solid #3498db;
+            white-space: nowrap;
+            margin: 0 auto;
+            letter-spacing: .15em;
+            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+        }
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #3498db; }
+        }
+        
+        /* FAQ Section */
+        .faq { padding: 4rem 0; background-color: #f4f4f4; }
+        .faq-item { margin-bottom: 1rem; }
+        .faq-question {
+            background-color: white;
+            padding: 1rem;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+        .faq-question:hover { background-color: #e3f2fd; }
+        .faq-answer {
+            padding: 1rem;
+            display: none;
+            background-color: white;
+            border-radius: 0 0 8px 8px;
+        }
+        .faq-item.active .faq-answer { display: block; }
+        
+        /* Trust Signals Section */
+        .trust-signals { padding: 4rem 0; }
+        .trust-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+        }
+        .trust-logo {
+            filter: grayscale(100%);
+            transition: all 0.3s ease;
+        }
+        .trust-logo:hover {
+            filter: grayscale(0%);
+            transform: scale(1.1);
+        }
+        
+        /* Pricing Section */
+        .pricing { padding: 4rem 0; background-color: #f4f4f4; }
+        .pricing-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        .pricing-plan {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        /* Ready to Get Started Section */
+        .cta {
+            background: linear-gradient(120deg, #3498db, #8e44ad);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+        .cta h2 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .cta p { font-size: 1.2rem; margin-bottom: 2rem; }
+        
+        /* Footer */
+        footer {
+            background: linear-gradient(to bottom, #2c3e50, #34495e);
+            color: white;
+            padding: 4rem 0 2rem;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+        .footer-column h3 { margin-bottom: 1rem; }
+        .footer-column ul { list-style-type: none; }
+        .footer-column ul li { margin-bottom: 0.5rem; }
+        .footer-column ul li a { color: #bdc3c7; text-decoration: none; }
+        .footer-column ul li a:hover { color: white; }
+        #newsletter-form input[type="email"] {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .social-icons { margin-top: 1rem; }
+        .social-icon {
+            color: white;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+        .copyright { margin-top: 2rem; text-align: center; color: #bdc3c7; }
+        
+        /* Chat Button */
+        .chat-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #3498db;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            padding: 10px;
+        }
+        .chat-btn i {
+            font-size: 1.5rem;
+            background-color: white;
+            color: #3498db;
+            padding: 10px;
+            border-radius: 50%;
+        }
+        
+        /* Scroll Progress Bar */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background-color: #3498db;
+            z-index: 9999;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .hero p { font-size: 1rem; }
+            .benefits-grid, .steps-grid, .pricing-container { grid-template-columns: 1fr; }
+            .trust-logos { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="scroll-progress"></div>
+    
+    <section class="hero">
+        <div class="container">
+            <h1>Sell Your Home Smarter with Stella, Your AI Realtor</h1>
+            <p>Professional-grade tools and support at a fraction of the cost</p>
+            <a href="#" class="btn pulse">Get Your Free Home Valuation</a>
+        </div>
+    </section>
+
+    <section class="benefits">
+        <div class="container">
+            <div class="benefits-grid">
+                <div class="benefit-item">
+                    <i class="fas fa-dollar-sign"></i>
+                    <h3>Save on Commissions</h3>
+                    <p>Keep more of your home's value in your pocket</p>
+                </div>
+                <div class="benefit-item">
+                    <i class="fas fa-brain"></i>
+                    <h3>AI-Powered Insights</h3>
+                    <p>Make data-driven decisions for optimal results</p>
+                </div>
+                <div class="benefit-item">
+                    <i class="fas fa-clock"></i>
+                    <h3>24/7 Support</h3>
+                    <p>Get help whenever you need it, day or night</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works">
+        <div class="container">
+            <h2>How It Works</h2>
+            <div class="steps-grid">
+                <div class="step-item">
+                    <i class="fas fa-home"></i>
+                    <h3>List Your Home</h3>
+                    <p>Enter your property details and let Stella do the rest</p>
+                </div>
+                <div class="step-item">
+                    <i class="fas fa-camera"></i>
+                    <h3>Showcase Your Property</h3>
+                    <p>Use AI-enhanced tools to highlight your home's best features</p>
+                </div>
+                <div class="step-item">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Get AI Insights</h3>
+                    <p>Receive data-driven recommendations to optimize your sale</p>
+                </div>
+                <div class="step-item">
+                    <i class="fas fa-handshake"></i>
+                    <h3>Close the Deal</h3>
+                    <p>Navigate offers and paperwork with AI-powered assistance</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <div class="container">
+            <h2>Success Stories</h2>
+            <div class="testimonial-container">
+                <div class="testimonial active">
+                    <p>"Sold in 14 days for 5% above asking price!"</p>
+                    <p><strong>John Doe, Los Angeles</strong></p>
+                </div>
+                <div class="testimonial">
+                    <p>"Stella's AI insights helped me price my home perfectly."</p>
+                    <p><strong>Jane Smith, San Francisco</strong></p>
+                </div>
+                <div class="testimonial">
+                    <p>"The 24/7 support made the whole process stress-free."</p>
+                    <p><strong>Bob Johnson, New York</strong></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   <section class="ai-demo">
+        <div class="container">
+            <h2>Experience Stella's AI Power</h2>
+            <div class="typewriter">
+                This charming 3-bedroom home features a spacious living room and updated kitchen...
+            </div>
+        </div>
+    </section>
+
+    <section class="faq">
+        <div class="container">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-item">
+                <div class="faq-question">How does Stella compare to traditional realtors?</div>
+                <div class="faq-answer">Stella offers many of the same services as traditional realtors, but at a fraction of the cost. Our AI-powered tools provide 24/7 support and data-driven insights to help you sell your home efficiently.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Is it really possible to sell my home without a realtor?</div>
+                <div class="faq-answer">Absolutely! With Stella's guidance and tools, many homeowners successfully sell their properties without traditional realtor involvement. We provide all the necessary resources and support to make the process smooth and effective.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">What if I need human assistance?</div>
+                <div class="faq-answer">While Stella is AI-powered, we have a team of real estate experts available to assist you with any complex issues or questions that may arise during the selling process.</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="trust-signals">
+        <div class="container">
+            <h2>Trusted By</h2>
+            <div class="trust-logos">
+                <img src="https://via.placeholder.com/150x75?text=Partner+1" alt="Partner 1" class="trust-logo">
+                <img src="https://via.placeholder.com/150x75?text=Partner+2" alt="Partner 2" class="trust-logo">
+                <img src="https://via.placeholder.com/150x75?text=Partner+3" alt="Partner 3" class="trust-logo">
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing">
+        <div class="container">
+            <h2>Choose Your Plan</h2>
+            <div class="pricing-container">
+                <div class="pricing-plan">
+                    <h3>Basic</h3>
+                    <p class="price">$99/mo</p>
+                    <ul>
+                        <li>AI-generated listing</li>
+                        <li>Basic marketing tools</li>
+                        <li>Email support</li>
+                    </ul>
+                    <a href="#" class="btn">Select Plan</a>
+                </div>
+                <div class="pricing-plan">
+                    <h3>Pro</h3>
+                    <p class="price">$199/mo</p>
+                    <ul>
+                        <li>All Basic features</li>
+                        <li>Advanced AI insights</li>
+                        <li>24/7 chat support</li>
+                        <li>Virtual tours</li>
+                    </ul>
+                    <a href="#" class="btn">Select Plan</a>
+                </div>
+                <div class="pricing-plan">
+                    <h3>Premium</h3>
+                    <p class="price">$499/mo</p>
+                    <ul>
+                        <li>All Pro features</li>
+                        <li>Personalized marketing campaign</li>
+                        <li>Dedicated AI agent</li>
+                        <li>Legal document review</li>
+                    </ul>
+                    <a href="#" class="btn">Select Plan</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta">
+        <div class="container">
+            <h2>Ready to Get Started?</h2>
+            <p>Join thousands of happy homeowners who sold their properties with Stella</p>
+            <a href="#" class="btn pulse">Get Started Now</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3>About Stella</h3>
+                    <ul>
+                        <li><a href="#">Our Story</a></li>
+                        <li><a href="#">How It Works</a></li>
+                        <li><a href="#">Testimonials</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">FSBO Guide</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Stay Connected</h3>
+                    <form id="newsletter-form">
+                        <input type="email" placeholder="Enter your email" required>
+                        <button type="submit" class="btn">Subscribe</button>
+                    </form>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <p class="copyright">&copy; 2024 Homes by Stella. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <div class="chat-btn">
+        <i class="fas fa-comments"></i>
+    </div>
+
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+    <script>
+        // Scroll Progress Bar
+        window.addEventListener('scroll', () => {
+            const scrollProgress = document.querySelector('.scroll-progress');
+            const scrollPx = document.documentElement.scrollTop;
+            const winHeightPx = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = `${(scrollPx / winHeightPx) * 100}%`;
+            scrollProgress.style.width = scrolled;
+        });
+
+        // FAQ Accordion
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            question.addEventListener('click', () => {
+                item.classList.toggle('active');
+            });
+        });
+
+        // Testimonial Carousel
+        const testimonials = document.querySelectorAll('.testimonial');
+        let currentTestimonial = 0;
+        setInterval(() => {
+            testimonials[currentTestimonial].classList.remove('active');
+            currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+            testimonials[currentTestimonial].classList.add('active');
+        }, 5000);
+
+        // How It Works Animation
+        const stepItems = document.querySelectorAll('.step-item');
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        stepItems.forEach(item => observer.observe(item));
+
+        // Newsletter Form Submission
+        const newsletterForm = document.getElementById('newsletter-form');
+        newsletterForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Thank you for subscribing to our newsletter!');
+            newsletterForm.reset();
+        });
+
+        // Chat Button Click Event
+        const chatBtn = document.querySelector('.chat-btn');
+        chatBtn.addEventListener('click', () => {
+            alert('Chat functionality coming soon!');
+        });
+
+        // Typing Animation
+        const typewriterElement = document.querySelector('.typewriter');
+        const text = typewriterElement.textContent;
+        typewriterElement.textContent = '';
+        let i = 0;
+        function typeWriter() {
+            if (i < text.length) {
+                typewriterElement.textContent += text.charAt(i);
+                i++;
+                setTimeout(typeWriter, 50);
+            }
+        }
+        typeWriter();
+    </script>
+</body>
+</html>
