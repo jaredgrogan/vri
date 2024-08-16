@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homes by Stella - Investor Deck</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Reset and base styles */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            line-height: 1.6; 
+            color: #333; 
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        .container { 
+            width: 90%; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 20px; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            justify-content: center;
+        }
+        h1, h2, h3 { margin-bottom: 20px; }
+        
+        /* Slide styles */
+        .slide { 
+            display: none; 
+            padding: 40px; 
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 900px;
+            margin-bottom: 20px;
+        }
+        .slide.active { display: block; }
+        
+        /* Button styles */
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .btn:hover { 
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* Navigation */
+        .nav { 
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .nav button { 
+            margin: 0 10px;
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .nav button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        /* Charts */
+        .chart-container { 
+            height: 300px; 
+            margin-bottom: 20px; 
+            display: flex;
+            justify-content: center;
+        }
+        
+        /* Team */
+        .team-member { 
+            display: inline-block; 
+            margin: 10px; 
+            text-align: center; 
+            background: linear-gradient(45deg, #f3e7e9 0%, #e3eeff 99%, #e3eeff 100%);
+            padding: 20px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        .team-member:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .team-member img { 
+            width: 120px; 
+            height: 120px; 
+            border-radius: 50%; 
+            object-fit: cover;
+            border: 4px solid white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container { width: 95%; }
+            .chart-container { height: 200px; }
+        }
+
+        /* Text styles */
+        p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 15px;
+        }
+        h1 { 
+            font-size: 36px; 
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        h2 { 
+            font-size: 28px;
+            color: #2c3e50;
+        }
+        h3 { 
+            font-size: 22px;
+            color: #34495e;
+        }
+
+        /* Additional styles for improved aesthetics */
+        .highlight-box {
+            background: linear-gradient(45deg, #e8f5e9, #c8e6c9);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .call-to-action {
+            background: linear-gradient(45deg, #ff9800, #f57c00);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 30px;
+        }
+        .timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: #3498db;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+        }
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            right: -17px;
+            background-color: white;
+            border: 4px solid #FF9F55;
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        .left {
+            left: 0;
+        }
+        .right {
+            left: 50%;
+        }
+        .right::after {
+            left: -16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="opening-slide" class="slide active">
+            <h1>Homes by Stella</h1>
+            <p>Revolutionizing FSBO with AI</p>
+            <button class="btn" onclick="startPresentation()">Start Presentation</button>
+        </div>
+
+        <div id="problem" class="slide">
+            <h2>The Problem</h2>
+            <p>Traditional real estate transactions are costly, time-consuming, and often inefficient.</p>
+            <div class="chart-container">
+                <canvas id="problem-chart"></canvas>
+            </div>
+            <div class="highlight-box">
+                <p><strong>Did you know?</strong> The average commission on a $300,000 home is $18,000. That's money that could stay in homeowners' pockets.</p>
+            </div>
+        </div>
+
+        <div id="solution" class="slide">
+            <h2>Our Solution</h2>
+            <p>Homes by Stella: AI-powered FSBO platform that revolutionizes home selling</p>
+            <div id="ai-demo">
+                <h3>AI Property Description Generator</h3>
+                <textarea id="property-details" rows="4" cols="50" placeholder="Enter property details..."></textarea>
+                <button class="btn" onclick="generateDescription()">Generate Description</button>
+                <p id="generated-description"></p>
+            </div>
+        </div>
+
+        <div id="market-opportunity" class="slide">
+            <h2>Market Opportunity</h2>
+            <div class="chart-container">
+                <canvas id="market-chart"></canvas>
+            </div>
+            <div class="highlight-box">
+                <p><strong>Massive Potential:</strong> The FSBO market is projected to reach $25 billion by 2025, with a CAGR of 7.2%.</p>
+            </div>
+        </div>
+
+        <div id="business-model" class="slide">
+            <h2>Business Model</h2>
+            <div id="pricing-tiers">
+                <div class="tier">
+                    <h3>Basic</h3>
+                    <p>$99/month</p>
+                    <ul>
+                        <li>AI-generated listing</li>
+                        <li>Basic marketing tools</li>
+                        <li>Email support</li>
+                    </ul>
+                </div>
+                <div class="tier">
+                    <h3>Pro</h3>
+                    <p>$199/month</p>
+                    <ul>
+                        <li>All Basic features</li>
+                        <li>Advanced AI insights</li>
+                        <li>24/7 chat support</li>
+                        <li>Virtual home staging</li>
+                    </ul>
+                </div>
+                <div class="tier">
+                    <h3>Premium</h3>
+                    <p>$499/month</p>
+                    <ul>
+                        <li>All Pro features</li>
+                        <li>Personalized AI marketing</li>
+                        <li>Legal document review</li>
+                        <li>Dedicated AI agent</li>
+                    </ul>
+                </div>
+            </div>
+            <div id="savings-calculator">
+                <h3>Savings Calculator</h3>
+                <input type="range" id="home-value" min="100000" max="1000000" value="300000" step="10000">
+                <p>Home Value: $<span id="home-value-display">300,000</span></p>
+                <select id="plan-select">
+                    <option value="basic">Basic Plan</option>
+                    <option value="pro">Pro Plan</option>
+                    <option value="premium">Premium Plan</option>
+                </select>
+                <p>Estimated Savings: $<span id="savings-display">17,901</span></p>
+            </div>
+        </div>
+
+        <div id="technology" class="slide">
+            <h2>Our Technology</h2>
+            <div class="tech-stack">
+                <div class="tech-item">
+                    <h3>Natural Language Processing</h3>
+                    <p>Generates compelling property descriptions and analyzes market trends</p>
+                </div>
+                <div class="tech-item">
+                    <h3>Computer Vision</h3>
+                    <p>Analyzes and enhances property photos, creates virtual tours</p>
+                </div>
+                <div class="tech-item">
+                    <h3>Predictive Analytics</h3>
+                    <p>Provides accurate home valuations and predicts optimal selling times</p>
+                </div>
+            </div>
+            <div class="integrations">
+                <h3>Key Integrations</h3>
+                <ul>
+                    <li>DocuSign for e-signatures</li>
+                    <li>Zillow for market data</li>
+                    <li>Google Cloud for AI and ML capabilities</li>
+                    <li>Matterport for 3D virtual tours</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="competitive-advantage" class="slide">
+            <h2>Our Competitive Advantage</h2>
+            <div class="chart-container">
+                <canvas id="competitive-chart"></canvas>
+            </div>
+            <div class="unique-features">
+                <h3>Unique AI-Powered Features</h3>
+                <ul>
+                    <li>Real-time market analysis and pricing optimization</li>
+                    <li>Automated buyer matching and lead qualification</li>
+                    <li>AI-driven negotiation assistance with predictive modeling</li>
+                    <li>Sentiment analysis on buyer feedback for rapid improvements</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="traction" class="slide">
+            <h2>Our Traction</h2>
+            <div class="chart-container">
+                <canvas id="traction-chart"></canvas>
+            </div>
+            <div class="metrics">
+                <div class="metric">
+                    <h3>3,000</h3>
+                    <p>Active Users</p>
+                </div>
+                <div class="metric">
+                    <h3>1,500</h3>
+                    <p>Listings</p>
+                </div>
+                <div class="metric">
+                    <h3>500</h3>
+                    <p>Successful Sales</p>
+                </div>
+                <div class="metric">
+                    <h3>$150M</h3>
+                    <p>Total Property Value Sold</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="team" class="slide">
+            <h2>Our Team</h2>
+            <div class="team-members">
+                <div class="team-member">
+                    <img src="https://via.placeholder.com/150" alt="CEO">
+                    <h3>Jane Doe</h3>
+                    <p>CEO, Former Zillow Executive</p>
+                </div>
+                <div class="team-member">
+                    <img src="https://via.placeholder.com/150" alt="CTO">
+                    <h3>John Smith</h3>
+                    <p>CTO, AI Expert from Google</p>
+                </div>
+                <div class="team-member">
+                    <img src="https://via.placeholder.com/150" alt="COO">
+                    <h3>Emily Brown</h3>
+                    <p>COO, 15 years in Real Estate</p>
+                </div>
+            </div>
+            <div class="advisors">
+                <h3>Advisors</h3>
+                <ul>
+                    <li>Michael Johnson, Former NAR President</li>
+                    <li>Sarah Lee, PropTech Investor</li>
+                    <li>Dr. Alan Turing, AI Ethics Specialist</li>
+                </ul>
+            </div>
+        </div>
+
+   <div id="financials" class="slide">
+            <h2>Financials</h2>
+            <div class="chart-container">
+                <canvas id="financials-chart"></canvas>
+            </div>
+            <div class="scenario-selector">
+                <button onclick="updateFinancials('conservative')">Conservative</button>
+                <button onclick="updateFinancials('base')">Base Case</button>
+                <button onclick="updateFinancials('optimistic')">Optimistic</button>
+            </div>
+            <div class="financial-metrics">
+                <div class="metric">
+                    <h3>Break-even Point</h3>
+                    <p id="breakeven">Q4 2025</p>
+                </div>
+                <div class="metric">
+                    <h3>2027 Revenue</h3>
+                    <p id="revenue-2027">$40M</p>
+                </div>
+                <div class="metric">
+                    <h3>5-Year CAGR</h3>
+                    <p id="cagr">102%</p>
+                </div>
+            </div>
+            <div class="highlight-box">
+                <p><strong>Key Financial Milestone:</strong> Projected to start generating revenue by October 15, 2024, just 6 weeks after MVP launch.</p>
+            </div>
+        </div>
+
+        <div id="go-to-market" class="slide">
+            <h2>Go-to-Market Strategy</h2>
+            <div class="timeline">
+                <div class="timeline-item left">
+                    <h3>Phase 1: Launch (Aug 2024 - Feb 2025)</h3>
+                    <ul>
+                        <li>MVP Launch: October 1, 2024</li>
+                        <li>Initial target: Tech-savvy homeowners in SF, LA, San Diego</li>
+                        <li>Focus on properties in $500k-$1M range</li>
+                        <li>Targeted digital marketing campaigns</li>
+                    </ul>
+                </div>
+                <div class="timeline-item right">
+                    <h3>Phase 2: Expansion (Feb 2025 - Aug 2025)</h3>
+                    <ul>
+                        <li>Expand to additional California cities</li>
+                        <li>Increase marketing budget by 150%</li>
+                        <li>Launch partnerships with home services</li>
+                        <li>Introduce AI-powered virtual open houses</li>
+                    </ul>
+                </div>
+                <div class="timeline-item left">
+                    <h3>Phase 3: National Rollout (Aug 2025 - Aug 2026)</h3>
+                    <ul>
+                        <li>Launch in top 20 US metropolitan areas</li>
+                        <li>National TV and digital advertising campaign</li>
+                        <li>Introduce advanced AI features (e.g., predictive market analysis)</li>
+                        <li>Establish partnerships with national home service chains</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="investment-opportunity" class="slide">
+            <h2>Investment Opportunity</h2>
+            <div class="funding-details">
+                <h3>Funding Sought: $<span id="funding-amount">2.0</span>M</h3>
+                <input type="range" id="funding-slider" min="1" max="5" step="0.1" value="2">
+            </div>
+            <div class="chart-container">
+                <canvas id="funding-chart"></canvas>
+            </div>
+            <div class="roi">
+                <h3>Potential ROI</h3>
+                <p>5x return in 5 years (Conservative)</p>
+                <p>10x return in 5 years (Base Case)</p>
+                <p>20x return in 5 years (Optimistic)</p>
+            </div>
+            <div class="highlight-box">
+                <p><strong>Unicorn Potential Study:</strong> Based on our growth projections and market analysis, Homes by Stella has a 15% chance of reaching unicorn status ($1B valuation) within 5 years, and a 30% chance within 7 years.</p>
+            </div>
+        </div>
+
+        <div id="vision" class="slide">
+            <h2>Vision for the Future</h2>
+            <div class="long-term-goals">
+                <h3>Long-Term Goals</h3>
+                <ul>
+                    <li>Capture 20% of the FSBO market by 2030</li>
+                    <li>Expand services to include AI-powered buying assistance</li>
+                    <li>Integrate blockchain for secure, transparent transactions</li>
+                    <li>Develop AI-powered property management tools</li>
+                    <li>Expand internationally to major global real estate markets</li>
+                </ul>
+            </div>
+            <div class="industry-transformation">
+                <h3>Transforming Real Estate</h3>
+                <p>Homes by Stella aims to democratize real estate transactions, making them more accessible, efficient, and cost-effective for everyone. By leveraging AI and machine learning, we're not just changing how homes are sold, but reimagining the entire real estate experience.</p>
+            </div>
+            <div class="exit-strategy">
+                <h3>Potential Exits</h3>
+                <ul>
+                    <li>IPO: Targeting within 5-7 years</li>
+                    <li>Acquisition by major tech or real estate company</li>
+                    <li>Merger with complementary PropTech firm</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="call-to-action">
+            <h2>Join Us in Revolutionizing Real Estate</h2>
+            <p>Invest now and be part of the AI-driven future of home selling.</p>
+            <button class="btn" onclick="showInterestForm()">Express Interest</button>
+        </div>
+    </div>
+
+    <div class="nav">
+        <button onclick="prevSlide()">Previous</button>
+        <button onclick="nextSlide()">Next</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + slides.length) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function prevSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        function startPresentation() {
+            document.getElementById('opening-slide').classList.remove('active');
+            showSlide(1);
+        }
+
+        function generateDescription() {
+            const propertyDetails = document.getElementById('property-details').value;
+            const descriptions = [
+                `This stunning property ${propertyDetails} showcases modern design and exceptional craftsmanship. Boasting spacious living areas and high-end finishes, this home is perfect for those seeking luxury and comfort.`,
+                `Nestled in a prime location, this charming home ${propertyDetails} offers a perfect blend of style and functionality. With its thoughtful layout and attractive features, it's an ideal choice for discerning buyers.`,
+                `Experience the epitome of urban living in this remarkable property. ${propertyDetails} Featuring cutting-edge amenities and a prime location, this home is a rare find in today's competitive market.`
+            ];
+            document.getElementById('generated-description').textContent = descriptions[Math.floor(Math.random() * descriptions.length)];
+        }
+
+        function updateSavingsCalculator() {
+            const homeValue = document.getElementById('home-value').value;
+            const plan = document.getElementById('plan-select').value;
+            const traditionalCommission = homeValue * 0.06;
+            const stellaCost = plan === 'basic' ? 99 : plan === 'pro' ? 199 : 499;
+            const savings = traditionalCommission - stellaCost;
+            document.getElementById('home-value-display').textContent = Number(homeValue).toLocaleString();
+            document.getElementById('savings-display').textContent = Math.round(savings).toLocaleString();
+        }
+
+        document.getElementById('home-value').addEventListener('input', updateSavingsCalculator);
+        document.getElementById('plan-select').addEventListener('change', updateSavingsCalculator);
+
+        function updateFinancials(scenario) {
+            const breakeven = document.getElementById('breakeven');
+            const revenue2027 = document.getElementById('revenue-2027');
+            const cagr = document.getElementById('cagr');
+            
+            switch(scenario) {
+                case 'conservative':
+                    breakeven.textContent = 'Q1 2026';
+                    revenue2027.textContent = '$30M';
+                    cagr.textContent = '91%';
+                    break;
+                case 'base':
+                    breakeven.textContent = 'Q4 2025';
+                    revenue2027.textContent = '$40M';
+                    cagr.textContent = '102%';
+                    break;
+                case 'optimistic':
+                    breakeven.textContent = 'Q3 2025';
+                    revenue2027.textContent = '$50M';
+                    cagr.textContent = '110%';
+                    break;
+            }
+            
+            updateFinancialsChart(scenario);
+        }
+
+        function updateFundingAmount() {
+            const amount = document.getElementById('funding-slider').value;
+            document.getElementById('funding-amount').textContent = amount;
+            updateFundingChart(amount);
+        }
+
+        document.getElementById('funding-slider').addEventListener('input', updateFundingAmount);
+
+        function showInterestForm() {
+            alert("Thank you for your interest! An investment packet will be sent to you shortly.");
+        }
+
+        // Chart initializations and updates (implementation details omitted for brevity)
+        function initCharts() {
+            // Initialize all charts here
+        }
+
+        function updateFinancialsChart(scenario) {
+            // Update financials chart based on selected scenario
+        }
+
+        function updateFundingChart(amount) {
+            // Update funding allocation chart based on selected amount
+        }
+
+        // Initialize everything when the page loads
+        window.onload = function() {
+            initCharts();
+            updateSavingsCalculator();
+            updateFundingAmount();
+        };
+    </script>
+</body>
+</html>
