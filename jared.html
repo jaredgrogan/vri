@@ -1,0 +1,177 @@
+import React, { useState } from 'react';
+import { ArrowRight, Briefcase, Globe, User, AlertCircle, Code, Brain, Cpu } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+
+const PersonalBrandWebpage = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Form submitted:', { name, email, message });
+    setSubmitted(true);
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-100 via-blue-50 to-purple-50 text-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-3xl mx-auto">
+        <header className="text-center mb-12">
+          <h1 className="text-5xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">Jared Grogan</h1>
+          <p className="text-2xl text-gray-700">AI Visionary & Strategic Advisor</p>
+          <p className="text-xl text-gray-600">Transforming Industries with AI Innovation</p>
+        </header>
+
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">🚀 Pioneering the AI Revolution</h2>
+          <ul className="space-y-2">
+            <li className="flex items-center">
+              <ArrowRight className="mr-2 h-4 w-4 text-blue-500" />
+              15+ years of global expertise in AI/ML and full-stack development
+            </li>
+            <li className="flex items-center">
+              <ArrowRight className="mr-2 h-4 w-4 text-blue-500" />
+              Advisor on multi-billion-dollar investments for deep tech ecosystems
+            </li>
+            <li className="flex items-center">
+              <ArrowRight className="mr-2 h-4 w-4 text-blue-500" />
+              Managed $300M+ annual budgets, fostering innovation worldwide
+            </li>
+            <li className="flex items-center">
+              <ArrowRight className="mr-2 h-4 w-4 text-blue-500" />
+              Honored as a Chevalier for contributions to nation-building and science
+            </li>
+          </ul>
+        </section>
+
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">🌟 Why Partner With Me?</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Card className="bg-gradient-to-br from-white to-blue-50">
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Brain className="mr-2 h-5 w-5 text-blue-500" />
+                  Comprehensive AI Expertise
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p>Bridging cutting-edge AI technologies:</p>
+                <ul className="list-disc list-inside mt-2">
+                  <li>Natural Language Processing</li>
+                  <li>Computer Vision</li>
+                  <li>Reinforcement Learning</li>
+                  <li>Generative AI Models</li>
+                </ul>
+              </CardContent>
+            </Card>
+            <Card className="bg-gradient-to-br from-white to-purple-50">
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Globe className="mr-2 h-5 w-5 text-purple-500" />
+                  Global Network
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                Connections across tech hubs, universities, and industry leaders
+              </CardContent>
+            </Card>
+            <Card className="bg-gradient-to-br from-white to-green-50">
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <User className="mr-2 h-5 w-5 text-green-500" />
+                  Ethical Leadership
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                Committed to responsible AI development and compliance
+              </CardContent>
+            </Card>
+            <Card className="bg-gradient-to-br from-white to-yellow-50">
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Cpu className="mr-2 h-5 w-5 text-yellow-600" />
+                  Technical Proficiency
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                Full-stack development and system architecture expertise
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">🔥 Ready to Revolutionize Your AI Strategy?</h2>
+          <p className="mb-4">Let's harness the power of AI to transform your:</p>
+          <ul className="space-y-2 mb-6">
+            <li className="flex items-center">
+              <Briefcase className="mr-2 h-4 w-4 text-blue-500" /> Product Development
+            </li>
+            <li className="flex items-center">
+              <Globe className="mr-2 h-4 w-4 text-purple-500" /> Operational Efficiency
+            </li>
+            <li className="flex items-center">
+              <User className="mr-2 h-4 w-4 text-green-500" /> Market Positioning
+            </li>
+            <li className="flex items-center">
+              <AlertCircle className="mr-2 h-4 w-4 text-yellow-600" /> Innovation Pipeline
+            </li>
+          </ul>
+          <p className="font-semibold">Don't just adapt to the AI era – lead it.</p>
+        </section>
+
+        <section>
+          <h2 className="text-2xl font-semibold mb-4">Book Your 1:1 AI Strategy Call</h2>
+          {submitted ? (
+            <Alert>
+              <AlertTitle>Success!</AlertTitle>
+              <AlertDescription>
+                Thank you for your interest. I'll be in touch shortly to schedule our call.
+              </AlertDescription>
+            </Alert>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <Input
+                type="text"
+                placeholder="Your Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                className="bg-white bg-opacity-50"
+              />
+              <Input
+                type="email"
+                placeholder="Your Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="bg-white bg-opacity-50"
+              />
+              <Textarea
+                placeholder="How can I help transform your business with AI?"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                required
+                className="bg-white bg-opacity-50"
+              />
+              <Button type="submit" className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+                Schedule Consultation
+              </Button>
+            </form>
+          )}
+        </section>
+
+        <footer className="mt-12 text-center text-gray-600">
+          <p>&copy; 2024 Aicosystem. All rights reserved.</p>
+        </footer>
+      </div>
+    </div>
+  );
+};
+
+export default PersonalBrandWebpage;
