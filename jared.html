@@ -1,177 +1,307 @@
-import React, { useState } from 'react';
-import { ArrowRight, Briefcase, Globe, User, AlertCircle, Code, Brain, Cpu } from 'lucide-react';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jared Grogan - AI Visionary & Strategic Advisor</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
 
-const PersonalBrandWebpage = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
-  const [submitted, setSubmitted] = useState(false);
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #9b59b6;
+            --text-color: #333;
+            --bg-color: #f5f7fa;
+        }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Form submitted:', { name, email, message });
-    setSubmitted(true);
-  };
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 via-blue-50 to-purple-50 text-gray-900 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto">
-        <header className="text-center mb-12">
-          <h1 className="text-5xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">Jared Grogan</h1>
-          <p className="text-2xl text-gray-700">AI Visionary & Strategic Advisor</p>
-          <p className="text-xl text-gray-600">Transforming Industries with AI Innovation</p>
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: linear-gradient(135deg, var(--bg-color), #e0e7ff);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 50px 0;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: var(--secondary-color);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .expertise-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .expertise-list li {
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .expertise-list li::before {
+            content: '✓';
+            color: var(--primary-color);
+            margin-right: 10px;
+        }
+
+        .cta-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        form {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+            color: var(--text-color);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .subtitle {
+                font-size: 1.2rem;
+            }
+
+            .card-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Jared Grogan</h1>
+            <p class="subtitle">AI Visionary & Strategic Advisor</p>
         </header>
 
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">🚀 Pioneering the AI Revolution</h2>
-          <ul className="space-y-2">
-            <li className="flex items-center">
-              <ArrowRight className="mr-2 h-4 w-4 text-blue-500" />
-              15+ years of global expertise in AI/ML and full-stack development
-            </li>
-            <li className="flex items-center">
-              <ArrowRight className="mr-2 h-4 w-4 text-blue-500" />
-              Advisor on multi-billion-dollar investments for deep tech ecosystems
-            </li>
-            <li className="flex items-center">
-              <ArrowRight className="mr-2 h-4 w-4 text-blue-500" />
-              Managed $300M+ annual budgets, fostering innovation worldwide
-            </li>
-            <li className="flex items-center">
-              <ArrowRight className="mr-2 h-4 w-4 text-blue-500" />
-              Honored as a Chevalier for contributions to nation-building and science
-            </li>
-          </ul>
-        </section>
-
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">🌟 Why Partner With Me?</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Card className="bg-gradient-to-br from-white to-blue-50">
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Brain className="mr-2 h-5 w-5 text-blue-500" />
-                  Comprehensive AI Expertise
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p>Bridging cutting-edge AI technologies:</p>
-                <ul className="list-disc list-inside mt-2">
-                  <li>Natural Language Processing</li>
-                  <li>Computer Vision</li>
-                  <li>Reinforcement Learning</li>
-                  <li>Generative AI Models</li>
+        <main>
+            <section>
+                <h2>🚀 Pioneering the AI Revolution</h2>
+                <ul class="expertise-list">
+                    <li>15+ years of global expertise in AI/ML and full-stack development</li>
+                    <li>Advisor on multi-billion-dollar investments for deep tech ecosystems</li>
+                    <li>Managed $300M+ annual budgets, fostering innovation worldwide</li>
+                    <li>Honored as a Chevalier for contributions to nation-building and science</li>
                 </ul>
-              </CardContent>
-            </Card>
-            <Card className="bg-gradient-to-br from-white to-purple-50">
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Globe className="mr-2 h-5 w-5 text-purple-500" />
-                  Global Network
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                Connections across tech hubs, universities, and industry leaders
-              </CardContent>
-            </Card>
-            <Card className="bg-gradient-to-br from-white to-green-50">
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <User className="mr-2 h-5 w-5 text-green-500" />
-                  Ethical Leadership
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                Committed to responsible AI development and compliance
-              </CardContent>
-            </Card>
-            <Card className="bg-gradient-to-br from-white to-yellow-50">
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Cpu className="mr-2 h-5 w-5 text-yellow-600" />
-                  Technical Proficiency
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                Full-stack development and system architecture expertise
-              </CardContent>
-            </Card>
-          </div>
-        </section>
+            </section>
 
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">🔥 Ready to Revolutionize Your AI Strategy?</h2>
-          <p className="mb-4">Let's harness the power of AI to transform your:</p>
-          <ul className="space-y-2 mb-6">
-            <li className="flex items-center">
-              <Briefcase className="mr-2 h-4 w-4 text-blue-500" /> Product Development
-            </li>
-            <li className="flex items-center">
-              <Globe className="mr-2 h-4 w-4 text-purple-500" /> Operational Efficiency
-            </li>
-            <li className="flex items-center">
-              <User className="mr-2 h-4 w-4 text-green-500" /> Market Positioning
-            </li>
-            <li className="flex items-center">
-              <AlertCircle className="mr-2 h-4 w-4 text-yellow-600" /> Innovation Pipeline
-            </li>
-          </ul>
-          <p className="font-semibold">Don't just adapt to the AI era – lead it.</p>
-        </section>
+            <section>
+                <h2>🌟 Why Partner With Me?</h2>
+                <div class="card-container">
+                    <div class="card">
+                        <h3>Comprehensive AI Expertise</h3>
+                        <p>Bridging cutting-edge AI technologies:</p>
+                        <ul class="expertise-list">
+                            <li>Natural Language Processing</li>
+                            <li>Computer Vision</li>
+                            <li>Reinforcement Learning</li>
+                            <li>Generative AI Models</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Global Network</h3>
+                        <p>Connections across tech hubs, universities, and industry leaders</p>
+                    </div>
+                    <div class="card">
+                        <h3>Ethical Leadership</h3>
+                        <p>Committed to responsible AI development and compliance</p>
+                    </div>
+                    <div class="card">
+                        <h3>Technical Proficiency</h3>
+                        <p>Full-stack development and system architecture expertise</p>
+                    </div>
+                </div>
+            </section>
 
-        <section>
-          <h2 className="text-2xl font-semibold mb-4">Book Your 1:1 AI Strategy Call</h2>
-          {submitted ? (
-            <Alert>
-              <AlertTitle>Success!</AlertTitle>
-              <AlertDescription>
-                Thank you for your interest. I'll be in touch shortly to schedule our call.
-              </AlertDescription>
-            </Alert>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <Input
-                type="text"
-                placeholder="Your Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                className="bg-white bg-opacity-50"
-              />
-              <Input
-                type="email"
-                placeholder="Your Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="bg-white bg-opacity-50"
-              />
-              <Textarea
-                placeholder="How can I help transform your business with AI?"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                required
-                className="bg-white bg-opacity-50"
-              />
-              <Button type="submit" className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white">
-                Schedule Consultation
-              </Button>
-            </form>
-          )}
-        </section>
+            <section class="cta-section">
+                <h2>🔥 Ready to Revolutionize Your AI Strategy?</h2>
+                <p>Let's harness the power of AI to transform your business</p>
+                <a href="#contact" class="cta-button">Schedule a Consultation</a>
+            </section>
 
-        <footer className="mt-12 text-center text-gray-600">
-          <p>&copy; 2024 Aicosystem. All rights reserved.</p>
+            <section id="contact">
+                <h2>Book Your 1:1 AI Strategy Call</h2>
+                <form id="contact-form">
+                    <input type="text" id="name" placeholder="Your Name" required>
+                    <input type="email" id="email" placeholder="Your Email" required>
+                    <textarea id="message" placeholder="How can I help transform your business with AI?" required></textarea>
+                    <button type="submit">Schedule Consultation</button>
+                </form>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Aicosystem. All rights reserved.</p>
         </footer>
-      </div>
     </div>
-  );
-};
 
-export default PersonalBrandWebpage;
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        gsap.to("h1", {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            ease: "power3.out"
+        });
+
+        gsap.to(".subtitle", {
+            opacity: 1,
+            y: 0,
+            duration: 1,
+            delay: 0.3,
+            ease: "power3.out"
+        });
+
+        gsap.utils.toArray(".card").forEach((card, i) => {
+            gsap.to(card, {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: "power3.out",
+                scrollTrigger: {
+                    trigger: card,
+                    start: "top 80%",
+                    end: "bottom 20%",
+                    toggleActions: "play none none reverse"
+                }
+            });
+        });
+
+        document.getElementById("contact-form").addEventListener("submit", function(e) {
+            e.preventDefault();
+            alert("Thank you for your interest. I'll be in touch shortly to schedule our call.");
+            this.reset();
+        });
+
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                gsap.to(card, { scale: 1.05, duration: 0.3 });
+            });
+            card.addEventListener('mouseleave', () => {
+                gsap.to(card, { scale: 1, duration: 0.3 });
+            });
+        });
+    </script>
+</body>
+</html>
