@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Personal Tax Model</title>
+    <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono:wght@400;600&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #121212 0%, #1e1e1e 100%);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Layout and Responsiveness */
+        .container {
+            margin: 0 auto;
+            padding: 15px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        section {
+            margin-bottom: 20px;
+            background: rgba(42, 42, 42, 0.6);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            section {
+                padding: 10px;
+            }
+
+            input, select, button {
+                font-size: 1rem;
+                padding: 10px;
+            }
+        }
+
+        /* Inputs and Buttons */
+        input, select, button {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border: none;
+            background-color: #333333;
+            color: #ffffff;
+            font-size: 1rem;
+        }
+
+        button {
+            background-color: #b22222;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #ff2a2a;
+            transform: scale(1.05);
+        }
+
+        /* Chart and Comparison Section */
+        .chart-container, .comparison-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .chart-container, .comparison-container {
+                flex-direction: column;
+            }
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: rgba(26, 26, 26, 0.6);
+            color: #b0b0b0;
+            font-size: 0.8rem;
+            backdrop-filter: blur(10px);
+        }
+
+        body.day-mode footer {
+            background: rgba(255, 255, 255, 0.6);
+            color: #000;
+        }
+    </style>
+</head>
+<body class="night-mode">
+    <header class="container">
+        <img src="logo1.svg" alt="Venture Research Logo" style="width:50px; height:50px; position:absolute; top:20px; left:20px;">
+        <h1>Dynamic Personal Tax Model</h1>
+    </header>
+
+    <section class="container">
+        <h2>Select Your State or Territory</h2>
+        <select id="stateDropdown">
+            <option value="">Select State/Territory</option>
+        </select>
+
+        <!-- Select Filing Status -->
+        <label>Select Your Filing Status:</label><br>
+        <input type="radio" id="single" name="filingStatus" value="Single">
+        <label for="single">Single</label><br>
+        <input type="radio" id="married" name="filingStatus" value="Married">
+        <label for="married">Married</label><br>
+    </section>
+
+    <!-- Tax Breakdown Section -->
+    <section class="container tax-summary">
+        <h3>Your Tax Breakdown</h3>
+        <p>Income: $<span id="incomeSummary">0</span></p>
+        <p>Federal Tax: $<span id="federalTaxSummary">0</span></p>
+        <p>State Tax: $<span id="stateTaxSummary">0</span></p>
+        <p>Sales Tax: $<span id="salesTaxSummary">0</span></p>
+        <p><b>Total Tax Burden: $<span id="totalTaxSummary">0</span></b></p>
+        <p><b>Net Income: $<span id="remainingIncome">0</span></b></p>
+    </section>
+
+    <!-- Annual Savings Section -->
+    <section class="container annual-savings">
+        <h3>Annual Savings</h3>
+        <label for="expenses">Other Expenses ($):</label>
+        <input type="number" id="expenses" placeholder="Enter your expenses">
+        <p><b>True Net Income: $<span id="trueNetIncome">0</span></b></p>
+    </section>
+
+    <!-- Pie Chart Section -->
+    <section class="container chart-container">
+        <canvas id="taxPieChart"></canvas>
+    </section>
+
+    <!-- Comparison Section -->
+    <section class="container comparison-container">
+        <h3>Compare with Other States</h3>
+        <button id="compareButton">Compare States</button>
+        <div id="comparisonSection"></div>
+    </section>
+
+    <!-- Footer with Export Options -->
+    <footer>
+        <button id="exportCsv">Export to CSV</button>
+        <button id="exportPdf">Export to PDF</button>
+        <p>&copy; 2024 Venture Research Institute. All Rights Reserved.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+    <script>
+        // Initialize Chart.js Pie Chart
+        const ctx = document.getElementById('taxPieChart').getContext('2d');
+        const pieChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Federal Tax', 'State Tax', 'Sales Tax'],
+                datasets: [{
+                    data: [0, 0, 0],  // Dynamic values based on inputs
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+                }]
+            }
+        });
+
+        // Handle Compare Button
+        document.getElementById('compareButton').addEventListener('click', function () {
+            const state1 = document.getElementById('stateDropdown').value;
+            const state2 = prompt('Enter the second state for comparison:');
+            const state3 = prompt('Enter a third state for comparison (optional):');
+
+            // Logic to compare tax breakdown between states (dummy output)
+            document.getElementById('comparisonSection').innerHTML = `
+                <p>Comparison between ${state1}, ${state2}${state3 ? ', and ' + state3 : ''}</p>
+            `;
+        });
+
+        // Export CSV
+        document.getElementById('exportCsv').addEventListener('click', function () {
+            const csvContent = "data:text/csv;charset=utf-8," 
+                + "Income,Federal Tax,State Tax,Sales Tax,Total Tax Burden,Net Income\n"
+                + "0,0,0,0,0,0";  // Dynamic data
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement('a');
+            link.setAttribute('href', encodedUri);
+            link.setAttribute('download', 'tax_data.csv');
+            document.body.appendChild(link);
+            link.click();
+        });
+
+        // Export PDF
+        document.getElementById('exportPdf').addEventListener('click', function () {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.text('Tax Breakdown', 10, 10);
+            doc.text('Income: $0', 10, 20);
+            doc.text('Federal Tax: $0', 10, 30);
+            // Add more data
+            doc.save('tax_data.pdf');
+        });
+    </script>
+</body>
+</html>
