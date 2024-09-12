@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venture Research Institute - Metro Area Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .header {
+            text-align: center;
+            padding: 20px;
+            font-size: 2em;
+            font-weight: bold;
+            background-color: #333;
+            color: white;
+        }
+        .content {
+            margin: 20px;
+        }
+        .dropdown-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .dropdown {
+            width: 50%;
+            padding: 10px;
+            font-size: 1.1em;
+        }
+        .fact-sheet {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+        .fact-sheet.visible {
+            display: block;
+        }
+        .fact-sheet h2 {
+            margin-top: 0;
+        }
+        .export-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .export-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">Venture Research Institute</div>
+
+    <div class="content">
+        <div class="dropdown-container">
+            <select class="dropdown" id="metro-dropdown">
+                <option value="">Select a Metro Area</option>
+                <option value="new-york">New York City</option>
+                <option value="bay-area">The Bay Area</option>
+                <option value="los-angeles">Los Angeles</option>
+                <!-- Add more options as needed -->
+            </select>
+        </div>
+
+        <div class="fact-sheet" id="fact-sheet">
+            <h2 id="city-name">City Name</h2>
+            <p><strong>Millionaires:</strong> <span id="millionaires"></span></p>
+            <p><strong>Centi-millionaires:</strong> <span id="centi-millionaires"></span></p>
+            <p><strong>Billionaires:</strong> <span id="billionaires"></span></p>
+            <p><strong>Millionaire Growth (2013-2023):</strong> <span id="growth"></span></p>
+            <!-- Add more data fields as needed -->
+            <button class="export-button" onclick="exportPDF()">Export to PDF</button>
+        </div>
+    </div>
+
+    <script>
+        const metroData = {
+            'new-york': {
+                name: "New York City",
+                millionaires: "349,500",
+                centiMillionaires: "744",
+                billionaires: "60",
+                growth: "48%"
+            },
+            'bay-area': {
+                name: "The Bay Area",
+                millionaires: "305,700",
+                centiMillionaires: "675",
+                billionaires: "68",
+                growth: "82%"
+            },
+            'los-angeles': {
+                name: "Los Angeles",
+                millionaires: "212,100",
+                centiMillionaires: "496",
+                billionaires: "43",
+                growth: "45%"
+            }
+            // Add more metro data as needed
+        };
+
+        const dropdown = document.getElementById('metro-dropdown');
+        const factSheet = document.getElementById('fact-sheet');
+
+        dropdown.addEventListener('change', function () {
+            const selectedMetro = this.value;
+            if (selectedMetro && metroData[selectedMetro]) {
+                document.getElementById('city-name').textContent = metroData[selectedMetro].name;
+                document.getElementById('millionaires').textContent = metroData[selectedMetro].millionaires;
+                document.getElementById('centi-millionaires').textContent = metroData[selectedMetro].centiMillionaires;
+                document.getElementById('billionaires').textContent = metroData[selectedMetro].billionaires;
+                document.getElementById('growth').textContent = metroData[selectedMetro].growth;
+                factSheet.classList.add('visible');
+            } else {
+                factSheet.classList.remove('visible');
+            }
+        });
+
+        function exportPDF() {
+            // Implement PDF export functionality here
+            alert('Export to PDF clicked!');
+        }
+    </script>
+
+</body>
+</html>
