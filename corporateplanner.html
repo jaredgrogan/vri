@@ -208,7 +208,7 @@
     <div class="glass-container">
         <h2>Qualified R&D Expenses</h2>
         <label for="rdExpenses">R&D Expenses ($):</label>
-        <input type="number" id="rdExpenses" value="500000" oninput="calculateTaxes()">
+        <input type="number" id="rdExpenses" value="100000" oninput="calculateTaxes()">
     </div>
 
     <!-- New section: Payroll Expenses -->
@@ -224,32 +224,54 @@
         </select>
 
         <label for="salary">Employee Salary ($):</label>
-        <input type="number" id="salary" value="100000" oninput="calculateTaxes()">
+        <input type="number" id="salary" value="50000" oninput="calculateTaxes()">
 
         <label for="employees">Number of Employees:</label>
-        <input type="number" id="employees" value="50" oninput="calculateTaxes()">
+        <input type="number" id="employees" value="10" oninput="calculateTaxes()">
 
         <label for="revenue">Total Revenue ($):</label>
-        <input type="number" id="revenue" value="20000000" oninput="calculateTaxes()">
+        <input type="number" id="revenue" value="2000000" oninput="calculateTaxes()">
 
         <label for="expenses">Total Expenses ($):</label>
-        <input type="number" id="expenses" value="12000000" oninput="calculateTaxes()">
+        <input type="number" id="expenses" value="1500000" oninput="calculateTaxes()">
         
         <!-- Checkboxes for tax inclusion -->
     </div>
 
+    <!-- Export buttons -->
+    <div class="export-buttons">
+        <button onclick="exportToCSV()">Export as CSV</button>
+        <button onclick="exportToPDF()">Export as PDF</button>
+    </div>
+
+    <!-- Citations & Resources -->
+    <button class="collapsible">Citations & Resources</button>
+    <div class="content">
+        <ul>
+            <li><a href="https://www.irs.gov/">IRS - Federal Tax Information</a></li>
+            <li><a href="https://www.taxpolicycenter.org/">Tax Policy Center - State and Federal Tax Data</a></li>
+            <li><a href="https://taxfoundation.org/">Tax Foundation - Tax Rates by State</a></li>
+            <li><a href="https://www.bls.gov/">Bureau of Labor Statistics</a></li>
+        </ul>
+    </div>
+
+    <footer>
+        &copy; 2024 Venture Research Institute
+    </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
         const stateData = {
             // Data for states
         };
 
         let selectedState = 'CA';
-        let salary = 100000;
-        let employees = 50;
-        let revenue = 20000000;
-        let expenses = 12000000;
-        let rdExpenses = 500000;
+        let salary = 50000;
+        let employees = 10;
+        let revenue = 2000000;
+        let expenses = 1500000;
+        let rdExpenses = 100000;
 
         const ctx = document.getElementById('taxChart').getContext('2d');
         let taxChart = new Chart(ctx, {
@@ -285,8 +307,8 @@
             rdExpenses = parseFloat(document.getElementById('rdExpenses').value);
 
             // Existing tax calculation logic
-            let totalPayrollTax = stateData[selectedState].payrollTax * (employees / 50);
-            let totalStateIncomeTax = stateData[selectedState].stateIncomeTax * (employees / 50);
+            let totalPayrollTax = stateData[selectedState].payrollTax * (employees / 10);
+            let totalStateIncomeTax = stateData[selectedState].stateIncomeTax * (employees / 10);
             let federalTax = (revenue - expenses) * 0.21;
 
             let totalTaxBurden = totalPayrollTax + totalStateIncomeTax + federalTax;
@@ -309,6 +331,33 @@
             // Update chart data
             taxChart.data.datasets[0].data = [totalPayrollTax, totalStateIncomeTax, federalTax, totalTaxBurden];
             taxChart.update();
+        }
+
+        function exportToCSV() {
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "Tax Component,Amount ($)\n";
+            csvContent += `Payroll Tax,${document.getElementById('payrollTax').textContent}\n`;
+            csvContent += `State Income Tax,${document.getElementById('stateIncomeTax').textContent}\n`;
+            csvContent += `Federal Tax,${document.getElementById('federalTax').textContent}\n`;
+            csvContent += `Total Tax Burden,${document.getElementById('totalTax').textContent}\n`;
+
+            let encodedUri = encodeURI(csvContent);
+            let link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "tax_data.csv");
+            document.body.appendChild(link); // Required for FF
+
+            link.click();
+        }
+
+        function exportToPDF() {
+            const doc = new jsPDF();
+            doc.text("Tax Projections Report", 20, 10);
+            doc.text(`Payroll Tax: $${document.getElementById('payrollTax').textContent}`, 20, 30);
+            doc.text(`State Income Tax: $${document.getElementById('stateIncomeTax').textContent}`, 20, 40);
+            doc.text(`Federal Tax: $${document.getElementById('federalTax').textContent}`, 20, 50);
+            doc.text(`Total Tax Burden: $${document.getElementById('totalTax').textContent}`, 20, 60);
+            doc.save("tax_report.pdf");
         }
 
         calculateTaxes(); // Initial calculation
