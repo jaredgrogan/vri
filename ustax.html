@@ -4,7 +4,167 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VRI Tax Calculator</title>
-    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            margin: 20px auto;
+            max-width: 90%;
+            color: white;
+        }
+
+        h1 {
+            font-size: 2rem;
+        }
+
+        p {
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+
+        section {
+            margin: 20px auto;
+            padding: 15px;
+            width: 90%;
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin: 10px 0;
+        }
+
+        input[type="number"], select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+        }
+
+        input[type="number"]:focus, select:focus {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            outline: none;
+        }
+
+        /* Button Styles */
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            transition: background-color 0.3s ease;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        /* Tax Summary Styles */
+        .summary-panel {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            color: white;
+            text-align: left;
+        }
+
+        .summary-panel p {
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+
+        .summary-panel span {
+            font-weight: bold;
+        }
+
+        /* Responsive Chart */
+        #pie-chart-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: white;
+            font-size: 0.8rem;
+            margin-top: auto;
+        }
+
+        /* Mobile-first adjustments */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            p {
+                font-size: 0.9rem;
+            }
+
+            input[type="number"], select {
+                font-size: 1rem;
+            }
+
+            button {
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Animations */
+        input, select, button {
+            transition: transform 0.3s ease;
+        }
+
+        input:focus, select:focus, button:active {
+            transform: scale(1.05);
+        }
+
+        header, section, footer {
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+
+        header:hover, section:hover, footer:hover {
+            transform: translateY(-5px);
+        }
+    </style>
 </head>
 <body>
     <!-- Header with VRI branding -->
