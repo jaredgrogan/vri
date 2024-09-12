@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Personal Tax Model</title>
+    <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono:wght@400;600&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #121212 0%, #1e1e1e 100%);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Day/Night Toggle */
+        body.day-mode {
+            background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+            color: #000000;
+        }
+
+        /* Logo */
+        header .logo {
+            width: 50px;
+            height: 50px;
+            padding: 20px;
+            filter: invert(1); /* Invert logo in dark mode */
+        }
+
+        body.day-mode .logo {
+            filter: invert(0); /* Normal logo in day mode */
+        }
+
+        /* Header with Glassmorphism */
+        header {
+            text-align: center;
+            padding: 20px;
+            background: rgba(30, 30, 30, 0.6);
+            border-bottom: 2px solid #b0b0b0;
+            backdrop-filter: blur(10px);
+        }
+
+        body.day-mode header {
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        h1 {
+            font-family: 'Berkeley Mono', monospace;
+            color: #d4af37; /* Gold for title */
+            font-size: 2rem;
+        }
+
+        section {
+            margin: 20px auto;
+            padding: 15px;
+            width: 90%;
+            max-width: 600px;
+            background: rgba(42, 42, 42, 0.6);
+            border-radius: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        body.day-mode section {
+            background: rgba(255, 255, 255, 0.6);
+            color: #000;
+        }
+
+        /* Interactive Elements */
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border: none;
+            background-color: #333333;
+            color: #ffffff;
+        }
+
+        body.day-mode input, body.day-mode select {
+            background-color: #e0e0e0;
+            color: #000;
+        }
+
+        button {
+            background-color: #b22222;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #ff2a2a;
+            transform: scale(1.05);
+        }
+
+        /* Summary Panel */
+        .summary-panel {
+            background: rgba(26, 26, 26, 0.6);
+            border-radius: 20px;
+            padding: 20px;
+        }
+
+        body.day-mode .summary-panel {
+            background: rgba(255, 255, 255, 0.6);
+            color: #000;
+        }
+
+        .summary-panel p {
+            font-size: 1rem;
+        }
+
+        .summary-panel span {
+            font-weight: bold;
+            color: #d4af37;
+        }
+
+        /* Resources Section */
+        .resources h3 {
+            cursor: pointer;
+            color: #d4af37;
+        }
+
+        .resources ul {
+            display: none;
+        }
+
+        .resources ul li {
+            margin: 5px 0;
+        }
+
+        .resources ul li a {
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .resources ul li a:hover {
+            color: #ff2a2a;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: rgba(26, 26, 26, 0.6);
+            color: #b0b0b0;
+            font-size: 0.8rem;
+            backdrop-filter: blur(10px);
+        }
+
+        body.day-mode footer {
+            background: rgba(255, 255, 255, 0.6);
+            color: #000;
+        }
+
+        footer .footer-nav a {
+            margin: 0 10px;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        footer .footer-nav a:hover {
+            color: #ff2a2a;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body class="night-mode">
+    <header>
+        <img src="logo1.svg" alt="Venture Research Logo" class="logo">
+        <h1>Dynamic Personal Tax Model</h1>
+    </header>
+
+    <section>
+        <h2>Select Your State or Territory</h2>
+        <select id="stateDropdown">
+            <option value="">Select State/Territory</option>
+        </select>
+    </section>
+
+    <section class="user-input">
+        <h3>Enter Your Income and Exemptions</h3>
+        <label for="income">Annual Income ($):</label>
+        <input type="number" id="income" placeholder="Enter your income">
+
+        <label for="standardExemption">Apply Standard Exemption</label>
+        <input type="checkbox" id="standardExemption">
+
+        <label for="customExclusions">Other Exemptions/Exclusions ($):</label>
+        <input type="number" id="customExclusions" placeholder="Enter custom exemptions">
+
+        <h3>Enter Your Spending</h3>
+        <label for="spending">Total Spending in State ($):</label>
+        <input type="number" id="spending" placeholder="Enter your spending">
+    </section>
+
+    <section class="tax-summary">
+        <h3>Your Tax Breakdown</h3>
+        <div class="summary-panel">
+            <p>Income: $<span id="incomeSummary">0</span></p>
+            <p>Federal Tax: $<span id="federalTaxSummary">0</span></p>
+            <p>State Tax: $<span id="stateTaxSummary">0</span></p>
+            <p>Sales Tax: $<span id="salesTaxSummary">0</span></p>
+            <p><b>Total Tax Burden: $<span id="totalTaxSummary">0</span></b></p>
+            <p><b>Net Income: $<span id="remainingIncome">0</span></b></p>
+        </div>
+    </section>
+
+    <section class="resources">
+        <h3 onclick="toggleResources()">Resources</h3>
+        <ul id="resourcesList">
+            <li><a href="https://www.irs.gov/individuals/tax-withholding-estimator" data-tooltip="IRS Withholding Estimator">IRS Withholding Estimator</a></li>
+            <li><a href="https://taxfoundation.org" data-tooltip="Tax Foundation">Tax Foundation</a></li>
+            <li><a href="https://www.cnbc.com/taxes/" data-tooltip="CNBC Tax Resources">CNBC Tax Resources</a></li>
+        </ul>
+    </section>
+
+    <footer>
+        <nav class="footer-nav">
+            <a href="about.html">About</a>
+            <a href="programs.html">Programs</a>
+            <a href="fund.html">Fund</a>
+            <a href="products.html">Products</a>
+            <a href="events.html">Events</a>
+        </nav>
+        <p>&copy; 2024 Venture Research Institute. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        const toggleMode = () => {
+            document.body.classList.toggle('day-mode');
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleButton = document.createElement('button');
+            toggleButton.textContent = 'Toggle Day/Night Mode';
+            toggleButton.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background-color: #b22222;
+                color: #ffffff;
+                border: none;
+                border-radius: 10px;
+                padding: 10px;
+                cursor: pointer;
+            `;
+            toggleButton.addEventListener('click', toggleMode);
+            document.body.appendChild(toggleButton);
+        });
+    </script>
+</body>
+</html>
+
