@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>US Tax Calculator - Venture Research Institute</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/logo1.svg">
+    <!-- Preload critical assets -->
+    <link rel="preload" href="/assets/fonts/berkeley-mono.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/assets/fonts/trajan-pro.woff2" as="font" type="font/woff2" crossorigin>
+    <!-- Critical CSS inline for faster rendering -->
+    <style>
+        /* Add critical CSS here */
+        body { font-family: 'Berkeley Mono', monospace; margin: 0; padding: 0; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+    </style>
+    <!-- Non-critical CSS loaded asynchronously -->
+    <link rel="stylesheet" href="/assets/css/main.css" media="print" onload="this.media='all'">
+    <!-- Fallback for browsers that don't support async CSS loading -->
+    <noscript><link rel="stylesheet" href="/assets/css/main.css"></noscript>
+</head>
+<body>
+    <header>
+        <!-- Header content -->
+    </header>
+
+    <main id="root" class="container">
+        <!-- React app will be mounted here -->
+        <noscript>You need to enable JavaScript to run this app.</noscript>
+    </main>
+
+    <footer>
+        <!-- Footer content -->
+    </footer>
+
+    <!-- Load React and other dependencies from a CDN with SRI for security -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.2/umd/react.production.min.js" 
+            integrity="sha384-7Er69WnAl0+tY5MWEvnQzWHeDFjgHSnlQfDDeWUvv8qlRXtzaF/pNo18Q2aoZNiO" 
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.2/umd/react-dom.production.min.js" 
+            integrity="sha384-vj2XpC1SOa8PHrb0YlBqKN7CQzJYj3nDqj+oQhT0Owb4vRmhuxItU+V1VJVxpgI8" 
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js" 
+            integrity="sha384-VgZgZqjY9Fh+YsIGYp/Vzpry0WVkjTY0rNO5jjK0KRNTBdS9hK/u8wr4cGM1KeyD" 
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/recharts/2.1.9/Recharts.min.js" 
+            integrity="sha384-YLThpnVhP4NbUVHCDeN+9+2omjsq5d/Gd7PFhB+uXU1TvcEJSLU6xYpxAhwP06k" 
+            crossorigin="anonymous"></script>
+
+    <!-- Load our React components -->
+    <script src="/assets/js/components/USMap.js"></script>
+    <script src="/assets/js/components/TaxCalculator.js"></script>
+
+    <!-- Initialize our React app -->
+    <script type="text/babel">
+        ReactDOM.render(<TaxCalculator />, document.getElementById('root'));
+    </script>
+
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-XXXXXXX');</script>
+    <!-- End Google Tag Manager -->
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                }, function(err) {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
