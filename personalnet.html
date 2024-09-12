@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Website Update</title>
+  <style>
+    /* General CSS */
+    body {
+      font-family: Arial, sans-serif;
+    }
+    
+    /* SVG Toggle for Day/Night */
+    .toggle-theme {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    }
+
+    #theme-icon {
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+    }
+
+    /* Top Left Logo */
+    .logo {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      width: 50px;
+      height: 50px;
+    }
+
+    /* Tooltip CSS */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+    }
+
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 120px;
+      background-color: black;
+      color: white;
+      text-align: center;
+      border-radius: 5px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+      bottom: 100%;
+      left: 50%;
+      margin-left: -60px;
+    }
+
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+    }
+
+    /* Link Styles */
+    a {
+      text-decoration: none;
+      color: black; /* Customize default color */
+    }
+
+    a:hover {
+      color: darkgray; /* Shade change on hover */
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SVG Toggle for Sun/Moon (Day/Night Mode) -->
+  <div class="toggle-theme">
+    <img src="sun.svg" alt="Day mode" id="theme-icon" onclick="toggleTheme()">
+  </div>
+
+  <!-- Top Left Logo -->
+  <div class="logo">
+    <img src="logo1.svg" alt="Logo" />
+  </div>
+
+  <!-- Tooltip Example -->
+  <div class="tooltip">
+    Hover over me
+    <span class="tooltiptext">Tooltip description</span>
+  </div>
+
+  <!-- IRS Links with No Underlines and Hover Effects -->
+  <p>
+    IRS Tax Withholding Estimator:
+    <a href="https://www.irs.gov/individuals/tax-withholding-estimator" target="_blank">IRS Tax Withholding Estimator</a>
+  </p>
+  <p>
+    IRS Charities and Nonprofits Resources:
+    <a href="https://www.irs.gov/charities-non-profits" target="_blank">IRS Charities and Nonprofits</a>
+  </p>
+  <p>
+    Taxpayer Advocate Service:
+    <a href="https://www.taxpayeradvocate.irs.gov/" target="_blank">Taxpayer Advocate Service</a>
+  </p>
+  <p>
+    USA.gov - Filing and Paying Taxes:
+    <a href="https://www.usa.gov/taxes" target="_blank">Filing and Paying Taxes</a>
+  </p>
+  <p>
+    IRS Free File Program:
+    <a href="https://www.irs.gov/filing/free-file-do-your-federal-taxes-for-free" target="_blank">IRS Free File Program</a>
+  </p>
+
+  <script>
+    // Day/Night Mode Toggle Script
+    function toggleTheme() {
+      const icon = document.getElementById('theme-icon');
+      const body = document.body;
+
+      if (icon.alt === "Day mode") {
+        icon.src = "moon.svg";
+        icon.alt = "Night mode";
+        body.style.backgroundColor = "#1e1e1e"; // Night background
+        body.style.color = "#ffffff"; // Night text color
+      } else {
+        icon.src = "sun.svg";
+        icon.alt = "Day mode";
+        body.style.backgroundColor = "#ffffff"; // Day background
+        body.style.color = "#000000"; // Day text color
+      }
+    }
+  </script>
+  
+</body>
+</html>
