@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Personal Tax Model</title>
+    <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono:wght@400;600&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #121212 0%, #1e1e1e 100%);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Layout and Spacing */
+        .container {
+            margin: 0 auto;
+            padding: 20px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(42, 42, 42, 0.6);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Tax Breakdown Panel */
+        .tax-panel {
+            background: rgba(30, 30, 30, 0.8);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .tax-panel p {
+            margin-bottom: 10px;
+        }
+
+        /* Night Mode Toggle */
+        .toggle-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            background-image: url('sun.svg'); /* Default icon */
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        body.day-mode .toggle-button {
+            background-image: url('moon.svg'); /* Icon for night mode */
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            section {
+                padding: 15px;
+            }
+
+            input, select, button {
+                font-size: 0.9rem;
+                padding: 10px;
+            }
+
+            footer {
+                padding: 15px;
+                font-size: 0.7rem;
+            }
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border: none;
+            background-color: #333333;
+            color: #ffffff;
+            font-size: 1rem;
+        }
+
+        button {
+            background-color: #b22222;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #ff2a2a;
+            transform: scale(1.05);
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.3);
+        }
+
+        h1 {
+            margin-left: 80px;
+            padding-top: 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: rgba(26, 26, 26, 0.6);
+            color: #b0b0b0;
+            font-size: 0.8rem;
+            backdrop-filter: blur(10px);
+        }
+
+        body.day-mode footer {
+            background: rgba(255, 255, 255, 0.6);
+            color: #000;
+        }
+    </style>
+</head>
+<body class="night-mode">
+    <header class="container">
+        <a href="index.html">
+            <img src="logo1.svg" alt="Venture Research Logo" class="logo">
+        </a>
+        <h1>Dynamic Personal Tax Model</h1>
+    </header>
+
+    <!-- Night Mode Toggle -->
+    <div class="toggle-button" onclick="toggleMode()"></div>
+
+    <!-- Tax Breakdown Panel -->
+    <section class="container tax-summary">
+        <h3>Your Tax Breakdown</h3>
+        <div class="tax-panel">
+            <p>Income: $<span id="incomeSummary">0</span></p>
+            <p>Federal Tax: $<span id="federalTaxSummary">0</span></p>
+            <p>State Tax: $<span id="stateTaxSummary">0</span></p>
+            <p>Sales Tax: $<span id="salesTaxSummary">0</span></p>
+            <p><b>Total Tax Burden: $<span id="totalTaxSummary">0</span></b></p>
+            <p><b>Net Income: $<span id="remainingIncome">0</span></b></p>
+        </div>
+    </section>
+
+    <!-- JavaScript to Toggle Night/Day Mode -->
+    <script>
+        function toggleMode() {
+            document.body.classList.toggle('day-mode');
+        }
+    </script>
+
+    <!-- Footer with Export Options -->
+    <footer>
+        <button id="exportCsv">Export to CSV</button>
+        <button id="exportPdf">Export to PDF</button>
+        <p>&copy; 2024 Venture Research Institute. All Rights Reserved.</p>
+    </footer>
+
+    <!-- External Libraries for Chart.js and jsPDF -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+</body>
+</html>
