@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VRI Tax Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header with VRI branding -->
+    <header>
+        <h1>Venture Research Institute</h1>
+        <p>Your Guide to Understanding Tax Obligations</p>
+    </header>
+
+    <!-- Map and Dropdown Section -->
+    <section class="state-selection">
+        <h2>Select Your State or Territory</h2>
+        <!-- US Map (to be implemented) -->
+        <div id="us-map"></div>
+        <!-- Dropdown for state selection -->
+        <select id="stateDropdown">
+            <option value="">Select State/Territory</option>
+            <!-- Options for states and territories -->
+        </select>
+    </section>
+
+    <!-- User Input Section -->
+    <section class="user-input">
+        <h3>Enter Your Income and Exemptions</h3>
+        <label for="income">Annual Income ($):</label>
+        <input type="number" id="income" placeholder="Enter your income">
+        
+        <label for="standardExemption">Apply Standard Exemption</label>
+        <input type="checkbox" id="standardExemption">
+        
+        <label for="customExclusions">Other Exemptions/Exclusions ($):</label>
+        <input type="number" id="customExclusions" placeholder="Enter custom exemptions">
+
+        <h3>Enter Your Spending</h3>
+        <label for="spending">Total Spending in State ($):</label>
+        <input type="number" id="spending" placeholder="Enter your spending">
+    </section>
+
+    <!-- Tax Calculation & Summary -->
+    <section class="tax-summary">
+        <h3>Your Tax Breakdown</h3>
+        <div class="summary-panel">
+            <p>Income: $<span id="incomeSummary">0</span></p>
+            <p>Federal Tax: $<span id="federalTaxSummary">0</span></p>
+            <p>State Tax: $<span id="stateTaxSummary">0</span></p>
+            <p>Sales Tax: $<span id="salesTaxSummary">0</span></p>
+            <p><b>Total Tax Burden: $<span id="totalTaxSummary">0</span></b></p>
+            <p><b>Remaining Income: $<span id="remainingIncome">0</span></b></p>
+        </div>
+    </section>
+
+    <!-- Pie Chart Section -->
+    <section id="pie-chart-container">
+        <canvas id="taxPieChart"></canvas>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Venture Research Institute. All Rights Reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
