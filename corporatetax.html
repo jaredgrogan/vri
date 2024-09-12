@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tax Projection Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+
+        label {
+            margin: 10px 0 5px;
+        }
+
+        input, select {
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 10px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        canvas {
+            max-width: 800px;
+            margin-top: 20px;
+        }
+
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>Interactive Tax Projection Tool</h1>
+    
+    <div class="input-container">
+        <label for="state">Select State:</label>
+        <select id="state" onchange="updateStateData()">
+            <option value="CA">California</option>
+            <option value="WA">Washington</option>
+            <option value="AZ">Arizona</option>
+            <option value="NV">Nevada</option>
+            <option value="FL">Florida</option>
+            <option value="GA">Georgia</option>
+            <option value="NC">North Carolina</option>
+            <option value="NY">New York</option>
+            <option value="MA">Massachusetts</option>
+            <option value="OH">Ohio</option>
+            <option value="PA">Pennsylvania</option>
+        </select>
+
+        <label for="salary">Employee Salary ($):</label>
+        <input type="number" id="salary" value="100000" oninput="calculateTaxes()">
+
+        <label for="employees">Number of Employees:</label>
+        <input type="number" id="employees" value="50" oninput="calculateTaxes()">
+
+        <label for="revenue">Total Revenue ($):</label>
+        <input type="number" id="revenue" value="20000000" oninput="calculateTaxes()">
+
+        <label for="expenses">Total Expenses ($):</label>
+        <input type="number" id="expenses" value="12000000" oninput="calculateTaxes()">
+    </div>
+
+    <div>
+        <canvas id="taxChart"></canvas>
+    </div>
+
+    <footer>
+        &copy; 2024 Venture Research Institute
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const stateData = {
+            CA: { payrollTax: 396500, stateIncomeTax: 707200 },
+            WA: { payrollTax: 442400, stateIncomeTax: 0 },
+            AZ: { payrollTax: 391600, stateIncomeTax: 392000 },
+            NV: { payrollTax: 443750, stateIncomeTax: 0 },
+            FL: { payrollTax: 394050, stateIncomeTax: 440000 },
+            GA: { payrollTax: 397450, stateIncomeTax: 460000 },
+            NC: { payrollTax: 411200, stateIncomeTax: 200000 },
+            NY: { payrollTax: 405500, stateIncomeTax: 580000 },
+            MA: { payrollTax: 402750, stateIncomeTax: 640000 },
+            OH: { payrollTax: 396750, stateIncomeTax: 0 },
+            PA: { payrollTax: 403050, stateIncomeTax: 719200 }
+        };
+
+        let selectedState = 'CA';
+        let salary = 100000;
+        let employees = 50;
+        let revenue = 20000000;
+        let expenses = 12000000;
+
+        const ctx = document.getElementById('taxChart').getContext('2d');
+        let taxChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Payroll Tax', 'State Income Tax', 'Federal Tax', 'Total Tax Burden'],
+                datasets: [{
+                    label: 'Tax Burden in USD',
+                    data: [0, 0, 0, 0],
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0']
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        function updateStateData() {
+            selectedState = document.getElementById('state').value;
+            calculateTaxes();
+        }
+
+        function calculateTaxes() {
+            salary = parseFloat(document.getElementById('salary').value);
+            employees = parseInt(document.getElementById('employees').value);
+            revenue = parseFloat(document.getElementById('revenue').value);
+            expenses = parseFloat(document.getElementById('expenses').value);
+
+            let statePayrollTax = stateData[selectedState].payrollTax;
+            let stateIncomeTax = stateData[selectedState].stateIncomeTax;
+            let federalTax = (revenue - expenses) * 0.21; // 21% federal corporate tax
+
+            let totalPayrollTax = statePayrollTax * (employees / 50); // Adjust based on number of employees
+            let totalStateIncomeTax = stateIncomeTax * (employees / 50);
+            let totalTaxBurden = totalPayrollTax + totalStateIncomeTax + federalTax;
+
+            // Update chart data
+            taxChart.data.datasets[0].data = [
+                totalPayrollTax,
+                totalStateIncomeTax,
+                federalTax,
+                totalTaxBurden
+            ];
+
+            taxChart.update();
+        }
+
+        // Initial Calculation
+        calculateTaxes();
+    </script>
+</body>
+</html>
