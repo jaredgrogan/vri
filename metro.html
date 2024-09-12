@@ -1,137 +1,188 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Venture Research Institute - Metro Area Data</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
+<script>
+    const metroData = {
+        'new-york': {
+            name: "New York City",
+            millionaires: "349,500",
+            centiMillionaires: "744",
+            billionaires: "60",
+            growth: "48%",
+            population: "19,261,570",
+            industries: "Finance, Media, Real Estate",
+            universities: "Columbia University, NYU",
+            techHubs: "Silicon Alley",
+            incentives: "NYC Business Solutions",
+            fortune500: "JPMorgan, Verizon, Citigroup",
+            demographics: "Median Age: 36.2, College Grads: 38%"
+        },
+        'bay-area': {
+            name: "The Bay Area",
+            millionaires: "305,700",
+            centiMillionaires: "675",
+            billionaires: "68",
+            growth: "82%",
+            population: "4,709,220",
+            industries: "Technology, Finance",
+            universities: "Stanford University, UC Berkeley",
+            techHubs: "Silicon Valley",
+            incentives: "California Competes Tax Credit",
+            fortune500: "Apple, Google, Facebook",
+            demographics: "Median Age: 39.5, College Grads: 44%"
+        },
+        'los-angeles': {
+            name: "Los Angeles",
+            millionaires: "212,100",
+            centiMillionaires: "496",
+            billionaires: "43",
+            growth: "45%",
+            population: "13,211,027",
+            industries: "Entertainment, Aerospace",
+            universities: "UCLA, USC",
+            techHubs: "Silicon Beach",
+            incentives: "California Competes Tax Credit",
+            fortune500: "Walt Disney, Occidental Petroleum",
+            demographics: "Median Age: 35.6, College Grads: 31%"
+        },
+        'chicago': {
+            name: "Chicago",
+            millionaires: "120,500",
+            centiMillionaires: "290",
+            billionaires: "24",
+            growth: "22%",
+            population: "9,478,801",
+            industries: "Finance, Manufacturing",
+            universities: "University of Chicago, Northwestern",
+            techHubs: "1871 Tech Incubator",
+            incentives: "Chicago Business Start-Up Certificate",
+            fortune500: "Boeing, McDonald's, Walgreens",
+            demographics: "Median Age: 37.4, College Grads: 34%"
+        },
+        'houston': {
+            name: "Houston",
+            millionaires: "90,900",
+            centiMillionaires: "258",
+            billionaires: "18",
+            growth: "70%",
+            population: "6,979,613",
+            industries: "Energy, Healthcare",
+            universities: "Rice University, University of Houston",
+            techHubs: "Houston Energy Corridor",
+            incentives: "Texas Enterprise Fund",
+            fortune500: "ExxonMobil, Phillips 66, ConocoPhillips",
+            demographics: "Median Age: 34.3, College Grads: 29%"
+        },
+        'dallas': {
+            name: "Dallas",
+            millionaires: "68,600",
+            centiMillionaires: "125",
+            billionaires: "15",
+            growth: "75%",
+            population: "7,451,858",
+            industries: "Finance, Real Estate",
+            universities: "Southern Methodist University",
+            techHubs: "Dallas Tech District",
+            incentives: "Texas Enterprise Fund",
+            fortune500: "AT&T, American Airlines, ExxonMobil",
+            demographics: "Median Age: 33.9, College Grads: 32%"
+        },
+        'seattle': {
+            name: "Seattle",
+            millionaires: "54,200",
+            centiMillionaires: "130",
+            billionaires: "11",
+            growth: "72%",
+            population: "3,928,498",
+            industries: "Technology, Aerospace",
+            universities: "University of Washington",
+            techHubs: "Amazon, Microsoft HQs",
+            incentives: "Washington State Innovation Partnership Zone",
+            fortune500: "Amazon, Microsoft, Starbucks",
+            demographics: "Median Age: 35.2, College Grads: 45%"
+        },
+        'boston': {
+            name: "Boston",
+            millionaires: "42,900",
+            centiMillionaires: "107",
+            billionaires: "8",
+            growth: "55%",
+            population: "4,854,808",
+            industries: "Education, Healthcare",
+            universities: "Harvard University, MIT",
+            techHubs: "Kendall Square",
+            incentives: "Massachusetts Investment Tax Credit",
+            fortune500: "General Electric, Liberty Mutual",
+            demographics: "Median Age: 32.4, College Grads: 49%"
+        },
+        'miami': {
+            name: "Miami",
+            millionaires: "35,300",
+            centiMillionaires: "164",
+            billionaires: "15",
+            growth: "78%",
+            population: "6,129,858",
+            industries: "Tourism, Finance",
+            universities: "University of Miami, FIU",
+            techHubs: "Miami Tech Scene",
+            incentives: "Florida Capital Investment Tax Credit",
+            fortune500: "World Fuel Services, Ryder System",
+            demographics: "Median Age: 40.2, College Grads: 27%"
+        },
+        'austin': {
+            name: "Austin",
+            millionaires: "32,700",
+            centiMillionaires: "92",
+            billionaires: "10",
+            growth: "110%",
+            population: "2,227,083",
+            industries: "Technology, Education",
+            universities: "University of Texas at Austin",
+            techHubs: "Austin Tech Corridor",
+            incentives: "Texas Enterprise Fund",
+            fortune500: "Dell Technologies",
+            demographics: "Median Age: 33.5, College Grads: 43%"
+        },
+        'dc': {
+            name: "Washington, D.C.",
+            millionaires: "28,300",
+            centiMillionaires: "88",
+            billionaires: "12",
+            growth: "75%",
+            population: "6,250,309",
+            industries: "Government, Defense",
+            universities: "Georgetown University, George Washington University",
+            techHubs: "D.C. Tech Scene",
+            incentives: "D.C. Qualified High Technology Companies Tax Credit",
+            fortune500: "Lockheed Martin, Danaher",
+            demographics: "Median Age: 34.0, College Grads: 50%"
         }
-        .header {
-            text-align: center;
-            padding: 20px;
-            font-size: 2em;
-            font-weight: bold;
-            background-color: #333;
-            color: white;
-        }
-        .content {
-            margin: 20px;
-        }
-        .dropdown-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-        .dropdown {
-            width: 50%;
-            padding: 10px;
-            font-size: 1.1em;
-        }
-        .fact-sheet {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            display: none;
-        }
-        .fact-sheet.visible {
-            display: block;
-        }
-        .fact-sheet h2 {
-            margin-top: 0;
-        }
-        .export-button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        .export-button:hover {
-            background-color: #45a049;
-        }
-    </style>
-</head>
-<body>
+        // Add more metro data as needed
+    };
 
-    <div class="header">Venture Research Institute</div>
+    const dropdown = document.getElementById('metro-dropdown');
+    const factSheet = document.getElementById('fact-sheet');
 
-    <div class="content">
-        <div class="dropdown-container">
-            <select class="dropdown" id="metro-dropdown">
-                <option value="">Select a Metro Area</option>
-                <option value="new-york">New York City</option>
-                <option value="bay-area">The Bay Area</option>
-                <option value="los-angeles">Los Angeles</option>
-                <!-- Add more options as needed -->
-            </select>
-        </div>
-
-        <div class="fact-sheet" id="fact-sheet">
-            <h2 id="city-name">City Name</h2>
-            <p><strong>Millionaires:</strong> <span id="millionaires"></span></p>
-            <p><strong>Centi-millionaires:</strong> <span id="centi-millionaires"></span></p>
-            <p><strong>Billionaires:</strong> <span id="billionaires"></span></p>
-            <p><strong>Millionaire Growth (2013-2023):</strong> <span id="growth"></span></p>
-            <!-- Add more data fields as needed -->
-            <button class="export-button" onclick="exportPDF()">Export to PDF</button>
-        </div>
-    </div>
-
-    <script>
-        const metroData = {
-            'new-york': {
-                name: "New York City",
-                millionaires: "349,500",
-                centiMillionaires: "744",
-                billionaires: "60",
-                growth: "48%"
-            },
-            'bay-area': {
-                name: "The Bay Area",
-                millionaires: "305,700",
-                centiMillionaires: "675",
-                billionaires: "68",
-                growth: "82%"
-            },
-            'los-angeles': {
-                name: "Los Angeles",
-                millionaires: "212,100",
-                centiMillionaires: "496",
-                billionaires: "43",
-                growth: "45%"
-            }
-            // Add more metro data as needed
-        };
-
-        const dropdown = document.getElementById('metro-dropdown');
-        const factSheet = document.getElementById('fact-sheet');
-
-        dropdown.addEventListener('change', function () {
-            const selectedMetro = this.value;
-            if (selectedMetro && metroData[selectedMetro]) {
-                document.getElementById('city-name').textContent = metroData[selectedMetro].name;
-                document.getElementById('millionaires').textContent = metroData[selectedMetro].millionaires;
-                document.getElementById('centi-millionaires').textContent = metroData[selectedMetro].centiMillionaires;
-                document.getElementById('billionaires').textContent = metroData[selectedMetro].billionaires;
-                document.getElementById('growth').textContent = metroData[selectedMetro].growth;
-                factSheet.classList.add('visible');
-            } else {
-                factSheet.classList.remove('visible');
-            }
-        });
-
-        function exportPDF() {
-            // Implement PDF export functionality here
-            alert('Export to PDF clicked!');
+    dropdown.addEventListener('change', function () {
+        const selectedMetro = this.value;
+        if (selectedMetro && metroData[selectedMetro]) {
+            document.getElementById('city-name').textContent = metroData[selectedMetro].name;
+            document.getElementById('millionaires').textContent = metroData[selectedMetro].millionaires;
+            document.getElementById('centi-millionaires').textContent = metroData[selectedMetro].centiMillionaires;
+            document.getElementById('billionaires').textContent = metroData[selectedMetro].billionaires;
+            document.getElementById('growth').textContent = metroData[selectedMetro].growth;
+            document.getElementById('population').textContent = metroData[selectedMetro].population;
+            document.getElementById('industries').textContent = metroData[selectedMetro].industries;
+            document.getElementById('universities').textContent = metroData[selectedMetro].universities;
+            document.getElementById('tech-hubs').textContent = metroData[selectedMetro].techHubs;
+            document.getElementById('incentives').textContent = metroData[selectedMetro].incentives;
+            document.getElementById('fortune-500').textContent = metroData[selectedMetro].fortune500;
+            document.getElementById('demographics').textContent = metroData[selectedMetro].demographics;
+            factSheet.classList.add('visible');
+        } else {
+            factSheet.classList.remove('visible');
         }
-    </script>
+    });
 
-</body>
-</html>
+    function exportPDF() {
+        // Implement PDF export functionality here
+        alert('Export to PDF clicked!');
+    }
+</script>
