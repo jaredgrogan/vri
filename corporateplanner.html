@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Corporate Tax Projections</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e0e5ec;
+            padding: 20px;
+            margin: 0;
+        }
+
+        h1, h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .data-display {
+            font-size: 28px;
+            text-align: center;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 15px;
+            color: #333;
+        }
+
+        .glass-container {
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        label {
+            margin: 10px 0 5px;
+        }
+
+        input, select {
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 10px;
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            background-color: rgba(255, 255, 255, 0.5);
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        canvas {
+            max-width: 1000px;
+            margin: 0 auto 30px auto;
+            display: block;
+            height: auto;
+        }
+
+        table {
+            width: 100%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            max-width: 1000px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+
+        .collapsible {
+            background-color: #f1f1f1;
+            color: #333;
+            cursor: pointer;
+            padding: 10px;
+            width: 100%;
+            text-align: left;
+            border: none;
+            outline: none;
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+
+        .content {
+            padding: 0 18px;
+            display: none;
+            overflow: hidden;
+            background-color: #fafafa;
+            border-radius: 12px;
+        }
+
+        .checkbox-container {
+            margin-top: 20px;
+        }
+
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .export-buttons {
+            text-align: center;
+            margin: 20px;
+        }
+
+        .export-buttons button {
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .export-buttons button:hover {
+            background-color: #45a049;
+        }
+
+        @media (max-width: 600px) {
+            .data-display {
+                font-size: 22px;
+            }
+
+            label, input, select {
+                font-size: 14px;
+            }
+
+            th, td {
+                font-size: 14px;
+            }
+
+            canvas {
+                max-width: 100%;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Venture Research Institute</h1>
+    <h2>Interactive Corporate Tax Projections</h2>
+
+    <div class="data-display" id="dataDisplay">
+        Total Tax Burden: $0
+    </div>
+    <div>
+        <canvas id="taxChart"></canvas>
+    </div>
+
+    <!-- Matrix section below the graph -->
+    <table>
+        <thead>
+            <tr>
+                <th>Tax Component</th>
+                <th>Amount ($)</th>
+            </tr>
+        </thead>
+        <tbody id="taxTableBody">
+            <tr>
+                <td>Payroll Tax</td>
+                <td id="payrollTax">0</td>
+            </tr>
+            <tr>
+                <td>State Income Tax</td>
+                <td id="stateIncomeTax">0</td>
+            </tr>
+            <tr>
+                <td>Federal Tax</td>
+                <td id="federalTax">0</td>
+            </tr>
+            <tr>
+                <td><b>Total Tax Burden</b></td>
+                <td id="totalTax"><b>0</b></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- New section: Profit (Revenue - Expenses) -->
+    <div class="glass-container">
+        <h2>Profit Calculation</h2>
+        <p><b>Profit: </b><span id="profitAmount">$0</span></p>
+    </div>
+
+    <!-- New section: Qualified R&D Expenses -->
+    <div class="glass-container">
+        <h2>Qualified R&D Expenses</h2>
+        <label for="rdExpenses">R&D Expenses ($):</label>
+        <input type="number" id="rdExpenses" value="500000" oninput="calculateTaxes()">
+    </div>
+
+    <!-- New section: Payroll Expenses -->
+    <div class="glass-container">
+        <h2>Payroll Expenses</h2>
+        <p><b>Total Payroll Expenses: </b><span id="payrollExpenses">$0</span></p>
+    </div>
+
+    <div class="input-container glass-container">
+        <label for="state">Select State:</label>
+        <select id="state" onchange="updateStateData()">
+            <!-- State Options -->
+        </select>
+
+        <label for="salary">Employee Salary ($):</label>
+        <input type="number" id="salary" value="100000" oninput="calculateTaxes()">
+
+        <label for="employees">Number of Employees:</label>
+        <input type="number" id="employees" value="50" oninput="calculateTaxes()">
+
+        <label for="revenue">Total Revenue ($):</label>
+        <input type="number" id="revenue" value="20000000" oninput="calculateTaxes()">
+
+        <label for="expenses">Total Expenses ($):</label>
+        <input type="number" id="expenses" value="12000000" oninput="calculateTaxes()">
+        
+        <!-- Checkboxes for tax inclusion -->
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const stateData = {
+            // Data for states
+        };
+
+        let selectedState = 'CA';
+        let salary = 100000;
+        let employees = 50;
+        let revenue = 20000000;
+        let expenses = 12000000;
+        let rdExpenses = 500000;
+
+        const ctx = document.getElementById('taxChart').getContext('2d');
+        let taxChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Payroll Tax', 'State Income Tax', 'Federal Tax', 'Total Tax Burden'],
+                datasets: [{
+                    label: 'Tax Burden in USD',
+                    data: [0, 0, 0, 0],
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0']
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        function updateStateData() {
+            selectedState = document.getElementById('state').value;
+            calculateTaxes();
+        }
+
+        function calculateTaxes() {
+            salary = parseFloat(document.getElementById('salary').value);
+            employees = parseInt(document.getElementById('employees').value);
+            revenue = parseFloat(document.getElementById('revenue').value);
+            expenses = parseFloat(document.getElementById('expenses').value);
+            rdExpenses = parseFloat(document.getElementById('rdExpenses').value);
+
+            // Existing tax calculation logic
+            let totalPayrollTax = stateData[selectedState].payrollTax * (employees / 50);
+            let totalStateIncomeTax = stateData[selectedState].stateIncomeTax * (employees / 50);
+            let federalTax = (revenue - expenses) * 0.21;
+
+            let totalTaxBurden = totalPayrollTax + totalStateIncomeTax + federalTax;
+
+            // Calculating profit
+            let profit = revenue - expenses;
+            document.getElementById('profitAmount').textContent = `$${profit.toFixed(2)}`;
+
+            // Payroll expenses
+            let payrollExpenses = salary * employees;
+            document.getElementById('payrollExpenses').textContent = `$${payrollExpenses.toFixed(2)}`;
+
+            // Update chart and table
+            document.getElementById('payrollTax').textContent = totalPayrollTax.toFixed(2);
+            document.getElementById('stateIncomeTax').textContent = totalStateIncomeTax.toFixed(2);
+            document.getElementById('federalTax').textContent = federalTax.toFixed(2);
+            document.getElementById('totalTax').textContent = totalTaxBurden.toFixed(2);
+            document.getElementById('dataDisplay').textContent = `Total Tax Burden: $${totalTaxBurden.toFixed(2)}`;
+
+            // Update chart data
+            taxChart.data.datasets[0].data = [totalPayrollTax, totalStateIncomeTax, federalTax, totalTaxBurden];
+            taxChart.update();
+        }
+
+        calculateTaxes(); // Initial calculation
+    </script>
+</body>
+</html>
