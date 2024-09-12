@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Personal Tax Model | Venture Research Institute</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #b22222;
+            --secondary-color: #ff2a2a;
+            --text-color-light: #ffffff;
+            --text-color-dark: #000000;
+            --bg-color-light: #f0f0f0;
+            --bg-color-dark: #121212;
+            --panel-bg-light: rgba(255, 255, 255, 0.8);
+            --panel-bg-dark: rgba(30, 30, 30, 0.8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, var(--bg-color-dark) 0%, #1e1e1e 100%);
+            color: var(--text-color-light);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        body.day-mode {
+            background: linear-gradient(135deg, var(--bg-color-light) 0%, #ffffff 100%);
+            color: var(--text-color-dark);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            margin-right: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.1);
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        section {
+            background: var(--panel-bg-dark);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+
+        body.day-mode section {
+            background: var(--panel-bg-light);
+        }
+
+        section:hover {
+            transform: translateY(-5px);
+        }
+
+        h2, h3 {
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 400;
+        }
+
+        select, input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-color-light);
+            font-size: 1rem;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        body.day-mode select, body.day-mode input[type="number"] {
+            background-color: rgba(0, 0, 0, 0.05);
+            color: var(--text-color-dark);
+        }
+
+        select:focus, input[type="number"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 5px 10px 0;
+            border-radius: 5px;
+            border: none;
+            background-color: var(--primary-color);
+            color: var(--text-color-light);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        button:hover {
+            background-color: var(--secondary-color);
+            transform: scale(1.05);
+        }
+
+        .tax-panel {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        body.day-mode .tax-panel {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .tax-panel p {
+            margin-bottom: 10px;
+        }
+
+        #taxPieChart {
+            width: 100%;
+            max-width: 400px;
+            max-height: 400px;
+            margin: 0 auto;
+        }
+
+        .toggle-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            background-size: contain;
+            background-repeat: no-repeat;
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toggle-button:hover {
+            transform: scale(1.1);
+        }
+
+        .night-mode .toggle-button {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='5'/%3E%3Cline x1='12' y1='1' x2='12' y2='3'/%3E%3Cline x1='12' y1='21' x2='12' y2='23'/%3E%3Cline x1='4.22' y1='4.22' x2='5.64' y2='5.64'/%3E%3Cline x1='18.36' y1='18.36' x2='19.78' y2='19.78'/%3E%3Cline x1='1' y1='12' x2='3' y2='12'/%3E%3Cline x1='21' y1='12' x2='23' y2='12'/%3E%3Cline x1='4.22' y1='19.78' x2='5.64' y2='18.36'/%3E%3Cline x1='18.36' y1='5.64' x2='19.78' y2='4.22'/%3E%3C/svg%3E");
+        }
+
+        .day-mode .toggle-button {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z'/%3E%3C/svg%3E");
+        }
+
+        footer {
+            margin-top: auto;
+            background: var(--panel-bg-dark);
+            color: var(--text-color-light);
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        body.day-mode footer {
+            background: var(--panel-bg-light);
+            color: var(--text-color-dark);
+        }
+
+        .footer-nav {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .footer-nav a {
+            color: var(--text-color-light);
+            text-decoration: none;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+
+        body.day-mode .footer-nav a {
+            color: var(--text-color-dark);
+        }
+
+        .footer-nav a:hover {
+            color: var(--primary-color);
+        }
+
+        .copyright {
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            section {
+                padding: 15px;
+            }
+
+            .footer-nav {
+                flex-wrap: wrap;
+            }
+
+            .footer-nav a {
+                margin: 5px 10px;
+            }
+
+            #taxPieChart {
+                max-width: 200px;
+                max-height: 200px;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .fade-in {
+            animation: fadeIn 0
+            .5s ease-in;
+        }
+    </style>
+</head>
+<body class="night-mode">
+    <div class="container">
+        <header>
+            <a href="index.html">
+                <img src="logo1.svg" alt="Venture Research Logo" class="logo">
+            </a>
+            <h1>Dynamic Personal Tax Model</h1>
+        </header>
+
+        <div class="toggle-button" onclick="toggleMode()" aria-label="Toggle day/night mode"></div>
+
+        <section class="fade-in">
+            <h2>Select Your State and Filing Status</h2>
+            <div class="input-group">
+                <label for="stateDropdown">State/Territory:</label>
+                <select id="stateDropdown">
+                    <option value="">Select State/Territory</option>
+                    <!-- Add state/territory options here -->
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="filingStatus">Filing Status:</label>
+                <select id="filingStatus">
+                    <option value="">Select Filing Status</option>
+                    <option value="single">Single</option>
+                    <option value="married">Married</option>
+                </select>
+            </div>
+        </section>
+
+        <section class="fade-in">
+            <h2>Enter Your Income and Exemptions</h2>
+            <div class="input-group">
+                <label for="annualIncome">Annual Income ($):</label>
+                <input type="number" id="annualIncome" placeholder="Enter your annual income">
+            </div>
+            <div class="input-group">
+                <label for="standardExemption">Apply Standard Exemption:</label>
+                <select id="standardExemption">
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="otherExemptions">Other Exemptions/Exclusions ($):</label>
+                <input type="number" id="otherExemptions" placeholder="Enter other exemptions">
+            </div>
+        </section>
+
+        <section class="fade-in">
+            <h2>Enter Your Spending</h2>
+            <div class="input-group">
+                <label for="totalSpending">Total Spending in State ($):</label>
+                <input type="number" id="totalSpending" placeholder="Enter your total spending">
+            </div>
+        </section>
+
+        <section class="tax-summary fade-in">
+            <h2>Your Tax Breakdown</h2>
+            <div class="tax-panel">
+                <p>Income: $<span id="incomeSummary">0</span></p>
+                <p>Federal Tax: $<span id="federalTaxSummary">0</span></p>
+                <p>State Tax: $<span id="stateTaxSummary">0</span></p>
+                <p>Sales Tax: $<span id="salesTaxSummary">0</span></p>
+                <p><strong>Total Tax Burden: $<span id="totalTaxSummary">0</span></strong></p>
+                <p><strong>Net Income: $<span id="remainingIncome">0</span></strong></p>
+            </div>
+        </section>
+
+        <section class="annual-savings fade-in">
+            <h2>Annual Savings</h2>
+            <div class="input-group">
+                <label for="expenses">Other Expenses ($):</label>
+                <input type="number" id="expenses" placeholder="Enter your expenses">
+            </div>
+            <p><strong>True Net Income: $<span id="trueNetIncome">0</span></strong></p>
+        </section>
+
+        <section class="chart-container fade-in">
+            <h2>Tax Distribution</h2>
+            <canvas id="taxPieChart"></canvas>
+        </section>
+
+        <section class="comparison-container fade-in">
+            <h2>Compare with Other States</h2>
+            <button id="compareButton">Compare States</button>
+            <div id="comparisonSection"></div>
+        </section>
+
+        <section class="resources fade-in">
+            <h2>Resources & Citations</h2>
+            <ul>
+                <li><a href="https://www.irs.gov/individuals/tax-withholding-estimator" data-tooltip="IRS Withholding Estimator">IRS Tax Withholding Estimator</a></li>
+                <li><a href="https://www.irs.gov/charities-non-profits" data-tooltip="IRS Charities and Nonprofits">IRS Charities and Nonprofits Resources</a></li>
+                <li><a href="https://www.taxpayeradvocate.irs.gov/" data-tooltip="Taxpayer Advocate Service">Taxpayer Advocate Service</a></li>
+                <li><a href="https://www.usa.gov/taxes" data-tooltip="Filing and Paying Taxes">USA.gov - Filing and Paying Taxes</a></li>
+                <li><a href="https://www.irs.gov/filing/free-file-do-your-federal-taxes-for-free" data-tooltip="IRS Free File Program">IRS Free File Program</a></li>
+            </ul>
+        </section>
+    </div>
+
+    <footer>
+        <nav class="footer-nav">
+            <a href="about.html">About</a>
+            <a href="programs.html">Programs</a>
+            <a href="fund.html">Fund</a>
+            <a href="products.html">Products</a>
+            <a href="events.html">Events</a>
+        </nav>
+        <p>&copy; 2024 Venture Research Institute</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Initialize the pie chart
+        const ctx = document.getElementById('taxPieChart').getContext('2d');
+        const pieChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Federal Tax', 'State Tax', 'Sales Tax'],
+                datasets: [{
+                    data: [0, 0, 0],
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+                    hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                legend: {
+                    position: 'bottom',
+                },
+                title: {
+                    display: true,
+                    text: 'Tax Distribution'
+                }
+            }
+        });
+
+        // Function to update the tax model
+        function updateTaxModel() {
+            const income = parseFloat(document.getElementById('annualIncome').value) || 0;
+            const spending = parseFloat(document.getElementById('totalSpending').value) || 0;
+            const otherExemptions = parseFloat(document.getElementById('otherExemptions').value) || 0;
+
+            const federalTax = income * 0.2;
+            const stateTax = income * 0.05;
+            const salesTax = spending * 0.08;
+
+            const totalTax = federalTax + stateTax + salesTax;
+            const netIncome = income - totalTax;
+
+            // Update the tax breakdown
+            document.getElementById('incomeSummary').textContent = income.toFixed(2);
+            document.getElementById('federalTaxSummary').textContent = federalTax.toFixed(2);
+            document.getElementById('stateTaxSummary').textContent = stateTax.toFixed(2);
+            document.getElementById('salesTaxSummary').textContent = salesTax.toFixed(2);
+            document.getElementById('totalTaxSummary').textContent = totalTax.toFixed(2);
+            document.getElementById('remainingIncome').textContent = netIncome.toFixed(2);
+
+            // Update the pie chart
+            pieChart.data.datasets[0].data = [federalTax, stateTax, salesTax];
+            pieChart.update();
+
+            // Calculate true net income
+            const expenses = parseFloat(document.getElementById('expenses').value) || 0;
+            const trueNetIncome = netIncome - expenses;
+            document.getElementById('trueNetIncome').textContent = trueNetIncome.toFixed(2);
+        }
+
+        // Add event listeners to input fields
+        const inputFields = document.querySelectorAll('input[type="number"], select');
+        inputFields.forEach(field => {
+            field.addEventListener('change', updateTaxModel);
+            field.addEventListener('keyup', updateTaxModel);
+        });
+
+        // Function to toggle between day and night mode
+        function toggleMode() {
+            document.body.classList.toggle('day-mode');
+            document.body.classList.toggle('night-mode');
+        }
+
+        // Function to compare states (placeholder)
+        document.getElementById('compareButton').addEventListener('click', function() {
+            const currentState = document.getElementById('stateDropdown').value;
+            const comparisonSection = document.getElementById('comparisonSection');
+            comparisonSection.innerHTML = `<p>Comparing ${currentState} with other states...</p>
+                                           <p>This feature is coming soon!</p>`;
+        });
+
+        // Initialize the model on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateTaxModel();
+        });
+    </script>
+</body>
+</html>
