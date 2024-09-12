@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VRI Tax Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background: linear-gradient(135deg, #2b5876 0%, #4e4376 100%);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            margin: 20px auto;
+            max-width: 90%;
+            color: white;
+            position: relative;
+        }
+
+        /* Logo */
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+        }
+
+        p {
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        section {
+            margin: 20px auto;
+            padding: 15px;
+            width: 90%;
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin: 10px 0;
+        }
+
+        input[type="number"], select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+        }
+
+        input[type="number"]:focus, select:focus {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            transition: background-color 0.3s ease;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        .summary-panel {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            color: white;
+            text-align: left;
+        }
+
+        .summary-panel p {
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+
+        .summary-panel span {
+            font-weight: bold;
+        }
+
+        #pie-chart-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: white;
+            font-size: 0.8rem;
+            margin-top: auto;
+        }
+
+        /* Expandable Section */
+        .resources {
+            margin-top: 20px;
+        }
+
+        .resources h3 {
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .resources ul {
+            display: none;
+            padding-left: 20px;
+        }
+
+        .resources ul li {
+            list-style: none;
+            margin: 5px 0;
+        }
+
+        .resources ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
+        /* Tooltips */
+        [data-tooltip]:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            background-color: #333;
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            top: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            p {
+                font-size: 0.9rem;
+            }
+
+            input[type="number"], select {
+                font-size: 1rem;
+            }
+
+            button {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with VRI branding -->
+    <header>
+        <img src="logo1.svg" alt="Logo" class="logo">
+        <h1>Venture Research Institute</h1>
+        <p>Dynamic Personal Tax Model</p>
+    </header>
+
+    <!-- Map and Dropdown Section -->
+    <section class="state-selection">
+        <h2>Select Your State or Territory</h2>
+        <!-- US Map (to be implemented) -->
+        <div id="us-map"></div>
+        <!-- Dropdown for state selection -->
+        <select id="stateDropdown">
+            <option value="">Select State/Territory</option>
+        </select>
+    </section>
+
+    <!-- User Input Section -->
+    <section class="user-input">
+        <h3>Enter Your Income and Exemptions</h3>
+        <label for="income">Annual Income ($):</label>
+        <input type="number" id="income" placeholder="Enter your income">
+        
+        <label for="standardExemption">Apply Standard Exemption</label>
+        <input type="checkbox" id="standardExemption">
+        
+        <label for="customExclusions">Other Exemptions/Exclusions ($):</label>
+        <input type="number" id="customExclusions" placeholder="Enter custom exemptions">
+
+        <h3>Enter Your Spending</h3>
+        <label for="spending">Total Spending in State ($):</label>
+        <input type="number" id="spending" placeholder="Enter your spending">
+    </section>
+
+    <!-- Tax Calculation & Summary -->
+    <section class="tax-summary">
+        <h3>Your Tax Breakdown</h3>
+        <div class="summary-panel">
+            <p>Income: $<span id="incomeSummary">0</span></p>
+            <p>Federal Tax: $<span id="federalTaxSummary">0</span></p>
+            <p>State Tax: $<span id="stateTaxSummary">0</span></p>
+            <p>Sales Tax: $<span id="salesTaxSummary">0</span></p>
+            <p><b>Total Tax Burden: $<span id="totalTaxSummary">0</span></b></p>
+            <p><b>Net Income: $<span id="remainingIncome">0</span></b></p>
+        </div>
+    </section>
+
+    <!-- Pie Chart Section -->
+    <section id="pie-chart-container">
+        <canvas id="taxPieChart"></canvas>
+    </section>
+
+    <!-- Expandable Resources Section -->
+    <section class="resources">
+        <h3 onclick="toggleResources()">Resources</h3>
+        <ul id="resourcesList">
+            <li><a href="#" data-tooltip="Link to Tax Resource 1">Tax Resource 1</a></li>
+            <li><a href="#" data-tooltip="Link to Tax Resource 2">Tax Resource 2</a></li>
+            <li><a href="#" data-tooltip="Link to Tax Resource 3">Tax Resource 3</a></li>
+        </ul>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Venture Research Institute. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        function toggleResources() {
+            const resources = document.getElementById('resourcesList');
+            resources.style.display = resources.style.display === 'block' ? 'none' : 'block';
+        }
+    </script>
+</body>
+</html>
