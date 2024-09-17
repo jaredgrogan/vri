@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Herakles Exoskeleton</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            height: 100%;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Collapsible Panel */
+        .panel {
+            width: 300px;
+            height: 100%;
+            background-color: #ffffff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2);
+            transition: transform 0.4s ease-in-out;
+            padding: 20px;
+            z-index: 1000;
+        }
+
+        .panel.closed {
+            transform: translateX(-100%);
+        }
+
+        /* Hamburger Icon */
+        .panel-toggle {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: white;
+            border: none;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .panel-toggle svg {
+            fill: black;
+            width: 30px;
+            height: 30px;
+        }
+
+        /* Toolbar and Drawing */
+        .toolbar {
+            margin: 10px;
+            text-align: center;
+        }
+
+        .icon {
+            fill: black;
+            transition: fill 0.3s ease;
+        }
+
+        .icon:hover {
+            fill: #007bff;
+        }
+
+        .canvas-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 90vw;
+            height: 60vh;
+            background-color: white;
+            position: relative;
+        }
+
+        canvas {
+            display: block;
+            cursor: crosshair;
+            touch-action: none;
+        }
+
+        /* Brush Size Slider */
+        .brush-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 10px;
+        }
+
+        .brush-slider {
+            width: 200px;
+        }
+
+        /* Color Selection */
+        .color-selection {
+            display: flex;
+            justify-content: space-around;
+            margin: 10px 0;
+        }
+
+        .color-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .color-wheel {
+            width: 30px;
+            height: 30px;
+            background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        /* AI Indicator */
+        .ai-indicator {
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, blue, teal);
+            animation: colorPhaser 30s infinite alternate;
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+        }
+
+        @keyframes colorPhaser {
+            0% { background: linear-gradient(45deg, blue, teal); }
+            50% { background: linear-gradient(45deg, purple, red); }
+            100% { background: linear-gradient(45deg, blue, teal); }
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: black;
+            color: white;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Webcam & Mic */
+        .webcam-container {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        video {
+            width: 150px;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .toggle-webcam, .mic-icon, .speaker-icon {
+            margin-top: 5px;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .mic-active {
+            background-color: red;
+            animation: pulse 1s infinite;
+        }
+
+        .volume-slider {
+            display: none;
+        }
+
+        .speaker-icon.active + .volume-slider {
+            display: block;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+
+        /* Chat Console */
+        .chat-console {
+            width: 90%;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .upload-btn, .send-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .upload-btn svg, .send-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Refresh Button */
+        .refresh-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .refresh-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Collapsible Panel -->
+    <div class="panel" id="panel">
+        <h3>Menu</h3>
+        <div class="brush-container">
+            <label for="brushSlider">Brush Size: <span id="brushSizeLabel">10px</span></label>
+            <input type="range" id="brushSlider" class="brush-slider" min="1" max="30" value="10">
+        </div>
+        <div class="color-selection">
+            <div class="color-option" style="background-color: black;" data-color="black"></div>
+            <div class="color-option" style="background-color: blue;" data-color="blue"></div>
+            <div class="color-wheel" id="colorWheel"></div>
+        </div>
+    </div>
+    <button class="panel-toggle" id="panelToggle">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/>
+        </svg>
+    </button>
+
+    <!-- Canvas Wrapper -->
+    <div class="canvas-wrapper">
+        <canvas id="drawingCanvas"></canvas>
+        <!-- AI Light Indicator -->
+        <div class="ai-indicator"></div>
+    </div>
+
+    <!-- Refresh Button -->
+    <button class="refresh-btn tooltip" id="refreshBtn">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="24px" height="24px">
+            <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+        </svg>
+        <span class="tooltiptext">Refresh Canvas</span>
+    </button>
+
+    <!-- Chat Console -->
+    <div class="chat-console">
+        <button class="upload-btn tooltip">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="24px" height="24px">
+                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+            </svg>
+            <span class="tooltiptext">Upload File</span>
+        </button>
+        <input type="text" class="chat-input" placeholder="Type your message...">
+        <button class="send-btn tooltip" id="sendBtn">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="24px" height="24px">
+                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+            </svg>
+            <span class="tooltiptext">Send Message</span>
+        </button>
+    </div>
+
+    <!-- Webcam & Mic Icons -->
+    <div class="webcam-container">
+        <video id="webcam" autoplay></video>
+        <button class="toggle-webcam tooltip" id="toggleWebcam">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px">
+                <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4zM14 13h-3v3H9v-3H6v-2h3V8h2v3h3v2z"/>
+            </svg>
+            <span class="tooltiptext">Toggle Webcam</span>
+        </button>
+        <button class="mic-icon tooltip" id="micIcon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px">
+                <path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/>
+            </svg>
+            <span class="tooltiptext">Toggle Microphone</span>
+        </button>
+        <button class="speaker-icon tooltip" id="speakerIcon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px">
+                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+            </svg>
+            <span class="tooltiptext">Toggle Speaker</span>
+        </button>
+        <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="50">
+    </div>
+
+    <script>
+        // Collapsible Panel Logic
+        const panel = document.getElementById('panel');
+        const panelToggle = document.getElementById('panelToggle');
+
+        panelToggle.addEventListener('click', () => {
+            panel.classList.toggle('closed');
+        });
+
+        // Drawing Canvas Logic
+        const canvas = document.getElementById('drawingCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = canvas.parentElement.clientWidth;
+        canvas.height = canvas.parentElement.clientHeight;
+        let drawing = false;
+        let brushSize = 10;
+        let brushColor = 'black';
+        let paths = [];
+        let currentPath = [];
+
+        // Align canvas with cursor
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseleave', stopDrawing);
+
+            // Touch events
+        canvas.addEventListener('touchstart', handleTouch);
+        canvas.addEventListener('touchmove', handleTouch);
+        canvas.addEventListener('touchend', stopDrawing);
+
+        function handleTouch(e) {
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent("mousemove", {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            canvas.dispatchEvent(mouseEvent);
+        }
+
+        function startDrawing(e) {
+            drawing = true;
+            currentPath = [];
+            draw(e);
+        }
+
+        function draw(e) {
+            if (!drawing) return;
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            currentPath.push({ x, y });
+
+            ctx.lineWidth = brushSize;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = brushColor;
+
+            ctx.beginPath();
+            ctx.moveTo(currentPath[currentPath.length - 2]?.x || x, currentPath[currentPath.length - 2]?.y || y);
+            ctx.lineTo(x, y);
+            ctx.stroke();
+        }
+
+        function stopDrawing() {
+            if (!drawing) return;
+            drawing = false;
+            paths.push([...currentPath]);
+        }
+
+        // Brush Size Slider
+        const brushSlider = document.getElementById('brushSlider');
+        const brushSizeLabel = document.getElementById('brushSizeLabel');
+
+        brushSlider.addEventListener('input', (e) => {
+            brushSize = e.target.value;
+            brushSizeLabel.textContent = `${brushSize}px`;
+        });
+
+        // Color Selection
+        const colorOptions = document.querySelectorAll('.color-option');
+        const colorWheel = document.getElementById('colorWheel');
+
+        colorOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                brushColor = option.dataset.color;
+            });
+        });
+
+        colorWheel.addEventListener('click', () => {
+            const colorPicker = document.createElement('input');
+            colorPicker.type = 'color';
+            colorPicker.click();
+            colorPicker.addEventListener('change', (e) => {
+                brushColor = e.target.value;
+            });
+        });
+
+        // Refresh Button
+        const refreshBtn = document.getElementById('refreshBtn');
+        refreshBtn.addEventListener('click', () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            paths = [];
+        });
+
+        // Mic and Transcription
+        const micIcon = document.getElementById('micIcon');
+        micIcon.addEventListener('click', () => {
+            micIcon.classList.toggle('mic-active');
+            // Activate mic, transcribe voice to text, etc.
+        });
+
+        // Webcam Logic
+        const video = document.getElementById('webcam');
+        const toggleWebcam = document.getElementById('toggleWebcam');
+
+        toggleWebcam.addEventListener('click', () => {
+            if (video.style.display === 'none') {
+                video.style.display = 'block';
+                startWebcam();
+            } else {
+                video.style.display = 'none';
+                stopWebcam();
+            }
+        });
+
+        function startWebcam() {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    video.srcObject = stream;
+                })
+                .catch(err => console.error('Error accessing webcam:', err));
+        }
+
+        function stopWebcam() {
+            const stream = video.srcObject;
+            const tracks = stream.getTracks();
+            tracks.forEach(track => track.stop());
+            video.srcObject = null;
+        }
+
+        // Speaker Icon and Volume Slider
+        const speakerIcon = document.getElementById('speakerIcon');
+        const volumeSlider = document.getElementById('volumeSlider');
+
+        speakerIcon.addEventListener('click', () => {
+            speakerIcon.classList.toggle('active');
+            volumeSlider.style.display = speakerIcon.classList.contains('active') ? 'block' : 'none';
+        });
+
+        volumeSlider.addEventListener('input', (e) => {
+            const volume = e.target.value;
+            // Adjust voice synthesis volume logic here
+        });
+
+        // Send Button Logic
+        const sendBtn = document.getElementById('sendBtn');
+        const chatInput = document.querySelector('.chat-input');
+
+        sendBtn.addEventListener('click', () => {
+            const message = chatInput.value.trim();
+            if (message) {
+                // Send logic (sends chat, drawings, etc.)
+                console.log('Sending message:', message);
+                // Clear input after sending
+                chatInput.value = '';
+            }
+        });
+
+        // File Upload Logic
+        const uploadBtn = document.querySelector('.upload-btn');
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+
+        uploadBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                // Handle file upload logic here
+                console.log('File selected:', file.name);
+            }
+        });
+    </script>
+</body>
+</html>
