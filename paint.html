@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Canvas Paint Tool</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&display=swap" rel="stylesheet">
+  <style>
+    /* Main Styles */
+    body {
+      font-family: 'Berkeley Mono', monospace;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      position: relative;
+      height: 70vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    /* Canvas Styling */
+    canvas {
+      border: 1px solid #000;
+    }
+
+    /* Menu Styles */
+    .color-picker,
+    .menu {
+      display: none;
+    }
+
+    .paint-active .color-picker,
+    .paint-active .menu {
+      display: block;
+    }
+  </style>
+</head>
+
+<body class="light-mode" id="app">
+
+  <!-- Navigation -->
+  <div class="nav-header">
+    <ul id="navMenu">
+      <li><a href="#">Menu</a>
+        <ul>
+          <li><a href="#" id="paintMenu">Paint</a></li>
+          <li><a href="#" id="exportBtn">Export</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Hero Section with Canvas -->
+  <div class="hero-section">
+    <canvas id="paintCanvas" width="800" height="600"></canvas>
+  </div>
+
+  <!-- Color Picker and Paint Menu -->
+  <div class="color-picker">
+    <p>Select Color: Use number keys (1-9) to choose colors</p>
+  </div>
+
+  <script>
+    // Selectors
+    const canvas = document.getElementById('paintCanvas');
+    const ctx = canvas.getContext('2d');
+    let painting = false;
+    let color = '#000000';
+    let opacity = 1.0;
+
+    // Menu to activate Paint mode
+    document.getElementById('paintMenu').addEventListener('click', () => {
+      document.body.classList.toggle('paint-active');
+    });
+
+    // Paint Start/End functions
+    function startPaint(e) {
+      painting = true;
+      paint(e);
+    }
+
+    function endPaint() {
+      painting = false;
+      ctx.beginPath();
+    }
+
+    // Painting function
+    function paint(e) {
+      if (!painting) return;
+
+      ctx.lineWidth = 5;
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = color;
+      ctx.globalAlpha = opacity;
+
+      ctx.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+    }
+
+    // Event Listeners for Painting
+    canvas.addEventListener('mousedown', startPaint);
+    canvas.addEventListener('mouseup', endPaint);
+    canvas.addEventListener('mousemove', paint);
+
+    // Key Bindings for Color Adjustments
+    document.addEventListener('keydown', (e) => {
+      switch (e.key) {
+        case '1': color = '#000000'; break; // Black
+        case '2': color = '#ffffff'; break; // White
+        case '3': color = '#ff0000'; break; // Red
+        case '4': color = '#ffa500'; break; // Orange
+        case '5': color = '#ffff00'; break; // Yellow
+        case '6': color = '#00ff00'; break; // Green
+        case '7': color = '#0000ff'; break; // Blue
+        case '8': color = '#4b0082'; break; // Indigo
+        case '9': color = '#ee82ee'; break; // Violet
+        case '-': opacity = Math.max(0, opacity - 0.1); break;
+        case '=': opacity = Math.min(1, opacity + 0.1); break;
+      }
+    });
+
+    // Screenshot & Export function
+    document.getElementById('exportBtn').addEventListener('click', () => {
+      const image = canvas.toDataURL();
+      const link = document.createElement('a');
+      link.href = image;
+      link.download = 'canvas-image.png';
+      link.click();
+    });
+  </script>
+</body>
+
+</html>
