@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Herakles Exoskeleton</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Berkeley+Mono&display=swap');
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            height: 100%;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            overflow-x: hidden;
+            cursor: default;
+        }
+
+        /* Clock Sphere */
+        .clock-sphere {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #00ffff, #ff00ff);
+            cursor: pointer;
+            z-index: 1001;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Berkeley Mono', monospace;
+            font-size: 12px;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            animation: pulse 2s infinite alternate, rotate 10s linear infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 5px rgba(255,255,255,0.5); }
+            100% { box-shadow: 0 0 20px rgba(255,255,255,0.8); }
+        }
+
+        @keyframes rotate {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+
+        /* Collapsible Panel */
+        .panel {
+            width: 300px;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            position: fixed;
+            top: 0;
+            left: -300px;
+            box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2);
+            transition: left 0.4s ease-in-out;
+            padding: 20px;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .panel.open {
+            left: 0;
+        }
+
+        .panel h3 {
+            margin-top: 40px;
+        }
+
+        /* Canvas Wrapper */
+        .canvas-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 90vw;
+            height: 60vh;
+            background-color: white;
+            position: relative;
+            margin-top: 60px;
+        }
+
+        canvas {
+            display: block;
+            cursor: crosshair;
+            touch-action: none;
+        }
+
+        /* Drawing Controls */
+        .drawing-controls {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .drawing-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .drawing-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .drawing-btn:disabled svg {
+            opacity: 0.5;
+        }
+
+        /* Pen/Eraser Toggle */
+        .pen-eraser-toggle {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .pen-eraser-toggle label {
+            margin-right: 10px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: #2196F3;
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Webcam Container */
+        .webcam-container {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 150px;
+            height: 112.5px;
+            overflow: hidden;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        #webcam {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .camera-controls {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-top: 5px;
+        }
+
+        .camera-btn, .mic-icon, .speaker-icon {
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .camera-btn, .mic-icon, .speaker-icon {
+                width: 40%;
+            }
+        }
+
+        .camera-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        /* Enlarged Video Modal */
+        .video-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 90%;
+            max-height: 90%;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* Chat Console */
+        .chat-console {
+            width: 90%;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .chat-mode-toggle {
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .chat-mode-toggle svg {
+            width: 24px;
+            height: 24px;
+            margin-right: 5px;
+        }
+
+        .upload-btn, .send-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .upload-btn svg, .send-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Footer */
+        footer {
+            width: 100%;
+            text-align: center;
+            padding: 10px 0;
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Clock Sphere -->
+    <div class="clock-sphere" id="clockSphere"></div>
+
+    <!-- Collapsible Panel -->
+    <div class="panel" id="panel">
+        <h3>Menu</h3>
+        <div class="brush-container">
+            <label for="brushSlider">Brush Size: <span id="brushSizeLabel">10px</span></label>
+            <input type="range" id="brushSlider" class="brush-slider" min="1" max="30" value="10">
+        </div>
+        <div class="color-selection">
+            <div class="color-option" style="background-color: black;" data-color="black"></div>
+            <div class="color-option" style="background-color: blue;" data-color="blue"></div>
+            <div class="color-wheel" id="colorWheel"></div>
+        </div>
+        <div class="pen-eraser-toggle">
+            <label>Pen</label>
+            <label class="toggle-switch">
+                <input type="checkbox" id="penEraserToggle">
+                <span class="toggle-slider"></span>
+            </label>
+            <label>Eraser</label>
+        </div>
+        <div class="ai-voice">
+            <label for="aiVoice">AI Voice:</label>
+            <select id="aiVoice">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+        </div>
+        <div class="export-options">
+            <button id="exportChat">Export Chat History</button>
+            <button id="exportImages">Export Images</button>
+            <button id="takeScreenshot">Take Screenshot</button>
+        </div>
+    </div>
+
+    <!-- Canvas Wrapper -->
+    <div class="canvas-wrapper">
+        <canvas id="drawingCanvas"></canvas>
+        <div class="drawing-controls">
+            <button class="drawing-btn" id="undoBtn" title="Undo">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 7v6h6"></path>
+                    <path d="M21 17a9 9 0 00-9-9 9 9 0 00-6 2.3L3 13"></path>
+                </svg>
+            </button>
+            <button class="drawing-btn" id="redoBtn" title="Redo">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 7v6h-6"></path>
+                    <path d="M3 17a9 9 0 019-9 9 9 0 016 2.3l3 2.7"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Webcam Container -->
+    <div class="webcam-container">
+        <div class="video-wrapper" id="videoWrapper">
+            <video id="webcam" autoplay playsinline></video>
+        </div>
+        <div class="camera-controls">
+            <button class="camera-btn" id="switchCamera">Switch Camera</button>
+            <button class="camera-btn" id="capturePhoto">Capture</button>
+        </div>
+    </div>
+
+    <!-- Enlarged Video Modal -->
+    <div class="video-modal" id="videoModal">
+        <span class="close-modal">&times;</span>
+        <video class="modal-content" id="enlargedVideo" autoplay playsinline></video>
+    </div>
+
+    <!-- Chat Console -->
+    <div class="chat-console">
+        <div class="chat-mode-toggle" id="chatModeToggle">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <span id="chatModeText">Search</span>
+        </div>
+        <input type="text" class="chat-input" placeholder="Type your message...">
+        <button class="send-btn tooltip" id="sendBtn">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="24px" height="24px">
+                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+            </svg>
+            <span class="tooltiptext">Send Message</span>
+        </button>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        © Copyright 2024 UNIVERSITAS AI
+    </footer>
+
+    <script>
+        // Clock Sphere and Panel Logic
+        const clockSphere = document.getElementById('clockSphere');
+        const panel = document.getElementById('panel');
+
+        function updateClockSphere() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            clockSphere.textContent = `${hours}:${minutes}`;
+        }
+
+        updateClockSphere();
+        setInterval(updateClockSphere, 1000);
+
+        clockSphere.addEventListener('click', () => {
+            panel.classList.toggle('open');
+        });
+
+          // Mouse hover to open panel
+        document.addEventListener('mousemove', (e) => {
+            if (e.clientX <= 20) {
+                panel.classList.add('open');
+            } else if (e.clientX > 320) {
+                panel.classList.remove('open');
+            }
+        });
+
+        // Drawing Canvas Logic
+        const canvas = document.getElementById('drawingCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = canvas.parentElement.clientWidth;
+        canvas.height = canvas.parentElement.clientHeight;
+        let isDrawing = false;
+        let lastX = 0;
+        let lastY = 0;
+        let brushSize = 10;
+        let brushColor = 'blue';  // Default color set to blue
+        let isEraser = false;
+        let drawHistory = [];
+        let historyIndex = -1;
+
+        const undoBtn = document.getElementById('undoBtn');
+        const redoBtn = document.getElementById('redoBtn');
+        const penEraserToggle = document.getElementById('penEraserToggle');
+        const brushSlider = document.getElementById('brushSlider');
+        const brushSizeLabel = document.getElementById('brushSizeLabel');
+
+        function startDrawing(e) {
+            isDrawing = true;
+            [lastX, lastY] = [e.offsetX, e.offsetY];
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(e.offsetX, e.offsetY);
+            ctx.strokeStyle = isEraser ? 'white' : brushColor;
+            ctx.lineWidth = brushSize;
+            ctx.lineCap = 'round';
+            ctx.stroke();
+            [lastX, lastY] = [e.offsetX, e.offsetY];
+        }
+
+        function stopDrawing() {
+            if (isDrawing) {
+                isDrawing = false;
+                saveDrawingState();
+            }
+        }
+
+        function saveDrawingState() {
+            historyIndex++;
+            drawHistory = drawHistory.slice(0, historyIndex);
+            drawHistory.push(canvas.toDataURL());
+            updateUndoRedoButtons();
+        }
+
+        function undo() {
+            if (historyIndex > 0) {
+                historyIndex--;
+                restoreDrawingState();
+            }
+        }
+
+        function redo() {
+            if (historyIndex < drawHistory.length - 1) {
+                historyIndex++;
+                restoreDrawingState();
+            }
+        }
+
+        function restoreDrawingState() {
+            const img = new Image();
+            img.src = drawHistory[historyIndex];
+            img.onload = () => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 0, 0);
+            };
+            updateUndoRedoButtons();
+        }
+
+        function updateUndoRedoButtons() {
+            undoBtn.disabled = historyIndex <= 0;
+            redoBtn.disabled = historyIndex >= drawHistory.length - 1;
+        }
+
+        // Event listeners for drawing
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+
+        // Touch events
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            startDrawing({
+                offsetX: touch.clientX - canvas.offsetLeft,
+                offsetY: touch.clientY - canvas.offsetTop
+            });
+        });
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            draw({
+                offsetX: touch.clientX - canvas.offsetLeft,
+                offsetY: touch.clientY - canvas.offsetTop
+            });
+        });
+        canvas.addEventListener('touchend', stopDrawing);
+
+        // Undo and Redo buttons
+        undoBtn.addEventListener('click', undo);
+        redoBtn.addEventListener('click', redo);
+
+        // Pen/Eraser toggle
+        penEraserToggle.addEventListener('change', () => {
+            isEraser = penEraserToggle.checked;
+        });
+
+        // Brush size slider
+        brushSlider.addEventListener('input', (e) => {
+            brushSize = e.target.value;
+            brushSizeLabel.textContent = `${brushSize}px`;
+        });
+
+        // Color selection
+        const colorOptions = document.querySelectorAll('.color-option');
+        const colorWheel = document.getElementById('colorWheel');
+
+        colorOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                brushColor = option.dataset.color;
+                isEraser = false;
+                penEraserToggle.checked = false;
+            });
+        });
+
+        colorWheel.addEventListener('click', () => {
+            const colorPicker = document.createElement('input');
+            colorPicker.type = 'color';
+            colorPicker.click();
+            colorPicker.addEventListener('change', (e) => {
+                brushColor = e.target.value;
+                isEraser = false;
+                penEraserToggle.checked = false;
+            });
+        });
+
+        // Camera Functionality
+        const video = document.getElementById('webcam');
+        const videoWrapper = document.getElementById('videoWrapper');
+        const switchCameraBtn = document.getElementById('switchCamera');
+        const capturePhotoBtn = document.getElementById('capturePhoto');
+        const videoModal = document.getElementById('videoModal');
+        const enlargedVideo = document.getElementById('enlargedVideo');
+        const closeModal = document.querySelector('.close-modal');
+
+        let currentStream;
+        let facingMode = 'user';
+
+        async function startCamera() {
+            if (currentStream) {
+                currentStream.getTracks().forEach(track => track.stop());
+            }
+
+            const constraints = {
+                video: { facingMode: facingMode }
+            };
+
+            try {
+                currentStream = await navigator.mediaDevices.getUserMedia(constraints);
+                video.srcObject = currentStream;
+                enlargedVideo.srcObject = currentStream;
+            } catch (err) {
+                console.error('Error accessing camera:', err);
+            }
+        }
+
+        startCamera();
+
+        switchCameraBtn.addEventListener('click', () => {
+            facingMode = facingMode === 'user' ? 'environment' : 'user';
+            startCamera();
+        });
+
+        // Check if device has multiple cameras
+        navigator.mediaDevices.enumerateDevices()
+            .then(devices => {
+                const videoInputs = devices.filter(device => device.kind === 'videoinput');
+                if (videoInputs.length <= 1) {
+                    switchCameraBtn.disabled = true;
+                    switchCameraBtn.style.textDecoration = 'line-through';
+                }
+            });
+
+        capturePhotoBtn.addEventListener('click', () => {
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = video.videoWidth;
+            tempCanvas.height = video.videoHeight;
+            tempCanvas.getContext('2d').drawImage(video, 0, 0);
+            
+            const img = new Image();
+            img.onload = () => {
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                saveDrawingState();
+            };
+            img.src = tempCanvas.toDataURL();
+        });
+
+        videoWrapper.addEventListener('click', () => {
+            videoModal.style.display = 'block';
+        });
+
+        closeModal.addEventListener('click', () => {
+            videoModal.style.display = 'none';
+        });
+
+        // Chat Mode Toggle
+        const chatModeToggle = document.getElementById('chatModeToggle');
+        const chatModeText = document.getElementById('chatModeText');
+        let isSearchMode = true;
+
+        chatModeToggle.addEventListener('click', () => {
+            isSearchMode = !isSearchMode;
+            chatModeText.textContent = isSearchMode ? 'Search' : 'Chat';
+            // Here you would typically update the behavior of the chat/search functionality
+            console.log(`Switched to ${isSearchMode ? 'Search' : 'Chat'} mode`);
+        });
+
+        // Export functions
+        document.getElementById('exportChat').addEventListener('click', () => {
+            // Implement chat history export logic here
+            console.log('Exporting chat history...');
+        });
+
+        document.getElementById('exportImages').addEventListener('click', () => {
+            // Implement image export logic here
+            console.log('Exporting images...');
+        });
+
+        document.getElementById('takeScreenshot').addEventListener('click', () => {
+            // Implement screenshot logic here
+            console.log('Taking screenshot...');
+        });
+
+        // Initialize drawing state
+        saveDrawingState();
+
+        // Responsive Canvas Resizing
+        window.addEventListener('resize', () => {
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+            restoreDrawingState();
+        });
+
+        // Set initial brush color
+        document.querySelector('.color-option[data-color="blue"]').click();
+    </script>
+</body>
+</html>
