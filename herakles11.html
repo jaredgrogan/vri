@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Herakles Exoskeleton</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Berkeley+Mono&display=swap');
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            height: 100%;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Collapsible Panel */
+        .panel {
+            width: 300px;
+            height: 100%;
+            background-color: #ffffff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2);
+            transition: transform 0.4s ease-in-out;
+            padding: 20px;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .panel.closed {
+            transform: translateX(-100%);
+        }
+
+        .panel h3 {
+            margin-top: 40px;
+        }
+
+        /* Hamburger Icon */
+        .panel-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: white;
+            border: none;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .panel-toggle svg {
+            fill: black;
+            width: 30px;
+            height: 30px;
+        }
+
+        /* Toolbar and Drawing */
+        .toolbar {
+            margin: 10px;
+            text-align: center;
+        }
+
+        .icon {
+            fill: black;
+            transition: fill 0.3s ease;
+        }
+
+        .icon:hover {
+            fill: #007bff;
+        }
+
+        .canvas-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 90vw;
+            height: 60vh;
+            background-color: white;
+            position: relative;
+            margin-top: 60px;
+        }
+
+        canvas {
+            display: block;
+            cursor: crosshair;
+            touch-action: none;
+        }
+
+        /* Brush Size Slider */
+        .brush-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 10px 0;
+        }
+
+        .brush-slider {
+            width: 200px;
+        }
+
+        /* Color Selection */
+        .color-selection {
+            display: flex;
+            justify-content: space-around;
+            margin: 10px 0;
+        }
+
+        .color-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .color-wheel {
+            width: 30px;
+            height: 30px;
+            background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        /* AI Indicator */
+        .ai-indicator {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, blue, teal);
+            animation: colorPhaser 30s infinite alternate;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+        }
+
+        @keyframes colorPhaser {
+            0% { background: linear-gradient(45deg, blue, teal); }
+            50% { background: linear-gradient(45deg, purple, red); }
+            100% { background: linear-gradient(45deg, blue, teal); }
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: black;
+            color: white;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Webcam & Mic */
+        .webcam-container {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        video {
+            width: 150px;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .toggle-webcam, .mic-icon, .speaker-icon {
+            margin-top: 5px;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .mic-active {
+            background-color: red;
+            animation: pulse 1s infinite;
+        }
+
+        .volume-slider {
+            display: none;
+        }
+
+        .speaker-icon.active + .volume-slider {
+            display: block;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+
+        /* Chat Console */
+        .chat-console {
+            width: 90%;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .upload-btn, .send-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .upload-btn svg, .send-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Date and Time */
+        .datetime {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            font-family: 'Berkeley Mono', monospace;
+            font-size: 14px;
+        }
+
+        /* Footer */
+        footer {
+            width: 100%;
+            text-align: center;
+            padding: 10px 0;
+            background-color: #f0f0f0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .panel {
+                width: 100%;
+            }
+
+            .canvas-wrapper {
+                width: 95vw;
+                height: 50vh;
+            }
+
+            .chat-console {
+                width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Date and Time -->
+    <div class="datetime" id="datetime"></div>
+
+    <!-- Collapsible Panel -->
+    <div class="panel" id="panel">
+        <h3>Menu</h3>
+        <div class="brush-container">
+            <label for="brushSlider">Brush Size: <span id="brushSizeLabel">10px</span></label>
+            <input type="range" id="brushSlider" class="brush-slider" min="1" max="30" value="10">
+        </div>
+        <div class="color-selection">
+            <div class="color-option" style="background-color: black;" data-color="black"></div>
+            <div class="color-option" style="background-color: blue;" data-color="blue"></div>
+            <div class="color-wheel" id="colorWheel"></div>
+        </div>
+        <div class="ai-voice">
+            <label for="aiVoice">AI Voice:</label>
+            <select id="aiVoice">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+        </div>
+        <div class="export-options">
+            <button id="exportChat">Export Chat History</button>
+            <button id="exportImages">Export Images</button>
+            <button id="takeScreenshot">Take Screenshot</button>
+        </div>
+    </div>
+    <button class="panel-toggle" id="panelToggle">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/>
+        </svg>
+    </button>
+
+    <!-- Canvas Wrapper -->
+    <div class="canvas-wrapper">
+        <canvas id="drawingCanvas"></canvas>
+    </div>
+
+    <!-- AI Light Indicator -->
+    <div class="ai-indicator"></div>
+
+    <!-- Chat Console -->
+    <div class="chat-console">
+        <button class="upload-btn tooltip">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="24px" height="24px">
+                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+            </svg>
+            <span class="tooltiptext">Upload File</span>
+        </button>
+        <input type="text" class="chat-input" placeholder="Type your message...">
+        <button class="send-btn tooltip" id="sendBtn">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" width="24px" height="24px">
+                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+            </svg>
+            <span class="tooltiptext">Send Message</span>
+        </button>
+    </div>
+
+    <!-- Webcam & Mic Icons -->
+    <div class="webcam-container">
+        <video id="webcam" autoplay></video>
+        <button class="toggle-webcam tooltip" id="toggleWebcam">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px">
+                <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4zM14 13h-3v3H9v-3H6v-2h3V8h2v3h3v2z"/>
+            </svg>
+            <span class="tooltiptext">Toggle Webcam</span>
+        </button>
+        <button class="mic-icon tooltip" id="micIcon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px">
+                <path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/>
+            </svg>
+            <span class="tooltiptext">Toggle Microphone</span>
+        </button>
+        <button class="speaker-icon tooltip" id="speakerIcon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px">
+                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+            </svg>
+            <span class="tooltiptext">Toggle Speaker</span>
+        </button>
+        <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="50">
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        Copyright 2024 UNIVERSITAS AI
+    </footer>
+
+    <script>
+        // Collapsible Panel Logic
+        const panel = document.getElementById('panel');
+        const panelToggle = document.getElementById('panelToggle');
+
+        panelToggle.addEventListener('click', () => {
+            panel.classList.toggle('closed');
+        });
+
+        // Drawing Canvas Logic
+        const canvas = document.getElementById('drawingCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = canvas.parentElement.clientWidth;
+        canvas.height = canvas.parentElement.clientHeight;
+        let drawing = false;
+        let brushSize = 10;
+        let brushColor = 'blue';  // Default color set to blue
+        let paths = [];
+        let currentPath = [];
+
+         // Align canvas with cursor
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseleave', stopDrawing);
+
+        // Touch events
+        canvas.addEventListener('touchstart', handleTouch);
+        canvas.addEventListener('touchmove', handleTouch);
+        canvas.addEventListener('touchend', stopDrawing);
+
+        function handleTouch(e) {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            const x = touch.clientX - rect.left;
+            const y = touch.clientY - rect.top;
+            
+            if (e.type === 'touchstart') startDrawing({ clientX: x, clientY: y });
+            else if (e.type === 'touchmove') draw({ clientX: x, clientY: y });
+        }
+
+        function startDrawing(e) {
+            drawing = true;
+            currentPath = [];
+            draw(e);
+        }
+
+        function draw(e) {
+            if (!drawing) return;
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            // Smooth line drawing
+            if (currentPath.length > 0) {
+                const lastPoint = currentPath[currentPath.length - 1];
+                const dx = x - lastPoint.x;
+                const dy = y - lastPoint.y;
+                const step = 1 / Math.max(Math.abs(dx), Math.abs(dy));
+                
+                for (let t = 0; t < 1; t += step) {
+                    const ix = lastPoint.x + dx * t;
+                    const iy = lastPoint.y + dy * t;
+                    currentPath.push({ x: ix, y: iy });
+                    drawPoint(ix, iy);
+                }
+            }
+            
+            currentPath.push({ x, y });
+            drawPoint(x, y);
+        }
+
+        function drawPoint(x, y) {
+            ctx.beginPath();
+            ctx.arc(x, y, brushSize / 2, 0, Math.PI * 2);
+            ctx.fillStyle = brushColor;
+            ctx.fill();
+        }
+
+        function stopDrawing() {
+            if (!drawing) return;
+            drawing = false;
+            paths.push([...currentPath]);
+        }
+
+        // Brush Size Slider
+        const brushSlider = document.getElementById('brushSlider');
+        const brushSizeLabel = document.getElementById('brushSizeLabel');
+
+        brushSlider.addEventListener('input', (e) => {
+            brushSize = e.target.value;
+            brushSizeLabel.textContent = `${brushSize}px`;
+        });
+
+        // Color Selection
+        const colorOptions = document.querySelectorAll('.color-option');
+        const colorWheel = document.getElementById('colorWheel');
+
+        colorOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                brushColor = option.dataset.color;
+            });
+        });
+
+        colorWheel.addEventListener('click', () => {
+            const colorPicker = document.createElement('input');
+            colorPicker.type = 'color';
+            colorPicker.click();
+            colorPicker.addEventListener('change', (e) => {
+                brushColor = e.target.value;
+            });
+        });
+
+        // File Upload Logic
+        const uploadBtn = document.querySelector('.upload-btn');
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+
+        uploadBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    console.log('File contents:', event.target.result);
+                    // Here you would typically send the file contents to your backend
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        // Webcam Logic
+        const video = document.getElementById('webcam');
+        const toggleWebcam = document.getElementById('toggleWebcam');
+
+        toggleWebcam.addEventListener('click', () => {
+            if (video.style.display === 'none') {
+                video.style.display = 'block';
+                startWebcam();
+            } else {
+                video.style.display = 'none';
+                stopWebcam();
+            }
+        });
+
+        function startWebcam() {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    video.srcObject = stream;
+                })
+                .catch(err => console.error('Error accessing webcam:', err));
+        }
+
+        function stopWebcam() {
+            const stream = video.srcObject;
+            const tracks = stream.getTracks();
+            tracks.forEach(track => track.stop());
+            video.srcObject = null;
+        }
+
+        // Mic and Speaker Logic
+        const micIcon = document.getElementById('micIcon');
+        const speakerIcon = document.getElementById('speakerIcon');
+        const volumeSlider = document.getElementById('volumeSlider');
+
+        micIcon.addEventListener('click', () => {
+            micIcon.classList.toggle('mic-active');
+            // Activate mic, transcribe voice to text, etc.
+        });
+
+        speakerIcon.addEventListener('click', () => {
+            speakerIcon.classList.toggle('active');
+            volumeSlider.style.display = speakerIcon.classList.contains('active') ? 'block' : 'none';
+        });
+
+        volumeSlider.addEventListener('input', (e) => {
+            const volume = e.target.value;
+            volumeSlider.title = `${volume}%`;
+        });
+
+        // AI Voice Selection
+        const aiVoice = document.getElementById('aiVoice');
+        aiVoice.addEventListener('change', (e) => {
+            console.log('AI Voice changed to:', e.target.value);
+            // Here you would typically update the voice used for text-to-speech
+        });
+
+        // Export Functions
+        document.getElementById('exportChat').addEventListener('click', () => {
+            // Here you would typically gather the chat history and create a downloadable file
+            console.log('Exporting chat history...');
+        });
+
+        document.getElementById('exportImages').addEventListener('click', () => {
+            // Here you would typically gather the images and create a downloadable zip file
+            console.log('Exporting images...');
+        });
+
+        document.getElementById('takeScreenshot').addEventListener('click', () => {
+            html2canvas(document.body).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'screenshot.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        });
+
+        // Date and Time Display
+        function updateDateTime() {
+            const now = new Date();
+            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const day = days[now.getDay()];
+            const month = months[now.getMonth()];
+            const date = now.getDate();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            const formattedHours = hours % 12 || 12;
+            const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+            
+            const dateTimeString = `${day} ${month} ${date} ${formattedHours}:${formattedMinutes} ${ampm}`;
+            document.getElementById('datetime').textContent = dateTimeString;
+        }
+
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+
+        // Responsive Canvas Resizing
+        window.addEventListener('resize', () => {
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+            redrawCanvas();
+        });
+
+        function redrawCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            paths.forEach(path => {
+                ctx.beginPath();
+                ctx.moveTo(path[0].x, path[0].y);
+                for (let i = 1; i < path.length; i++) {
+                    ctx.lineTo(path[i].x, path[i].y);
+                }
+                ctx.stroke();
+            });
+        }
+
+        // Initialize with blue color
+        document.querySelector('.color-option[data-color="blue"]').click();
+    </script>
+</body>
+</html>
