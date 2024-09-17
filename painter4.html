@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Dynamic Canvas Note-Taking App</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Berkeley Mono', monospace;
+        }
+        #canvas-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .menu-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+            background: rgba(245,245,245,0.1);
+            backdrop-filter: blur(10px);
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+        .menu {
+            position: absolute;
+            top: 50px;
+            left: 10px;
+            background: rgba(245,245,245,0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            display: none;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .night-mode .menu-button,
+        .night-mode .menu {
+            background: rgba(42,42,42,0.1);
+        }
+        .submenu {
+            margin-left: 20px;
+            display: none;
+            margin-top: 10px;
+        }
+        .menu-item {
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .icon-button {
+            width: 24px;
+            height: 24px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            cursor: pointer;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        #undo-button {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"/></svg>');
+        }
+        #redo-button {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.4 10.6C16.55 8.99 14.15 8 11.5 8c-4.65 0-8.58 3.03-9.96 7.22L3.9 16c1.05-3.19 4.05-5.5 7.6-5.5 1.95 0 3.73.72 5.12 1.88L13 16h9V7l-3.6 3.6z"/></svg>');
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container">
+        <canvas id="main-canvas"></canvas>
+        <div id="particles-js"></div>
+    </div>
+    
+    <button class="menu-button" onclick="toggleMenu()" data-tooltip="Open Menu">Menu</button>
+    
+    <div class="menu" id="main-menu">
+        <div class="menu-item">Export ▼</div>
+        <select id="export-format" onchange="exportCanvas(this.value)">
+            <option value="png">PNG</option>
+            <option value="gif">GIF</option>
+            <option value="jpeg">JPEG</option>
+            <option value="pdf">PDF</option>
+        </select>
+        <br><br>
+        <button onclick="location.reload()">Refresh Page</button>
+        <br><br>
+        <div class="icon-button" id="undo-button" onclick="undo()" data-tooltip="Undo"></div>
+        <div class="icon-button" id="redo-button" onclick="redo()" data-tooltip="Redo"></div>
+    </div>
+
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        const canvas = document.getElementById('main-canvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+        let brushSize = 5;
+        let brushOpacity = 1;
+        let brushType = 'normal';
+        let currentColor = '#000000';
+        let undoStack = [];
+        let redoStack = [];
+        let geometryTool = null;
+        let geometryFill = false;
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        function saveState() {
+            undoStack.push(canvas.toDataURL());
+            redoStack = [];
+        }
+
+        function undo() {
+            if (undoStack.length > 0) {
+                redoStack.push(canvas.toDataURL());
+                const img = new Image();
+                img.onload = () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0);
+                };
+                img.src = undoStack.pop();
+            }
+        }
+
+        function redo() {
+            if (redoStack.length > 0) {
+                undoStack.push(canvas.toDataURL());
+                const img = new Image();
+                img.onload = () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0);
+                };
+                img.src = redoStack.pop();
+            }
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('main-menu');
+            menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function exportCanvas(format) {
+            let dataURL;
+            switch(format) {
+                case 'png':
+                    dataURL = canvas.toDataURL('image/png');
+                    break;
+                case 'jpeg':
+                    dataURL = canvas.toDataURL('image/jpeg');
+                    break;
+                case 'gif':
+                    // Placeholder for GIF export
+                    alert("GIF export would be implemented here.");
+                    return;
+                case 'pdf':
+                    // Placeholder for PDF export
+                    alert("PDF export would be implemented here.");
+                    return;
+            }
+            const link = document.createElement('a');
+            link.download = `canvas-export.${format}`;
+            link.href = dataURL;
+            link.click();
+        }
+
+        function setGeometryTool(tool) {
+            geometryTool = tool;
+            brushType = 'geometry';
+            canvas.style.cursor = 'crosshair';
+        }
+
+        function drawGeometry(e) {
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+            ctx.setLineDash([5, 5]);
+
+            const width = e.clientX - selectionStart.x;
+            const height = e.clientY - selectionStart.y;
+
+            switch(geometryTool) {
+                case 'circle':
+                    ctx.beginPath();
+                    ctx.arc(selectionStart.x, selectionStart.y, Math.abs(width), 0, Math.PI * 2);
+                    if (geometryFill) ctx.fill();
+                    ctx.stroke();
+                    break;
+                case 'square':
+                    if (geometryFill) ctx.fillRect(selectionStart.x, selectionStart.y, width, height);
+                    ctx.strokeRect(selectionStart.x, selectionStart.y, width, height);
+                    break;
+            }
+
+            ctx.setLineDash([]);
+        }
+
+        function activateTypingTool() {
+            brushType = 'text';
+            canvas.style.cursor = 'text';
+            canvas.addEventListener('click', handleTextToolClick);
+        }
+
+        function handleTextToolClick(e) {
+            const text = prompt("Enter text:");
+            if (text) {
+                ctx.font = "16px Arial";
+                ctx.fillStyle = currentColor;
+                ctx.fillText(text, e.clientX, e.clientY);
+                canvas.removeEventListener('click', handleTextToolClick);
+                saveState();
+            }
+        }
+
+        canvas.addEventListener('mousedown', startAction);
+        canvas.addEventListener('mousemove', performAction);
+        canvas.addEventListener('mouseup', endAction);
+
+        function startAction(e) {
+            if (brushType === 'geometry') {
+                isDrawing = true;
+                selectionStart = { x: e.clientX, y: e.clientY };
+            } else if (brushType === 'text') {
+                const text = prompt("Enter text:");
+                if (text) {
+                    ctx.font = "16px Arial";
+                    ctx.fillStyle = currentColor;
+                    ctx.fillText(text, e.clientX, e.clientY);
+                    saveState();
+                }
+            }
+        }
+
+        function performAction(e) {
+            if (isDrawing) {
+                if (brushType === 'geometry') {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    drawGeometry(e);
+                }
+            }
+        }
+
+        function endAction(e) {
+            if (isDrawing && brushType === 'geometry') {
+                drawGeometry(e);
+                saveState();
+            }
+            isDrawing = false;
+            ctx.beginPath();
+        }
+
+        // Initial background color
+        canvas.style.background = '#f3f4f6';
+
+    </script>
+</body>
+</html>
