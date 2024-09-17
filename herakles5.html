@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Herakles Exoskeleton</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            height: 100%;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Collapsible Panel */
+        .panel {
+            width: 300px;
+            height: 100%;
+            background-color: #ffffff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2);
+            transition: transform 0.4s ease-in-out;
+            padding: 20px;
+        }
+
+        .panel.closed {
+            transform: translateX(-100%);
+        }
+
+        /* Hamburger Icon */
+        .panel-toggle {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .panel-toggle svg {
+            fill: black;
+            width: 30px;
+            height: 30px;
+        }
+
+        /* Toolbar and Drawing */
+        .toolbar {
+            margin: 10px;
+            text-align: center;
+        }
+
+        .icon {
+            fill: black;
+            transition: fill 0.3s ease;
+        }
+
+        .icon:hover {
+            fill: #007bff;
+        }
+
+        .canvas-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 90vw;
+            height: 60vh;
+            background-color: white;
+        }
+
+        canvas {
+            display: block;
+            cursor: crosshair;
+            touch-action: none;
+        }
+
+        /* Brush Size Slider */
+        .brush-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 10px;
+        }
+
+        .brush-slider {
+            width: 200px;
+        }
+
+        /* AI Indicator */
+        .ai-indicator {
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, blue, teal);
+            animation: colorPhaser 5s infinite alternate;
+        }
+
+        @keyframes colorPhaser {
+            0% {
+                background: linear-gradient(45deg, blue, teal);
+            }
+            100% {
+                background: linear-gradient(45deg, purple, red);
+            }
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+        }
+
+        .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: black;
+            color: white;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Webcam & Mic */
+        .webcam-container {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        video {
+            width: 150px;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .toggle-webcam, .mic-icon, .speaker-icon {
+            margin-top: 5px;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .mic-active {
+            background-color: red;
+            animation: pulse 1s infinite;
+        }
+
+        .volume-slider {
+            display: none;
+        }
+
+        .speaker-icon.active + .volume-slider {
+            display: block;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+
+        /* Transcription Area */
+        .transcription-area {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px 0;
+            width: 90%;
+            height: 100px;
+            overflow-y: scroll;
+        }
+
+        /* Send Button */
+        .send-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .send-btn svg {
+            fill: white;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Collapsible Panel -->
+    <div class="panel" id="panel">
+        <h3>User Input Forms</h3>
+        <div class="brush-container">
+            <label for="brushSlider">Brush Size: <span id="brushSizeLabel">10px</span></label>
+            <input type="range" id="brushSlider" class="brush-slider" min="1" max="30" value="10">
+        </div>
+        <button class="export-transcript">Export Transcript</button>
+    </div>
+    <button class="panel-toggle" id="panelToggle">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/>
+        </svg>
+    </button>
+
+    <!-- Toolbar and Drawing Canvas -->
+    <div class="toolbar">
+        <div class="tooltip">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="black" viewBox="0 0 24 24" width="24px" height="24px" class="icon trash-icon">
+                <path d="M5 5v14c0 1.103.897 2 2 2h10c1.103 0 2-.897 2-2V5H5zm2 2h10v12H7V7zm11-3h-3l-1-1h-4l-1 1H6v2h12V4z"/>
+            </svg>
+            <span class="tooltiptext">Clear Canvas</span>
+        </div>
+    </div>
+
+    <div class="canvas-wrapper">
+        <canvas id="drawingCanvas"></canvas>
+    </div>
+
+    <!-- AI Light Indicator -->
+    <div class="ai-indicator"></div>
+
+    <!-- Transcription Area -->
+    <div class="transcription-area" id="transcriptionArea"></div>
+
+    <!-- Webcam & Mic Icons -->
+    <div class="webcam-container">
+        <video id="webcam" autoplay></video>
+        <button class="toggle-webcam" id="toggleWebcam">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px">
+                <path d="M12 7c-2.761 0-5 2.239-5 5s2.239 5 5 5 5-2.239 5-5-2.239-5-5-5zm0 8c-1.657 0-3-1.343-3-3s1.343-3 3-3 3 1.343 3 3-1.343 3-3 3zm8-8h-1.535c-.281-.621-.931-1-1.716-1h-2.499c-.786 0-1.435.379-1.716 1h-6.498c-.786 0-1.435.379-1.716 1h-1.535v14h18v-14zm-9 12c-2.209 0-4-1.791-4-4s1.791-4 4-4 4 1.791 4 4-1.791 4-4 4z"/>
+            </svg>
+        </button>
+        <button class="mic-icon" id="micIcon">🎤</button>
+        <button class="speaker-icon" id="speakerIcon">🔊</button>
+        <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="50">
+    </div>
+
+    <!-- Send Button -->
+    <button class="send-btn" id="sendBtn">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px">
+            <path d="M3 6l18 6-18 6z"/>
+        </svg>
+    </button>
+
+    <script>
+        // Collapsible Panel Logic
+        const panel = document.getElementById('panel');
+        const panelToggle = document.getElementById('panelToggle');
+
+        panelToggle.addEventListener('click', () => {
+            panel.classList.toggle('closed');
+        });
+
+        // Drawing Canvas Logic
+        const canvas = document.getElementById('drawingCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = canvas.parentElement.clientWidth;
+        canvas.height = canvas.parentElement.clientHeight;
+        let drawing = false;
+        let brushSize = 10;
+        let paths = [];
+        let currentPath = [];
+
+        // Align canvas with cursor
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseleave', stopDrawing);
+
+        function startDrawing(e) {
+            drawing = true;
+            currentPath = [];
+            draw(e);
+        }
+
+        function draw(e) {
+            if (!drawing) return;
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            currentPath.push({ x, y });
+
+            ctx.lineWidth = brushSize;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = 'black';
+
+            ctx.beginPath();
+            ctx.moveTo(currentPath[currentPath.length - 2]?.x || x, currentPath[currentPath.length - 2]?.y || y);
+            ctx.lineTo(x, y);
+            ctx.stroke();
+        }
+
+        function stopDrawing() {
+            if (!drawing) return;
+            drawing = false;
+            paths.push([...currentPath]);
+        }
+
+        // Brush Size Slider
+        const brushSlider = document.getElementById('brushSlider');
+        const brushSizeLabel = document.getElementById('brushSizeLabel');
+
+        brushSlider.addEventListener('input', (e) => {
+            brushSize = e.target.value;
+            brushSizeLabel.textContent = `${brushSize}px`;
+        });
+
+        // Mic and Transcription
+        const micIcon = document.getElementById('micIcon');
+        micIcon.addEventListener('click', () => {
+            micIcon.classList.toggle('mic-active');
+            // Activate mic, transcribe voice to text, etc.
+        });
+
+        // Webcam Logic
+        const video = document.getElementById('webcam');
+        const toggleWebcam = document.getElementById('toggleWebcam');
+
+        toggleWebcam.addEventListener('click', () => {
+            if (video.style.display === 'none') {
+                video.style.display = 'block';
+            } else {
+                video.style.display = 'none';
+            }
+        });
+
+        function startWebcam() {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    video.srcObject = stream;
+                })
+                .catch(err => console.error('Error accessing webcam:', err));
+        }
+
+        startWebcam();
+
+        // Speaker Icon and Volume Slider
+        const speakerIcon = document.getElementById('speakerIcon');
+        const volumeSlider = document.getElementById('volumeSlider');
+
+        speakerIcon.addEventListener('click', () => {
+            speakerIcon.classList.toggle('active');
+        });
+
+        volumeSlider.addEventListener('input', (e) => {
+            const volume = e.target.value;
+            // Adjust voice synthesis volume logic here
+        });
+
+        // Send Button Logic
+        const sendBtn = document.getElementById('sendBtn');
+        sendBtn.addEventListener('click', () => {
+            // Send logic (sends chat, drawings, etc.)
+        });
+    </script>
+</body>
+</html>
