@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universitas Studio</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Source Sans Pro', sans-serif;
+        }
+        #canvas-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .menu-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+            background: rgba(245,245,245,0.1);
+            backdrop-filter: blur(10px);
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: background 0.3s ease;
+        }
+        .menu-button:hover {
+            background: rgba(245,245,245,0.2);
+        }
+        .menu {
+            position: absolute;
+            top: 50px;
+            left: 10px;
+            background: rgba(245,245,245,0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            display: none;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .night-mode .menu-button,
+        .night-mode .menu {
+            background: rgba(42,42,42,0.1);
+        }
+        .submenu {
+            margin-left: 20px;
+            display: none;
+            margin-top: 10px;
+        }
+        .menu-item {
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .menu-item:hover {
+            color: #007bff;
+        }
+        .color-wheel {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red);
+            margin-top: 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .color-wheel:hover {
+            transform: scale(1.05);
+        }
+        .effects-list, .geometry-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .effect-button, .geometry-button {
+            padding: 5px 10px;
+            border: none;
+            background: rgba(255,255,255,0.2);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .effect-button:hover, .geometry-button:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        .tooltip {
+            position: absolute;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
+            display: none;
+            pointer-events: none;
+        }
+        .icon-button {
+            width: 24px;
+            height: 24px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .icon-button:hover {
+            transform: scale(1.1);
+        }
+        #undo-button {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"/></svg>');
+        }
+        #redo-button {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.4 10.6C16.55 8.99 14.15 8 11.5 8c-4.65 0-8.58 3.03-9.96 7.22L3.9 16c1.05-3.19 4.05-5.5 7.6-5.5 1.95 0 3.73.72 5.12 1.88L13 16h9V7l-3.6 3.6z"/></svg>');
+        }
+        .text-formatting {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 5px;
+        }
+        .geometry-indicator {
+            position: absolute;
+            border: 1px dashed rgba(255,255,255,0.5);
+            pointer-events: none;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+        .geometry-dimension {
+            position: absolute;
+            background: rgba(255,255,255,0.7);
+            color: #000;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+        #text-cursor {
+            position: absolute;
+            width: 2px;
+            height: 20px;
+            background-color: #000;
+            display: none;
+            animation: blink 0.7s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container">
+        <canvas id="main-canvas"></canvas>
+        <div id="particles-js"></div>
+        <div id="text-cursor"></div>
+    </div>
+    
+    <button class="menu-button" onclick="toggleMenu()" data-tooltip="Open Menu">Menu</button>
+    
+    <div class="menu" id="main-menu">
+        <div class="menu-item" onclick="toggleSubmenu('brush-options')" data-tooltip="Brush Settings">Brush Options ▼</div>
+        <div class="submenu" id="brush-options">
+            <input type="range" id="brush-size" min="1" max="50" value="5" oninput="updateBrushSize(this.value)" data-tooltip="Size">
+            <span id="brush-size-display">5</span>
+            <input type="range" id="brush-opacity" min="0" max="1" step="0.1" value="1" oninput="updateBrushOpacity(this.value)" data-tooltip="Opacity">
+            <span id="brush-opacity-display">100%</span>
+            <select id="brush-type" onchange="updateBrushType(this.value)" data-tooltip="Select Brush Type">
+                <option value="normal">Normal</option>
+                <option value="magic">Magic</option>
+                <option value="eraser">Eraser</option>
+            </select>
+            <div class="color-wheel" onclick="openColorPicker()" data-tooltip="Choose Color"></div>
+        </div>
+        
+        <div class="menu-item" onclick="toggleSubmenu('canvas-options')" data-tooltip="Canvas Settings">Canvas Options ▼</div>
+        <div class="submenu" id="canvas-options">
+            <button onclick="toggleBackground()" data-tooltip="Toggle Background">Toggle Background</button>
+            <button onclick="toggleDayNight()" data-tooltip="Switch Day/Night Mode">Toggle Day/Night</button>
+            <input type="file" id="bg-upload" accept="image/*" onchange="uploadBackground(event)" data-tooltip="Upload Background Image">
+        </div>
+        
+        <div class="menu-item" onclick="toggleSubmenu('effects')" data-tooltip="Visual Effects">Effects ▼</div>
+        <div class="submenu" id="effects">
+            <div class="effects-list">
+                <button class="effect-button" onclick="toggleEffect('shooting-stars')" data-tooltip="Shooting Stars Effect">Shooting Stars</button>
+                <button class="effect-button" onclick="toggleEffect('bubbles')" data-tooltip="Bubbles Effect">Bubbles</button>
+                <button class="effect-button" onclick="toggleEffect('fireworks')" data-tooltip="Fireworks Effect">Fireworks</button>
+                <button class="effect-button" onclick="toggleEffect('snow')" data-tooltip="Snow Effect">Snow</button>
+            </div>
+        </div>
+
+        <div class="menu-item" onclick="toggleSubmenu('geometry')" data-tooltip="Geometry Tools">Geometry ▼</div>
+        <div class="submenu" id="geometry">
+            <div class="geometry-list">
+                <button class="geometry-button" onclick="setGeometryTool('circle')" data-tooltip="Draw Circle">Circle</button>
+                <button class="geometry-button" onclick="setGeometryTool('square')" data-tooltip="Draw Square">Square</button>
+                <button class="geometry-button" onclick="setGeometryTool('line')" data-tooltip="Draw Line">Line</button>
+                <button class="geometry-button" onclick="setGeometryTool('arrow')" data-tooltip="Draw Arrow">Arrow</button>
+            </div>
+            <input type="checkbox" id="geometry-fill" onchange="toggleGeometryFill()">
+            <label for="geometry-fill">Fill</label>
+        </div>
+
+        <div class="menu-item" onclick="toggleSubmenu('tools')" data-tooltip="Additional Tools">Tools ▼</div>
+        <div class="submenu" id="tools">
+            <button onclick="activateTypingTool()" data-tooltip="Text Input Tool">Typing Tool</button>
+            <div class="text-formatting" id="text-formatting" style="display: none;">
+                <select id="font-family">
+                    <option value="Source Sans Pro">Source Sans Pro</option>
+                    <option value="Arial">Arial</option>
+                    <option value="Verdana">Verdana</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                </select>
+                <input type="number" id="font-size" value="16" min="8" max="72">
+                <button onclick="applyTextFormat('bold')">B</button>
+                <button onclick="applyTextFormat('italic')">I</button>
+                <button onclick="applyTextFormat('underline')">U</button>
+            </div>
+            <button onclick="exportCanvas('png')" data-tooltip="Save Canvas as PNG">Export PNG</button>
+            <button onclick="exportCanvas('svg')" data-tooltip="Save Canvas as SVG">Export SVG</button>
+            <button onclick="exportCanvas('pdf')" data-tooltip="Save Canvas as PDF">Export PDF</button>
+        </div>
+
+        <div style="display: flex; gap: 10px;">
+            <div class="icon-button" id="undo-button" onclick="undo()" data-tooltip="Undo"></div>
+            <div class="icon-button" id="redo-button" onclick="redo()" data-tooltip="Redo"></div>
+        </div>
+
+        <button onclick="location.reload()" data-tooltip="Refresh Page">Refresh Page</button>
+    </div>
+
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        const canvas = document.getElementById('main-canvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+        let brushSize = 5;
+        let brushOpacity = 1;
+        let brushType = 'normal';
+        let isDayMode = true;
+        let hasBackground = false;
+        let currentEffect = null;
+        let currentColor = '#000000';
+        let undoStack = [];
+        let redoStack = [];
+        let geometryTool = null;
+        let geometryFill = false;
+        let textCursor = document.getElementById('text-cursor');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        function saveState() {
+            undoStack.push(canvas.toDataURL());
+            redoStack = [];
+        }
+
+        function undo() {
+            if (undoStack.length > 0) {
+                redoStack.push(canvas.toDataURL());
+                const img = new Image();
+                img.onload = () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0);
+                };
+                img.src = undoStack.pop();
+            }
+        }
+
+        function redo() {
+            if (redoStack.length > 0) {
+                undoStack.push(canvas.toDataURL());
+                const img = new Image();
+                img.onload = () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0);
+                };
+                img.src = redoStack.pop();
+            }
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('main-menu');
+            menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function toggleSubmenu(id) {
+            const submenu = document.getElementById(id);
+            submenu.style.display = submenu.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function updateBrushSize(size) {
+            brushSize = size;
+            document.getElementById('brush-size-display').textContent = size;
+        }
+
+        function updateBrushOpacity(opacity) {
+            brushOpacity = opacity;
+            document.getElementById('brush-opacity-display').textContent = `${Math.round(opacity * 100)}%`;
+        }
+
+        function updateBrushType(type) {
+            brushType = type;
+        }
+
+        function toggleBackground() {
+            hasBackground = !hasBackground;
+            canvas.style.background = hasBackground ? (isDayMode ? '#f3f4f6' : '#111111') : 'transparent';
+        }
+
+       Advanced Dynamic Canvas Note-Taking App
+Preview
+Code
+
+function toggleDayNight() {
+            isDayMode = !isDayMode;
+            document.body.classList.toggle('night-mode');
+            if (hasBackground) {
+                canvas.style.background = isDayMode ? '#f3f4f6' : '#111111';
+            }
+        }
+
+        function uploadBackground(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    saveState();
+                }
+                img.src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+
+        function toggleEffect(effect) {
+            if (currentEffect === effect) {
+                currentEffect = null;
+                document.getElementById('particles-js').style.display = 'none';
+            } else {
+                currentEffect = effect;
+                document.getElementById('particles-js').style.display = 'block';
+                initializeParticles(effect);
+            }
+        }
+
+        function initializeParticles(effect) {
+            let particlesConfig;
+            switch(effect) {
+                case 'shooting-stars':
+                    particlesConfig = {
+                        "particles": {
+                            "number": {"value": 50},
+                            "size": {"value": 3},
+                            "line_linked": {"enable": false},
+                            "move": {
+                                "speed": 10,
+                                "direction": "bottom-right"
+                            }
+                        }
+                    };
+                    break;
+                case 'bubbles':
+                    particlesConfig = {
+                        "particles": {
+                            "number": {"value": 100},
+                            "size": {"value": 5},
+                            "line_linked": {"enable": false},
+                            "move": {
+                                "speed": 2,
+                                "direction": "top"
+                            }
+                        }
+                    };
+                    break;
+                case 'fireworks':
+                    particlesConfig = {
+                        "particles": {
+                            "number": {"value": 100},
+                            "size": {"value": 3},
+                            "color": {"value": ["#ff0000", "#00ff00", "#0000ff"]},
+                            "line_linked": {"enable": false},
+                            "move": {
+                                "speed": 5,
+                                "out_mode": "out"
+                            }
+                        }
+                    };
+                    break;
+                case 'snow':
+                    particlesConfig = {
+                        "particles": {
+                            "number": {"value": 200},
+                            "size": {"value": 3},
+                            "line_linked": {"enable": false},
+                            "move": {
+                                "speed": 1,
+                                "direction": "bottom"
+                            }
+                        }
+                    };
+                    break;
+            }
+            particlesJS('particles-js', particlesConfig);
+        }
+
+        function activateTypingTool() {
+            brushType = 'text';
+            canvas.style.cursor = 'text';
+            document.getElementById('text-formatting').style.display = 'block';
+        }
+
+        function applyTextFormat(format) {
+            const fontFamily = document.getElementById('font-family').value;
+            const fontSize = document.getElementById('font-size').value;
+            ctx.font = `${format === 'bold' ? 'bold' : ''} ${format === 'italic' ? 'italic' : ''} ${fontSize}px "${fontFamily}"`;
+            ctx.fillStyle = currentColor;
+            if (format === 'underline') {
+                ctx.textDecoration = 'underline';
+            } else {
+                ctx.textDecoration = 'none';
+            }
+        }
+
+        function exportCanvas(format) {
+            let dataURL;
+            switch(format) {
+                case 'png':
+                    dataURL = canvas.toDataURL('image/png');
+                    break;
+                case 'svg':
+                    const svgData = canvasToSVG();
+                    dataURL = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgData);
+                    break;
+                case 'pdf':
+                    // Implement PDF export (requires additional library)
+                    alert("PDF export would be implemented here.");
+                    return;
+            }
+            const link = document.createElement('a');
+            link.download = `canvas-export.${format}`;
+            link.href = dataURL;
+            link.click();
+        }
+
+        function canvasToSVG() {
+            const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            svg.setAttribute("width", canvas.width);
+            svg.setAttribute("height", canvas.height);
+
+            const paths = [];
+            let currentPath = null;
+            let currentColor = null;
+
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+
+            for (let y = 0; y < canvas.height; y++) {
+                for (let x = 0; x < canvas.width; x++) {
+                    const index = (y * canvas.width + x) * 4;
+                    const r = data[index];
+                    const g = data[index + 1];
+                    const b = data[index + 2];
+                    const a = data[index + 3];
+
+                    if (a > 0) {
+                        const color = `rgb(${r},${g},${b})`;
+                        if (color !== currentColor) {
+                            if (currentPath) {
+                                paths.push(currentPath);
+                            }
+                            currentPath = `M${x},${y}`;
+                            currentColor = color;
+                        } else {
+                            currentPath += `L${x},${y}`;
+                        }
+                    }
+                }
+            }
+
+            if (currentPath) {
+                paths.push(currentPath);
+            }
+
+            paths.forEach((path, index) => {
+                const pathElement = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                pathElement.setAttribute("d", path);
+                pathElement.setAttribute("fill", "none");
+                pathElement.setAttribute("stroke", `rgb(${index * 10 % 256},${index * 20 % 256},${index * 30 % 256})`);
+                pathElement.setAttribute("stroke-width", "1");
+                svg.appendChild(pathElement);
+            });
+
+            return new XMLSerializer().serializeToString(svg);
+        }
+
+        function openColorPicker() {
+            const input = document.createElement('input');
+            input.type = 'color';
+            input.onchange = function() {
+                currentColor = input.value;
+            };
+            input.click();
+        }
+
+        function setGeometryTool(tool) {
+            geometryTool = tool;
+            brushType = 'geometry';
+            canvas.style.cursor = 'crosshair';
+        }
+
+        function toggleGeometryFill() {
+            geometryFill = !geometryFill;
+        }
+
+        canvas.addEventListener('mousedown', startAction);
+        canvas.addEventListener('mousemove', performAction);
+        canvas.addEventListener('mouseup', endAction);
+
+        function startAction(e) {
+            if (brushType === 'geometry') {
+                isDrawing = true;
+                selectionStart = { x: e.clientX, y: e.clientY };
+            } else if (brushType === 'text') {
+                const text = prompt("Enter text:");
+                if (text) {
+                    ctx.font = `${document.getElementById('font-size').value}px ${document.getElementById('font-family').value}`;
+                    ctx.fillStyle = currentColor;
+                    ctx.fillText(text, e.clientX, e.clientY);
+                    saveState();
+                }
+                updateTextCursor(e);
+            } else {
+                isDrawing = true;
+                saveState();
+                draw(e);
+            }
+        }
+
+        function performAction(e) {
+            if (isDrawing) {
+                if (brushType === 'geometry') {
+                    drawGeometry(e);
+                } else {
+                    draw(e);
+                }
+            }
+            if (brushType === 'text') {
+                updateTextCursor(e);
+            }
+        }
+
+        function endAction(e) {
+            if (brushType === 'geometry') {
+                drawGeometry(e);
+                saveState();
+            }
+            isDrawing = false;
+            ctx.beginPath();
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            
+            ctx.lineWidth = brushSize;
+            ctx.lineCap = 'round';
+            
+            if (brushType === 'eraser') {
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.strokeStyle = `rgba(255,255,255,${brushOpacity})`;
+            } else {
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.strokeStyle = `${currentColor}${Math.floor(brushOpacity * 255).toString(16).padStart(2, '0')}`;
+            }
+            
+            if (brushType === 'magic') {
+                drawMagicBrush(e.clientX, e.clientY);
+            } else {
+                ctx.lineTo(e.clientX, e.clientY);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(e.clientX, e.clientY);
+            }
+        }
+
+        function drawMagicBrush(x, y) {
+            for (let i = 0; i < 20; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const radius = Math.random() * brushSize * 2;
+                const particleX = x + Math.cos(angle) * radius;
+                const particleY = y + Math.sin(angle) * radius;
+                
+                ctx.beginPath();
+                ctx.arc(particleX, particleY, Math.random() * 2, 0, Math.PI * 2);
+                ctx.fillStyle = currentColor;
+                ctx.fill();
+            }
+        }
+
+        function drawGeometry(e) {
+            ctx.strokeStyle = currentColor;
+            ctx.fillStyle = currentColor;
+            
+            const width = e.clientX - selectionStart.x;
+            const height = e.clientY - selectionStart.y;
+
+            // Clear previous preview
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(undoStack[undoStack.length - 1], 0, 0);
+
+            switch(geometryTool) {
+                case 'circle':
+                    ctx.beginPath();
+                    ctx.arc(selectionStart.x, selectionStart.y, Math.abs(width), 0, Math.PI * 2);
+                    if (geometryFill) ctx.fill();
+                    ctx.stroke();
+                    break;
+                case 'square':
+                    if (geometryFill) ctx.fillRect(selectionStart.x, selectionStart.y, width, height);
+                    ctx.strokeRect(selectionStart.x, selectionStart.y, width, height);
+                    break;
+                case 'line':
+                    ctx.beginPath();
+                    ctx.moveTo(selectionStart.x, selectionStart.y);
+                    ctx.lineTo(e.clientX, e.clientY);
+                    ctx.stroke();
+                    break;
+                case 'arrow':
+                    drawArrow(selectionStart.x, selectionStart.y, e.clientX, e.clientY);
+                    break;
+            }
+
+            // Draw dimension indicators
+            drawDimensionIndicators(selectionStart.x, selectionStart.y, e.clientX, e.clientY);
+        }
+
+        function drawArrow(fromx, fromy, tox, toy) {
+            const headlen = 10;
+            const dx = tox - fromx;
+            const dy = toy - fromy;
+            const angle = Math.atan2(dy, dx);
+            ctx.beginPath();
+            ctx.moveTo(fromx, fromy);
+            ctx.lineTo(tox, toy);
+            ctx.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
+            ctx.moveTo(tox, toy);
+            ctx.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
+            ctx.stroke();
+        }
+
+        function drawDimensionIndicators(x1, y1, x2, y2) {
+            const width = Math.abs(x2 - x1);
+            const height = Math.abs(y2 - y1);
+
+            ctx.fillStyle = 'rgba(255,255,255,0.7)';
+            ctx.font = '12px Source Sans Pro';
+            
+            // Width indicator
+            ctx.fillText(`${width}px`, (x1 + x2) / 2, Math.max(y1, y2) + 20);
+
+            // Height indicator
+            ctx.fillText(`${height}px`, Math.max(x1, x2) + 10, (y1 + y2) / 2);
+        }
+
+        function updateTextCursor(e) {
+            textCursor.style.left = `${e.clientX}px`;
+            textCursor.style.top = `${e.clientY}px`;
+            textCursor.style.display = 'block';
+        }
+
+        // Performance optimization for large canvases
+        function optimizeCanvasRendering() {
+            ctx.imageSmoothingEnabled = false;
+            // Use requestAnimationFrame for smooth rendering
+            function render() {
+                // Your main rendering logic here
+                requestAnimationFrame(render);
+            }
+            render();
+        }
+
+        optimizeCanvasRendering();
+
+        // Data persistence
+        function saveToLocalStorage() {
+            localStorage.setItem('canvasData', canvas.toDataURL());
+        }
+
+        function loadFromLocalStorage() {
+            const savedData = localStorage.getItem('canvasData');
+            if (savedData) {
+                const img = new Image();
+                img.onload = function() {
+                    ctx.drawImage(img, 0, 0);
+                }
+                img.src = savedData;
+            }
+        }
+
+        // Auto-save every 30 seconds
+        setInterval(saveToLocalStorage, 30000);
+
+        // Load saved data on startup
+        loadFromLocalStorage();
+
+        // Tooltip functionality
+        const tooltip = document.getElementById('tooltip');
+        document.querySelectorAll('[data-tooltip]').forEach(element => {
+            element.addEventListener('mouseover', e => {
+                tooltip.textContent = e.target.getAttribute('data-tooltip');
+                tooltip.style.display = 'block';
+                tooltip.style.left = e.pageX + 'px';
+                tooltip.style.top = e.pageY + 'px';
+            });
+            element.addEventListener('mouseout', () => {
+                tooltip.style.display = 'none';
+            });
+        });
+
+        // Initialize with no effects
+        document.getElementById('particles-js').style.display = 'none';
+
+        // Set initial background
+        canvas.style.background = 'transparent';
+    </script>
+</body>
+</html>
