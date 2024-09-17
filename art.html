@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Dynamic Canvas Note-Taking App</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Berkeley Mono', monospace;
+        }
+        #canvas-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .menu-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+        .menu {
+            position: absolute;
+            top: 50px;
+            left: 10px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            display: none;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .submenu {
+            margin-left: 20px;
+            display: none;
+            margin-top: 10px;
+        }
+        .menu-item {
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        .color-wheel {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red);
+            margin-top: 10px;
+        }
+        .effects-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .effect-button {
+            padding: 5px 10px;
+            border: none;
+            background: rgba(255,255,255,0.2);
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container">
+        <canvas id="main-canvas"></canvas>
+        <div id="particles-js"></div>
+    </div>
+    
+    <button class="menu-button" onclick="toggleMenu()">Menu</button>
+    
+    <div class="menu" id="main-menu">
+        <div class="menu-item" onclick="toggleSubmenu('brush-options')">Brush Options ▼</div>
+        <div class="submenu" id="brush-options">
+            <input type="range" id="brush-size" min="1" max="50" value="5" oninput="updateBrushSize(this.value)">
+            <input type="range" id="brush-opacity" min="0" max="1" step="0.1" value="1" oninput="updateBrushOpacity(this.value)">
+            <select id="brush-type" onchange="updateBrushType(this.value)">
+                <option value="normal">Normal</option>
+                <option value="magic">Magic</option>
+            </select>
+            <div class="color-wheel" onclick="openColorPicker()"></div>
+        </div>
+        
+        <div class="menu-item" onclick="toggleSubmenu('canvas-options')">Canvas Options ▼</div>
+        <div class="submenu" id="canvas-options">
+            <button onclick="toggleDayNight()">Toggle Day/Night</button>
+            <button onclick="toggleAlphaLayer()">Toggle Alpha Layer</button>
+            <input type="file" id="bg-upload" accept="image/*" onchange="uploadBackground(event)">
+        </div>
+        
+        <div class="menu-item" onclick="toggleSubmenu('effects')">Effects ▼</div>
+        <div class="submenu" id="effects">
+            <div class="effects-list">
+                <button class="effect-button" onclick="toggleEffect('shooting-stars')">Shooting Stars</button>
+                <button class="effect-button" onclick="toggleEffect('bubbles')">Bubbles</button>
+                <button class="effect-button" onclick="toggleEffect('fireworks')">Fireworks</button>
+            </div>
+        </div>
+
+        <div class="menu-item" onclick="toggleSubmenu('tools')">Tools ▼</div>
+        <div class="submenu" id="tools">
+            <button onclick="activateTypingTool()">Typing Tool</button>
+            <button onclick="noteToText()">Note to Text</button>
+            <button onclick="exportCanvas()">Export Canvas</button>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('main-canvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+        let brushSize = 5;
+        let brushOpacity = 1;
+        let brushType = 'normal';
+        let isDayMode = true;
+        let hasAlphaLayer = true;
+        let currentEffect = null;
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        function toggleMenu() {
+            const menu = document.getElementById('main-menu');
+            menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function toggleSubmenu(id) {
+            const submenu = document.getElementById(id);
+            submenu.style.display = submenu.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function updateBrushSize(size) {
+            brushSize = size;
+        }
+
+        function updateBrushOpacity(opacity) {
+            brushOpacity = opacity;
+        }
+
+        function updateBrushType(type) {
+            brushType = type;
+        }
+
+        function toggleDayNight() {
+            isDayMode = !isDayMode;
+            canvas.style.background = isDayMode ? '#f3f4f6' : '#1e1e1e';
+        }
+
+        function toggleAlphaLayer() {
+            hasAlphaLayer = !hasAlphaLayer;
+            // Implement alpha layer toggle logic
+        }
+
+        function uploadBackground(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                }
+                img.src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+
+        function toggleEffect(effect) {
+            if (currentEffect === effect) {
+                currentEffect = null;
+                document.getElementById('particles-js').style.display = 'none';
+            } else {
+                currentEffect = effect;
+                document.getElementById('particles-js').style.display = 'block';
+                initializeParticles(effect);
+            }
+        }
+
+        function initializeParticles(effect) {
+            let config;
+            switch(effect) {
+                case 'shooting-stars':
+                    config = {
+                        "particles": {
+                            "number": {"value": 50},
+                            "color": {"value": "#ffffff"},
+                            "shape": {"type": "star"},
+                            "size": {"value": 3},
+                            "move": {
+                                "speed": 20,
+                                "direction": "bottom-right"
+                            }
+                        }
+                    };
+                    break;
+                case 'bubbles':
+                    config = {
+                        "particles": {
+                            "number": {"value": 100},
+                            "color": {"value": "#87ceeb"},
+                            "shape": {"type": "circle"},
+                            "size": {"value": 5},
+                            "move": {
+                                "speed": 3,
+                                "direction": "top"
+                            }
+                        }
+                    };
+                    break;
+                case 'fireworks':
+                    config = {
+                        "particles": {
+                            "number": {"value": 200},
+                            "color": {"value": ["#ff0000", "#00ff00", "#0000ff"]},
+                            "shape": {"type": "circle"},
+                            "size": {"value": 2},
+                            "move": {
+                                "speed": 10,
+                                "direction": "none",
+                                "out_mode": "out"
+                            }
+                        }
+                    };
+                    break;
+            }
+            particlesJS('particles-js', config);
+        }
+
+        function activateTypingTool() {
+            // Implement typing tool functionality
+        }
+
+        function noteToText() {
+            // Implement OCR functionality (placeholder)
+            alert("OCR functionality would be implemented here. For production, consider using Google Cloud Vision API or Tesseract.js for client-side OCR.");
+        }
+
+        function exportCanvas() {
+            const dataURL = canvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.download = 'canvas-export.png';
+            link.href = dataURL;
+            link.click();
+        }
+
+        function openColorPicker() {
+            const input = document.createElement('input');
+            input.type = 'color';
+            input.onchange = function() {
+                // Update brush color
+            };
+            input.click();
+        }
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+
+        function startDrawing(e) {
+            isDrawing = true;
+            draw(e);
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            
+            ctx.lineWidth = brushSize;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = `rgba(0,0,0,${brushOpacity})`;
+            
+            if (brushType === 'magic') {
+                drawMagicBrush(e.clientX, e.clientY);
+            } else {
+                ctx.lineTo(e.clientX, e.clientY);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(e.clientX, e.clientY);
+            }
+        }
+
+        function drawMagicBrush(x, y) {
+            // Implement magic brush effect
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+            ctx.beginPath();
+        }
+
+        // Hotkeys
+        document.addEventListener('keydown', (e) => {
+            switch(e.key) {
+                case '1': case '2': case '3': case '4': case '5':
+                case '6': case '7': case '8': case '9':
+                    // Implement color selection
+                    break;
+                case '-':
+                    brushOpacity = Math.max(0, brushOpacity - 0.1);
+                    break;
+                case '=':
+                    brushOpacity = Math.min(1, brushOpacity + 0.1);
+                    break;
+            }
+        });
+
+        // Initialize with no effects
+        document.getElementById('particles-js').style.display = 'none';
+    </script>
+</body>
+</html>
