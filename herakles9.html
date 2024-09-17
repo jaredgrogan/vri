@@ -3,350 +3,241 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Herakles Exoskeleton</title>
+    <title>Universitas AI - Discover the Universe</title>
     <style>
-        body, html {
+        :root {
+            --primary-color: #3a1c71;
+            --secondary-color: #d76d77;
+            --accent-color: #ffaf7b;
+            --text-color: #ffffff;
+            --bg-color: #0a0a1a;
+        }
+        
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
-            height: 100%;
-            background-color: #f0f0f0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
         }
-
-        /* Side Panel */
-        .panel {
-            width: 300px;
-            height: 100%;
-            background-color: #ffffff;
-            position: fixed;
-            top: 0;
-            left: 0;
-            box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2);
-            transition: transform 0.4s ease-in-out;
-            padding: 20px;
-            border-radius: 10px;
-            z-index: 10; /* Supersedes canvas */
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
         }
-
-        .panel.closed {
-            transform: translateX(-100%);
-        }
-
-        /* Hamburger Icon */
-        .panel-toggle {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background-color: white;
-            border: none;
-            cursor: pointer;
-            z-index: 11;
-        }
-
-        .panel-toggle svg {
-            fill: black;
-            width: 30px;
-            height: 30px;
-        }
-
-        /* Refresh Button */
-        .refresh-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            border-radius: 10px;
-        }
-
-        .refresh-btn svg {
-            fill: white;
-        }
-
-        /* AI Indicator */
-        .ai-indicator {
-            margin-top: 10px;
-            width: 75px;
-            height: 75px;
-            border-radius: 50%;
-            border: 4px solid #e5e4e2; /* Platinum */
-            background: linear-gradient(45deg, blue, teal);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            animation: colorCycle 30s infinite linear;
-        }
-
-        @keyframes colorCycle {
-            0%, 100% { background: linear-gradient(45deg, blue, teal); }
-            50% { background: linear-gradient(45deg, red, orange); }
-        }
-
-        /* Chat Box */
-        .chat-box {
-            display: flex;
-            flex-direction: column;
-            width: 90%;
-            height: 300px;
-            overflow-y: auto;
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-top: 10px;
-            border-radius: 10px;
-        }
-
-        .user-message, .ai-message {
-            margin: 5px 0;
-        }
-
-        /* Chat Controls */
-        .chat-controls {
-            display: flex;
-            justify-content: space-between;
-            width: 90%;
-        }
-
-        .paperclip, .send-btn {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-
-        .paperclip svg, .send-btn svg {
-            fill: white;
-        }
-
-        /* Canvas and Drawing */
-        .canvas-wrapper {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 90vw;
-            height: 60vh;
-            background-color: white;
-            border-radius: 10px;
-            position: relative;
-        }
-
-        canvas {
-            display: block;
-            cursor: crosshair;
-            touch-action: none;
-            position: absolute;
-        }
-
-        /* Brush Menu and Color Wheel */
-        .brush-menu {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 10px;
-        }
-
-        .color-option {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            border: 2px solid black;
-            cursor: pointer;
-        }
-
-        .color-option.blue { background-color: blue; }
-        .color-option.black { background-color: black; }
-        .color-wheel {
-            background: conic-gradient(from 0deg, red, yellow, green, cyan, blue, magenta, red);
-        }
-
-        /* Tooltip */
-        .tooltip {
-            position: relative;
-        }
-
-        .tooltiptext {
-            visibility: hidden;
-            width: 120px;
-            background-color: black;
-            color: white;
+        
+        header {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            padding: 1rem;
             text-align: center;
-            border-radius: 6px;
-            padding: 5px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            margin-left: -60px;
-            opacity: 0;
-            transition: opacity 0.3s;
         }
-
-        .tooltip:hover .tooltiptext {
-            visibility: visible;
-            opacity: 1;
+        
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
         }
-
-        /* Footer */
-        footer {
-            position: fixed;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-family: Arial, sans-serif;
-            font-size: 12px;
-            color: #666;
+        
+        nav {
+            display: flex;
+            justify-content: flex-end;
+            padding: 0.5rem;
+        }
+        
+        nav button {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            font-size: 1rem;
+            margin-left: 1rem;
+        }
+        
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .universe-visualization {
+            background: url('/api/placeholder/1200/600') center/cover no-repeat;
+            border-radius: 15px;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 2rem;
+        }
+        
+        .search-container {
+            display: flex;
+            margin-bottom: 2rem;
+        }
+        
+        #search-input {
+            flex-grow: 1;
+            padding: 1rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: 25px 0 0 25px;
+            background-color: rgba(255,255,255,0.1);
+            color: var(--text-color);
+        }
+        
+        #search-button {
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: 0 25px 25px 0;
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+            cursor: pointer;
+        }
+        
+        .mode-switcher {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        
+        .mode-button {
+            background: none;
+            border: 2px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 0.5rem 1rem;
+            margin: 0 0.5rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .mode-button:hover, .mode-button.active {
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .content-card {
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            .universe-visualization {
+                height: 300px;
+                font-size: 1.5rem;
+            }
+            
+            .mode-switcher {
+                flex-wrap: wrap;
+            }
+            
+            .mode-button {
+                margin-bottom: 0.5rem;
+            }
         }
     </style>
 </head>
 <body>
-
-    <!-- Refresh Button -->
-    <button class="refresh-btn" id="refreshBtn">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px">
-            <path d="M12 6V3l-1.27 1.27A9 9 0 0 0 2.05 13H5l1.29-1.29C6.47 9.67 8.84 7 12 7zM12 18v3l1.27-1.27a9 9 0 0 0 8.68-8.7h-3v3L16.7 16.3C16.53 14.33 14.16 12 12 12z"/>
-        </svg>
-    </button>
-
-    <!-- Collapsible Panel -->
-    <div class="panel" id="panel">
-        <h3>Menu</h3>
-        <div class="brush-menu">
-            <div class="color-option blue"></div>
-            <div class="color-option black"></div>
-            <div class="color-option color-wheel"></div>
+    <header>
+        <h1>Universitas AI</h1>
+        <p>Discover the Universe</p>
+    </header>
+    
+    <nav>
+        <button id="settings-button">Settings</button>
+        <button id="profile-button">Profile</button>
+        <button id="help-button">Help</button>
+    </nav>
+    
+    <main>
+        <div class="universe-visualization">
+            Your Cognitive Computer
         </div>
-        <button class="export-transcript">Export Transcript</button>
-        <button class="export-images">Export Images</button>
-    </div>
-    <button class="panel-toggle" id="panelToggle">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/>
-        </svg>
-    </button>
-
-    <!-- Chat Box and Controls -->
-    <div class="chat-box" id="chatBox">
-        <div class="user-message">User: Hello</div>
-        <div class="ai-message">Herakles: Hello, how can I assist you?</div>
-    </div>
-
-    <div class="chat-controls">
-        <button class="paperclip" id="paperclipBtn">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" width="24px" height="24px">
-                <path d="M20.167 7.839L11.628 16.385a5.166 5.166 0 01-7.32-7.32l7.54-7.54a4.375 4.375 0 116.185 6.186l-7.2 7.201a3.125 3.125 0 01-4.415-4.415l7.156-7.156 1.415 1.415-7.156 7.156a1.875 1.875 0 002.645 2.646l7.199-7.2a2.916 2.916 0 00-4.125-4.125l-7.54 7.54a3.333 3.333 0 004.707 4.708l8.539-8.539 1.415 1.415z"/>
-            </svg>
-        </button>
-        <button class="send-btn" id="sendBtn">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px">
-                <path d="M3 6l18 6-18 6z"/>
-            </svg>
-        </button>
-    </div>
-
-    <!-- Canvas Wrapper and Drawing -->
-    <div class="canvas-wrapper">
-        <canvas id="drawingCanvas"></canvas>
-    </div>
-
-    <!-- AI Light Indicator -->
-    <div class="ai-indicator"></div>
-
-    <!-- Footer -->
-    <footer>&copy; UNIVERSITAS AI</footer>
+        
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Search or ask anything...">
+            <button id="search-button">Enter</button>
+        </div>
+        
+        <div class="mode-switcher">
+            <button class="mode-button active" id="text-mode">Text</button>
+            <button class="mode-button" id="voice-mode">Voice</button>
+            <button class="mode-button" id="visual-mode">Visual</button>
+            <button class="mode-button" id="explore-mode">Explore</button>
+            <button class="mode-button" id="learn-mode">Learn</button>
+        </div>
+        
+        <div class="content-grid">
+            <div class="content-card">
+                <h3>Recent Searches</h3>
+                <ul id="recent-searches"></ul>
+            </div>
+            <div class="content-card">
+                <h3>Trending Topics</h3>
+                <ul id="trending-topics"></ul>
+            </div>
+            <div class="content-card">
+                <h3>Your Topics</h3>
+                <ul id="your-topics"></ul>
+            </div>
+        </div>
+    </main>
 
     <script>
-        // Collapsible Panel Logic
-        const panel = document.getElementById('panel');
-        const panelToggle = document.getElementById('panelToggle');
+        // Sample data
+        const recentSearches = ['Quantum mechanics', 'Dark matter', 'Exoplanets'];
+        const trendingTopics = ['AI ethics', 'Space exploration', 'Renewable energy'];
+        const yourTopics = ['Astrophysics', 'Neuroscience', 'Bioengineering'];
 
-        panelToggle.addEventListener('click', () => {
-            panel.classList.toggle('closed');
-        });
-
-        // Refresh Button Logic
-        const refreshBtn = document.getElementById('refreshBtn');
-        refreshBtn.addEventListener('click', () => {
-            location.reload();
-        });
-
-        // Chat Paperclip (Upload File) and Send Button
-        const paperclipBtn = document.getElementById('paperclipBtn');
-        const sendBtn = document.getElementById('sendBtn');
-
-        paperclipBtn.addEventListener('click', () => {
-            // File upload logic here
-        });
-
-        sendBtn.addEventListener('click', () => {
-            // Send message logic here
-        });
-
-        // Drawing Canvas Logic
-        const canvas = document.getElementById('drawingCanvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = canvas.parentElement.clientWidth;
-        canvas.height = canvas.parentElement.clientHeight;
-        let drawing = false;
-        let brushSize = 10;
-        let paths = [];
-        let currentPath = [];
-
-        // Align canvas with cursor
-        canvas.addEventListener('mousedown', startDrawing);
-        canvas.addEventListener('mousemove', draw);
-        canvas.addEventListener('mouseup', stopDrawing);
-        canvas.addEventListener('mouseleave', stopDrawing);
-        canvas.addEventListener('touchstart', startDrawing);
-        canvas.addEventListener('touchmove', draw);
-        canvas.addEventListener('touchend', stopDrawing);
-
-        function startDrawing(e) {
-            drawing = true;
-            currentPath = [];
-            draw(e);
+        // Populate lists
+        function populateList(id, items) {
+            const ul = document.getElementById(id);
+            items.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                ul.appendChild(li);
+            });
         }
 
-        function draw(e) {
-            if (!drawing) return;
-            const rect = canvas.getBoundingClientRect();
-            const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
-            const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
-            currentPath.push({ x, y });
+        populateList('recent-searches', recentSearches);
+        populateList('trending-topics', trendingTopics);
+        populateList('your-topics', yourTopics);
 
-            ctx.lineWidth = brushSize;
-            ctx.lineCap = 'round';
-            ctx.strokeStyle = 'black';
-
-            ctx.beginPath();
-            ctx.moveTo(currentPath[currentPath.length - 2]?.x || x, currentPath[currentPath.length - 2]?.y || y);
-            ctx.lineTo(x, y);
-            ctx.stroke();
-        }
-
-        function stopDrawing() {
-            if (!drawing) return;
-            drawing = false;
-            paths.push([...currentPath]);
-        }
-
-        // Color Change Logic for Brush
-        const colorOptions = document.querySelectorAll('.color-option');
-        colorOptions.forEach(option => {
-            option.addEventListener('click', () => {
-                if (option.classList.contains('blue')) {
-                    ctx.strokeStyle = 'blue';
-                } else if (option.classList.contains('black')) {
-                    ctx.strokeStyle = 'black';
-                } else {
-                    // Custom color wheel logic here
-                }
+        // Mode switching
+        const modeButtons = document.querySelectorAll('.mode-button');
+        modeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                modeButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
             });
         });
+
+        // Search functionality
+        const searchInput = document.getElementById('search-input');
+        const searchButton = document.getElementById('search-button');
+
+        searchButton.addEventListener('click', () => {
+            const query = searchInput.value;
+            if (query) {
+                alert(`Searching for: ${query}`);
+                // Here you would typically send the query to your backend
+                searchInput.value = '';
+            }
+        });
+
+        // Add event listeners for nav buttons
+        document.getElementById('settings-button').addEventListener('click', () => alert('Settings clicked'));
+        document.getElementById('profile-button').addEventListener('click', () => alert('Profile clicked'));
+        document.getElementById('help-button').addEventListener('click', () => alert('Help clicked'));
     </script>
 </body>
 </html>
