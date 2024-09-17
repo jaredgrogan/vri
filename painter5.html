@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universitas Studio</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Source Sans Pro', sans-serif;
+        }
+        #canvas-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .menu-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+            background: rgba(245,245,245,0.1);
+            backdrop-filter: blur(10px);
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: background 0.3s ease;
+        }
+        .menu-button:hover {
+            background: rgba(245,245,245,0.2);
+        }
+        .menu {
+            position: absolute;
+            top: 50px;
+            left: 10px;
+            background: rgba(245,245,245,0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            display: none;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .night-mode .menu-button,
+        .night-mode .menu {
+            background: rgba(42,42,42,0.1);
+        }
+        .submenu {
+            margin-left: 20px;
+            display: none;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+        }
+        .submenu.open {
+            max-height: 500px;
+            opacity: 1;
+        }
+        .menu-item {
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .menu-item:hover {
+            color: #007bff;
+        }
+        .color-wheel {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red);
+            margin-top: 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .color-wheel:hover {
+            transform: scale(1.05);
+        }
+        .effects-list, .geometry-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .effect-button, .geometry-button {
+            padding: 5px 10px;
+            border: none;
+            background: rgba(255,255,255,0.2);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .effect-button:hover, .geometry-button:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        .tooltip {
+            position: absolute;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
+            display: none;
+            pointer-events: none;
+        }
+        .icon-button {
+            width: 24px;
+            height: 24px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .icon-button:hover {
+            transform: scale(1.1);
+        }
+        #undo-button {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"/></svg>');
+        }
+        #redo-button {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.4 10.6C16.55 8.99 14.15 8 11.5 8c-4.65 0-8.58 3.03-9.96 7.22L3.9 16c1.05-3.19 4.05-5.5 7.6-5.5 1.95 0 3.73.72 5.12 1.88L13 16h9V7l-3.6 3.6z"/></svg>');
+        }
+        .text-formatting {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 5px;
+        }
+        #text-cursor {
+            position: absolute;
+            width: 2px;
+            height: 20px;
+            background-color: #000;
+            display: none;
+            animation: blink 0.7s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+        .brush-options {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .brush-button {
+            width: 40px;
+            height: 40px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            cursor: pointer;
+            border: 2px solid transparent;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        .brush-button:hover, .brush-button.active {
+            background-color: rgba(0,0,0,0.1);
+            border-color: #007bff;
+        }
+        #layers-container {
+            margin-top: 10px;
+        }
+        #layers-container > div {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        #layers-container input[type="checkbox"] {
+            margin-right: 5px;
+        }
+        #layers-container input[type="range"] {
+            width: 60px;
+            margin: 0 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="canvas-container">
+        <canvas id="main-canvas"></canvas>
+        <div id="particles-js"></div>
+        <div id="text-cursor"></div>
+    </div>
+    
+    <button class="menu-button" onclick="toggleMenu()" data-tooltip="Open Menu">Menu</button>
+    
+    <div class="menu" id="main-menu">
+        <div class="menu-item" onclick="toggleSubmenu('brush-options')" data-tooltip="Brush Settings">Brush Options ▼</div>
+        <div class="submenu" id="brush-options">
+            <div class="brush-options">
+                <div class="brush-button normal" onclick="updateBrushType('normal')" data-tooltip="Paint Brush">
+                    <svg viewBox="0 0 60 60" width="40" height="40">
+                        <circle cx="30" cy="30" r="28" fill="none" stroke="black" stroke-width="2"/>
+                        <path d="M20 45 C 25 40, 30 20, 40 15" fill="none" stroke="black" stroke-width="3" stroke-linecap="round"/>
+                        <path d="M22 43 C 26 39, 30 22, 38 18" fill="none" stroke="black" stroke-width="5" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="brush-button magic" onclick="updateBrushType('magic')" data-tooltip="Spray Paint">
+                    <svg viewBox="0 0 60 60" width="40" height="40">
+                        <circle cx="30" cy="30" r="28" fill="none" stroke="black" stroke-width="2"/>
+                        <path d="M25 40 L 35 40 L 33 20 L 27 20 Z" fill="none" stroke="black" stroke-width="2"/>
+                        <circle cx="30" cy="17" r="2" fill="black"/>
+                        <path d="M26 15 C 26 10, 34 10, 34 15" fill="none" stroke="black" stroke-width="2"/>
+                        <path d="M28 25 L 24 21 M 32 25 L 36 21 M 30 23 L 30 19" stroke="black" stroke-width="1"/>
+                    </svg>
+                </div>
+                <div class="brush-button eraser" onclick="updateBrushType('eraser')" data-tooltip="Eraser">
+                    <svg viewBox="0 0 60 60" width="40" height="40">
+                        <circle cx="30" cy="30" r="28" fill="none" stroke="black" stroke-width="2"/>
+                        <rect x="15" y="25" width="30" height="15" fill="white" stroke="black" stroke-width="2" rx="2" ry="2"/>
+                        <rect x="15" y="25" width="20" height="15" fill="#ffcccc" stroke="black" stroke-width="2" rx="2" ry="2"/>
+                        <line x1="35" y1="25" x2="35" y2="40" stroke="black" stroke-width="2"/>
+                    </svg>
+                </div>
+            </div>
+            <input type="range" id="brush-size" min="1" max="50" value="5" oninput="updateBrushSize(this.value)" data-tooltip="Size">
+            <span id="brush-size-display">5</span>
+            <input type="range" id="brush-opacity" min="0" max="1" step="0.1" value="1" oninput="updateBrushOpacity(this.value)" data-tooltip="Opacity">
+            <span id="brush-opacity-display">100%</span>
+            <div class="color-wheel" onclick="openColorPicker()" data-tooltip="Choose Color"></div>
+        </div>
+        
+        <div class="menu-item" onclick="toggleSubmenu('canvas-options')" data-tooltip="Canvas Settings">Canvas Options ▼</div>
+        <div class="submenu" id="canvas-options">
+            <button onclick="toggleBackground()" data-tooltip="Toggle Background">Toggle Background</button>
+            <button onclick="toggleDayNight()" data-tooltip="Switch Day/Night Mode">Toggle Day/Night</button>
+            <input type="file" id="bg-upload" accept="image/*" onchange="uploadBackground(event)" data-tooltip="Upload Background Image">
+        </div>
+        
+        <div class="menu-item" onclick="toggleSubmenu('effects')" data-tooltip="Visual Effects">Effects ▼</div>
+        <div class="submenu" id="effects">
+            <div class="effects-list">
+                <button class="effect-button" onclick="toggleEffect('shooting-stars')" data-tooltip="Shooting Stars Effect">Shooting Stars</button>
+                <button class="effect-button" onclick="toggleEffect('bubbles')" data-tooltip="Bubbles Effect">Bubbles</button>
+                <button class="effect-button" onclick="toggleEffect('fireworks')" data-tooltip="Fireworks Effect">Fireworks</button>
+                <button class="effect-button" onclick="toggleEffect('snow')" data-tooltip="Snow Effect">Snow</button>
+            </div>
+        </div>
+
+        <div class="menu-item" onclick="toggleSubmenu('geometry')" data-tooltip="Geometry Tools">Geometry ▼</div>
+        <div class="submenu" id="geometry">
+            <div class="geometry-list">
+                <button class="geometry-button" onclick="setGeometryTool('circle')" data-tooltip="Draw Circle">Circle</button>
+                <button class="geometry-button" onclick="setGeometryTool('square')" data-tooltip="Draw Square">Square</button>
+                <button class="geometry-button" onclick="setGeometryTool('line')" data-tooltip="Draw Line">Line</button>
+                <button class="geometry-button" onclick="setGeometryTool('arrow')" data-tooltip="Draw Arrow">Arrow</button>
+            </div>
+            <label><input type="checkbox" id="geometry-fill" onchange="toggleGeometryFill()">Fill</label>
+        </div>
+
+        <div class="menu-item" onclick="toggleSubmenu('tools')" data-tooltip="Additional Tools">Tools ▼</div>
+        <div class="submenu" id="tools">
+            <button onclick="activateTypingTool()" data-tooltip="Text Input Tool">Typing Tool</button>
+            <div class="text-formatting" id="text-formatting" style="display: none;">
+                <select id="font-family">
+                    <option value="Source Sans Pro">Source Sans Pro</option>
+                    <option value="Arial">Arial</option>
+                    <option value="Verdana">Verdana</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                </select>
+                <input type="number" id="font-size" value="16" min="8" max="72">
+                <button onclick="applyTextFormat('bold')">B</button>
+                <button onclick="applyTextFormat('italic')">I</button>
+                <button onclick="applyTextFormat('underline')">U</button>
+            </div>
+            <button onclick="exportCanvas('png')" data-tooltip="Save Canvas as PNG">Export PNG</button>
+            <button onclick="exportCanvas('svg')" data-tooltip="Save Canvas as SVG">Export SVG</button>
+            <button onclick="exportCanvas('pdf')" data-tooltip="Save Canvas as PDF">Export PDF</button>
+        </div>
+
+      <div class="menu-item" onclick="toggleSubmenu('layers-menu')" data-tooltip="Layer Management">Layers ▼</div>
+        <div class="submenu" id="layers-menu">
+            <button onclick="addLayer()">Add Layer</button>
+            <div id="layers-container"></div>
+        </div>
+
+        <div style="display: flex; gap: 10px;">
+            <div class="icon-button" id="undo-button" onclick="undo()" data-tooltip="Undo"></div>
+            <div class="icon-button" id="redo-button" onclick="redo()" data-tooltip="Redo"></div>
+        </div>
+
+        <button onclick="location.reload()" data-tooltip="Refresh Page">Refresh Page</button>
+    </div>
+
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        const canvas = document.getElementById('main-canvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+        let lastX = 0;
+        let lastY = 0;
+        let brushSize = 5;
+        let brushOpacity = 1;
+        let brushType = 'normal';
+        let isDayMode = true;
+        let hasBackground = false;
+        let currentEffect = null;
+        let currentColor = '#000000';
+        let undoStack = [];
+        let redoStack = [];
+        let geometryTool = null;
+        let geometryFill = false;
+        let textCursor = document.getElementById('text-cursor');
+        let isTyping = false;
+        let typingX = 0;
+        let typingY = 0;
+        let currentText = '';
+        let drawingQueue = [];
+        let layers = [{
+            canvas: document.createElement('canvas'),
+            ctx: null,
+            name: 'Layer 1',
+            visible: true,
+            opacity: 1
+        }];
+        let currentLayerIndex = 0;
+        let geometryStartX = 0;
+        let geometryStartY = 0;
+        let isDrawingGeometry = false;
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        function initializeLayers() {
+            layers[0].canvas.width = canvas.width;
+            layers[0].canvas.height = canvas.height;
+            layers[0].ctx = layers[0].canvas.getContext('2d');
+            updateLayersUI();
+        }
+
+        function addLayer() {
+            const newLayer = {
+                canvas: document.createElement('canvas'),
+                ctx: null,
+                name: `Layer ${layers.length + 1}`,
+                visible: true,
+                opacity: 1
+            };
+            newLayer.canvas.width = canvas.width;
+            newLayer.canvas.height = canvas.height;
+            newLayer.ctx = newLayer.canvas.getContext('2d');
+            layers.push(newLayer);
+            currentLayerIndex = layers.length - 1;
+            updateLayersUI();
+        }
+
+        function removeLayer(index) {
+            if (layers.length > 1) {
+                layers.splice(index, 1);
+                currentLayerIndex = Math.min(currentLayerIndex, layers.length - 1);
+                updateLayersUI();
+                redrawCanvas();
+            }
+        }
+
+        function setCurrentLayer(index) {
+            currentLayerIndex = index;
+            updateLayersUI();
+        }
+
+        function toggleLayerVisibility(index) {
+            layers[index].visible = !layers[index].visible;
+            updateLayersUI();
+            redrawCanvas();
+        }
+
+        function setLayerOpacity(index, opacity) {
+            layers[index].opacity = opacity;
+            updateLayersUI();
+            redrawCanvas();
+        }
+
+        function updateLayersUI() {
+            const layersContainer = document.getElementById('layers-container');
+            layersContainer.innerHTML = '';
+            layers.forEach((layer, index) => {
+                const layerDiv = document.createElement('div');
+                layerDiv.innerHTML = `
+                    <input type="checkbox" ${layer.visible ? 'checked' : ''} onchange="toggleLayerVisibility(${index})">
+                    <span onclick="setCurrentLayer(${index})" style="cursor: pointer; ${index === currentLayerIndex ? 'font-weight: bold;' : ''}">${layer.name}</span>
+                    <input type="range" min="0" max="1" step="0.1" value="${layer.opacity}" onchange="setLayerOpacity(${index}, this.value)">
+                    <button onclick="removeLayer(${index})" ${layers.length === 1 ? 'disabled' : ''}>Remove</button>
+                `;
+                layersContainer.appendChild(layerDiv);
+            });
+        }
+
+        function redrawCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            layers.forEach(layer => {
+                if (layer.visible) {
+                    ctx.globalAlpha = layer.opacity;
+                    ctx.drawImage(layer.canvas, 0, 0);
+                }
+            });
+        }
+
+        function saveState() {
+            undoStack.push(layers.map(layer => {
+                return {
+                    imageData: layer.ctx.getImageData(0, 0, canvas.width, canvas.height),
+                    visible: layer.visible,
+                    opacity: layer.opacity
+                };
+            }));
+            redoStack = [];
+        }
+
+        function undo() {
+            if (undoStack.length > 1) {
+                redoStack.push(undoStack.pop());
+                const previousState = undoStack[undoStack.length - 1];
+                layers.forEach((layer, index) => {
+                    layer.ctx.putImageData(previousState[index].imageData, 0, 0);
+                    layer.visible = previousState[index].visible;
+                    layer.opacity = previousState[index].opacity;
+                });
+                updateLayersUI();
+                redrawCanvas();
+            }
+        }
+
+        function redo() {
+            if (redoStack.length > 0) {
+                const nextState = redoStack.pop();
+                undoStack.push(nextState);
+                layers.forEach((layer, index) => {
+                    layer.ctx.putImageData(nextState[index].imageData, 0, 0);
+                    layer.visible = nextState[index].visible;
+                    layer.opacity = nextState[index].opacity;
+                });
+                updateLayersUI();
+                redrawCanvas();
+            }
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('main-menu');
+            menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function toggleSubmenu(id) {
+            const submenu = document.getElementById(id);
+            submenu.classList.toggle('open');
+        }
+
+        function updateBrushSize(size) {
+            brushSize = size;
+            document.getElementById('brush-size-display').textContent = size;
+        }
+
+        function updateBrushOpacity(opacity) {
+            brushOpacity = opacity;
+            document.getElementById('brush-opacity-display').textContent = `${Math.round(opacity * 100)}%`;
+        }
+
+        function updateBrushType(type) {
+            brushType = type;
+            document.querySelectorAll('.brush-button').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.brush-button.${type}`).classList.add('active');
+        }
+
+        function toggleBackground() {
+            hasBackground = !hasBackground;
+            canvas.style.background = hasBackground ? (isDayMode ? '#f3f4f6' : '#111111') : 'transparent';
+        }
+
+        function toggleDayNight() {
+            isDayMode = !isDayMode;
+            document.body.classList.toggle('night-mode');
+            if (hasBackground) {
+                canvas.style.background = isDayMode ? '#f3f4f6' : '#111111';
+            }
+        }
+
+        function uploadBackground(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    saveState();
+                }
+                img.src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+
+        function toggleEffect(effect) {
+            if (currentEffect === effect) {
+                currentEffect = null;
+                document.getElementById('particles-js').style.display = 'none';
+            } else {
+                currentEffect = effect;
+                document.getElementById('particles-js').style.display = 'block';
+                initializeParticles(effect);
+            }
+        }
+
+        function initializeParticles(effect) {
+            let particlesConfig;
+            switch(effect) {
+                case 'shooting-stars':
+                    particlesConfig = {
+                        "particles": {
+                            "number": {"value": 50},
+                            "size": {"value": 3},
+                            "line_linked": {"enable": false},
+                            "move": {
+                                "speed": 10,
+                                "direction": "bottom-right"
+                            }
+                        }
+                    };
+                    break;
+                case 'bubbles':
+                    particlesConfig = {
+                        "particles": {
+                            "number": {"value": 100},
+                            "size": {"value": 5},
+                            "line_linked": {"enable": false},
+                            "move": {
+                                "speed": 2,
+                                "direction": "top"
+                            }
+                        }
+                    };
+                    break;
+                case 'fireworks':
+                    particlesConfig = {
+                        "particles": {
+                            "number": {"value": 100},
+                            "size": {"value": 3},
+                            "color": {"value": ["#ff0000", "#00ff00", "#0000ff"]},
+                            "line_linked": {"enable": false},
+                            "move": {
+                                "speed": 5,
+                                "out_mode": "out"
+                            }
+                        }
+                    };
+                    break;
+                case 'snow':
+                    particlesConfig = {
+                        "particles": {
+                            "number": {"value": 200},
+                            "size": {"value": 3},
+                            "line_linked": {"enable": false},
+                            "move": {
+                                "speed": 1,
+                                "direction": "bottom"
+                            }
+                        }
+                    };
+                    break;
+            }
+            particlesJS('particles-js', particlesConfig);
+        }
+
+        function startDrawing(e) {
+            isDrawing = true;
+            [lastX, lastY] = [e.offsetX, e.offsetY];
+            saveState();
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            const currentLayer = layers[currentLayerIndex];
+            drawingQueue.push({
+                x: e.offsetX,
+                y: e.offsetY,
+                brushType: brushType,
+                brushSize: brushSize,
+                brushOpacity: brushOpacity,
+                color: currentColor,
+                layer: currentLayer
+            });
+            requestAnimationFrame(processDrawingQueue);
+        }
+
+        function processDrawingQueue() {
+            if (drawingQueue.length === 0) return;
+
+            while (drawingQueue.length > 0) {
+                const item = drawingQueue.shift();
+                const layerCtx = item.layer.ctx;
+                layerCtx.lineCap = 'round';
+                layerCtx.lineJoin = 'round';
+                layerCtx.globalAlpha = item.brushOpacity;
+                layerCtx.strokeStyle = item.color;
+                layerCtx.lineWidth = item.brushSize;
+
+                if (item.brushType === 'eraser') {
+                    layerCtx.globalCompositeOperation = 'destination-out';
+                } else {
+                    layerCtx.globalCompositeOperation = 'source-over';
+                }
+
+                layerCtx.beginPath();
+                layerCtx.moveTo(lastX, lastY);
+                layerCtx.lineTo(item.x, item.y);
+                layerCtx.stroke();
+
+                if (item.brushType === 'magic') {
+                    drawMagicBrush(item.x, item.y, layerCtx);
+                }
+
+                lastX = item.x;
+                lastY = item.y;
+            }
+
+            redrawCanvas();
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+            drawingQueue = [];
+            saveState();
+        }
+
+        function drawMagicBrush(x, y, ctx) {
+            for (let i = 0; i < 20; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const radius = Math.random() * brushSize * 2;
+                const particleX = x + Math.cos(angle) * radius;
+                const particleY = y + Math.sin(angle) * radius;
+                
+                ctx.beginPath();
+                ctx.arc(particleX, particleY, Math.random() * 2, 0, Math.PI * 2);
+                ctx.fillStyle = currentColor;
+                ctx.fill();
+            }
+        }
+
+        function setGeometryTool(tool) {
+            geometryTool = tool;
+            brushType = 'geometry';
+            canvas.style.cursor = 'crosshair';
+            
+            canvas.removeEventListener('mousedown', startDrawing);
+            canvas.removeEventListener('mousemove', draw);
+            canvas.removeEventListener('mouseup', stopDrawing);
+            
+            canvas.addEventListener('mousedown', startGeometryDraw);
+            canvas.addEventListener('mousemove', previewGeometry);
+            canvas.addEventListener('mouseup', endGeometryDraw);
+        }
+
+        function startGeometryDraw(e) {
+            isDrawingGeometry = true;
+            geometryStartX = e.offsetX;
+            geometryStartY = e.offsetY;
+            saveState();
+        }
+
+        function previewGeometry(e) {
+            if (!isDrawingGeometry) return;
+            
+            const img = new Image();
+            img.onload = () => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 0, 0);
+                
+                ctx.strokeStyle = currentColor;
+                ctx.fillStyle = currentColor;
+                ctx.lineWidth = brushSize;
+                ctx.globalAlpha = brushOpacity;
+                
+                ctx.beginPath();
+                switch(geometryTool) {
+                    case 'circle':
+                        const radius = Math.sqrt(Math.pow(e.offsetX - geometryStartX, 2) + Math.pow(e.offsetY - geometryStartY, 2));
+                        ctx.arc(geometryStartX, geometryStartY, radius, 0, Math.PI * 2);
+                        break;
+                    case 'square':
+                        ctx.rect(geometryStartX, geometryStartY, e.offsetX - geometryStartX, e.offsetY - geometryStartY);
+                        break;
+                    case 'line':
+                        ctx.moveTo(geometryStartX, geometryStartY);
+                        ctx.lineTo(e.offsetX, e.offsetY);
+                        break;
+                    case 'arrow':
+                        drawArrow(geometryStartX, geometryStartY, e.offsetX, e.offsetY, ctx);
+                        break;
+                }
+                if (geometryFill) {
+                    ctx.fill();
+                }
+                ctx.stroke();
+            };
+            img.src = undoStack[undoStack.length - 1];
+        }
+
+        function endGeometryDraw(e) {
+            if (!isDrawingGeometry) return;
+            
+            const currentLayer = layers[currentLayerIndex];
+            const layerCtx = currentLayer.ctx;
+            
+            layerCtx.strokeStyle = currentColor;
+            layerCtx.fillStyle = currentColor;
+            layerCtx.lineWidth = brushSize;
+            layerCtx.globalAlpha = brushOpacity;
+            
+            layerCtx.beginPath();
+            switch(geometryTool) {
+                case 'circle':
+                    const radius = Math.sqrt(Math.pow(e.offsetX - geometryStartX, 2) + Math.pow(e.offsetY - geometryStartY, 2));
+                    layerCtx.arc(geometryStartX, geometryStartY, radius, 0, Math.PI * 2);
+                    break;
+                case 'square':
+                    layerCtx.rect(geometryStartX, geometryStartY, e.offsetX - geometryStartX, e.offsetY - geometryStartY);
+                    break;
+                case 'line':
+                    layerCtx.moveTo(geometryStartX, geometryStartY);
+                    layerCtx.lineTo(e.offsetX, e.offsetY);
+                    break;
+                case 'arrow':
+                    drawArrow(geometryStartX, geometryStartY, e.offsetX, e.offsetY, layerCtx);
+                    break;
+            }
+            if (geometryFill) {
+                layerCtx.fill();
+            }
+            layerCtx.stroke();
+            
+            isDrawingGeometry = false;
+            redrawCanvas();
+            saveState();
+        }
+
+        function drawArrow(fromx, fromy, tox, toy, context) {
+            const headlen = 10;
+            const dx = tox - fromx;
+            const dy = toy - fromy;
+            const angle = Math.atan2(dy, dx);
+            context.moveTo(fromx, fromy);
+            context.lineTo(tox, toy);
+            context.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
+            context.moveTo(tox, toy);
+            context.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
+        }
+
+        function toggleGeometryFill() {
+            geometryFill = !geometryFill;
+        }
+
+        function activateTypingTool() {
+            brushType = 'text';
+            canvas.style.cursor = 'text';
+            document.getElementById('text-formatting').style.display = 'block';
+            canvas.addEventListener('click', startTyping);
+        }
+
+        function startTyping(e) {
+            if (brushType !== 'text') return;
+            isTyping = true;
+            typingX = e.offsetX;
+            typingY = e.offsetY;
+            currentText = '';
+            updateTextCursor(e);
+            canvas.removeEventListener('click', startTyping);
+            window.addEventListener('keydown', handleTyping);
+        }
+
+        function handleTyping(e) {
+            if (!isTyping) return;
+            if (e.key === 'Enter') {
+                finishTyping();
+                return;
+            }
+            if (e.key === 'Backspace') {
+                currentText = currentText.slice(0, -1);
+            } else if (e.key.length === 1) {
+                currentText += e.key;
+            }
+            redrawCanvasWithText();
+        }
+
+        function finishTyping() {
+            if (!isTyping) return;
+            const currentLayer = layers[currentLayerIndex];
+            const layerCtx = currentLayer.ctx;
+            
+            layerCtx.font = ctx.font;
+            layerCtx.fillStyle = currentColor;
+            layerCtx.fillText(currentText, typingX, typingY);
+            
+            isTyping = false;
+            textCursor.style.display = 'none';
+            window.removeEventListener('keydown', handleTyping);
+            canvas.addEventListener('click', startTyping);
+            redrawCanvas();
+            saveState();
+        }
+
+        function redrawCanvasWithText() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            redrawCanvas();
+            ctx.font = `${document.getElementById('font-size').value}px ${document.getElementById('font-family').value}`;
+            ctx.fillStyle = currentColor;
+            ctx.fillText(currentText, typingX, typingY);
+        }
+
+        function updateTextCursor(e) {
+            textCursor.style.left = `${e.clientX}px`;
+            textCursor.style.top = `${e.clientY}px`;
+            textCursor.style.display = 'block';
+        }
+
+        function applyTextFormat(format) {
+            const fontFamily = document.getElementById('font-family').value;
+            const fontSize = document.getElementById('font-size').value;
+            ctx.font = `${format === 'bold' ? 'bold' : ''} ${format === 'italic' ? 'italic' : ''} ${fontSize}px "${fontFamily}"`;
+            ctx.fillStyle = currentColor;
+        }
+
+        function exportCanvas(format) {
+            let dataURL;
+            switch(format) {
+                case 'png':
+                    dataURL = canvas.toDataURL('image/png');
+                    break;
+                case 'svg':
+                    // Implement SVG export
+                    alert("SVG export not implemented yet.");
+                    return;
+                case 'pdf':
+                    // Implement PDF export
+                    alert("PDF export not implemented yet.");
+                    return;
+            }
+            const link = document.createElement('a');
+            link.download = `canvas-export.${format}`;
+            link.href = dataURL;
+            link.click();
+        }
+
+        function openColorPicker() {
+            const input = document.createElement('input');
+            input.type = 'color';
+            input.onchange = function() {
+                currentColor = input.value;
+            };
+            input.click();
+        }
+
+        // Initialize canvas and event listeners
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (brushType === 'text' && !isTyping) {
+                updateTextCursor(e);
+            }
+        });
+
+        // Initialize layers when the app starts
+        initializeLayers();
+
+        // Set initial background
+        canvas.style.background = 'transparent';
+
+        // Save initial state
+        saveState();
+
+        // Tooltip functionality
+        const tooltip = document.getElementById('tooltip');
+        document.querySelectorAll('[data-tooltip]').forEach(element => {
+            element.addEventListener('mouseover', e => {
+                tooltip.textContent = e.target.getAttribute('data-tooltip');
+                tooltip.style.display = 'block';
+                tooltip.style.left = e.pageX + 'px';
+                tooltip.style.top = e.pageY + 'px';
+            });
+            element.addEventListener('mouseout', () => {
+                tooltip.style.display = 'none';
+            });
+        });
+
+        // Implement Undo/Redo keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'z' && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault();
+                undo();
+            } else if (e.key === 'y' && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault();
+                redo();
+            }
+        });
+    </script>
+</body>
+</html>
