@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universitas AI</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: #0a0a1a;
+            color: #ffffff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background: rgba(20, 20, 40, 0.8);
+            padding: 1rem;
+            text-align: center;
+        }
+        main {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+        }
+        .universe-visual {
+            flex-grow: 1;
+            background: url('/api/placeholder/800/400') center/cover no-repeat;
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .unified-input {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            border-radius: 25px;
+            padding: 1rem;
+            font-size: 1rem;
+            color: #ffffff;
+            width: calc(100% - 2rem);
+            margin-bottom: 1rem;
+        }
+        .mode-switcher {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 0.5rem;
+        }
+        .mode-button {
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .mode-button:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Universitas AI</h1>
+        <p>Discover the Universe</p>
+    </header>
+    <main>
+        <div class="universe-visual">
+            Your Cognitive Computer
+        </div>
+        <input type="text" class="unified-input" placeholder="Ask anything or give a command...">
+        <div class="mode-switcher">
+            <button class="mode-button">🗣️</button>
+            <button class="mode-button">⌨️</button>
+            <button class="mode-button">🎨</button>
+            <button class="mode-button">🔍</button>
+        </div>
+    </main>
+</body>
+</html>
