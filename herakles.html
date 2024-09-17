@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Interactive Interface</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+        }
+
+        /* Collapsible Panel */
+        .panel {
+            width: 300px;
+            height: 100%;
+            background-color: #ffffff;
+            position: fixed;
+            top: 0;
+            left: 0;
+            box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .panel.closed {
+            transform: translateX(-100%);
+        }
+
+        .panel-toggle {
+            position: absolute;
+            top: 20px;
+            left: 310px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        /* Canvas */
+        #drawingCanvas {
+            border: 2px solid #ccc;
+            width: 90vw;
+            height: 60vh;
+        }
+
+        /* Tool bar */
+        .toolbar {
+            margin: 10px;
+        }
+
+        .toolbar button {
+            padding: 8px;
+            margin-right: 5px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Animation Indicators */
+        .indicator {
+            display: none;
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+        }
+
+        .indicator.thinking {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.9);
+                opacity: 0.7;
+            }
+            100% {
+                transform: scale(1.1);
+                opacity: 1;
+            }
+        }
+
+        /* Reasoning Animation */
+        .reasoning-dots {
+            display: flex;
+            gap: 5px;
+        }
+
+        .reasoning-dots span {
+            width: 10px;
+            height: 10px;
+            background-color: #007bff;
+            border-radius: 50%;
+            animation: connect 2s infinite;
+        }
+
+        @keyframes connect {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* Imagining Animation */
+        .nebula {
+            width: 50px;
+            height: 50px;
+            background: radial-gradient(circle, #e66465, #9198e5);
+            animation: expand 3s infinite;
+        }
+
+        @keyframes expand {
+            0% {
+                transform: scale(0.5);
+                opacity: 0.6;
+            }
+            100% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+
+        /* Webcam */
+        .webcam-container {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        video {
+            width: 150px;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .toggle-webcam {
+            margin-top: 5px;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Collapsible Panel -->
+    <div class="panel" id="panel">
+        <h3>User Input Forms</h3>
+        <form>
+            <label for="textInput">Input Text:</label><br>
+            <input type="text" id="textInput" name="textInput"><br><br>
+            <label for="fileUpload">Upload Image:</label><br>
+            <input type="file" id="fileUpload" name="fileUpload"><br><br>
+        </form>
+    </div>
+    <button class="panel-toggle" id="panelToggle">Toggle Panel</button>
+
+    <!-- Canvas and Toolbar -->
+    <div class="toolbar">
+        <button onclick="setDrawMode('draw')">Pen</button>
+        <button onclick="setDrawMode('erase')">Eraser</button>
+        <button onclick="clearCanvas()">Clear</button>
+        <button onclick="undo()">Undo</button>
+    </div>
+    <canvas id="drawingCanvas"></canvas>
+
+    <!-- Indicators -->
+    <div class="indicator thinking" id="thinkingIndicator">Thinking...</div>
+    <div class="indicator reasoning" id="reasoningIndicator">
+        <div class="reasoning-dots">
+            <span></span><span></span><span></span>
+        </div>
+    </div>
+    <div class="indicator imagining" id="imaginingIndicator">
+        <div class="nebula"></div>
+        Imagining...
+    </div>
+
+    <!-- Webcam -->
+    <div class="webcam-container">
+        <video id="webcam" autoplay></video>
+        <button class="toggle-webcam" id="toggleWebcam">Toggle Webcam</button>
+    </div>
+
+    <script>
+        // Collapsible Panel Logic
+        const panel = document.getElementById('panel');
+        const panelToggle = document.getElementById('panelToggle');
+
+        panelToggle.addEventListener('click', () => {
+            panel.classList.toggle('closed');
+        });
+
+        // Canvas Logic
+        const canvas = document.getElementById('drawingCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = canvas.clientWidth;
+        canvas.height = canvas.clientHeight;
+        let drawing = false;
+        let drawMode = 'draw';
+        let paths = [];
+        let currentPath = [];
+
+        function setDrawMode(mode) {
+            drawMode = mode;
+        }
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseleave', stopDrawing);
+
+        function startDrawing(e) {
+            drawing = true;
+            currentPath = [];
+            draw(e);
+        }
+
+        function draw(e) {
+            if (!drawing) return;
+            const x = e.clientX - canvas.offsetLeft;
+            const y = e.clientY - canvas.offsetTop;
+            currentPath.push({ x, y });
+
+            ctx.lineWidth = drawMode === 'draw' ? 2 : 10;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = drawMode === 'draw' ? '#000' : '#fff';
+
+            ctx.beginPath();
+            ctx.moveTo(currentPath[currentPath.length - 2]?.x || x, currentPath[currentPath.length - 2]?.y || y);
+            ctx.lineTo(x, y);
+            ctx.stroke();
+        }
+
+        function stopDrawing() {
+            if (!drawing) return;
+            drawing = false;
+            paths.push([...currentPath]);
+        }
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            paths = [];
+        }
+
+        function undo() {
+            if (paths.length === 0) return;
+            paths.pop();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            paths.forEach(path => {
+                ctx.beginPath();
+                path.forEach(({ x, y }, index) => {
+                    if (index === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                });
+                ctx.stroke();
+            });
+        }
+
+        // Webcam Logic
+        const video = document.getElementById('webcam');
+        const toggleWebcam = document.getElementById('toggleWebcam');
+
+        toggleWebcam.addEventListener('click', () => {
+            if (video.style.display === 'none') {
+                video.style.display = 'block';
+            } else {
+                video.style.display = 'none';
+            }
+        });
+
+        function startWebcam() {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(stream => {
+                    video.srcObject = stream;
+                })
+                .catch(err => console.error('Error accessing webcam:', err));
+        }
+
+        startWebcam();
+    </script>
+</body>
+</html>
