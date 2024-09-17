@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Model Training Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: white;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #2e2e2e;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+        .component {
+            margin-bottom: 40px;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #e0e0e0;
+        }
+        .graph {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #3e3e3e;
+            padding: 20px;
+            background-color: #000;
+            border-radius: 10px;
+        }
+        .controls {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .controls button {
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #5e5e5e;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .controls button:hover {
+            background-color: #8e8e8e;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>AI Model Training Dashboard</h1>
+
+        <div class="component">
+            <h2>Validation Loss vs Compute</h2>
+            <div class="graph">
+                <img src="your-image-path/validation_loss_graph.png" alt="Validation Loss Graph" width="600px">
+            </div>
+        </div>
+
+        <div class="controls">
+            <button onclick="startTraining()">Start Training</button>
+            <button onclick="pauseTraining()">Pause Training</button>
+            <button onclick="resetModel()">Reset Model</button>
+        </div>
+    </div>
+
+    <script>
+        function startTraining() {
+            alert('Starting the AI Model Training...');
+            // Add functionality to trigger model training
+        }
+
+        function pauseTraining() {
+            alert('Pausing the AI Model Training...');
+            // Add functionality to pause the training process
+        }
+
+        function resetModel() {
+            alert('Resetting the AI Model...');
+            // Add functionality to reset the model training
+        }
+    </script>
+
+</body>
+</html>
