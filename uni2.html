@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Get Universitas Pro</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&display=swap" rel="stylesheet">
+  <link rel="icon" href="/favicon10.svg" type="image/svg+xml">
+  <style>
+    body {
+      background-color: #f3f4f6;
+      color: #111827;
+      font-family: 'Berkeley Mono', monospace;
+    }
+
+    .light-mode {
+      background-color: #f3f4f6;
+      color: #111827;
+    }
+
+    .dark-mode {
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+    }
+
+    .header-container {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+    }
+
+    .header-container img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 20px;
+    }
+
+    .header-container h1 {
+      font-family: 'Courier New', monospace;
+      font-size: 27px;
+      font-weight: bold;
+      color: black;
+      transition: color 0.3s;
+    }
+
+    @media (max-width: 640px) {
+      .header-container h1 {
+        font-size: 20px;
+      }
+    }
+
+    @media (max-width: 455px) {
+      .header-container h1 {
+        font-size: 18px;
+        display: none;
+      }
+
+      .header-container::after {
+        content: "";
+        font-family: 'Courier New', monospace;
+        font-size: 18px;
+        color: black;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .header-container h1 {
+        font-size: 16px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: none;
+      }
+
+      .header-container::after {
+        content: "";
+        font-family: 'Courier New', monospace;
+        font-size: 16px;
+        color: black;
+      }
+    }
+
+    .nav-header {
+      position: fixed;
+      top: 24px;
+      right: 230px;
+      display: flex;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .nav-header ul {
+      display: flex;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      gap: 20px;
+      font-family: 'Berkeley Mono', monospace;
+    }
+
+    .nav-header ul li {
+      position: relative;
+    }
+
+    .nav-header ul li a {
+      text-decoration: none;
+      font-size: 16px;
+      transition: color 0.3s;
+    }
+
+    .nav-header ul li ul {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: #d5d5d5;
+      border-radius: 5px;
+      padding: 10px;
+    }
+
+    .nav-header ul li ul li a {
+      font-weight: normal;
+      font-size: 14px;
+      padding: 5px 10px;
+      border-radius: 4px;
+      display: block;
+      color: #111827;
+    }
+
+    .nav-header ul li ul li a:hover,
+    .nav-header ul li ul li a:focus {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .light-mode .nav-header ul li ul {
+      background-color: #d5d5d5;
+    }
+
+    .light-mode .nav-header ul li ul li a {
+      color: #111827;
+    }
+
+    .light-mode .nav-header ul li ul li a:hover,
+    .light-mode .nav-header ul li ul li a:focus {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .dark-mode .nav-header ul li ul {
+      background-color: #333;
+    }
+
+    .dark-mode .nav-header ul li ul li a {
+      color: #e0e0e0;
+    }
+
+    .dark-mode .nav-header ul li ul li a:focus {
+      background-color: #007bff;
+      color: #e0e0e0;
+    }
+
+    .nav-header ul li:hover ul {
+      display: block;
+    }
+
+    .light-mode .nav-header ul li a {
+      color: black;
+    }
+
+    .dark-mode .nav-header ul li a {
+      color: white;
+    }
+
+    .light-mode .header-container h1 {
+      color: black;
+    }
+
+    .dark-mode .header-container h1 {
+      color: white;
+    }
+
+    .dark-mode .language-select select {
+      border: 1px solid white;
+    }
+
+    .dark-mode .toggle-container button {
+      border: 1px solid white;
+    }
+
+    .toggle-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+    }
+
+    .toggle-container button {
+      border: 1px solid #111827;
+    }
+
+    .language-select {
+      position: fixed;
+      top: 20px;
+      right: 80px;
+      z-index: 100;
+    }
+
+    .language-select select {
+      background: none;
+      color: inherit;
+      border: 1px solid #111827;
+      border-radius: 5px;
+      padding: 5px;
+      outline-color: #007bff;
+    }
+
+    .language-select select:focus {
+      outline: 2px solid #007bff;
+    }
+
+    .hero-section {
+      height: 80vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      font-family: 'Courier New', monospace;
+    }
+
+    .minilogo {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      width: 50px;
+      height: 50px;
+      transition: transform 0.3s ease;
+    }
+
+    .minilogo:hover {
+      transform: scale(1.5);
+    }
+
+    .logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 200px;
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover {
+      transform: scale(1.5);
+      transition: transform 0.3s ease;
+    }
+
+    .circle {
+      display: inline-block;
+      width: 100px;
+      height: 100px;
+      border: 2px solid black;
+      border-radius: 50%;
+      line-height: 100px;
+      text-align: center;
+      font-size: 5rem;
+    }
+
+    .u {
+      color: black;
+      font-size: 5rem;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    .dark-mode .circle {
+      border-color: white;
+    }
+
+    .dark-mode .u {
+      color: white;
+    }
+
+    .content {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .enter-btn {
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 27px;
+      font-family: 'Courier New', monospace;
+      transition: transform 0.3s ease;
+    }
+
+    .enter-btn:hover {
+      transform: scale(1.2);
+    }
+
+    .enter-btn a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .enter-btn a:visited,
+    .enter-btn a:active {
+      color: inherit;
+    }
+
+    .mode-toggle {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      cursor: pointer;
+    }
+
+    footer {
+      text-align: center;
+      font-family: 'Courier New', monospace;
+      padding: 20px;
+    }
+
+    #drawingCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .icon-container {
+      position: fixed;
+      top: 24px;
+      right: 285px;
+      display: flex;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .icon {
+      width: 20px;
+      height: 20px;
+      margin-right: 5px;
+      cursor: pointer;
+    }
+
+    .volume-slider {
+      width: 80px;
+      display: none;
+      margin-right: 5px;
+    }
+
+    .cta-button {
+      display: inline-block;
+      margin-top: 35px;
+      padding: 15px 30px;
+      background: linear-gradient(45deg, #006666, #009999, #00cccc, #0099cc, #006699, #0033cc, #3300cc, #6600cc);
+      background-size: 800% 800%;
+      animation: aquaBluePurpleShift 15s ease infinite;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 18px;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    @keyframes aquaBluePurpleShift {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+
+    .cta-button:hover {
+      transform: scale(1.05);
+    }
+
+    .drawing-controls {
+      display: none;
+      position: fixed;
+      top: 60px;
+      right: 20px;
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 10px;
+      border-radius: 5px;
+      z-index: 1000;
+    }
+
+    .drawing-controls input {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    .dark-mode .drawing-controls {
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+
+    body.drawing-mode {
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15"><circle cx="7.5" cy="7.5" r="6.5" fill="none" stroke="gray" stroke-width="1"/><line x1="7.5" y1="0" x2="7.5" y2="15" stroke="gray" stroke-width="1"/><line x1="0" y1="7.5" x2="15" y2="7.5" stroke="gray" stroke-width="1"/></svg>') 7.5 7.5, crosshair;
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 400px;
+      border-radius: 10px;
+      font-family: 'Courier New', monospace;
+    }
+
+    .modal-content h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-content input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-family: 'Courier New', monospace;
+    }
+
+    .modal-content button {
+      width: 100%;
+      padding: 10px;
+      background: linear-gradient(45deg, #006666, #009999, #00cccc, #0099cc, #006699, #0033cc, #3300cc, #6600cc);
+      background-size: 800% 800%;
+      animation: aquaBluePurpleShift 15s ease infinite;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body class="light-mode" id="app">
+  <canvas id="drawingCanvas"></canvas>
+
+  <!-- Navigation Header with Day/Night Toggle -->
+  <div class="nav-header">
+    <ul id="navMenu">
+      <li>
+        <a href="javascript:void(0)" id="navMenuItem">Menu</a>
+        <ul>
+          <li><a href="newconsole.html" id="navHeraklesItem">Herakles AI</a></li>
+          <li><a href="docuchat5.html" id="navResearchItem">Research</a></li>
+          <li><a href="todotoday.html" id="navProjectsItem">Projects</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Icon Container -->
+  <div class="icon-container">
+    <input type="range" min="0" max="100" value="50" class="volume-slider" id="volumeSlider">
+    <svg class="icon" id="speakerIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+      <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+    </svg>
+    <svg class="icon" id="pencilIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+    </svg>
+</div>
+
+  <!-- Language Selection Dropdown -->
+  <div class="language-select">
+    <select id="languageSelect" onchange="changeLanguage()">
+      <option value="en">English</option>
+      <option value="es">Español</option>
+    </select>
+  </div>
+
+  <!-- Day/Night Mode Toggle Button -->
+  <div class="toggle-container">
+    <button id="darkModeBtn" class="border border-gray-300 rounded-md p-2" onclick="toggleDarkMode()">
+      <svg id="darkModeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Hero Section -->
+  <div class="hero-section">
+    <a href="index.html" class="minilogo">
+      <img src="/favicon5.svg" alt="miniLogo">
+    </a>
+    <div class="container">
+      <a href="app.html">
+        <div class="logo">
+          <div class="circle">
+            <span class="u">U</span>
+          </div>
+        </div>
+      </a>
+      <div class="content">
+        <button class="enter-btn">
+          <a href="#" id="slogan">Your Cognitive Computer.</a>
+        </button>
+        <a href="#" id="discoverBtn" class="cta-button">// Discover the Universe</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Copyright Notice -->
+  <footer>
+    &copy; 2024 UNIVERSITAS AI
+  </footer>
+
+  <!-- Discover Modal -->
+  <div id="discoverModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>// Discover Your Potential</h2>
+      <form id="discoveryForm">
+        <input type="text" id="name" placeholder="// Your Name" required>
+        <input type="email" id="email" placeholder="// Email" required>
+        <button type="submit">Discover U</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Video Overlay -->
+  <div id="videoOverlay">
+    <div class="video-container">
+      <iframe src="https://www.youtube.com/embed/WW1qYGqUfHU" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+    <span id="closeVideo">&times;</span>
+  </div>
+
+  <!-- Drawing Controls -->
+  <div class="drawing-controls">
+    <input type="range" id="brushSize" min="1" max="50" value="3">
+    <input type="range" id="colorHue" min="0" max="360" value="0">
+  </div>
+
+  <script>
+    const app = document.getElementById('app');
+    const darkModeBtn = document.getElementById('darkModeBtn');
+    const darkModeIcon = document.getElementById('darkModeIcon');
+    const languageSelect = document.getElementById('languageSelect');
+    const navMenuItem = document.getElementById('navMenuItem');
+    const navHeraklesItem = document.getElementById('navHeraklesItem');
+    const navResearchItem = document.getElementById('navResearchItem');
+    const navProjectsItem = document.getElementById('navProjectsItem');
+    const slogan = document.getElementById('slogan');
+    const canvas = document.getElementById('drawingCanvas');
+    const ctx = canvas.getContext('2d');
+    const speakerIcon = document.getElementById('speakerIcon');
+    const pencilIcon = document.getElementById('pencilIcon');
+    const volumeSlider = document.getElementById('volumeSlider');
+    const discoverBtn = document.getElementById('discoverBtn');
+    const discoverModal = document.getElementById('discoverModal');
+    const closeModal = document.querySelector('.close');
+    const discoveryForm = document.getElementById('discoveryForm');
+    const videoOverlay = document.getElementById('videoOverlay');
+    const closeVideoBtn = document.getElementById('closeVideo');
+
+    let isDarkMode = false;
+    let language = 'en';
+    let isDrawing = false;
+    let isDrawingMode = false;
+    let lastX = 0;
+    let lastY = 0;
+    let brushSize = 3;
+    let brushColor = 'hsl(0, 100%, 50%)';
+
+    const translations = {
+      en: {
+        navMenu: "Menu",
+        navHerakles: "Herakles AI",
+        navResearch: "Research",
+        navProjects: "Projects",
+        slogan: "Your Cognitive Computer.",
+        discover: "Discover",
+        yourPotential: "Your Potential"
+      },
+      es: {
+        navMenu: "Menú",
+        navHerakles: "Herakles AI",
+        navResearch: "Investigación",
+        navProjects: "Proyectos",
+        slogan: "Tu Computadora Cognitiva.",
+        discover: "Descubre",
+        yourPotential: "Tu Potencial"
+      },
+    };
+
+    function changeLanguage() {
+      language = languageSelect.value;
+      updateLanguage();
+    }
+
+    function updateLanguage() {
+      navMenuItem.textContent = translations[language].navMenu;
+      navHeraklesItem.textContent = translations[language].navHerakles;
+      navResearchItem.textContent = translations[language].navResearch;
+      navProjectsItem.textContent = translations[language].navProjects;
+      slogan.textContent = translations[language].slogan;
+      document.querySelector('h2').textContent = translations[language].discover;
+      document.querySelector('h3').textContent = translations[language].yourPotential;
+    }
+
+    function toggleDarkMode() {
+      isDarkMode = !isDarkMode;
+      if (isDarkMode) {
+        app.classList.remove('light-mode');
+        app.classList.add('dark-mode');
+        darkModeIcon.innerHTML = '<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
+      } else {
+        app.classList.remove('dark-mode');
+        app.classList.add('light-mode');
+        darkModeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+      }
+      updateIconColors();
+    }
+
+    function setCanvasSize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    function startDrawing(e) {
+      if (!isDrawingMode) return;
+      isDrawing = true;
+      [lastX, lastY] = [e.offsetX, e.offsetY];
+    }
+
+    function stopDrawing() {
+      isDrawing = false;
+      ctx.beginPath();
+    }
+
+    function draw(e) {
+      if (!isDrawing || !isDrawingMode) return;
+      ctx.beginPath();
+      ctx.moveTo(lastX, lastY);
+      ctx.lineTo(e.offsetX, e.offsetY);
+      ctx.strokeStyle = brushColor;
+      ctx.lineWidth = brushSize;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.stroke();
+      [lastX, lastY] = [e.offsetX, e.offsetY];
+    }
+
+    function updateIconColors() {
+      const color = isDarkMode ? 'white' : 'black';
+      speakerIcon.style.color = color;
+      pencilIcon.style.color = color;
+    }
+
+    function updateBrushSize() {
+      brushSize = document.getElementById('brushSize').value;
+    }
+
+    function updateBrushColor() {
+      const hue = document.getElementById('colorHue').value;
+      brushColor = `hsl(${hue}, 100%, 50%)`;
+    }
+
+    function showDrawingControls() {
+      document.querySelector('.drawing-controls').style.display = 'block';
+    }
+
+    function hideDrawingControls() {
+      document.querySelector('.drawing-controls').style.display = 'none';
+    }
+
+    speakerIcon.onclick = function() {
+      volumeSlider.style.display = volumeSlider.style.display === 'none' ? 'inline-block' : 'none';
+    }
+
+    pencilIcon.onclick = function(e) {
+      if (e.shiftKey) {
+        showDrawingControls();
+      } else {
+        isDrawingMode = !isDrawingMode;
+        document.body.classList.toggle('drawing-mode', isDrawingMode);
+        canvas.style.pointerEvents = isDrawingMode ? 'auto' : 'none';
+        pencilIcon.style.transform = isDrawingMode ? 'scale(1.2)' : 'scale(1)';
+        if (!isDrawingMode) {
+          hideDrawingControls();
+        }
+      }
+    }
+
+    discoverBtn.onclick = function() {
+      discoverModal.style.display = "block";
+    }
+
+    closeModal.onclick = function() {
+      discoverModal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+      if (event.target == discoverModal) {
+        discoverModal.style.display = "none";
+      }
+    }
+
+    discoveryForm.onsubmit = function(e) {
+      e.preventDefault();
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      console.log(`Name: ${name}, Email: ${email}`);
+      // Here you would typically send this data to your server or CRM
+      discoverModal.style.display = "none";
+      alert('Thank you for joining the journey!');
+    }
+
+    slogan.onclick = function(e) {
+      e.preventDefault();
+      videoOverlay.style.display = "block";
+    }
+
+    closeVideoBtn.onclick = function() {
+      videoOverlay.style.display = "none";
+      // Stop the video when closing the overlay
+      const iframe = videoOverlay.querySelector('iframe');
+      const iframeSrc = iframe.src;
+      iframe.src = iframeSrc;
+    }
+
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('mouseout', stopDrawing);
+
+    canvas.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      const touch = e.touches[0];
+      startDrawing({ offsetX: touch.clientX, offsetY: touch.clientY });
+    });
+
+    canvas.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      const touch = e.touches[0];
+      draw({ offsetX: touch.clientX, offsetY: touch.clientY });
+    });
+
+    canvas.addEventListener('touchend', stopDrawing);
+
+    document.getElementById('brushSize').addEventListener('input', updateBrushSize);
+    document.getElementById('colorHue').addEventListener('input', updateBrushColor);
+
+    window.addEventListener('resize', setCanvasSize);
+    
+    // Initialize
+    setCanvasSize();
+    updateLanguage();
+    updateIconColors();
+  </script>
+</body>
+
+</html>
