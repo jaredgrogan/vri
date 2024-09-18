@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Letter Animation Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        canvas {
+            border: 1px solid #000;
+            background: #f9f9f9;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Letter Animation Demo</h1>
+    <button onclick="generateAnimations()">Animate Letters</button>
+    <canvas id="letterCanvas" width="600" height="400"></canvas>
+
+    <script>
+        const lettersToAnimate = [
+            { text: 'Cat', language: 'English' },
+            { text: 'Una Libra', language: 'Spanish' },
+            { text: 'باب', language: 'Arabic' },
+            { text: '人', language: 'Chinese' }
+        ];
+
+        const canvas = document.getElementById('letterCanvas');
+        const ctx = canvas.getContext('2d');
+
+        async function generateAnimations() {
+            for (const item of lettersToAnimate) {
+                const animationText = await getResponse(item.text); // Call GPT-4 to get animation prompts
+                animateDrawing(animationText, item.language);
+            }
+        }
+
+        async function getResponse(prompt) {
+            // Simulated API response for demonstration purposes
+            return new Promise(resolve => {
+                setTimeout(() => resolve(prompt), 500); // Mimicking API delay
+            });
+        }
+
+        function animateDrawing(text, language) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas for new drawing
+            const letters = text.split('');
+            let index = 0;
+
+            function drawNextLetter() {
+                if (index < letters.length) {
+                    drawLetter(letters[index], 50 + index * 60, 100); // Example positioning
+                    index++;
+                    setTimeout(drawNextLetter, 1000); // 1-second delay for next letter
+                }
+            }
+
+            drawNextLetter();
+        }
+
+        function drawLetter(letter, x, y) {
+            ctx.font = "50px Arial";
+            ctx.fillText(letter, x, y);
+        }
+    </script>
+</body>
+</html>
