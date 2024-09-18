@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Get Universitas Pro</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&display=swap" rel="stylesheet">
+  <link rel="icon" href="/favicon10.svg" type="image/svg+xml">
+  <style>
+    body {
+      background-color: #f3f4f6;
+      color: #111827;
+      font-family: 'Berkeley Mono', monospace;
+    }
+
+    .light-mode {
+      background-color: #f3f4f6;
+      color: #111827;
+    }
+
+    .dark-mode {
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+    }
+
+    .header-container {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+    }
+
+    .header-container img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 20px;
+    }
+
+    .header-container h1 {
+      font-family: 'Courier New', monospace;
+      font-size: 27px;
+      font-weight: bold;
+      color: black;
+      transition: color 0.3s;
+    }
+
+    @media (max-width: 640px) {
+      .header-container h1 {
+        font-size: 20px;
+      }
+    }
+
+    @media (max-width: 455px) {
+      .header-container h1 {
+        font-size: 18px;
+        display: none;
+      }
+
+      .header-container::after {
+        content: "";
+        font-family: 'Courier New', monospace;
+        font-size: 18px;
+        color: black;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .header-container h1 {
+        font-size: 16px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: none;
+      }
+
+      .header-container::after {
+        content: "";
+        font-family: 'Courier New', monospace;
+        font-size: 16px;
+        color: black;
+      }
+    }
+
+    .nav-header {
+      position: fixed;
+      top: 24px;
+      right: 230px;
+      display: flex;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .nav-header ul {
+      display: flex;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      gap: 20px;
+      font-family: 'Berkeley Mono', monospace;
+    }
+
+    .nav-header ul li {
+      position: relative;
+    }
+
+    .nav-header ul li a {
+      text-decoration: none;
+      font-size: 16px;
+      transition: color 0.3s;
+    }
+
+    .nav-header ul li ul {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: #d5d5d5;
+      border-radius: 5px;
+      padding: 10px;
+    }
+
+    .nav-header ul li ul li a {
+      font-weight: normal;
+      font-size: 14px;
+      padding: 5px 10px;
+      border-radius: 4px;
+      display: block;
+      color: #111827;
+    }
+
+    .nav-header ul li ul li a:hover,
+    .nav-header ul li ul li a:focus {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .light-mode .nav-header ul li ul {
+      background-color: #d5d5d5;
+    }
+
+    .light-mode .nav-header ul li ul li a {
+      color: #111827;
+    }
+
+    .light-mode .nav-header ul li ul li a:hover,
+    .light-mode .nav-header ul li ul li a:focus {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .dark-mode .nav-header ul li ul {
+      background-color: #333;
+    }
+
+    .dark-mode .nav-header ul li ul li a {
+      color: #e0e0e0;
+    }
+
+    .dark-mode .nav-header ul li ul li a:focus {
+      background-color: #007bff;
+      color: #e0e0e0;
+    }
+
+    .nav-header ul li:hover ul {
+      display: block;
+    }
+
+    .light-mode .nav-header ul li a {
+      color: black;
+    }
+
+    .dark-mode .nav-header ul li a {
+      color: white;
+    }
+
+    .light-mode .header-container h1 {
+      color: black;
+    }
+
+    .dark-mode .header-container h1 {
+      color: white;
+    }
+
+    .dark-mode .language-select select {
+      border: 1px solid white;
+    }
+
+    .dark-mode .toggle-container button {
+      border: 1px solid white;
+    }
+
+    .toggle-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+    }
+
+    .toggle-container button {
+      border: 1px solid #111827;
+    }
+
+    .language-select {
+      position: fixed;
+      top: 20px;
+      right: 80px;
+      z-index: 100;
+    }
+
+    .language-select select {
+      background: none;
+      color: inherit;
+      border: 1px solid #111827;
+      border-radius: 5px;
+      padding: 5px;
+      outline-color: #007bff;
+    }
+
+    .language-select select:focus {
+      outline: 2px solid #007bff;
+    }
+
+    .hero-section {
+      height: 80vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      font-family: 'Courier New', monospace;
+    }
+
+    .minilogo {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      width: 50px;
+      height: 50px;
+      transition: transform 0.3s ease;
+    }
+
+    .minilogo:hover {
+      transform: scale(1.5);
+    }
+
+    .logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 200px;
+      transition: transform 0.3s ease;
+    }
+
+    .logo:hover {
+      transform: scale(1.5);
+      transition: transform 0.3s ease;
+    }
+
+    .circle {
+      display: inline-block;
+      width: 100px;
+      height: 100px;
+      border: 2px solid black;
+      border-radius: 50%;
+      line-height: 100px;
+      text-align: center;
+      font-size: 5rem;
+    }
+
+    .u {
+      color: black;
+      font-size: 5rem;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    .dark-mode .circle {
+      border-color: white;
+    }
+
+    .dark-mode .u {
+      color: white;
+    }
+
+    .content {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .enter-btn {
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 27px;
+      font-family: 'Courier New', monospace;
+      transition: transform 0.3s ease;
+    }
+
+    .enter-btn:hover {
+      transform: scale(1.2);
+    }
+
+    .enter-btn a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .enter-btn a:visited,
+    .enter-btn a:active {
+      color: inherit;
+    }
+
+    .mode-toggle {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      cursor: pointer;
+    }
+
+    footer {
+      text-align: center;
+      font-family: 'Courier New', monospace;
+      padding: 20px;
+    }
+
+    #drawingCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .icon-container {
+      position: fixed;
+      top: 24px;
+      right: 285px;
+      display: flex;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .icon {
+      width: 20px;
+      height: 20px;
+      margin-right: 5px;
+      cursor: pointer;
+    }
+
+    .volume-slider {
+      width: 80px;
+      display: none;
+      margin-right: 5px;
+    }
+
+    .cta-button {
+      display: inline-block;
+      margin-top: 35px;
+      padding: 15px 30px;
+      background: linear-gradient(45deg, #1a4ccc, #3579f5, #7aa7ff);
+      background-size: 200% 200%;
+      animation: gradientShift 15s ease infinite;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 18px;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    @keyframes gradientShift {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+
+    .dark-mode .cta-button {
+      background: linear-gradient(45deg, #0d2666, #1a4ccc, #3579f5);
+    }
+
+    .cta-button:hover {
+      transform: scale(1.05);
+    }
+
+    .drawing-controls {
+      display: none;
+      position: fixed;
+      top: 60px;
+      right: 20px;
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 15px;
+      border-radius: 5px;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .dark-mode .drawing-controls {
+      background-color: rgba(30, 30, 30, 0.9);
+    }
+
+    .drawing-controls input {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    .color-strip {
+      height: 20px;
+      width: 100%;
+      background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet, black);
+      margin-bottom: 10px;
+      border-radius: 3px;
+    }
+
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 200px;
+      background-color: #555;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -100px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    @media (min-width: 1024px) {
+      .hero-section {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .content {
+        text-align: center;
+      }
+
+      .cta-button {
+        margin-top: 35px;
+      }
+    }
+
+    .eraser-active {
+      background-color: #ffcccc;
+    }
+
+    .dark-mode .eraser-active {
+      background-color: #4d0000;
+    }
+
+    body.drawing-mode {
+      cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15"><circle cx="7.5" cy="7.5" r="6.5" fill="none" stroke="gray" stroke-width="1"/><line x1="7.5" y1="0" x2="7.5" y2="15" stroke="gray" stroke-width="1"/><line x1="0" y1="7.5" x2="15" y2="7.5" stroke="gray" stroke-width="1"/></svg>') 7.5 7.5, crosshair;
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 400px;
+      border-radius: 10px;
+      font-family: 'Courier New', monospace;
+    }
+
+    .modal-content h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .modal-content input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-family: 'Courier New', monospace;
+    }
+
+    .modal-content button {
+      width: 100%;
+      padding: 10px;
+      background: linear-gradient(45deg, #1a4ccc, #3579f5, #7aa7ff);
+      background-size: 200% 200%;
+      animation: gradientShift 15s ease infinite;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .color-display {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-left: 10px;
+    }
+  </style>
+</head>
+
+<body class="light-mode" id="app">
+  <canvas id="drawingCanvas"></canvas>
+
+  <!-- Navigation Header with Day/Night Toggle -->
+  <div class="nav-header">
+    <ul id="navMenu">
+      <li
