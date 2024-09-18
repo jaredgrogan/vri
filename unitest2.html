@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Get Universitas Pro</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&display=swap" rel="stylesheet">
+  <link rel="icon" href="/favicon10.svg" type="image/svg+xml">
+  <meta name="description" content="Universitas Pro offers AI-powered productivity tools for students, researchers, and engineers to streamline research and learning.">
+  <meta name="keywords" content="AI, productivity, research tools, cognitive computing, education, university, upskilling, knowledge workers, engineering, cloud solutions">
+  <meta name="author" content="Universitas AI">
+  <style>
+    body {
+      background-color: #f3f4f6;
+      color: #111827;
+      font-family: 'Berkeley Mono', monospace;
+      transition: background-color 0.5s ease, color 0.5s ease;
+    }
+
+    .light-mode {
+      background-color: #f3f4f6;
+      color: #111827;
+    }
+
+    .dark-mode {
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+    }
+
+    .header-container {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+    }
+
+    .header-container img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 20px;
+    }
+
+    .header-container h1 {
+      font-family: 'Courier New', monospace;
+      font-size: 27px;
+      font-weight: bold;
+      color: black;
+      transition: color 0.3s;
+    }
+
+    @media (max-width: 640px) {
+      .header-container h1 {
+        font-size: 20px;
+      }
+    }
+
+    @media (max-width: 455px) {
+      .header-container h1 {
+        font-size: 18px;
+        display: none;
+      }
+    }
+
+    .nav-header {
+      position: fixed;
+      top: 24px;
+      right: 230px;
+      display: flex;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .nav-header ul {
+      display: flex;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      gap: 20px;
+      font-family: 'Berkeley Mono', monospace;
+    }
+
+    .nav-header ul li {
+      position: relative;
+    }
+
+    .nav-header ul li a {
+      text-decoration: none;
+      font-size: 16px;
+      transition: color 0.3s;
+    }
+
+    .nav-header ul li ul {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: #d5d5d5;
+      border-radius: 5px;
+      padding: 10px;
+    }
+
+    .nav-header ul li:hover ul {
+      display: block;
+    }
+
+    .toggle-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+    }
+
+    .toggle-container button {
+      border: 1px solid #111827;
+      padding: 10px;
+      background: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .language-select {
+      position: fixed;
+      top: 20px;
+      right: 100px;
+    }
+
+    /* Hover animations for buttons */
+    .enter-btn:hover {
+      transform: scale(1.2);
+      transition: transform 0.3s ease;
+    }
+
+    /* Canvas for drawing */
+    #drawingCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 50;
+      background-color: transparent;
+      cursor: url('/path/to/pencil.svg'), auto;
+    }
+
+    /* Modal for YouTube video */
+    #videoModal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80%;
+      height: 80%;
+      background-color: rgba(0, 0, 0, 0.8);
+      z-index: 200;
+    }
+
+    #videoModal iframe {
+      width: 100%;
+      height: 100%;
+    }
+
+    #videoModal .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: #fff;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    /* Onboarding input styles */
+    #onboarding {
+      display: none;
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    #onboarding input {
+      font-size: 1.2rem;
+      padding: 10px;
+      border: none;
+      border-bottom: 2px solid black;
+      outline: none;
+      width: 80%;
+      max-width: 400px;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+
+<body class="light-mode" id="app">
+  <!-- Navigation Header with Day/Night Toggle -->
+  <div class="nav-header">
+    <ul id="navMenu">
+      <li><a href="javascript:void(0)" id="navMenuItem">Menu</a></li>
+      <li><a href="newconsole.html" id="navHeraklesItem">Herakles AI</a></li>
+      <li><a href="docuchat5.html" id="navResearchItem">Research</a></li>
+      <li><a href="todotoday.html" id="navProjectsItem">Projects</a></li>
+    </ul>
+  </div>
+
+  <!-- Language Selection Dropdown -->
+  <div class="language-select">
+    <select id="languageSelect" onchange="changeLanguage()">
+      <option value="en">English</option>
+      <option value="es">Español</option>
+    </select>
+  </div>
+
+  <!-- Day/Night Mode Toggle Button -->
+  <div class="toggle-container">
+    <button id="darkModeBtn" onclick="toggleDarkMode()">
+      Toggle Dark/Light Mode
+    </button>
+  </div>
+
+  <!-- Hero Section with Logo and Slogan -->
+  <div class="hero-section">
+    <a href="index.html" class="minilogo">
+      <img src="/favicon5.svg" alt="miniLogo">
+    </a>
+    <div class="container">
+      <div id="logo" class="logo" onclick="showVideo()"> <!-- Trigger YouTube Video on Logo Click -->
+        <div class="circle">
+          <span class="u">U</span>
+        </div>
+      </div>
+      <div class="content">
+        <button class="enter-btn" id="onboardTrigger">Your Cognitive Computer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Drawing Canvas -->
+  <canvas id="drawingCanvas" width="800" height="600"></canvas>
+
+  <!-- Onboarding Section -->
+  <div id="onboarding">
+    <p>What is your name?</p>
+    <input type="text" id="nameInput" placeholder="Enter your name">
+    <p>What is your email?</p>
+    <input type="email" id="emailInput" placeholder="Enter your email">
+    <button id="submitOnboarding">Submit</button>
+  </div>
+
+  <!-- YouTube Video Modal -->
+  <div id="videoModal">
+    <button class="close-btn" onclick="closeVideo()">X</button>
+    <iframe src="https://www.youtube.com/embed/WW1qYGqUfHU" frameborder="0" allowfullscreen></iframe>
+  </div>
+
+  <footer>
+    &copy; 2024 UNIVERSITAS AI
+  </footer>
+
+  <script>
+    // Dark/Light mode toggle
+    function toggleDarkMode() {
+      const app = document.getElementById('app');
+      app.classList.toggle('dark-mode');
+    }
+
+    // Show YouTube video in modal
+    function showVideo() {
+      document.getElementById('videoModal').style.display = 'block';
+    }
+
+    // Close YouTube video modal
+    function closeVideo() {
+      document.getElementById('videoModal').style.display = 'none';
+    }
+
+    // Onboarding process
+    document.getElementById('onboardTrigger').addEventListener('click', function () {
+      document.getElementById('onboarding').style.display = 'block';
+    });
+
+    document.getElementById('submitOnboarding').addEventListener('click', function () {
+      const name = document.getElementById('nameInput').value;
+      const email = document.getElementById('emailInput').value;
+      if (name && email) {
+        alert(`Welcome, ${name}! Your email: ${email}`);
+        window.location.href = 'app.html';
+      } else {
+        alert('Please enter both your name and email.');
+      }
+    });
+
+    // Drawing functionality on canvas
+    const canvas = document.getElementById('drawingCanvas');
+    const ctx = canvas.getContext('2d');
+    let drawing = false;
+
+    canvas.addEventListener('mousedown', () => drawing = true);
+    canvas.addEventListener('mouseup', () => drawing = false);
+    canvas.addEventListener('mousemove', draw);
+
+    function draw(event) {
+      if (!drawing) return;
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = document.getElementById('app').classList.contains('dark-mode') ? '#fff' : '#000';
+      ctx.lineTo(event.clientX - canvas.offsetLeft, event.clientY - canvas.offsetTop);
+      ctx.stroke();
+    }
+
+    // Language translation
+    const translations = {
+      en: {
+        navMenu: "Menu",
+        navHerakles: "Herakles AI",
+        navResearch: "Research",
+        navProjects: "Projects",
+        slogan: "Your Cognitive Computer."
+      },
+      es: {
+        navMenu: "Menú",
+        navHerakles: "Herakles AI",
+        navResearch: "Investigación",
+        navProjects: "Proyectos",
+        slogan: "Tu Computadora Cognitiva."
+      },
+    };
+
+    function changeLanguage() {
+      const language = document.getElementById('languageSelect').value;
+      document.getElementById('navMenuItem').textContent = translations[language].navMenu;
+      document.getElementById('navHeraklesItem').textContent = translations[language].navHerakles;
+      document.getElementById('navResearchItem').textContent = translations[language].navResearch;
+      document.getElementById('navProjectsItem').textContent = translations[language].navProjects;
+      document.querySelector('.enter-btn').textContent = translations[language].slogan;
+    }
+  </script>
+</body>
+
+</html>
