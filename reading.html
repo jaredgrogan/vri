@@ -44,21 +44,20 @@
 
         function simulateWriting(word, x, y) {
             return new Promise(resolve => {
-                const letters = Array.from(word);
-                let letterIndex = 0;
+                let letterIndex = 0; // To keep track of the current letter
 
                 // Function to draw each letter one by one
                 function drawLetter() {
-                    if (letterIndex < letters.length) {
-                        const letter = new fabric.Text(letters[letterIndex], {
-                            left: x + letterIndex * 30, // Space letters apart
+                    if (letterIndex < word.length) {
+                        const letter = new fabric.Text(word[letterIndex], {
+                            left: x + letterIndex * 50, // Space letters apart
                             top: y,
                             fontSize: 50,
                             fill: 'black',
                             opacity: 0 // Start invisible
                         });
-                        
-                        canvas.add(letter);
+
+                        canvas.add(letter); // Add letter to canvas
                         canvas.renderAll(); // Render the canvas
 
                         // Animate opacity to simulate writing
