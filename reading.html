@@ -16,9 +16,6 @@
             background: #f9f9f9;
             margin-top: 20px;
         }
-        .word {
-            margin: 15px 0;
-        }
     </style>
 </head>
 <body>
@@ -47,33 +44,32 @@
 
         function simulateWriting(word, x, y) {
             return new Promise(resolve => {
-                const text = new fabric.Text(word, {
-                    left: x,
-                    top: y,
-                    fontSize: 50,
-                    fill: 'black'
-                });
+                const letters = Array.from(word);
+                let letterIndex = 0;
 
-                // Create a path for each letter
-                const letterPositions = [];
-                for (let i = 0; i < word.length; i++) {
-                    letterPositions.push({ x: x + i * 30, y: y }); // Adjust x position for each letter
-                }
-
-                // Animate letter drawing
-                canvas.add(text); // Add text to canvas
-                text.set({ opacity: 0 }); // Start with invisible text
-                canvas.renderAll(); // Render canvas
-
-                // Simulate drawing effect
-                let index = 0;
+                // Function to draw each letter one by one
                 function drawLetter() {
-                    if (index < letterPositions.length) {
-                        const pos = letterPositions[index];
-                        text.set({ left: pos.x, top: pos.y, opacity: 1 });
-                        canvas.renderAll(); // Update canvas
-                        index++;
-                        setTimeout(drawLetter, 500); // Delay between letters
+                    if (letterIndex < letters.length) {
+                        const letter = new fabric.Text(letters[letterIndex], {
+                            left: x + letterIndex * 30, // Space letters apart
+                            top: y,
+                            fontSize: 50,
+                            fill: 'black',
+                            opacity: 0 // Start invisible
+                        });
+                        
+                        canvas.add(letter);
+                        canvas.renderAll(); // Render the canvas
+
+                        // Animate opacity to simulate writing
+                        letter.animate('opacity', 1, {
+                            onChange: canvas.renderAll.bind(canvas),
+                            duration: 500,
+                            onComplete: () => {
+                                letterIndex++;
+                                drawLetter(); // Draw the next letter
+                            }
+                        });
                     } else {
                         resolve(); // Resolve promise when done
                     }
