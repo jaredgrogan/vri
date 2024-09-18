@@ -52,7 +52,7 @@
                 const animationText = await getResponse(item.text);
                 const span = document.getElementById(item.canvasId);
                 span.innerHTML = ''; // Clear previous animations
-                await animateDrawing(animationText, item.language);
+                await animateDrawing(animationText);
             }
         }
 
@@ -63,14 +63,14 @@
             });
         }
 
-        async function animateDrawing(text, language) {
+        async function animateDrawing(text) {
             const letters = text.split('');
             let index = 0;
 
             for (const letter of letters) {
                 await new Promise(resolve => {
                     setTimeout(() => {
-                        simulateWriting(letter, 50 + index * 60, 200 + wordsToAnimate.find(item => item.language === language).canvasId.charAt(0).charCodeAt(0) * 20);
+                        simulateWriting(letter, 50 + index * 60, 200); // Adjust y for alignment
                         index++;
                         resolve();
                     }, 1000); // Delay between letters
@@ -86,6 +86,9 @@
             const positions = getWritingPath(x, y, letter); // Get path for natural writing
             let pathIndex = 0;
 
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+
             function drawPath() {
                 if (pathIndex < positions.length) {
                     const pos = positions[pathIndex];
@@ -98,18 +101,16 @@
                 }
             }
 
-            ctx.beginPath();
-            ctx.moveTo(x, y);
             drawPath();
         }
 
         function getWritingPath(startX, startY, letter) {
             const path = [];
-            const stepSize = 5;
+            const stepSize = 10; // Adjust for smoother or rougher paths
 
             for (let i = 0; i < letter.length; i++) {
-                const xOffset = Math.random() * stepSize - stepSize / 2;
-                const yOffset = Math.random() * stepSize - stepSize / 2;
+                const xOffset = (Math.random() - 0.5) * stepSize;
+                const yOffset = (Math.random() - 0.5) * stepSize;
                 path.push({ x: startX + xOffset, y: startY + yOffset });
             }
 
