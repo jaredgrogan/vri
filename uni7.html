@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -419,34 +420,35 @@
       margin-bottom: 5px;
     }
 
- .tooltip {
-  position: relative;
-  display: inline-block;
-  cursor: pointer;
-}
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
 
-.tooltip .tooltiptext {
-  visibility: hidden;
-  width: 200px;
-  background: rgba(255, 255, 255, 0.15); /* Glassmorphic effect */
-  backdrop-filter: blur(10px);
-  color: white;
-  text-align: center;
-  border-radius: 10px;
-  padding: 10px;
-  position: absolute;
-  z-index: 1;
-  bottom: 125%; /* Position the tooltip above the element */
-  left: 50%;
-  transform: translateX(-50%);
-  opacity: 0;
-  transition: opacity 0.3s;
-}
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 200px;
+      background-color: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 10px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -100px;
+      opacity: 0;
+      transition: opacity 0.3s, visibility 0.3s;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      pointer-events: none;
+    }
 
-.tooltip:hover .tooltiptext {
-  visibility: visible;
-  opacity: 1;
-}
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
 
     @media (min-width: 1024px) {
       .hero-section {
@@ -594,11 +596,11 @@
     <svg class="icon tooltip" id="speakerIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
       <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-      <span class="tooltiptext">Adjust Volume</span>
+      <span class="tooltiptext"></span>
     </svg>
     <svg class="icon tooltip" id="pencilIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
-      <span class="tooltiptext">Shift+Click for Options</span>
+      <span class="tooltiptext"></span>
     </svg>
   </div>
 
