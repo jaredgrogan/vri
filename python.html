@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Web Frameworks Bootcamp</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --background-color: #f4f4f4;
+            --text-color: #333;
+            --link-color: #2980b9;
+            --header-color: #2c3e50;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        header {
+            background: var(--header-color);
+            color: #ffffff;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        header a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        header ul {
+            padding: 0;
+            list-style: none;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        header li {
+            padding: 0 10px;
+        }
+
+        header #branding {
+            margin-bottom: 1rem;
+        }
+
+        header #branding h1 {
+            font-size: 2rem;
+            text-align: center;
+        }
+
+        .content {
+            padding: 20px;
+            background: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .active {
+            display: block;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .concept {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .concept:hover {
+            transform: translateY(-5px);
+        }
+
+        .concept.important {
+            border-left: 5px solid var(--primary-color);
+        }
+
+        .concept.frequent {
+            border-left: 5px solid var(--secondary-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        #dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            background: var(--primary-color);
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #dark-mode-toggle:hover {
+            background-color: #2980b9;
+        }
+
+        .dark-mode {
+            --background-color: #2c3e50;
+            --text-color: #ecf0f1;
+            --link-color: #3498db;
+        }
+
+        .dark-mode .content {
+            background-color: #34495e;
+        }
+
+        .dark-mode .concept {
+            background-color: #2c3e50;
+        }
+
+        .dark-mode th {
+            background-color: #2980b9;
+        }
+
+        .dark-mode tr:nth-child(even) {
+            background-color: #34495e;
+        }
+
+        .dark-mode a {
+            color: var(--link-color);
+        }
+
+        #concept-search {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem 0;
+            background-color: var(--header-color);
+            color: #fff;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            header ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            header li {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div id="branding">
+                <h1>Python Web Frameworks Bootcamp</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#home" class="nav-link">Home</a></li>
+                    <li><a href="#daily-content" class="nav-link">Daily Content</a></li>
+                    <li><a href="#concepts" class="nav-link">Concepts</a></li>
+                    <li><a href="#learning-outcomes" class="nav-link">Learning Outcomes</a></li>
+                    <li><a href="#resources" class="nav-link">Resources</a></li>
+                    <li><a href="#ai-integration" class="nav-link">AI Integration</a></li>
+                    <li><a href="#projects" class="nav-link">Projects</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <button id="dark-mode-toggle">Toggle Dark Mode</button>
+
+    <div class="container content">
+        <section id="home" class="section active">
+            <h2>Welcome to the Python Web Frameworks Bootcamp</h2>
+            <p>This 7-day intensive course focuses on Django and Flask, two popular Python web frameworks. Get ready to dive deep into web development with Python!</p>
+            <h3>Quick Navigation</h3>
+            <ul id="day-links"></ul>
+        </section>
+
+        <section id="daily-content" class="section">
+            <h2>Daily Content</h2>
+            <div id="day-content"></div>
+        </section>
+
+        <section id="concepts" class="section">
+            <h2>Key Concepts</h2>
+            <input type="text" id="concept-search" placeholder="Search concepts...">
+            <div id="concept-list"></div>
+        </section>
+
+        <section id="learning-outcomes" class="section">
+            <h2>Learning Outcomes</h2>
+            <table id="learning-outcomes-table">
+                <thead>
+                    <tr>
+                        <th>Outcome</th>
+                        <th>Related Concepts</th>
+                        <th>Day Covered</th>
+                        <th>Difficulty</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </section>
+
+        <section id="resources" class="section">
+            <h2>Resources</h2>
+            <ul id="resource-list"></ul>
+        </section>
+
+        <section id="ai-integration" class="section">
+            <h2>AI Integration</h2>
+            <p>Learn how to effectively use AI assistants like Claude or GPT-4 during the bootcamp:</p>
+            <ul id="ai-tips"></ul>
+            <h3>Sample Prompts</h3>
+            <ul id="sample-prompts"></ul>
+        </section>
+
+        <section id="projects" class="section">
+            <h2>Projects</h2>
+            <h3>Mini-Projects</h3>
+            <ul id="mini-projects"></ul>
+            <h3>Larger Projects</h3>
+            <ul id="larger-projects"></ul>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 UNIVERSITAS AI. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/2.0.3/marked.min.js"></script>
+    <script>
+        // Sample data (in a real application, this would be fetched from an API)
+        const days = [
+            { id: 1, content: "# Day 1: Introduction to Django and Flask\n\n- Setting up development environment\n- Overview of Django and Flask\n- Creating your first Django project\n- Creating your first Flask application" },
+            { id: 2, content: "# Day 2: Django Models and Flask SQLAlchemy\n\n- Django models and ORM\n- Database migrations in Django\n- Flask-SQLAlchemy setup\n- Creating and querying models in Flask" },
+            { id: 3, content: "# Day 3: Views and Routing\n\n- Django views and URL patterns\n- Class-based views in Django\n- Flask routes and views\n- Request handling in Flask" },
+            { id: 4, content: "# Day 4: Templates and Forms\n\n- Django template language\n- Flask Jinja2 templates\n- Django forms\n- Flask-WTF forms" },
+            { id: 5, content: "# Day 5: Authentication and Authorization\n\n- Django authentication system\n- Flask-Login for user sessions\n- Permissions and groups in Django\n- Role-based access control in Flask" },
+            { id: 6, content: "# Day 6: RESTful APIs\n\n- Django Rest Framework basics\n- Serializers and viewsets\n- Flask-RESTful\n- API authentication and permissions" },
+            { id: 7, content: "# Day 7: Deployment and Best Practices\n\n- Preparing Django and Flask apps for production\n- Deployment to Heroku\n- Performance optimization techniques\n- Security best practices" }
+        ];
+
+        const concepts = [
+            { id: 1, name: "MVC/MVT Architecture", definition: "Design pattern that separates an application into Model (data), View (user interface), and Controller/Template (logic) components.", isImportant: true, isFrequent: true },
+            { id: 2, name: "ORM (Object-Relational Mapping)", definition: "Technique that lets you query and manipulate data from a database using an object-oriented paradigm.", isImportant: true, isFrequent: true },
+            { id: 3, name: "WSGI (Web Server Gateway Interface)", definition: "Specification for a universal interface between web servers and web applications in Python.", isImportant: false, isFrequent: true },
+            { id: 4, name: "RESTful API design", definition: "Architectural style for designing networked applications, emphasizing scalability and stateless operations.", isImportant: true, isFrequent: true },
+            { id: 5, name: "Middleware", definition: "Software that acts as a bridge between an operating system or database and applications, especially on a network.", isImportant: false, isFrequent: true },
+            { id: 6, name: "URL routing", definition: "Process of mapping URLs to specific functions or classes in web applications.", isImportant: false, isFrequent: true },
+            { id: 7, name: "Template engines", definition: "Tools that allow you to generate dynamic HTML using a combination of static HTML and special syntax.", isImportant: false, isFrequent: true },
+            { id: 8, name: "Database migrations", definition: "Way to propagate changes you make to your models into your database schema.", isImportant: true, isFrequent: false },
+            { id: 9, name: "CRUD operations", definition: "Four basic functions of persistent storage: Create, Read, Update, and Delete.", isImportant: true, isFrequent: true },
+            { id: 10, name: "Authentication and authorization", definition: "Processes of verifying user identity and determining access rights to resources.", isImportant: true, isFrequent: false },
+            { id: 11, name: "Session management", definition: "Mechanism for storing information about a user's interaction with a web application across multiple requests.", isImportant: false, isFrequent: true },
+            { id: 12, name: "Form handling and validation", definition: "Process of accepting, processing, and validating user input from HTML forms.", isImportant: false, isFrequent: false },
+            { id: 13, name: "Static file management", definition: "Handling of CSS, JavaScript, and image files in web applications.", isImportant: false, isFrequent: false },
+            { id: 14, name: "Cross-Site Scripting (XSS) prevention", definition: "Security measure to prevent attackers from injecting malicious scripts into web pages.", isImportant: true, isFrequent: false },
+            { id: 15, name: "Cross-Site Request Forgery (CSRF) protection", definition: "Security mechanism to prevent unauthorized commands from being transmitted from a user that the web application trusts.", isImportant: true, isFrequent: false },
+            { id: 16, name: "SQL injection prevention", definition: "Technique to stop attackers from inserting malicious SQL code into application queries.", isImportant: true, isFrequent: false },
+            { id: 17, name: "Serialization and deserialization", definition: "Processes of converting complex data types to and from Python native datatypes.", isImportant: false, isFrequent: true },
+            { id: 18, name: "API versioning", definition: "Strategy for managing changes to your API over time without breaking client integrations.", isImportant: false, isFrequent: false },
+            { id: 19, name: "Pagination", definition: "Technique of dividing a large set of data into smaller, more manageable 'pages'.", isImportant: false, isFrequent: false },
+            { id: 20, name: "Caching", definition: "Storing copies of frequently accessed data in a system of faster access.", isImportant: true, isFrequent: false },
+            { id: 21, name: "Asynchronous tasks", definition: "Operations that run independently from the main application thread, often used for time-consuming processes.", isImportant: false, isFrequent: false },
+            { id: 22, name: "WebSockets", definition: "Protocol providing full-duplex communication channels over a single TCP connection.", isImportant: false, isFrequent: false },
+            { id: 23, name: "Database indexing", definition: "Technique to improve the speed of data retrieval operations
+   { id: 21, name: "Asynchronous tasks", definition: "Operations that run independently from the main application thread, often used for time-consuming processes.", isImportant: false, isFrequent: false },
+            { id: 22, name: "WebSockets", definition: "Protocol providing full-duplex communication channels over a single TCP connection.", isImportant: false, isFrequent: false },
+            { id: 23, name: "Database indexing", definition: "Technique to improve the speed of data retrieval operations on a database.", isImportant: false, isFrequent: false },
+            { id: 24, name: "Query optimization", definition: "Process of improving the performance of database queries.", isImportant: false, isFrequent: false },
+            { id: 25, name: "Test-Driven Development (TDD)", definition: "Software development process relying on software requirements being converted to test cases before software is fully developed.", isImportant: true, isFrequent: false },
+            { id: 26, name: "Continuous Integration/Continuous Deployment (CI/CD)", definition: "Practices of frequently integrating code changes and automatically deploying to production.", isImportant: false, isFrequent: true },
+            { id: 27, name: "Containerization (Docker)", definition: "OS-level virtualization method for deploying and running distributed applications without launching an entire VM for each app.", isImportant: false, isFrequent: false },
+            { id: 28, name: "Environment variables", definition: "Dynamic-named values that can affect the way running processes will behave on a computer.", isImportant: false, isFrequent: false },
+            { id: 29, name: "Logging", definition: "Process of recording application events for debugging and monitoring purposes.", isImportant: false, isFrequent: false },
+            { id: 30, name: "Error handling and debugging", definition: "Techniques for identifying, reporting, and resolving issues in code.", isImportant: false, isFrequent: true },
+            { id: 31, name: "Performance profiling", definition: "Analysis of a program's performance, particularly its speed and resource usage.", isImportant: false, isFrequent: false },
+            { id: 32, name: "Code organization and project structure", definition: "Logical arrangement of code files and directories in a project for maintainability and scalability.", isImportant: true, isFrequent: false },
+            { id: 33, name: "Database relationships", definition: "Associations between database tables (One-to-One, One-to-Many, Many-to-Many).", isImportant: false, isFrequent: true },
+            { id: 34, name: "JSON Web Tokens (JWT)", definition: "Compact, URL-safe means of representing claims to be transferred between two parties.", isImportant: false, isFrequent: false },
+            { id: 35, name: "CORS (Cross-Origin Resource Sharing)", definition: "Mechanism that allows restricted resources on a web page to be requested from another domain.", isImportant: false, isFrequent: false },
+            { id: 36, name: "API documentation", definition: "Detailed information about how to effectively use and integrate with an API.", isImportant: false, isFrequent: false },
+            { id: 37, name: "Rate limiting", definition: "Technique used to control the rate of requests sent or received by a network interface controller.", isImportant: false, isFrequent: false },
+            { id: 38, name: "Webhooks", definition: "Automated messages sent from apps when something happens.", isImportant: false, isFrequent: false },
+            { id: 39, name: "Service-Oriented Architecture (SOA)", definition: "Style of software design where services are provided to other components by application components, through a communication protocol over a network.", isImportant: false, isFrequent: false },
+            { id: 40, name: "Microservices architecture", definition: "Architectural style that structures an application as a collection of loosely coupled services.", isImportant: false, isFrequent: false }
+        ];
+
+        const learningOutcomes = [
+            { id: 1, description: "Create a basic Django project structure and understand its components", relatedConcepts: ["MVC/MVT Architecture", "URL routing"], dayCovered: 1, difficulty: 2 },
+            { id: 2, description: "Implement CRUD operations using Django's ORM and class-based views", relatedConcepts: ["ORM", "CRUD operations", "Database migrations"], dayCovered: 2, difficulty: 3 },
+            { id: 3, description: "Design and build RESTful APIs using Django REST Framework", relatedConcepts: ["RESTful API design", "Serialization and deserialization"], dayCovered: 6, difficulty: 4 },
+            { id: 4, description: "Implement user authentication and authorization in Django applications", relatedConcepts: ["Authentication and authorization", "Session management"], dayCovered: 5, difficulty: 3 },
+            { id: 5, description: "Create a Flask application with routing, request handling, and templating", relatedConcepts: ["WSGI", "URL routing", "Template engines"], dayCovered: 1, difficulty: 2 },
+            { id: 6, description: "Integrate databases with Flask using Flask-SQLAlchemy", relatedConcepts: ["ORM", "Database relationships"], dayCovered: 2, difficulty: 3 },
+            { id: 7, description: "Implement RESTful APIs in Flask using Flask-RESTful", relatedConcepts: ["RESTful API design", "Serialization and deserialization"], dayCovered: 6, difficulty: 4 },
+            { id: 8, description: "Deploy Django and Flask applications to a production environment", relatedConcepts: ["Continuous Integration/Continuous Deployment (CI/CD)", "Containerization (Docker)"], dayCovered: 7, difficulty: 4 },
+            { id: 9, description: "Understand and implement proper security measures in web applications", relatedConcepts: ["Cross-Site Scripting (XSS) prevention", "Cross-Site Request Forgery (CSRF) protection", "SQL injection prevention"], dayCovered: 7, difficulty: 5 },
+            { id: 10, description: "Utilize AI tools effectively for code generation, debugging, and optimization in Django and Flask projects", relatedConcepts: ["Code organization and project structure", "Error handling and debugging"], dayCovered: 7, difficulty: 3 }
+        ];
+
+        const resources = [
+            "Official Django Documentation: https://docs.djangoproject.com/",
+            "Official Flask Documentation: https://flask.palletsprojects.com/",
+            "Django for Beginners (Book) by William S. Vincent",
+            "Flask Web Development (Book) by Miguel Grinberg",
+            "Django REST Framework Documentation: https://www.django-rest-framework.org/",
+            "Flask-RESTful Documentation: https://flask-restful.readthedocs.io/",
+            "TestDriven.io Courses: https://testdriven.io/",
+            "Real Python Tutorials: https://realpython.com/",
+            "Django Girls Tutorial: https://tutorial.djangogirls.org/",
+            "Full Stack Python: https://www.fullstackpython.com/",
+            "PyCharm IDE (with student license): https://www.jetbrains.com/pycharm/",
+            "Visual Studio Code (free): https://code.visualstudio.com/",
+            "GitHub Student Developer Pack: https://education.github.com/pack"
+        ];
+
+        const aiTips = [
+            "Ask for code explanations to deepen your understanding",
+            "Use AI to brainstorm project ideas and features",
+            "Get help with debugging by providing error messages and relevant code",
+            "Request best practices for specific Django or Flask features",
+            "Use AI for code reviews and suggestions for improvement",
+            "Ask for help with writing clear and concise documentation",
+            "Generate test cases for your Django or Flask applications",
+            "Request a security audit of your code",
+            "Discuss performance optimization techniques for your web applications",
+            "Stay updated on the latest features and best practices in Django and Flask"
+        ];
+
+        const samplePrompts = [
+            "Explain this Django view code: [paste your code here]",
+            "What are some best practices for structuring a Flask application?",
+            "How can I optimize this database query: [paste your query here]",
+            "Can you help me debug this error: [paste error message and relevant code]",
+            "Suggest some features for a [describe your project] using Django",
+            "How can I implement user authentication in Flask?",
+            "What are the key differences between Django and Flask for [specific use case]?",
+            "Can you review this code and suggest improvements: [paste your code]",
+            "How do I set up a RESTful API using Django REST Framework?",
+            "What are some common security vulnerabilities I should look out for in my web application?"
+        ];
+
+        const projects = {
+            mini: [
+                "To-Do List application",
+                "Blog with comments",
+                "URL shortener",
+                "Weather app using an external API",
+                "Simple e-commerce product catalog"
+            ],
+            larger: [
+                "Social media platform",
+                "Project management tool",
+                "Online learning platform",
+                "Recipe sharing and meal planning application",
+                "Real-time chat application"
+            ]
+        };
+
+const projects = {
+            mini: [
+                "To-Do List application",
+                "Blog with comments",
+                "URL shortener",
+                "Weather app using an external API",
+                "Simple e-commerce product catalog"
+            ],
+            larger: [
+                "Social media platform",
+                "Project management tool",
+                "Online learning platform",
+                "Recipe sharing and meal planning application",
+                "Real-time chat application"
+            ]
+        };
+
+        // DOM elements
+        const dayLinks = document.getElementById('day-links');
+        const dayContent = document.getElementById('day-content');
+        const conceptList = document.getElementById('concept-list');
+        const conceptSearch = document.getElementById('concept-search');
+        const learningOutcomesTable = document.getElementById('learning-outcomes-table').getElementsByTagName('tbody')[0];
+        const resourceList = document.getElementById('resource-list');
+        const aiTipsList = document.getElementById('ai-tips');
+        const samplePromptsList = document.getElementById('sample-prompts');
+        const miniProjectsList = document.getElementById('mini-projects');
+        const largerProjectsList = document.getElementById('larger-projects');
+
+        // Navigation
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('.section');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = e.target.getAttribute('href').slice(1);
+                sections.forEach(section => section.classList.remove('active'));
+                document.getElementById(targetId).classList.add('active');
+            });
+        });
+
+        // Populate day links
+        days.forEach(day => {
+            const li = document.createElement('li');
+            li.innerHTML = `<a href="#" data-day="${day.id}">Day ${day.id}</a>`;
+            dayLinks.appendChild(li);
+        });
+
+        // Show day content
+        dayLinks.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (e.target.tagName === 'A') {
+                const dayId = e.target.getAttribute('data-day');
+                const day = days.find(d => d.id === parseInt(dayId));
+                dayContent.innerHTML = marked(day.content);
+                document.getElementById('daily-content').classList.add('active');
+                sections.forEach(section => {
+                    if (section.id !== 'daily-content') section.classList.remove('active');
+                });
+            }
+        });
+
+        // Populate concepts
+        function renderConcepts(conceptsToRender) {
+            conceptList.innerHTML = '';
+            conceptsToRender.forEach(concept => {
+                const div = document.createElement('div');
+                div.classList.add('concept');
+                if (concept.isImportant) div.classList.add('important');
+                if (concept.isFrequent) div.classList.add('frequent');
+                div.innerHTML = `
+                    <h3>${concept.name}</h3>
+                    <p>${concept.definition}</p>
+                `;
+                conceptList.appendChild(div);
+            });
+        }
+
+        renderConcepts(concepts);
+
+        // Concept search
+        conceptSearch.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredConcepts = concepts.filter(concept => 
+                concept.name.toLowerCase().includes(searchTerm) || 
+                concept.definition.toLowerCase().includes(searchTerm)
+            );
+            renderConcepts(filteredConcepts);
+        });
+
+        // Populate learning outcomes
+        learningOutcomes.forEach(outcome => {
+            const row = learningOutcomesTable.insertRow();
+            row.innerHTML = `
+                <td>${outcome.description}</td>
+                <td>${outcome.relatedConcepts.join(', ')}</td>
+                <td>${outcome.dayCovered}</td>
+                <td>${outcome.difficulty}</td>
+            `;
+        });
+
+        // Populate resources
+        resources.forEach(resource => {
+            const li = document.createElement('li');
+            li.innerHTML = resource;
+            resourceList.appendChild(li);
+        });
+
+        // Populate AI tips
+        aiTips.forEach(tip => {
+            const li = document.createElement('li');
+            li.textContent = tip;
+            aiTipsList.appendChild(li);
+        });
+
+        // Populate sample prompts
+        samplePrompts.forEach(prompt => {
+            const li = document.createElement('li');
+            li.textContent = prompt;
+            samplePromptsList.appendChild(li);
+        });
+
+        // Populate projects
+        projects.mini.forEach(project => {
+            const li = document.createElement('li');
+            li.textContent = project;
+            miniProjectsList.appendChild(li);
+        });
+
+        projects.larger.forEach(project => {
+            const li = document.createElement('li');
+            li.textContent = project;
+            largerProjectsList.appendChild(li);
+        });
+
+        // Dark mode toggle
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+        });
+    </script>
+</body>
+</html>
