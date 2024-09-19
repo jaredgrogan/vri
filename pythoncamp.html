@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Web Frameworks Bootcamp</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .container {
+            width: 90%;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px;
+        }
+        header {
+            background: #35424a;
+            color: #ffffff;
+            padding-top: 30px;
+            min-height: 70px;
+            border-bottom: #e8491d 3px solid;
+        }
+        header a {
+            color: #ffffff;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 16px;
+        }
+        header ul {
+            padding: 0;
+            list-style: none;
+        }
+        header li {
+            display: inline;
+            padding: 0 20px;
+        }
+        header #branding {
+            float: left;
+        }
+        header #branding h1 {
+            margin: 0;
+        }
+        header nav {
+            float: right;
+            margin-top: 10px;
+        }
+        .content {
+            padding: 20px;
+        }
+        .section {
+            display: none;
+        }
+        .active {
+            display: block;
+        }
+        .concept {
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #f4f4f4;
+            border-left: 5px solid #35424a;
+        }
+        .concept.important {
+            border-left-color: #e8491d;
+            font-weight: bold;
+        }
+        .concept.frequent {
+            border-left-color: #1de840;
+            font-style: italic;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        #dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px;
+            background: #35424a;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        .dark-mode {
+            background-color: #333;
+            color: #fff;
+        }
+        .dark-mode .concept {
+            background: #444;
+            color: #fff;
+        }
+        .dark-mode th, .dark-mode td {
+            border-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div id="branding">
+                <h1>Python Web Frameworks Bootcamp</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#home" class="nav-link">Home</a></li>
+                    <li><a href="#daily-content" class="nav-link">Daily Content</a></li>
+                    <li><a href="#concepts" class="nav-link">Concepts</a></li>
+                    <li><a href="#learning-outcomes" class="nav-link">Learning Outcomes</a></li>
+                    <li><a href="#resources" class="nav-link">Resources</a></li>
+                    <li><a href="#ai-integration" class="nav-link">AI Integration</a></li>
+                    <li><a href="#projects" class="nav-link">Projects</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <button id="dark-mode-toggle">Toggle Dark Mode</button>
+
+    <div class="container content">
+        <section id="home" class="section active">
+            <h2>Welcome to the Python Web Frameworks Bootcamp</h2>
+            <p>This 7-day intensive course focuses on Django and Flask, two popular Python web frameworks.</p>
+            <h3>Quick Navigation</h3>
+            <ul id="day-links"></ul>
+        </section>
+
+        <section id="daily-content" class="section">
+            <h2>Daily Content</h2>
+            <div id="day-content"></div>
+        </section>
+
+        <section id="concepts" class="section">
+            <h2>Key Concepts</h2>
+            <input type="text" id="concept-search" placeholder="Search concepts...">
+            <div id="concept-list"></div>
+        </section>
+
+        <section id="learning-outcomes" class="section">
+            <h2>Learning Outcomes</h2>
+            <table id="learning-outcomes-table">
+                <thead>
+                    <tr>
+                        <th>Outcome</th>
+                        <th>Related Concepts</th>
+                        <th>Day Covered</th>
+                        <th>Difficulty</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </section>
+
+        <section id="resources" class="section">
+            <h2>Resources</h2>
+            <ul id="resource-list"></ul>
+        </section>
+
+        <section id="ai-integration" class="section">
+            <h2>AI Integration</h2>
+            <p>Learn how to effectively use AI assistants like Claude or GPT-4 during the bootcamp:</p>
+            <ul id="ai-tips"></ul>
+            <h3>Sample Prompts</h3>
+            <ul id="sample-prompts"></ul>
+        </section>
+
+        <section id="projects" class="section">
+            <h2>Projects</h2>
+            <h3>Mini-Projects</h3>
+            <ul id="mini-projects"></ul>
+            <h3>Larger Projects</h3>
+            <ul id="larger-projects"></ul>
+        </section>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/2.0.3/marked.min.js"></script>
+    <script>
+        // Sample data (in a real application, this would be fetched from an API)
+        const days = [
+            { id: 1, content: "# Day 1: Introduction to Django\n\n- Setting up Django\n- Creating your first Django project\n- Understanding the MTV architecture" },
+            { id: 2, content: "# Day 2: Django Models and ORM\n\n- Creating Django models\n- Using the Django ORM\n- Database migrations" },
+            // Add content for days 3-7
+        ];
+
+        const concepts = [
+            { id: 1, name: "MVC/MVT Architecture", definition: "Design pattern that separates an application into Model (data), View (user interface), and Controller/Template (logic) components.", isImportant: true, isFrequent: true },
+            { id: 2, name: "ORM", definition: "Object-Relational Mapping: Technique that lets you query and manipulate data from a database using an object-oriented paradigm.", isImportant: true, isFrequent: true },
+            // Add more concepts
+        ];
+
+        const learningOutcomes = [
+            { id: 1, description: "Create a basic Django project structure", relatedConcepts: ["MVC/MVT Architecture", "ORM"], dayCovered: 1, difficulty: 2 },
+            { id: 2, description: "Implement CRUD operations using Django's ORM", relatedConcepts: ["ORM", "Database migrations"], dayCovered: 2, difficulty: 3 },
+            // Add more learning outcomes
+        ];
+
+        const resources = [
+            "Official Django Documentation",
+            "Official Flask Documentation",
+            "Django for Beginners (Book)",
+            "Flask Web Development (Book)",
+            // Add more resources
+        ];
+
+        const aiTips = [
+            "Ask for code explanations to deepen your understanding",
+            "Use AI to brainstorm project ideas and features",
+            "Get help with debugging by providing error messages and relevant code",
+            // Add more AI tips
+        ];
+
+        const samplePrompts = [
+            "Explain this Django view code: [paste your code here]",
+            "What are some best practices for structuring a Flask application?",
+            "How can I optimize this database query: [paste your query here]",
+            // Add more sample prompts
+        ];
+
+        const projects = {
+            mini: [
+                "To-Do List application",
+                "Blog with comments",
+                "Simple e-commerce site",
+                // Add more mini-projects
+            ],
+            larger: [
+                "Social media platform",
+                "Project management tool",
+                "Online learning platform",
+                // Add more larger projects
+            ]
+        };
+
+        // DOM elements
+        const dayLinks = document.getElementById('day-links');
+        const dayContent = document.getElementById('day-content');
+        const conceptList = document.getElementById('concept-list');
+        const conceptSearch = document.getElementById('concept-search');
+        const learningOutcomesTable = document.getElementById('learning-outcomes-table').getElementsByTagName('tbody')[0];
+        const resourceList = document.getElementById('resource-list');
+        const aiTipsList = document.getElementById('ai-tips');
+        const samplePromptsList = document.getElementById('sample-prompts');
+        const miniProjectsList = document.getElementById('mini-projects');
+        const largerProjectsList = document.getElementById('larger-projects');
+
+        // Navigation
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('.section');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = e.target.getAttribute('href').slice(1);
+                sections.forEach(section => section.classList.remove('active'));
+                document.getElementById(targetId).classList.add('active');
+            });
+        });
+
+        // Populate day links
+        days.forEach(day => {
+            const li = document.createElement('li');
+            li.innerHTML = `<a href="#" data-day="${day.id}">Day ${day.id}</a>`;
+            dayLinks.appendChild(li);
+        });
+
+        // Show day content
+        dayLinks.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (e.target.tagName === 'A') {
+                const dayId = e.target.getAttribute('data-day');
+                const day = days.find(d => d.id === parseInt(dayId));
+                dayContent.innerHTML = marked(day.content);
+                document.getElementById('daily-content').classList.add('active');
+                sections.forEach(section => {
+                    if (section.id !== 'daily-content') section.classList.remove('active');
+                });
+            }
+        });
+
+        // Populate concepts
+        function renderConcepts(conceptsToRender) {
+            conceptList.innerHTML = '';
+            conceptsToRender.forEach(concept => {
+                const div = document.createElement('div');
+                div.classList.add('concept');
+                if (concept.isImportant) div.classList.add('important');
+                if (concept.isFrequent) div.classList.add('frequent');
+                div.innerHTML = `
+                    <h3>${concept.name}</h3>
+                    <p>${concept.definition}</p>
+                `;
+                conceptList.appendChild(div);
+            });
+        }
+
+        renderConcepts(concepts);
+
+        // Concept search
+        conceptSearch.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredConcepts = concepts.filter(concept => 
+                concept.name.toLowerCase().includes(searchTerm) || 
+                concept.definition.toLowerCase().includes(searchTerm)
+            );
+            renderConcepts(filteredConcepts);
+        });
+
+        // Populate learning outcomes
+        learningOutcomes.forEach(outcome => {
+            const row = learningOutcomesTable.insertRow();
+            row.innerHTML = `
+                <td>${outcome.description}</td>
+                <td>${outcome.relatedConcepts.join(', ')}</td>
+                <td>${outcome.dayCovered}</td>
+                <td>${outcome.difficulty}</td>
+            `;
+        });
+
+        // Populate resources
+        resources.forEach(resource => {
+            const li = document.createElement('li');
+            li.textContent = resource;
+            resourceList.appendChild(li);
+        });
+
+        // Populate AI tips
+        aiTips.forEach(tip => {
+            const li = document.createElement('li');
+            li.textContent = tip;
+            aiTipsList.appendChild(li);
+        });
+
+        // Populate sample prompts
+        samplePrompts.forEach(prompt => {
+            const li = document.createElement('li');
+            li.textContent = prompt;
+            samplePromptsList.appendChild(li);
+        });
+
+        // Populate projects
+        projects.mini.forEach(project => {
+            const li = document.createElement('li');
+            li.textContent = project;
+            miniProjectsList.appendChild(li);
+        });
+
+        projects.larger.forEach(project => {
+            const li = document.createElement('li');
+            li.textContent = project;
+            largerProjectsList.appendChild(li);
+        });
+
+        // Dark mode toggle
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+        });
+    </script>
+</body>
+</html>
