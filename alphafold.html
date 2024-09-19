@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alpha Code Visualization</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #ffffff, #f0f0f0);
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .nav {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        .nav a {
+            margin: 0 15px;
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .visualization {
+            height: 400px;
+            background: #fff;
+            border-radius: 10px;
+        }
+        .code-editor {
+            height: 400px;
+            background: #f8f8f8;
+            border-radius: 10px;
+            padding: 10px;
+        }
+        .ai-interface {
+            margin-top: 30px;
+        }
+        .ai-interface input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .ai-interface button {
+            background: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header glass-card">
+            <h1>Alpha Code Visualization</h1>
+            <p>Explore, Learn, and Visualize with AI-Powered Alpha Code</p>
+        </header>
+        
+        <nav class="nav glass-card">
+            <a href="#playground">Playground</a>
+            <a href="#learn">Learn</a>
+            <a href="#gallery">Gallery</a>
+            <a href="#community">Community</a>
+        </nav>
+        
+        <main class="main-content">
+            <section class="visualization glass-card">
+                <!-- Placeholder for visualization -->
+                <img src="/api/placeholder/400/320" alt="Visualization Placeholder" />
+            </section>
+            
+            <section class="code-editor glass-card">
+                <!-- Placeholder for code editor -->
+                <p>Code Editor</p>
+            </section>
+        </main>
+        
+        <section class="ai-interface glass-card">
+            <h2>AI Assistant</h2>
+            <input type="text" placeholder="Ask a question or request code...">
+            <button>Generate</button>
+        </section>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <!-- Add your custom scripts here -->
+</body>
+</html>
