@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OneThreeSeven (137) - Investor Prospectus</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #6e8efb, #a777e3);
+            --secondary-gradient: linear-gradient(135deg, #84fab0, #8fd3f4);
+        }
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            scroll-behavior: smooth;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background: var(--primary-gradient);
+            padding: 20px 0;
+            text-align: center;
+            color: white;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        nav {
+            background-color: #2c3e50;
+            color: white;
+            padding: 10px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+        nav ul li {
+            margin: 0 15px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        nav ul li a:hover {
+            color: #3498db;
+        }
+        section {
+            margin: 40px 0;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .highlight {
+            background: var(--secondary-gradient);
+            color: #333;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .advisor {
+            margin-bottom: 20px;
+        }
+        .advisor h3 {
+            margin-bottom: 5px;
+        }
+        .advisor p {
+            margin-top: 0;
+            color: #666;
+        }
+        #team, #advisors {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        .team-member, .advisor {
+            flex-basis: 48%;
+            margin-bottom: 20px;
+        }
+        @media (max-width: 768px) {
+            .team-member, .advisor {
+                flex-basis: 100%;
+            }
+        }
+        .spotlight {
+            background: var(--secondary-gradient);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 40px;
+        }
+        .spotlight h3 {
+            color: #2c3e50;
+        }
+        #darkModeToggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>OneThreeSeven (137)</h1>
+            <p>Revolutionizing Computation Across Industries</p>
+        </div>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#technology">Technology</a></li>
+            <li><a href="#market">Market</a></li>
+            <li><a href="#products">Products</a></li>
+            <li><a href="#financials">Financials</a></li>
+            <li><a href="#team">Team</a></li>
+            <li><a href="#advisors">Advisors</a></li>
+            <li><a href="#investment">Investment</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <section id="overview">
+            <h2>Company Overview</h2>
+            <p>OneThreeSeven (137) was founded in 2024 by Jared James Grogan to commercialize the groundbreaking, patent-pending A-A-B gate technology. Our mission is to revolutionize computation across multiple industries, from AI and semiconductors to energy systems and beyond.</p>
+            <h3>Key Highlights:</h3>
+            <ul>
+                <li>Disruptive, patent-pending technology with applications across multiple high-growth industries</li>
+                <li>Potential market size exceeding <span class="highlight">$3 trillion by 2030</span></li>
+                <li>Strong IP portfolio with patent-pending status</li>
+                <li>Multiple revenue streams including licensing, product sales, and consulting</li>
+                <li>Projected to reach unicorn status within 3-4 years</li>
+            </ul>
+        </section>
+
+        <section id="technology">
+            <h2>The Technology</h2>
+            <p>The patent-pending A-A-B gate is a novel computational logic gate that utilizes harmonic symmetry in event sequencing, based on the golden ratio. This approach enables:</p>
+            <ul>
+                <li>Enhanced processing efficiency</li>
+                <li>Reduced energy consumption</li>
+                <li>Improved scalability in distributed systems</li>
+                <li>Compatibility with emerging optical and photonic computing paradigms</li>
+            </ul>
+            <h3>Key Applications:</h3>
+            <ol>
+                <li>AI Acceleration (Full Stack)</li>
+                <li>High-Precision Oscillators</li>
+                <li>Smart Grid Optimization</li>
+                <li>Edge AI</li>
+                <li>Quantum Computing</li>
+                <li>Robotics</li>
+                <li>Electric Vehicles</li>
+                <li>Virtual Reality</li>
+                <li>Optical and Photonic Computing</li>
+                <li>Metaverse NPCs</li>
+                <li>Ultra-High Resolution Imaging</li>
+                <li>Satellite Communications</li>
+                <li>Space-Based Data Centers</li>
+            </ol>
+        </section>
+
+        <section id="market">
+            <h2>Market Opportunity</h2>
+            <p>Our patent-pending technology addresses multiple high-growth markets:</p>
+            <canvas id="marketChart" width="400" height="200"></canvas>
+        </section>
+
+        <section id="products">
+            <h2>Product Portfolio</h2>
+            <ol>
+                <li>AI Accelerator Chips</li>
+                <li>High-Precision Oscillators</li>
+                <li>Smart Grid Optimization Systems</li>
+                <li>Edge AI Devices</li>
+                <li>Quantum Computing Modules</li>
+                <li>Robotics Control Systems</li>
+                <li>EV Intelligent Systems</li>
+                <li>VR Processing Units</li>
+                <li>Optical Computing Modules</li>
+                <li>Metaverse NPC Engine</li>
+                <li>Ultra-High Resolution Imaging Systems</li>
+                <li>Satellite Communication Processors</li>
+                <li>Space-Optimized Data Center Components</li>
+            </ol>
+        </section>
+
+        <section id="financials">
+            <h2>Financial Projections</h2>
+            <canvas id="financialChart" width="400" height="200"></canvas>
+        </section>
+
+        <section id="team">
+            <h2>Team</h2>
+            <div class="team-member">
+                <h3>Jared James Grogan</h3>
+                <p>Founder & CEO</p>
+                <p>Visionary technologist and industry leader</p>
+            </div>
+        </section>
+
+        <section id="advisors">
+            <h2>Advisory Board</h2>
+            <!-- Advisors list here -->
+        </section>
+
+        <section id="investment">
+            <h2>Investment Opportunity</h2>
+            <p>We are raising a <span class="highlight">$60 million seed round</span> to accelerate our growth:</p>
+            <h3>Use of Funds:</h3>
+            <ul>
+                <li>R&D and Prototyping: 50%</li>
+                <li>Team Expansion: 25%</li>
+                <li>Patent Portfolio Expansion: 15%</li>
+                <li>Marketing and Business Development: 10%</li>
+            </ul>
+            <h3>Investment Terms:</h3>
+            <ul>
+                <li>Preferred Shares with 1x liquidation preference</li>
+                <li>20% equity offered</li>
+                <li>$300 million post-money valuation</li>
+            </ul>
+            <h3>Future Funding:</h3>
+            <p>Series A of $200-250 million projected for Q2 2026</p>
+            <h3>Exit Opportunities:</h3>
+            <ul>
+                <li>IPO targeted within 5-7 years</li>
+                <li>Potential acquisition by major tech companies (estimated value $20-25 billion by 2030)</li>
+            </ul>
+        </section>
+
+        <section id="spotlight-ai" class="spotlight">
+            <h3>Spotlight: AI Efficiency and Applications</h3>
+            <p>Our A-A-B gate technology revolutionizes AI across the full stack, from hardware acceleration to novel algorithm design. It enables more efficient training of large language models, supports post-transformer architectures, and enhances data compression and clustering in vector spaces. The impact extends to AI data centers, potentially reducing energy consumption by up to 40% while increasing processing speed by 50%.</p>
+        </section>
+
+        <section id="spotlight-semiconductor" class="spotlight">
+            <h3>Spotlight: Semiconductor Applications</h3>
+            <p>In the semiconductor industry, A-A-B gates promise to overcome current limitations in CMOS technology. Our approach could lead to more energy-efficient chips, potentially extending Moore's Law and enabling new paradigms in computer architecture.</p>
+        </section>
+
+        <section id="spotlight-oscillators" class="spotlight">
+            <h3>Spotlight: Oscillators</h3>
+            <p>Our high-precision oscillators, built on A-A-B gate technology, offer unprecedented stability and accuracy. This has far-reaching implications for telecommunications, GPS systems, and quantum computing, where precise timing is crucial.</p>
+        </section>
+
+        <section id="spotlight-wireless" class="spotlight">
+            <h3>Spotlight: Wireless Communications</h3>
+            <p>In the realm of wireless communications, A-A-B gates enable more efficient signal processing and could be pivotal in the development of 6G technologies. Our technology also shows promise for satellite internet, potentially revolutionizing global connectivity.</p>
+        </section>
+
+        <section id="spotlight-blockchain" class="spotlight">
+            <h3>Spotlight: Blockchain</h3>
+            <p>For blockchain technologies, A-A-B gates could significantly improve transaction processing speeds and reduce energy consumption in mining operations. This could address key scalability and sustainability challenges facing the crypto industry.</p>
+        </section>
+
+        <section id="spotlight-energy" class="spotlight">
+            <h3>Spotlight: Energy Systems</h3>
+            <p>In energy systems, our technology enables more efficient grid management, better integration of renewable energy sources, and improved energy storage solutions. This could play a crucial role in the global transition to sustainable energy.</p>
+        </section>
+
+        <section id="spotlight-robotics" class="spotlight">
+            <h3>Spotlight: Robotics</h3>
+            <p>A-A-B gates in robotics allow for more sophisticated control systems, enabling robots to make faster, more nuanced decisions. This has applications in industrial automation, autonomous vehicles, and even space exploration.</p>
+        </section>
+
+        <section id="spotlight-vr" class="spotlight">
+            <h3>Spotlight: Virtual Reality</h3>
+            <p>Our technology promises to enhance VR experiences by enabling more realistic physics simulations, faster rendering, and more responsive environments. This could revolutionize gaming, training simulations, and virtual collaboration tools.</p>
+        </section>
+
+        <section id="spotlight-entertainment" class="spotlight">
+            <h3>Spotlight: Entertainment</h3>
+            <p>In the entertainment industry, A-A-B gates could enable new forms of interactive media, more sophisticated NPCs in games, and enhanced special effects in film and television production.</p>
+        </section>
+
+        <section id="spotlight-cybersecurity" class="spotlight">
+            <h3>Spotlight: Cybersecurity</h3>
+            <p>For cybersecurity, our technology offers potential advancements in encryption methods, faster threat detection, and more robust network defense systems. This could be crucial in addressing evolving cybersecurity challenges.</p>
+        </section>
+
+        <section id="spotlight-imaging" class="spotlight">
+            <h3>Spotlight: Imaging and Ultra-High Resolution Capture</h3>
+            <p>A-A-B gate technology enables breakthroughs in image processing, supporting ultra-high resolution capture of 2D and 3D images. This has applications in medical imaging, scientific research, and next-generation display technologies.</p>
+        </section>
+
+        <section id="spotlight-satellite" class="spotlight">
+            <h3>Spotlight: Satellite Communications and Space-Based Data Centers</h3>
+            <p>Our technology shows promise for enhancing satellite internet capabilities through advanced signal processing. Additionally, it could enable more efficient, cold-environment optimized data centers in space, potentially revolutionizing data storage and processing capabilities.</p>
+        </section>
+
+        <section id="customer-segments">
+            <h2>Customer Segments</h2>
+            <ul>
+                <li>AI and Machine Learning Companies</li>
+                <li>Semiconductor Manufacturers</li>
+                <li>Telecommunications Providers</li>
+                <li>Energy Companies and Utilities</li>
+                <li>Robotics and Automation Firms</li>
+                <li>Virtual Reality and Gaming Companies</li>
+                <li>Blockchain and Cryptocurrency Enterprises</li>
+                <li>Aerospace and Defense Contractors</li>
+                <li>Research Institutions and Universities</li>
+                <li>Government Agencies (DoD, NASA, etc.)</li>
+            </ul>
+        </section>
+
+      <section id="non-dilutive-funding">
+            <h2>Non-Dilutive Funding Strategy</h2>
+            <ol>
+                <li>Government Grants: Apply for SBIR/STTR grants from agencies like NSF, DOE, and DARPA</li>
+                <li>Research Partnerships: Collaborate with universities to access academic funding</li>
+                <li>Corporate Sponsorships: Secure funding from industry partners for specific R&D projects</li>
+                <li>Technology Licensing: Generate revenue through early-stage licensing of A-A-B gate technology</li>
+                <li>State-Level Innovation Funds: Pursue funding from state-level technology investment programs</li>
+            </ol>
+            <p>While these sources may be smaller compared to equity funding, they provide valuable capital without dilution and can validate our technology to future investors.</p>
+        </section>
+
+        <section id="industry-verticals">
+            <h2>Industry Verticals</h2>
+            <p>OneThreeSeven (137) is positioned to impact multiple industry verticals with our A-A-B gate technology:</p>
+            <ul>
+                <li>Artificial Intelligence and Machine Learning</li>
+                <li>Semiconductor Manufacturing</li>
+                <li>Telecommunications and Wireless Communications</li>
+                <li>Energy and Smart Grid Systems</li>
+                <li>Quantum Computing</li>
+                <li>Robotics and Automation</li>
+                <li>Virtual and Augmented Reality</li>
+                <li>Blockchain and Cryptocurrency</li>
+                <li>Aerospace and Defense</li>
+                <li>Healthcare and Medical Imaging</li>
+            </ul>
+            <p>Our full-stack approach allows us to provide solutions from hardware components to software implementations, maximizing the impact across these verticals.</p>
+        </section>
+
+        <section id="academic-research">
+            <h2>Academic and Research Partnerships</h2>
+            <p>We are committed to advancing the theoretical foundations and practical applications of A-A-B gate technology through collaborations with leading academic institutions. Our strategy includes:</p>
+            <ul>
+                <li>Establishing research partnerships with top universities in computer science, electrical engineering, and physics</li>
+                <li>Sponsoring PhD programs and post-doctoral research in A-A-B gate applications</li>
+                <li>Participating in academic conferences and publishing research findings</li>
+                <li>Creating an academic advisory board to guide our research initiatives</li>
+            </ul>
+        </section>
+
+        <section id="government-engagement">
+            <h2>Government Engagement</h2>
+            <p>OneThreeSeven (137) is actively engaging with government agencies to explore applications of A-A-B gate technology in areas of national interest:</p>
+            <ul>
+                <li>Department of Defense: Advanced computing for defense applications</li>
+                <li>Department of Energy: Next-generation energy grid optimization</li>
+                <li>NASA: Space-based computing and communications</li>
+                <li>NIST: Standards development for new computing paradigms</li>
+            </ul>
+        </section>
+
+        <section id="multi-state-plan">
+            <h2>Multi-State Engagement Plan</h2>
+            <p>To maximize our impact and access diverse talent pools, we plan to establish presence in multiple states:</p>
+            <ul>
+                <li>California: AI and semiconductor industry partnerships</li>
+                <li>New York: Financial technology applications and East Coast headquarters</li>
+                <li>Texas: Energy sector applications and talent acquisition</li>
+                <li>Massachusetts: Academic partnerships and biotech applications</li>
+            </ul>
+        </section>
+
+        <section id="nonprofit-institute">
+            <h2>Non-Profit R&D Institute</h2>
+            <p>We are planning to establish a parallel non-profit R&D institute in New York State. This institute will:</p>
+            <ul>
+                <li>Focus on fundamental research in A-A-B gate technology</li>
+                <li>Collaborate with academic institutions and government research labs</li>
+                <li>Provide a platform for open-source development of A-A-B gate applications</li>
+                <li>Serve as a talent pipeline for our commercial operations</li>
+            </ul>
+        </section>
+
+        <section id="advisory-board-evaluation">
+            <h2>Advisory Board Evaluation</h2>
+            <p>Our advisory board is ranked 92/99 for our task, demonstrating exceptional fit and function. Key strengths include:</p>
+            <ul>
+                <li>Diverse industry experience covering AI, semiconductors, telecommunications, and more</li>
+                <li>Strong academic connections to support research initiatives</li>
+                <li>Expertise in scaling technology startups and navigating regulatory landscapes</li>
+            </ul>
+            <p>Suggested focus areas for advisory board members:</p>
+            <ul>
+                <li>Arthur Morrish: Defense and aerospace applications</li>
+                <li>Emmett Shear: AI and machine learning strategy</li>
+                <li>Clem Delangue: NLP and LLM applications</li>
+                <li>Tanveer Makhani: Educational technology applications</li>
+                <li>Charlie Muirhead: Industry networking and partnerships</li>
+                <li>Raj Verma: Database and data center optimizations</li>
+                <li>Tom Plummer: Robotics and autonomous systems</li>
+                <li>Glen Muzyka: Semiconductor manufacturing insights</li>
+                <li>Alexander Schafgans: Advanced lithography and chip design</li>
+                <li>Terry Sejnowski: Neuroscience-inspired computing</li>
+                <li>Panos Kanelos: Academic partnerships and talent acquisition</li>
+                <li>Jeff Herbst: Venture capital strategy and financial planning</li>
+            </ul>
+        </section>
+
+        <section id="a-a-b-gate-applications">
+            <h2>A-A-B Gate Applications</h2>
+            <p>Our A-A-B gate technology has far-reaching implications across multiple domains:</p>
+            <ul>
+                <li>AI Acceleration: Full-stack solutions from hardware to software, including new reinforcement learning models, quantitative AI, post-transformer architectures, and AGI development</li>
+                <li>Data Centers: Significant improvements in energy efficiency and processing speed</li>
+                <li>CMOS Technology: Potential to extend Moore's Law and enable new chip designs</li>
+                <li>Machine Code: Exploring the possibility of A-A-B gate-based machine code for optimized low-level operations</li>
+                <li>Imaging and 3D Capture: Ultra-high resolution image processing and 3D reconstruction</li>
+                <li>Satellite Communications: Enhanced signal processing for improved global connectivity</li>
+                <li>Space-Based Computing: Optimized data centers for cold, space environments</li>
+            </ul>
+        </section>
+    </div>
+
+    <script>
+        // JavaScript for animations, dark mode toggle, and charts
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Intersection Observer for fade-in effect
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            });
+
+            document.querySelectorAll('section').forEach(section => {
+                observer.observe(section);
+            });
+
+            // Dark mode toggle
+            const darkModeToggle = document.createElement('button');
+            darkModeToggle.innerText = '🌓';
+            darkModeToggle.id = 'darkModeToggle';
+            document.body.appendChild(darkModeToggle);
+
+            darkModeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+            });
+
+            // Charts
+            const ctx = document.getElementById('marketChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['AI Hardware', 'Telecom', 'Smart Grid', 'Quantum', 'Edge AI', 'Robotics', 'EV', 'VR', 'Optical', 'Metaverse'],
+                    datasets: [{
+                        label: 'Market Size (Billion $)',
+                        data: [125, 538, 103, 65, 38, 260, 957, 92, 394, 800],
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                        borderColor: 'rgb(54, 162, 235)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            const ctxFinancial = document.getElementById('financialChart').getContext('2d');
+            new Chart(ctxFinancial, {
+                type: 'line',
+                data: {
+                    labels: ['2025', '2026', '2027', '2028', '2029'],
+                    datasets: [{
+                        label: 'Revenue ($ millions)',
+                        data: [25, 85, 225, 550, 1350],
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }, {
+                        label: 'EBITDA ($ millions)',
+                        data: [-27.5, -10, 45, 130, 350],
+                        borderColor: 'rgb(255, 99, 132)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
