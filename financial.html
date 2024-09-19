@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anomaly Detector</title>
+  <style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #fafafa;
+    }
+    
+    header {
+      text-align: center;
+      padding: 20px;
+    }
+    
+    .container {
+      width: 80%;
+      margin: 0 auto;
+    }
+    
+    #analysis-form {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    #analysis-form label {
+      margin-bottom: 5px;
+    }
+    
+    #analysis-form select,
+    #analysis-form button {
+      margin-bottom: 15px;
+    }
+    
+    #analyzeButton {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+    }
+    
+    #analyzeButton:hover {
+      background-color: #0056b3;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Anomaly Detector</h1>
+  </header>
+  <main>
+    <div class="container">
+      <form id="analysis-form">
+        <label for="asset-select">Select an Asset:</label>
+        <select id="asset-select">
+          <option value="asset1">Asset 1</option>
+          <option value="asset2">Asset 2</option>
+          <option value="asset3">Asset 3</option>
+        </select>
+        <button id="analyzeButton" type="button">Analyze</button>
+      </form>
+      <canvas id="resultChart"></canvas>
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    document.getElementById('analyzeButton').addEventListener('click', function() {
+      const ctx = document.getElementById('resultChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+          datasets: [{
+            label: 'Anomaly Detection',
+            data: [12, 19, 3, 5, 2, 3],
+            backgroundColor: 'rgba(0, 123, 255, 0.2)',
+            borderColor: 'rgba(0, 123, 255, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
