@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Herakles AI Chat</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: white;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Chat Console */
+        .chat-console {
+            position: fixed;
+            bottom: 120px; /* 100px above AI button */
+            right: 20px;
+            width: 370px;
+            height: 400px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(90deg, #3F00FF, #4B0082); /* Indigo Theme */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            font-family: 'Berkeley Mono', monospace;
+        }
+
+        .chat-header {
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 0 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+        }
+
+        .chat-header button {
+            background: #800080;
+            border: none;
+            color: #f0e0ff;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .chat-body {
+            flex-grow: 1;
+            padding: 10px;
+            overflow-y: auto;
+            color: white;
+        }
+
+        .chat-bubble {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 8px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .chat-input input {
+            flex-grow: 1;
+            border: none;
+            padding: 8px;
+            margin-right: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .chat-input button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        .paperclip-icon {
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .paperclip-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+
+        /* Mic Icon */
+        .mic-icon {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .mic-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+
+        /* Send Icon */
+        .send-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+
+        /* Chat Toggle Button */
+        .chat-toggle {
+            position: fixed;
+            bottom: 10px;
+            right: 20px;
+            background: white;
+            border-radius: 50%;
+            border: 3px solid black;
+            width: 75px; /* 50% larger */
+            height: 75px; /* 50% larger */
+            cursor: pointer;
+            font-size: 30px; /* 50% larger */
+            color: black;
+            font-family: "Courier New", monospace;
+            font-weight: bold;
+            text-align: center;
+            line-height: 75px; /* Centering */
+        }
+    </style>
+</head>
+<body>
+
+<!-- Chat Console -->
+<div class="chat-console" id="chatConsole" style="display: none;">
+    <div class="chat-header">
+        <span>Herakles AI</span>
+        <button id="closeChat">×</button>
+    </div>
+    <div class="chat-body" id="chatBody">
+        <div class="chat-bubble" id="heraklesGreeting">Hi, I'm your Cognitive Computer – Herakles. What's your name?</div>
+    </div>
+    <div class="chat-input">
+        <div class="paperclip-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M21.58 12.58l-9-9a6.53 6.53 0 00-9.19 9.19l1.2 1.2a.75.75 0 001.06-1.06l-1.2-1.2a5 5 0 017.08-7.08l9 9a5 5 0 01-7.08 7.08l-4.94-4.94a2.5 2.5 0 013.53-3.53l.88.88a.75.75 0 001.06-1.06l-.88-.88a4 4 0 00-5.65 5.65l4.94 4.94a6.5 6.5 0 009.19-9.19z"/>
+            </svg>
+        </div>
+        <div class="mic-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M12 1C10.34 1 9 2.34 9 4V12C9 13.66 10.34 15 12 15C13.66 15 15 13.66 15 12V4C15 2.34 13.66 1 12 1M19 10V12C19 15.31 16.31 18 13 18H11C7.69 18 5 15.31 5 12V10H3V12C3 16.42 6.58 20 11 20V23H13V20C17.42 20 21 16.42 21 12V10H19Z"/>
+            </svg>
+        </div>
+        <input type="text" id="userInput" placeholder="Type here...">
+        <div class="send-icon">
+            <button id="sendMessage">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M2 21l21-9-21-9v7l15 2-15 2v7z"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Chat Toggle Button -->
+<button class="chat-toggle" id="chatToggle"><b>AI</b></button>
+
+<script>
+    const chatConsole = document.getElementById('chatConsole');
+    const chatToggle = document.getElementById('chatToggle');
+    const closeChat = document.getElementById('closeChat');
+    const sendMessage = document.getElementById('sendMessage');
+    const chatBody = document.getElementById('chatBody');
+    const userInput = document.getElementById('userInput');
+
+    let currentStep = 'askName';
+    let userName = '';
+    let userEmail = '';
+
+    // Toggle Chat Console
+    chatToggle.addEventListener('click', () => {
+        chatConsole.style.display = 'flex';
+    });
+
+    // Close Chat Console
+    closeChat.addEventListener('click', () => {
+        chatConsole.style.display = 'none';
+    });
+
+    // Send Message Interaction
+    sendMessage.addEventListener('click', () => {
+        const message = userInput.value.trim();
+        if (message) {
+            const userMessage = document.createElement('div');
+            userMessage.classList.add('chat-bubble');
+            userMessage.textContent = message;
+            chatBody.appendChild(userMessage);
+            userInput.value = '';
+
+            // Interaction flow based on current step
+            if (currentStep === 'askName') {
+                userName = message;
+                const heraklesReply = document.createElement('div');
+                heraklesReply.classList.add('chat-bubble');
+                heraklesReply.textContent = `Welcome to Universitas, ${userName}. Let's get started! What's your email?`;
+                chatBody.appendChild(heraklesReply);
+                currentStep = 'askEmail';
+            } else if (currentStep === 'askEmail') {
+                userEmail = message;
+                const heraklesReply = document.createElement('div');
+                heraklesReply.classList.add('chat-bubble');
+                heraklesReply.textContent = `Thanks, ${userName}. We'll keep your email on file: ${userEmail}`;
+                chatBody.appendChild(heraklesReply);
+
+                // Here, you would send userName and userEmail to your CRM system.
+                console.log(`Name: ${userName}, Email: ${userEmail}`);
+
+                // Reset to the initial state or close the chat after interaction
+                currentStep = 'askName'; // Reset the interaction
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
