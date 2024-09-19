@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat Console - Indigo Theme</title>
+    <title>Chat Console Interaction</title>
     <style>
         body {
             margin: 0;
@@ -25,6 +25,7 @@
             background: linear-gradient(90deg, #3F00FF, #4B0082); /* Indigo Theme */
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             overflow: hidden;
+            font-family: 'Berkeley Mono', monospace;
         }
 
         .chat-header {
@@ -37,10 +38,26 @@
             color: white;
         }
 
+        .chat-header button {
+            background: #800080;
+            border: none;
+            color: #f0e0ff;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
         .chat-body {
             flex-grow: 1;
             padding: 10px;
             overflow-y: auto;
+            color: white;
+        }
+
+        .chat-bubble {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 8px;
+            border-radius: 10px;
+            margin-bottom: 10px;
             color: white;
         }
 
@@ -66,18 +83,31 @@
             cursor: pointer;
         }
 
+        .paperclip-icon {
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .paperclip-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+
+        /* Chat Toggle Button */
         .chat-toggle {
             position: fixed;
             bottom: 10px;
             right: 20px;
             background: white;
             border-radius: 50%;
-            border: none;
+            border: 3px solid black;
             width: 50px;
             height: 50px;
             cursor: pointer;
             font-size: 20px;
             color: black;
+            font-family: "Courier New", monospace;
         }
     </style>
 </head>
@@ -89,9 +119,16 @@
         <span>Herakles AI</span>
         <button id="closeChat">×</button>
     </div>
-    <div class="chat-body" id="chatBody"></div>
+    <div class="chat-body" id="chatBody">
+        <div class="chat-bubble" id="heraklesGreeting">Hi, I'm Herakles -- your Cognitive Computer. What's your name?</div>
+    </div>
     <div class="chat-input">
-        <input type="text" id="userInput" placeholder="Ask Herakles...">
+        <div class="paperclip-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M21.58 12.58l-9-9a6.53 6.53 0 00-9.19 9.19l1.2 1.2a.75.75 0 001.06-1.06l-1.2-1.2a5 5 0 017.08-7.08l9 9a5 5 0 01-7.08 7.08l-4.94-4.94a2.5 2.5 0 013.53-3.53l.88.88a.75.75 0 001.06-1.06l-.88-.88a4 4 0 00-5.65 5.65l4.94 4.94a6.5 6.5 0 009.19-9.19z"/>
+            </svg>
+        </div>
+        <input type="text" id="userInput" placeholder="Type here...">
         <button id="sendMessage">Send</button>
     </div>
 </div>
@@ -107,6 +144,10 @@
     const chatBody = document.getElementById('chatBody');
     const userInput = document.getElementById('userInput');
 
+    let currentStep = 'askName';
+    let userName = '';
+    let userEmail = '';
+
     // Toggle Chat Console
     chatToggle.addEventListener('click', () => {
         chatConsole.style.display = 'flex';
@@ -117,14 +158,37 @@
         chatConsole.style.display = 'none';
     });
 
-    // Send Message
+    // Send Message Interaction
     sendMessage.addEventListener('click', () => {
         const message = userInput.value.trim();
         if (message) {
             const userMessage = document.createElement('div');
+            userMessage.classList.add('chat-bubble');
             userMessage.textContent = message;
             chatBody.appendChild(userMessage);
             userInput.value = '';
+
+            // Interaction flow based on current step
+            if (currentStep === 'askName') {
+                userName = message;
+                const heraklesReply = document.createElement('div');
+                heraklesReply.classList.add('chat-bubble');
+                heraklesReply.textContent = `Welcome to Universitas, ${userName}. Let's get started! What's your email?`;
+                chatBody.appendChild(heraklesReply);
+                currentStep = 'askEmail';
+            } else if (currentStep === 'askEmail') {
+                userEmail = message;
+                const heraklesReply = document.createElement('div');
+                heraklesReply.classList.add('chat-bubble');
+                heraklesReply.textContent = `Thanks, ${userName}. We'll keep your email on file: ${userEmail}`;
+                chatBody.appendChild(heraklesReply);
+
+                // Here, you would send userName and userEmail to your CRM system.
+                console.log(`Name: ${userName}, Email: ${userEmail}`);
+
+                // Reset to the initial state or close the chat after interaction
+                currentStep = 'askName'; // Reset the interaction
+            }
         }
     });
 </script>
