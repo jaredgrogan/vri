@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat Console Interaction</title>
+    <title>Herakles AI Chat</title>
     <style>
         body {
             margin: 0;
@@ -15,7 +15,7 @@
         /* Chat Console */
         .chat-console {
             position: fixed;
-            bottom: 20px;
+            bottom: 120px; /* 100px above AI button */
             right: 20px;
             width: 370px;
             height: 400px;
@@ -108,6 +108,9 @@
             font-size: 20px;
             color: black;
             font-family: "Courier New", monospace;
+            font-weight: bold; /* Bold AI */
+            text-align: center;
+            line-height: 50px;
         }
     </style>
 </head>
@@ -120,7 +123,7 @@
         <button id="closeChat">×</button>
     </div>
     <div class="chat-body" id="chatBody">
-        <div class="chat-bubble" id="heraklesGreeting">Hi, I'm Herakles -- your Cognitive Computer. What's your name?</div>
+        <div class="chat-bubble" id="heraklesGreeting">Hi, I'm your Cognitive Computer – Herakles. What's your name?</div>
     </div>
     <div class="chat-input">
         <div class="paperclip-icon">
@@ -134,7 +137,7 @@
 </div>
 
 <!-- Chat Toggle Button -->
-<button class="chat-toggle" id="chatToggle">AI</button>
+<button class="chat-toggle" id="chatToggle"><b>AI</b></button>
 
 <script>
     const chatConsole = document.getElementById('chatConsole');
