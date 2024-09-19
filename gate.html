@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A-A-B Gate Visualization</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin: 0; padding: 0; background-color: #f4f4f4; }
+        .container { padding: 20px; }
+        #result { margin: 20px; padding: 20px; font-size: 20px; background-color: #fff; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        button { padding: 10px 20px; font-size: 16px; border: none; border-radius: 5px; background-color: #4CAF50; color: white; cursor: pointer; }
+        button:hover { background-color: #45a049; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>A-A-B Gate Demonstration</h1>
+    <p>Click the button to simulate A-A-B Gate logic based on harmonic symmetry and the golden ratio.</p>
+
+    <button onclick="simulateAAB()">Simulate A-A-B Gate</button>
+    <div id="result"></div>
+</div>
+
+<script>
+    function simulateAAB() {
+        // Generate random A1, A2, B values (0 or 1)
+        let A1 = Math.floor(Math.random() * 2);
+        let A2 = Math.floor(Math.random() * 2);
+        let B = Math.floor(Math.random() * 2);
+
+        // Calculate golden ratio
+        let goldenRatio = (1 + Math.sqrt(5)) / 2;
+
+        // Perform A-A-B Gate logic
+        let output = 0;
+        if (A1 === A2 && A1 !== B) {
+            // Randomly decide outcome based on golden ratio probability
+            let randomValue = Math.random();
+            output = randomValue < (1 / goldenRatio) ? 1 : 0;
+        }
+
+        // Display the result
+        document.getElementById("result").innerHTML = `
+            <strong>Inputs:</strong> A1 = ${A1}, A2 = ${A2}, B = ${B} <br>
+            <strong>Output:</strong> ${output}
+        `;
+    }
+</script>
+
+</body>
+</html>
