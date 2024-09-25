@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Venture Research Institute - High-speed AI and Cloud Services with 50Gbps advantage">
+    <title>VRI - Cognitive Cloud Services</title>
+    <style>
+        :root {
+            --primary-color: #0056b3;
+            --secondary-color: #17a2b8;
+            --background-color: #f8f9fa;
+            --text-color: #333;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+        header {
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        nav ul {
+            display: flex;
+            justify-content: space-around;
+            list-style: none;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            transition: background 0.3s ease;
+        }
+        nav a:hover { background: rgba(255,255,255,0.1); }
+        .hero {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-align: center;
+            padding: 100px 0 50px;
+        }
+        .hero h1 { font-size: 2.5em; margin-bottom: 20px; }
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: var(--primary-color);
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: transform 0.3s ease;
+        }
+        .cta-button:hover { transform: translateY(-3px); }
+        .section { padding: 50px 0; }
+        .section h2 { color: var(--primary-color); margin-bottom: 20px; }
+        .industry-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .industry-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .industry-card:hover { transform: translateY(-5px); }
+        #roi-calculator {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        #eap-portal {
+            background: var(--secondary-color);
+            color: white;
+            padding: 50px 0;
+            text-align: center;
+        }
+        footer {
+            background: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 50px;
+        }
+        @media (max-width: 768px) {
+            nav ul { flex-direction: column; }
+            nav li { margin: 10px 0; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#eap">Early Access</a></li>
+                <li><a href="#roi">ROI Calculator</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="container">
+            <h1>VRI Cognitive Cloud Services</h1>
+            <p>Unleash the power of 50Gbps high-speed AI and cloud solutions</p>
+            <a href="#eap" class="cta-button">Join Early Access Program</a>
+        </div>
+    </section>
+
+    <section id="services" class="section">
+        <div class="container">
+            <h2>Industry-Specific Solutions</h2>
+            <div class="industry-grid">
+                <div class="industry-card">
+                    <h3>Media & Entertainment</h3>
+                    <p>Ultra-fast video processing and content delivery with our 50Gbps infrastructure.</p>
+                </div>
+                <div class="industry-card">
+                    <h3>Cloud Gaming</h3>
+                    <p>Deliver seamless, low-latency gaming experiences globally.</p>
+                </div>
+                <div class="industry-card">
+                    <h3>AI/ML Services</h3>
+                    <p>Accelerate AI model training and deployment with high-throughput computing.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="eap" class="section">
+        <div class="container">
+            <h2>Early Access Program</h2>
+            <p>Be among the first to experience our cutting-edge services with exclusive benefits.</p>
+            <a href="#eap-portal" class="cta-button">Apply Now</a>
+        </div>
+    </section>
+
+    <section id="roi" class="section">
+        <div class="container">
+            <h2>ROI Calculator</h2>
+            <div id="roi-calculator">
+                <!-- Placeholder for ROI calculator -->
+                <p>Calculate your potential savings and performance improvements with our services.</p>
+                <!-- Interactive calculator would be implemented with JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <section id="eap-portal" class="section">
+        <div class="container">
+            <h2>EAP Application Portal</h2>
+            <p>Securely apply for our Early Access Program here.</p>
+            <!-- Placeholder for secure EAP application form -->
+            <a href="#" class="cta-button">Start Application</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Venture Research Institute. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Placeholder for JavaScript
+        // This would include functionality for smooth scrolling,
+        // the ROI calculator, and any other interactive elements
+    </script>
+</body>
+</html>
