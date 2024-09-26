@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PatentAI Assistant Preview</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .sidebar {
+            width: 250px;
+            transition: all 0.3s;
+        }
+        .main-content {
+            margin-left: 250px;
+            transition: all 0.3s;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 0;
+                overflow: hidden;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="flex h-screen">
+        <!-- Left Sidebar -->
+        <aside class="sidebar bg-gray-800 text-white p-4">
+            <h2 class="text-xl font-bold mb-4">PatentAI Assistant</h2>
+            <nav>
+                <ul>
+                    <li class="mb-2"><a href="#" class="flex items-center p-2 hover:bg-gray-700 rounded"><svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>Home</a></li>
+                    <li class="mb-2"><a href="#" class="flex items-center p-2 hover:bg-gray-700 rounded"><svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>Applications</a></li>
+                    <li class="mb-2"><a href="#" class="flex items-center p-2 hover:bg-gray-700 rounded"><svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>Prior Art Search</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content flex-1 overflow-x-hidden overflow-y-auto">
+            <header class="bg-white shadow">
+                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+                    <h1 class="text-3xl font-bold text-gray-900">Welcome to PatentAI Assistant</h1>
+                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        New Application
+                    </button>
+                </div>
+            </header>
+
+            <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Application Progress Card -->
+                    <div class="bg-white overflow-hidden shadow rounded-lg">
+                        <div class="px-4 py-5 sm:p-6">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">Application Progress</h3>
+                            <div class="mt-5">
+                                <div class="relative">
+                                    <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                                        <div class="w-full border-t border-gray-300"></div>
+                                    </div>
+                                    <div class="relative flex justify-between">
+                                        <span class="bg-white px-2 text-sm text-gray-500">Step 1</span>
+                                        <span class="bg-white px-2 text-sm text-gray-500">Step 2</span>
+                                        <span class="bg-white px-2 text-sm text-gray-500">Step 3</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Activity Card -->
+                    <div class="bg-white overflow-hidden shadow rounded-lg">
+                        <div class="px-4 py-5 sm:p-6">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">Recent Activity</h3>
+                            <div class="mt-5">
+                                <ul class="divide-y divide-gray-200">
+                                    <li class="py-4">Updated claims for App #12345</li>
+                                    <li class="py-4">Completed prior art search for App #67890</li>
+                                    <li class="py-4">Started new application #24680</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Suggestions Card -->
+                    <div class="bg-white overflow-hidden shadow rounded-lg">
+                        <div class="px-4 py-5 sm:p-6">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">AI Suggestions</h3>
+                            <div class="mt-5">
+                                <ul class="divide-y divide-gray-200">
+                                    <li class="py-4">Review similar patent in Class G06F for App #12345</li>
+                                    <li class="py-4">Consider adding dependent claim for App #67890</li>
+                                    <li class="py-4">Deadline approaching for office action response on App #13579</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // This script would handle dynamic interactions, but for this preview, we'll keep it minimal
+        document.addEventListener('DOMContentLoaded', (event) => {
+            console.log('PatentAI Assistant UI Preview Loaded');
+        });
+    </script>
+</body>
+</html>
