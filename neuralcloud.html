@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuralCloud: National AI Cloud Network</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        
+        @font-face {
+            font-family: 'Berkeley Mono';
+            src: url('https://cdn.jsdelivr.net/gh/vikrantgajria/Berkeley-Mono@main/berkeleymono-regular.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Berkeley Mono', 'Inter', sans-serif;
+            background: linear-gradient(to bottom right, #3b82f6, #7c3aed);
+            color: white;
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        nav ul li a:hover {
+            color: #93c5fd;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: white;
+            color: #3b82f6;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        
+        .btn:hover {
+            background-color: #93c5fd;
+        }
+        
+        .features {
+            padding: 4rem 0;
+        }
+        
+        .features h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature-card {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            text-align: center;
+        }
+        
+        .feature-card svg {
+            width: 3rem;
+            height: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .network-diagram {
+            padding: 4rem 0;
+            text-align: center;
+        }
+        
+        .network-diagram h2 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .network-diagram svg {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .cta {
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            text-align: center;
+            padding: 4rem 0;
+            margin-top: 4rem;
+        }
+        
+        .cta h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        footer {
+            background-color: rgba(0, 0, 0, 0.3);
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 4rem;
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+            }
+            
+            nav ul {
+                margin-top: 1rem;
+            }
+            
+            nav ul li {
+                margin-left: 0.75rem;
+                margin-right: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>NeuralCloud</h1>
+            <nav>
+                <ul>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#network">Network</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </header>
+        
+        <main>
+            <section class="hero">
+                <h1>National AI Cloud Network</h1>
+                <p>Ultra-high throughput. Low latency. AI-optimized infrastructure.</p>
+                <a href="#" class="btn">Learn More</a>
+            </section>
+            
+            <section class="features">
+                <h2>Our Advantages</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                        </svg>
+                        <h3>AI-Optimized</h3>
+                        <p>Purpose-built infrastructure for AI/ML workloads</p>
+                    </div>
+                    <div class="feature-card">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+                        </svg>
+                        <h3>Tiered Buffering</h3>
+                        <p>Efficient capacity distribution and scalability</p>
+                    </div>
+                    <div class="feature-card">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <h3>Strategic Nodes</h3>
+                        <p>Optimized for key industries and research hubs</p>
+                    </div>
+                    <div class="feature-card">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                        <h3>High Performance</h3>
+                        <p>Up to 50 Gbps throughput with sub-millisecond latency</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="network-diagram">
+                <h2>Our Network</h2>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+                    <defs>
+                        <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    
+                    <rect width="800" height="600" fill="url(#bg-gradient)" />
+                    
+                    <!-- Phase 1 -->
+                    <circle cx="400" cy="150" r="40" fill="#60a5fa" />
+                    <text x="400" y="155" font-family="Berkeley Mono" font-size="14" fill="white" text-anchor="middle">Kirkland, WA (HQ)</text>
+                    
+                    <circle cx="200" cy="250" r="30" fill="#34d399" />
+                    <text x="200" y="255" font-family="Berkeley Mono" font-size="12" fill="white" text-anchor="middle">Salt Lake City</text>
+                    
+                    <circle cx="600" cy="250" r="35" fill="#f59e0b" />
+                    <text x="600" y="255" font-family="Berkeley Mono" font-size="12" fill="white" text-anchor="middle">Atlanta</text>
+                    
+                    <circle cx="100" cy="400" r="25" fill="#6366f1" />
+                    <text x="100" y="405" font-family="Berkeley Mono" font-size="10" fill="white" text-anchor="middle">LA</text>
+                    
+                    <circle cx="700" cy="400" r="25" fill="#6366f1" />
+                    <text x="700" y="405" font-family="Berkeley Mono" font-size="10" fill="white" text-anchor="middle">NYC</text>
+                    
+                    <!-- Phase 2 -->
+                    <circle cx="300" cy="200" r="35" fill="#ec4899" stroke="white" stroke-width="2" />
+                    <text x="300" y="205" font-family="Berkeley Mono" font-size="12" fill="white" text-anchor="middle">Boise</text>
+                    
+                    <circle cx="500" cy="400" r="30" fill="#ec4899" stroke="white" stroke-width="2" />
+                    <text x="500" y="405" font-family="Berkeley Mono" font-size="12" fill="white" text-anchor="middle">Miami</text>
+                    
+                    <circle cx="650" cy="300" r="30" fill="#ec4899" stroke="white" stroke-width="2" />
+                    <text x="650" y="305" font-family="Berkeley Mono" font-size="12" fill="white" text-anchor="middle">Chattanooga</text>
+                    
+                    <!-- Phase 3 -->
+                    <circle cx="400" cy="450" r="30" fill="#8b5cf6" stroke="white" stroke-dasharray="5,5" />
+                    <text x="400" y="455" font-family="Berkeley Mono" font-size="12" fill="white" text-anchor="middle">Louisiana</text>
+                    
+                    <circle cx="250" cy="350" r="30" fill="#8b5cf6" stroke="white" stroke-dasharray="5,5" />
+                    <text x="250" y="355" font-family="Berkeley Mono" font-size="12" fill="white" text-anchor="middle">Austin</text>
+                    
+                    <!-- Connections -->
+                    <line x1="400" y1="150" x2="200" y2="250" stroke="white" stroke-width="2" />
+                    <line x1="400" y1="150" x2="600" y2="250" stroke="white" stroke-width="2" />
+                    <line x1="400" y1="150" x2="300" y2="200" stroke="white" stroke-width="2" />
+                    <line x1="600" y1="250" x2="650" y2="300" stroke="white" stroke-width="2" />
+                    <line x1="600" y1="250" x2="500" y2="400" stroke="white" stroke-width="2" />
+                    <line x1="600" y1="250" x2="700" y2="400" stroke="white" stroke-width="2" />
+                    <line x1="200" y1="250" x2="100" y2="400" stroke="white" stroke-width="2" />
+                    
+                    <!-- Legend -->
+                    <rect x="20" y="520" width="20" height="20" fill="#60a5fa" />
+                    <text x="50" y="535" font-family="Berkeley Mono" font-size="12" fill="white">Phase 1</text>
+                    
+                    <rect x="150" y="520" width="20" height="20" fill="#ec4899" />
+                    <text x="180" y="535" font-family="Berkeley Mono" font-size="12" fill="white">Phase 2</text>
+                    
+                    <rect x="280" y="520" width="20" height="20" fill="#8b5cf6" />
+                    <text x="310" y="535" font-family="Berkeley Mono" font-size="12" fill="white">Phase 3</text>
+                    
+                    <circle cx="430" cy="530" r="10" fill="none" stroke="white" stroke-width="2" />
+                    <text x="450" y="535" font-family="Berkeley Mono" font-size="12" fill="white">High Throughput</text>
+                    
+                    <circle cx="600" cy="530" r="7" fill="none" stroke="white" stroke-width="2" />
+                    <text x="620" y="535" font-family="Berkeley Mono" font-size="12" fill="white">Low Latency</text>
+                </svg>
+            </section>
+            
+            <section class="cta">
+                <h2>Ready to Supercharge Your AI Infrastructure?</h2>
+                <p>Get in touch with our team to learn how NeuralCloud can transform your AI capabilities.</p>
+                <a href="#" class="btn">Contact Us</a>
+            </section>
+        </main>
+        
+        <footer>
+            <p>&copy; 2024 NeuralCloud. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Simple JavaScript for mobile menu toggle
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const navToggle = document.createElement('button');
+            navToggle.textContent = 'Menu';
+            navToggle.classList.add('nav-toggle');
+            navToggle.style.display = 'none';
+
+            const nav = document.querySelector('nav');
+            const header = document.querySelector('header');
+
+            header.insertBefore(navToggle, nav);
+
+            navToggle.addEventListener('click', () => {
+                nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+            });
+
+            function checkScreenSize() {
+                if (window.innerWidth <= 768) {
+                    navToggle.style.display = 'block';
+                    nav.style.display = 'none';
+                } else {
+                    navToggle.style.display = 'none';
+                    nav.style.display = 'flex';
+                }
+            }
+
+            window.addEventListener('resize', checkScreenSize);
+            checkScreenSize();
+        });
+    </script>
+
+    <style>
+        .nav-toggle {
+            background-color: transparent;
+            border: 2px solid white;
+            color: white;
+            padding: 0.5rem 1rem;
+            font-family: 'Berkeley Mono', monospace;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                display: none;
+                width: 100%;
+            }
+
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            nav ul li {
+                margin: 0.5rem 0;
+            }
+        }
+    </style>
+</body>
+</html>
