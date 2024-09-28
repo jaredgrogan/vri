@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protein Codon Markov Chains - Information Address Matrix</title>
+    <!-- Include Plotly.js via CDN -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .dropdown-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        select {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            min-width: 200px;
+        }
+
+        #plot {
+            width: 100%;
+            height: 600px;
+        }
+
+        #codonList {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #fafafa;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        #codonList h2 {
+            margin-top: 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            #plot {
+                height: 400px;
+            }
+
+            select {
+                width: 100%;
+                font-size: 14px;
+            }
+
+            #codonList {
+                font-size: 14px;
+            }
+        }
+
+        /* Footer Styles */
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #777;
+            font-size: 14px;
+        }
+
+        /* Codon List Styles */
+        #codonList ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        #codonList li {
+            padding: 5px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Protein Codon Markov Chains - Information Address Matrix</h1>
+        
+        <div class="dropdown-container">
+            <label for="aminoDropdown"><strong>Select Amino Acid:</strong></label>
+            <select id="aminoDropdown">
+                <option value="" disabled selected>-- Select Amino Acid --</option>
+                <!-- Options will be populated by JavaScript -->
+            </select>
+        </div>
+        
+        <div id="plot"></div>
+
+        <div id="codonList">
+            <h2>Codon List</h2>
+            <ul id="codonItems">
+                <li>Select an amino acid to view its codons.</li>
+            </ul>
+        </div>
+        
+        <footer>
+            &copy; 137science.com
+        </footer>
+    </div>
+
+    <script>
+        // Data for All Amino Acids and Stop Codon
+        const aminoAcids = {
+            "Alanine": {
+                "codons": ["GCU", "GCC", "GCA", "GCG"],
+                "markovChains": [
+                    { "address": [2, 2, 0], "probability": 4/64, "bits": 4, "codons": ["GCU", "GCC", "GCA", "GCG"] }
+                ]
+            },
+            "Arginine": {
+                "codons": ["CGU", "CGC", "CGA", "CGG", "AGA", "AGG"],
+                "markovChains": [
+                    { "address": [2, 2, 0], "probability": 4/64, "bits": 4.736, "codons": ["CGU", "CGC", "CGA", "CGG"] },
+                    { "address": [2, 2, 1], "probability": 2/64, "bits": 5, "codons": ["AGA", "AGG"] }
+                ]
+            },
+            "Asparagine": {
+                "codons": ["AAU", "AAC"],
+                "markovChains": [
+                    { "address": [2, 2, 1], "probability": 2/64, "bits": 5, "codons": ["AAU", "AAC"] }
+                ]
+            },
+            "Aspartic Acid": {
+                "codons": ["GAU", "GAC"],
+                "markovChains": [
+                    { "address": [2, 2, 1], "probability": 2/64, "bits": 5, "codons": ["GAU", "GAC"] }
+                ]
+            },
+            "Cysteine": {
+                "codons": ["UGU", "UGC"],
+                "markovChains": [
+                    { "address": [2, 2, 1], "probability": 2/64, "bits": 5, "codons": ["UGU", "UGC"] }
+                ]
+            },
+            "Glutamine": {
+                "codons": ["CAA", "CAG"],
+                "markovChains": [
+                    { "address": [2, 2, 1], "probability": 2/64, "bits": 5, "codons": ["CAA", "CAG"] }
+                ]
+            },
+            "Glutamic Acid": {
+                "codons": ["GAA", "GAG"],
+                "markovChains": [
+                    { "address": [2, 2, 1], "probability": 2/64, "bits": 5, "codons": ["GAA", "GAG"] }
+                ]
+            },
+            "Glycine": {
+                "codons": ["GGU", "GGC", "GGA", "GGG"],
+                "markovChains": [
+                    { "address": [2, 2, 0], "probability": 4/64, "bits": 4, "codons": ["GGU", "GGC", "GGA", "GGG"] }
+                ]
+            },
+            "Histidine": {
+                "codons": ["CAU", "CAC"],
+                "markovChains": [
+                    { "address": [2, 2, 1], "probability": 2/64, "bits": 5, "codons": ["CAU", "CAC"] }
+                ]
+            },
+            "Isoleucine": {
+                "codons": ["AUU", "AUC", "AUA"],
+                "markovChains": [
+                    { "address": [2, 2, 1], "probability": 3/64, "bits": 4.736, "codons": ["AUU", "AUC", "AUA"] }
+                ]
+            },
+            "Leucine": {
+                "codons": ["UUA", "UUG", "CUU", "CUC", "CUA", "CUG"],
+                "markovChains": [
+                    { "address": [2, 2, 1], "probability": 2/64, "bits": 4.736, "codons": ["UUA", "UUG"] },
+                    { "address": [2, 2, 0], "probability": 4/64, "bits": 4.736, "codons": ["CUU", "CUC", "CUA", "CUG"] }
+                ]
+            },
+            "Lysine": {
+                "codons": ["AAA", "AAG"],
+                "markovChains": [
+                    { "address": [2, 2, 1], "probability": 2/64, "bits": 5, "codons": ["AAA", "AAG"] }
+                ]
+            },
+            "Methionine": {
+                "codons": ["AUG"],
+                "markovChains": [
+                    { "address": [2, 2, 2], "probability": 1/64, "bits": 6, "codons": ["AUG"] }
+                ]
+            },
+            "Phenylalanine": {
+                "codons": ["UUU", "UUC"],
+                "markovChains": [
+                    { "address": [2, 2, 1], "probability": 2/64, "bits": 5, "codons": ["UUU", "UUC"] }
+                ]
+            },
+            "Proline": {
+                "codons": ["CCU", "CCC", "CCA", "CCG"],
+                "markovChains": [
+                    { "address": [2, 2, 0], "probability": 4/64, "bits": 4, "codons": ["CCU", "CCC", "CCA", "CCG"] }
+                ]
+            },
+            "Serine": {
+                "codons": ["UCU", "UCC", "UCA", "UCG", "AGU", "AGC"],
+                "markovChains": [
+                    { "address": [2, 2, 0], "probability": 4/64, "bits": 4, "codons": ["UCU", "UCC", "UCA", "UCG"] },
+                    { "address": [2, 2, 1], "probability": 2/64, "bits": 5, "codons": ["AGU", "AGC"] }
+                ]
+            },
+            "Threonine": {
+                "codons": ["ACU", "ACC", "ACA", "ACG"],
+                "markovChains": [
+                    { "address": [2, 2, 0], "probability": 4/64, "bits": 4, "codons": ["ACU", "ACC", "ACA", "ACG"] }
+                ]
+            },
+            "Tryptophan": {
+                "codons": ["UGG"],
+                "markovChains": [
+                    { "address": [2, 2, 2], "probability": 1/64, "bits": 6, "codons": ["UGG"] }
+                ]
+            },
+            "Tyrosine": {
+                "codons": ["UAU", "UAC"],
+                "markovChains": [
+                    { "address": [2, 2, 1], "probability": 2/64, "bits": 5, "codons": ["UAU", "UAC"] }
+                ]
+            },
+            "Valine": {
+                "codons": ["GUU", "GUC", "GUA", "GUG"],
+                "markovChains": [
+                    { "address": [2, 2, 0], "probability": 4/64, "bits": 4, "codons": ["GUU", "GUC", "GUA", "GUG"] }
+                ]
+            },
+            "Stop Codon": {
+                "codons": ["UAA", "UAG", "UGA"],
+                "markovChains": [
+                    { "address": [2, 2, 1], "probability": 2/64, "bits": 5.58, "codons": ["UAA", "UAG"] },
+                    { "address": [2, 2, 0], "probability": 1/64, "bits": 5.58, "codons": ["UGA"] }
+                ]
+            }
+        };
+
+        // Populate Dropdown Menu
+        const dropdown = document.getElementById('aminoDropdown');
+        const sortedAminoAcids = Object.keys(aminoAcids).sort();
+
+        sortedAminoAcids.forEach(amino => {
+            const option = document.createElement('option');
+            option.value = amino;
+            option.text = amino;
+            dropdown.appendChild(option);
+        });
+
+        // Function to Render Plot Based on Selection
+        function renderPlot(amino) {
+            const chains = aminoAcids[amino].markovChains;
+
+            const plotData = chains.map((chain, index) => {
+                return {
+                    x: [chain.address[0]],
+                    y: [chain.address[1]],
+                    z: [chain.address[2]],
+                    mode: 'markers',
+                    marker: {
+                        size: chain.bits * 10, // Scale size based on bits
+                        color: getColor(amino, index),
+                        opacity: 0.8
+                    },
+                    name: `${amino} Chain ${index + 1} (${chain.bits} bits)`,
+                    type: 'scatter3d',
+                    text: chain.codons ? `${amino} Codons: ${chain.codons.join(', ')}` : `${amino} Codon: ${chain.codons}`,
+                    hoverinfo: 'text'
+                };
+            });
+
+            const layout = {
+                scene: {
+                    xaxis: { title: '1st Nucleotide (Bits)', dtick: 1 },
+                    yaxis: { title: '2nd Nucleotide (Bits)', dtick: 1 },
+                    zaxis: { title: '3rd Nucleotide (Bits)', dtick: 1 },
+                    camera: {
+                        eye: { x: 1.5, y: 1.5, z: 1.5 }
+                    }
+                },
+                title: `${amino} Codon Markov Chains`,
+                legend: { x: 0, y: 1 }
+            };
+
+            Plotly.newPlot('plot', plotData, layout);
+        }
+
+        // Function to Assign Unique Colors for Each Chain
+        function getColor(amino, index) {
+            // Define a color palette
+            const colorPalette = [
+                'blue', 'red', 'green', 'purple', 'orange', 'cyan', 'magenta', 'yellow', 'brown', 'pink',
+                'grey', 'lime', 'olive', 'navy', 'teal', 'maroon', 'aquamarine', 'gold', 'coral', 'indigo',
+                'turquoise', 'darkgreen', 'darkblue', 'darkred', 'darkpurple'
+            ];
+
+            // Assign different colors for multiple chains within the same amino acid
+            if (aminoAcids[amino].markovChains.length > 1) {
+                return colorPalette[index % colorPalette.length];
+            } else {
+                // Assign a default color based on bits
+                const bits = aminoAcids[amino].markovChains[0].bits;
+                return getColorByBits(bits);
+            }
+        }
+
+        // Function to Assign Colors Based on Bits
+        function getColorByBits(bits) {
+            if (bits === 4) return 'blue';
+            if (bits === 4.736) return 'green';
+            if (bits === 5) return 'red';
+            if (bits === 5.58) return 'purple';
+            if (bits === 6) return 'orange';
+            return 'gray';
+        }
+
+        // Function to Display Codon List
+        function displayCodonList(amino) {
+            const codonItems = document.getElementById('codonItems');
+            codonItems.innerHTML = ''; // Clear previous list
+
+            aminoAcids[amino].markovChains.forEach(chain => {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${amino} Codons (${chain.bits} bits): ${chain.codons.join(', ')}`;
+                codonItems.appendChild(listItem);
+            });
+        }
+
+        // Event Listener for Dropdown Selection
+        dropdown.addEventListener('change', (event) => {
+            const selectedAmino = event.target.value;
+            if (selectedAmino) {
+                renderPlot(selectedAmino);
+                displayCodonList(selectedAmino);
+            }
+        });
+
+        // Initial Plot (Optional: Set a default selection)
+        // Example: Uncomment the following lines to render Serine on load
+        /*
+        window.onload = () => {
+            const defaultAmino = "Serine";
+            dropdown.value = defaultAmino;
+            renderPlot(defaultAmino);
+            displayCodonList(defaultAmino);
+        };
+        */
+    </script>
+
+</body>
+</html>
