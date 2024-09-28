@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Protein Codon Markov Chains - Information Address Matrix</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Include Plotly.js via CDN -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <!-- Include Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&family=Berkeley+Mono&display=swap" rel="stylesheet">
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            font-family: 'Berkeley Mono', monospace;
+            color: #222;
+        }
+
+        .dropdown-container, .codon-input-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        select, input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            min-width: 200px;
+            font-family: 'Source Sans Pro', sans-serif;
+            margin: 0 10px;
+        }
+
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            background-color: #007BFF;
+            color: #fff;
+            font-family: 'Source Sans Pro', sans-serif;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #plot {
+            width: 100%;
+            height: 600px;
+        }
+
+        #codonList {
+            margin-top: 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, #e0eafc, #cfdef3);
+            border-radius: 8px;
+        }
+
+        #codonList h2 {
+            margin-top: 0;
+            font-family: 'Berkeley Mono', monospace;
+        }
+
+        #codonList ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        #codonList li {
+            padding: 5px 0;
+            font-size: 16px;
+        }
+
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .info-table th, .info-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            font-size: 15px;
+        }
+
+        .info-table th {
+            background-color: #f4f6f9;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            #plot {
+                height: 400px;
+            }
+
+            select, input[type="text"] {
+                width: 100%;
+                font-size: 14px;
+                margin-bottom: 10px;
+            }
+
+            button {
+                width: 100%;
+                font-size: 14px;
+            }
+
+            #codonList {
+                font-size: 14px;
+            }
+
+            .info-table th, .info-table td {
+                font-size: 14px;
+            }
+        }
+
+        /* Footer Styles */
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #777;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Protein Codon Markov Chains<br>Information Address Matrix</h1>
+        
+        <div class="dropdown-container">
+            <label for="aminoDropdown"><strong>Select Amino Acid:</strong></label>
+            <select id="aminoDropdown" aria-label="Select Amino Acid">
+                <option value="" disabled selected>-- Select Amino Acid --</option>
+                <!-- Options will be populated by JavaScript -->
+            </select>
+        </div>
+
+        <div class="codon-input-container">
+            <label for="codonInput"><strong>Enter Codon (e.g., AUG):</strong></label>
+            <input type="text" id="codonInput" maxlength="3" placeholder="Enter Codon">
+            <button id="codonButton">Find Amino Acid</button>
+        </div>
+        
+        <div id="plot"></div>
+
+        <div id="codonList" aria-live="polite">
+            <h2>Codon List & Properties</h2>
+            <ul id="codonItems">
+                <li>Select an amino acid or enter a codon to view details.</li>
+            </ul>
+        </div>
+        
+        <footer>
+            &copy; 137science.com
+        </footer>
+    </div>
+
+    <script>
+        // Data for All 22 Amino Acids and Stop Codon
+        const aminoAcids = {
+            "Alanine": {
+                "codons": ["GCU", "GCC", "GCA", "GCG"],
+                "properties": {
+                    "Polarity": "Nonpolar",
+                    "Charge": "Neutral",
+                    "Chemical Formula": "C3H7NO2",
+                    "Component Groups": "Methyl group",
+                    "Hydrogen Bonds": 0,
+                    "Essential": false,
+                    "Applications": "Protein synthesis, energy source"
+                },
+                "markovChains": [
+                    { "address": [2, 2, 0], "bits": 4, "codons": ["GCU", "GCC", "GCA", "GCG"] }
+                ]
+            },
+            "Arginine": {
+                "codons": ["CGU", "CGC", "CGA", "CGG", "AGA", "AGG"],
+                "properties": {
+                    "Polarity": "Polar",
+                    "Charge": "Positive",
+                    "Chemical Formula": "C6H14N4O2",
+                    "Component Groups": "Guanidino group",
+                    "Hydrogen Bonds": 6,
+                    "Essential": true,
+                    "Applications": "Nitric oxide synthesis, immune function"
+                },
+                "markovChains": [
+                    { "address": [2, 2, 0], "bits": 4, "codons": ["CGU", "CGC", "CGA", "CGG"] },
+                    { "address": [2, 2, 1], "bits": 5, "codons": ["AGA", "AGG"] }
+                ]
+            },
+            // ... Include all other amino acids with their properties and markovChains ...
+            "Stop Codon": {
+                "codons": ["UAA", "UAG", "UGA"],
+                "properties": {
+                    "Polarity": "N/A",
+                    "Charge": "N/A",
+                    "Chemical Formula": "N/A",
+                    "Component Groups": "N/A",
+                    "Hydrogen Bonds": "N/A",
+                    "Essential": "N/A",
+                    "Applications": "Termination of translation"
+                },
+                "markovChains": [
+                    { "address": [2, 2, 1], "bits": 5, "codons": ["UAA", "UAG"] },
+                    { "address": [2, 2, 2], "bits": 6, "codons": ["UGA"] }
+                ]
+            }
+        };
+
+        // Codon to Amino Acid Map
+        const codonToAminoAcid = {};
+
+        // Build Codon to Amino Acid Map
+        for (const amino in aminoAcids) {
+            aminoAcids[amino].codons.forEach(codon => {
+                codonToAminoAcid[codon.toUpperCase()] = amino;
+            });
+        }
+
+        // Populate Dropdown Menu
+        const dropdown = document.getElementById('aminoDropdown');
+        const sortedAminoAcids = Object.keys(aminoAcids).sort();
+
+        sortedAminoAcids.forEach(amino => {
+            const option = document.createElement('option');
+            option.value = amino;
+            option.text = amino;
+            dropdown.appendChild(option);
+        });
+
+        // Function to Render Plot Based on Selection
+        function renderPlot(amino) {
+            const chains = aminoAcids[amino].markovChains;
+
+            const plotData = chains.map((chain, index) => {
+                // Calculate marker size based on bits: 4 bits largest, 5 bits half size, 6 bits quarter size
+                let size;
+                if (chain.bits === 4) {
+                    size = 40; // Largest size for 4 bits
+                } else if (chain.bits === 5) {
+                    size = 20; // Half the size of 4 bits
+                } else if (chain.bits === 6) {
+                    size = 10; // Half the size of 5 bits
+                } else {
+                    size = 15; // Default size
+                }
+
+                return {
+                    x: [chain.address[0]],
+                    y: [chain.address[1]],
+                    z: [chain.address[2]],
+                    mode: 'markers',
+                    marker: {
+                        size: size,
+                        color: getColorByBits(chain.bits),
+                        opacity: 0.8
+                    },
+                    name: `${amino} Chain ${index + 1} (${chain.bits} bits)`,
+                    type: 'scatter3d',
+                    text: `${amino} Codons: ${chain.codons.join(', ')}<br>Bits: ${chain.bits}`,
+                    hoverinfo: 'text'
+                };
+            });
+
+            const layout = {
+                scene: {
+                    xaxis: { title: '1st Nucleotide (Bits)', dtick: 1 },
+                    yaxis: { title: '2nd Nucleotide (Bits)', dtick: 1 },
+                    zaxis: { title: '3rd Nucleotide (Bits)', dtick: 1 },
+                    camera: {
+                        eye: { x: 1.5, y: 1.5, z: 1.5 }
+                    }
+                },
+                title: `${amino} Codon Markov Chains`,
+                legend: { x: 0, y: 1 }
+            };
+
+            Plotly.newPlot('plot', plotData, layout, {responsive: true});
+        }
+
+        // Function to Assign Colors Based on Bits
+        function getColorByBits(bits) {
+            const colorScale = {
+                4: '#1f77b4', // Blue
+                5: '#ff7f0e', // Orange
+                6: '#2ca02c'  // Green
+            };
+            return colorScale[bits] || '#d62728'; // Red as default
+        }
+
+        // Function to Display Codon List and Properties
+        function displayCodonList(amino) {
+            const codonItems = document.getElementById('codonItems');
+            codonItems.innerHTML = ''; // Clear previous list
+
+            const properties = aminoAcids[amino].properties;
+            const propertiesTable = `
+                <table class="info-table">
+                    <tr><th>Property</th><th>Value</th></tr>
+                    <tr><td>Polarity</td><td>${properties.Polarity}</td></tr>
+                    <tr><td>Charge</td><td>${properties.Charge}</td></tr>
+                    <tr><td>Chemical Formula</td><td>${properties["Chemical Formula"]}</td></tr>
+                    <tr><td>Component Groups</td><td>${properties["Component Groups"]}</td></tr>
+                    <tr><td>Hydrogen Bonds</td><td>${properties["Hydrogen Bonds"]}</td></tr>
+                    <tr><td>Essential Amino Acid</td><td>${properties.Essential ? 'Yes' : 'No'}</td></tr>
+                    <tr><td>Applications</td><td>${properties.Applications}</td></tr>
+                </table>
+            `;
+
+            aminoAcids[amino].markovChains.forEach((chain, index) => {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `<strong>Chain ${index + 1} (${chain.bits} bits)</strong>: ${chain.codons.join(', ')}`;
+                codonItems.appendChild(listItem);
+            });
+
+            const propertiesHeader = document.createElement('h3');
+            propertiesHeader.textContent = 'Properties:';
+            codonItems.appendChild(propertiesHeader);
+
+            const propertiesDiv = document.createElement('div');
+            propertiesDiv.innerHTML = propertiesTable;
+            codonItems.appendChild(propertiesDiv);
+        }
+
+        // Event Listener for Dropdown Selection
+        dropdown.addEventListener('change', (event) => {
+            const selectedAmino = event.target.value;
+            if (selectedAmino) {
+                renderPlot(selectedAmino);
+                displayCodonList(selectedAmino);
+            }
+        });
+
+        // Event Listener for Codon Input
+        const codonInput = document.getElementById('codonInput');
+        const codonButton = document.getElementById('codonButton');
+
+        codonButton.addEventListener('click', () => {
+            const codon = codonInput.value.toUpperCase();
+            if (codon.length === 3 && /^[ACGU]{3}$/.test(codon)) {
+                const amino = codonToAminoAcid[codon];
+                if (amino) {
+                    dropdown.value = amino;
+                    renderPlot(amino);
+                    displayCodonList(amino);
+
+                    // Highlight the specific codon
+                    const codonItems = document.getElementById('codonItems');
+                    const listItems = codonItems.querySelectorAll('li');
+                    listItems.forEach(item => {
+                        if (item.innerHTML.includes(codon)) {
+                            item.style.backgroundColor = '#ffffcc';
+                        } else {
+                            item.style.backgroundColor = '';
+                        }
+                    });
+                } else {
+                    alert('Invalid codon or codon does not code for an amino acid.');
+                }
+            } else {
+                alert('Please enter a valid codon (three letters: A, C, G, U).');
+            }
+        });
+
+        // Allow Enter key to trigger the codon search
+        codonInput.addEventListener('keyup', (event) => {
+            if (event.key === 'Enter') {
+                codonButton.click();
+            }
+        });
+
+        // Initial Plot (Optional: Set a default selection)
+        // Example: Uncomment the following lines to render Serine on load
+        /*
+        window.onload = () => {
+            const defaultAmino = "Serine";
+            dropdown.value = defaultAmino;
+            renderPlot(defaultAmino);
+            displayCodonList(defaultAmino);
+        };
+        */
+    </script>
+
+</body>
+</html>
