@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serine Codon Visualization (UC and AG Chains)</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        /* Global styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        #plot {
+            width: 100%;
+            height: 600px;
+        }
+
+        /* Media queries for responsive design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            #plot {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Serine Codon Visualization (UC and AG Chains)</h1>
+        <div id="plot"></div>
+    </div>
+
+    <script>
+        // Data for UC Chain (4 codons)
+        const ucChain = {
+            x: [2],
+            y: [2],
+            z: [0],
+            mode: 'markers',
+            marker: {
+                size: [40], // Size proportional to magnitude (4 codons)
+                color: 'blue',
+                opacity: 0.8,
+            },
+            name: 'UC Chain (4 Codons)',
+            type: 'scatter3d',
+            text: ['UC Chain: UCU, UCC, UCA, UCG'],
+            hoverinfo: 'text',
+        };
+
+        // Data for AG Chain (2 codons)
+        const agChain = {
+            x: [2],
+            y: [2],
+            z: [1],
+            mode: 'markers',
+            marker: {
+                size: [20], // Size proportional to magnitude (2 codons)
+                color: 'red',
+                opacity: 0.8,
+            },
+            name: 'AG Chain (2 Codons)',
+            type: 'scatter3d',
+            text: ['AG Chain: AGU, AGC'],
+            hoverinfo: 'text',
+        };
+
+        // Combine data for the plot
+        const data = [ucChain, agChain];
+
+        // Layout configuration
+        const layout = {
+            scene: {
+                xaxis: { title: '1st Nucleotide (Bits)', dtick: 1 },
+                yaxis: { title: '2nd Nucleotide (Bits)', dtick: 1 },
+                zaxis: { title: '3rd Nucleotide (Bits)', dtick: 1 },
+            },
+            title: '3D Visualization of Serine Codons',
+            legend: { x: 0, y: 1 },
+        };
+
+        // Render the plot using Plotly
+        Plotly.newPlot('plot', data, layout);
+    </script>
+    
+</body>
+</html>
