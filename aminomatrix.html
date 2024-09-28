@@ -188,56 +188,358 @@
 
     <script>
         // Data for All 22 Amino Acids and Stop Codon
-        const aminoAcids = {
-            "Alanine": {
-                "codons": ["GCU", "GCC", "GCA", "GCG"],
-                "properties": {
-                    "Polarity": "Nonpolar",
-                    "Charge": "Neutral",
-                    "Chemical Formula": "C3H7NO2",
-                    "Component Groups": "Methyl group",
-                    "Hydrogen Bonds": 0,
-                    "Essential": false,
-                    "Applications": "Protein synthesis, energy source"
-                },
-                "markovChains": [
-                    { "address": [2, 2, 0], "bits": 4, "codons": ["GCU", "GCC", "GCA", "GCG"] }
-                ]
-            },
-            "Arginine": {
-                "codons": ["CGU", "CGC", "CGA", "CGG", "AGA", "AGG"],
-                "properties": {
-                    "Polarity": "Polar",
-                    "Charge": "Positive",
-                    "Chemical Formula": "C6H14N4O2",
-                    "Component Groups": "Guanidino group",
-                    "Hydrogen Bonds": 6,
-                    "Essential": true,
-                    "Applications": "Nitric oxide synthesis, immune function"
-                },
-                "markovChains": [
-                    { "address": [2, 2, 0], "bits": 4, "codons": ["CGU", "CGC", "CGA", "CGG"] },
-                    { "address": [2, 2, 1], "bits": 5, "codons": ["AGA", "AGG"] }
-                ]
-            },
-            // ... Include all other amino acids with their properties and markovChains ...
-            "Stop Codon": {
-                "codons": ["UAA", "UAG", "UGA"],
-                "properties": {
-                    "Polarity": "N/A",
-                    "Charge": "N/A",
-                    "Chemical Formula": "N/A",
-                    "Component Groups": "N/A",
-                    "Hydrogen Bonds": "N/A",
-                    "Essential": "N/A",
-                    "Applications": "Termination of translation"
-                },
-                "markovChains": [
-                    { "address": [2, 2, 1], "bits": 5, "codons": ["UAA", "UAG"] },
-                    { "address": [2, 2, 2], "bits": 6, "codons": ["UGA"] }
-                ]
-            }
-        };
+      const aminoAcids = {
+    "Alanine": {
+        "codons": ["GCU", "GCC", "GCA", "GCG"],
+        "properties": {
+            "Polarity": "Nonpolar",
+            "Charge": "Neutral",
+            "Chemical Formula": "C3H7NO2",
+            "Component Groups": "Methyl group",
+            "Hydrogen Bonds": 0,
+            "Essential": false,
+            "Applications": "Protein synthesis, energy source"
+        },
+        "markovChains": [
+            { "address": [2, 2, 0], "bits": 4, "codons": ["GCU", "GCC", "GCA", "GCG"] }
+        ]
+    },
+    "Arginine": {
+        "codons": ["CGU", "CGC", "CGA", "CGG", "AGA", "AGG"],
+        "properties": {
+            "Polarity": "Polar",
+            "Charge": "Positive",
+            "Chemical Formula": "C6H14N4O2",
+            "Component Groups": "Guanidino group",
+            "Hydrogen Bonds": 6,
+            "Essential": false,
+            "Applications": "Nitric oxide synthesis, immune function"
+        },
+        "markovChains": [
+            { "address": [2, 2, 0], "bits": 4, "codons": ["CGU", "CGC", "CGA", "CGG"] },
+            { "address": [2, 2, 1], "bits": 5, "codons": ["AGA", "AGG"] }
+        ]
+    },
+    "Asparagine": {
+        "codons": ["AAU", "AAC"],
+        "properties": {
+            "Polarity": "Polar",
+            "Charge": "Neutral",
+            "Chemical Formula": "C4H8N2O3",
+            "Component Groups": "Amide group",
+            "Hydrogen Bonds": 2,
+            "Essential": false,
+            "Applications": "Protein synthesis, biosynthesis of glycoproteins"
+        },
+        "markovChains": [
+            { "address": [2, 2, 1], "bits": 5, "codons": ["AAU", "AAC"] }
+        ]
+    },
+    "Aspartic Acid": {
+        "codons": ["GAU", "GAC"],
+        "properties": {
+            "Polarity": "Polar",
+            "Charge": "Negative",
+            "Chemical Formula": "C4H7NO4",
+            "Component Groups": "Carboxyl group",
+            "Hydrogen Bonds": 2,
+            "Essential": false,
+            "Applications": "Neurotransmission, urea cycle"
+        },
+        "markovChains": [
+            { "address": [2, 2, 1], "bits": 5, "codons": ["GAU", "GAC"] }
+        ]
+    },
+    "Cysteine": {
+        "codons": ["UGU", "UGC"],
+        "properties": {
+            "Polarity": "Polar",
+            "Charge": "Neutral",
+            "Chemical Formula": "C3H7NO2S",
+            "Component Groups": "Thiol group",
+            "Hydrogen Bonds": 2,
+            "Essential": false,
+            "Applications": "Disulfide bonds in proteins, antioxidant"
+        },
+        "markovChains": [
+            { "address": [2, 2, 1], "bits": 5, "codons": ["UGU", "UGC"] }
+        ]
+    },
+    "Glutamic Acid": {
+        "codons": ["GAA", "GAG"],
+        "properties": {
+            "Polarity": "Polar",
+            "Charge": "Negative",
+            "Chemical Formula": "C5H9NO4",
+            "Component Groups": "Carboxyl group",
+            "Hydrogen Bonds": 2,
+            "Essential": false,
+            "Applications": "Neurotransmission, protein synthesis"
+        },
+        "markovChains": [
+            { "address": [2, 2, 1], "bits": 5, "codons": ["GAA", "GAG"] }
+        ]
+    },
+    "Glutamine": {
+        "codons": ["CAA", "CAG"],
+        "properties": {
+            "Polarity": "Polar",
+            "Charge": "Neutral",
+            "Chemical Formula": "C5H10N2O3",
+            "Component Groups": "Amide group",
+            "Hydrogen Bonds": 2,
+            "Essential": false,
+            "Applications": "Nitrogen transport, protein synthesis"
+        },
+        "markovChains": [
+            { "address": [2, 2, 1], "bits": 5, "codons": ["CAA", "CAG"] }
+        ]
+    },
+    "Glycine": {
+        "codons": ["GGU", "GGC", "GGA", "GGG"],
+        "properties": {
+            "Polarity": "Nonpolar",
+            "Charge": "Neutral",
+            "Chemical Formula": "C2H5NO2",
+            "Component Groups": "Hydrogen",
+            "Hydrogen Bonds": 0,
+            "Essential": false,
+            "Applications": "Collagen formation, neurotransmitter"
+        },
+        "markovChains": [
+            { "address": [2, 2, 0], "bits": 4, "codons": ["GGU", "GGC", "GGA", "GGG"] }
+        ]
+    },
+    "Histidine": {
+        "codons": ["CAU", "CAC"],
+        "properties": {
+            "Polarity": "Polar",
+            "Charge": "Positive",
+            "Chemical Formula": "C6H9N3O2",
+            "Component Groups": "Imidazole ring",
+            "Hydrogen Bonds": 2,
+            "Essential": true,
+            "Applications": "Metal ion binding, enzyme catalysis"
+        },
+        "markovChains": [
+            { "address": [2, 2, 1], "bits": 5, "codons": ["CAU", "CAC"] }
+        ]
+    },
+    "Isoleucine": {
+        "codons": ["AUU", "AUC", "AUA"],
+        "properties": {
+            "Polarity": "Nonpolar",
+            "Charge": "Neutral",
+            "Chemical Formula": "C6H13NO2",
+            "Component Groups": "Alkyl side chain",
+            "Hydrogen Bonds": 0,
+            "Essential": true,
+            "Applications": "Muscle metabolism, hemoglobin synthesis"
+        },
+        "markovChains": [
+            { "address": [2, 2, 1], "bits": 4.736, "codons": ["AUU", "AUC", "AUA"] }
+        ]
+    },
+    "Leucine": {
+        "codons": ["UUA", "UUG", "CUU", "CUC", "CUA", "CUG"],
+        "properties": {
+            "Polarity": "Nonpolar",
+            "Charge": "Neutral",
+            "Chemical Formula": "C6H13NO2",
+            "Component Groups": "Alkyl side chain",
+            "Hydrogen Bonds": 0,
+            "Essential": true,
+            "Applications": "Protein synthesis, muscle repair"
+        },
+        "markovChains": [
+            { "address": [2, 2, 1], "bits": 5, "codons": ["UUA", "UUG"] },
+            { "address": [2, 2, 0], "bits": 4, "codons": ["CUU", "CUC", "CUA", "CUG"] }
+        ]
+    },
+    "Lysine": {
+        "codons": ["AAA", "AAG"],
+        "properties": {
+            "Polarity": "Polar",
+            "Charge": "Positive",
+            "Chemical Formula": "C6H14N2O2",
+            "Component Groups": "Amino group",
+            "Hydrogen Bonds": 3,
+            "Essential": true,
+            "Applications": "Protein synthesis, calcium absorption"
+        },
+        "markovChains": [
+            { "address": [2, 2, 1], "bits": 5, "codons": ["AAA", "AAG"] }
+        ]
+    },
+    "Methionine": {
+        "codons": ["AUG"],
+        "properties": {
+            "Polarity": "Nonpolar",
+            "Charge": "Neutral",
+            "Chemical Formula": "C5H11NO2S",
+            "Component Groups": "Thioether",
+            "Hydrogen Bonds": 0,
+            "Essential": true,
+            "Applications": "Start codon in translation, methyl donor"
+        },
+        "markovChains": [
+            { "address": [2, 2, 2], "bits": 6, "codons": ["AUG"] }
+        ]
+    },
+    "Phenylalanine": {
+        "codons": ["UUU", "UUC"],
+        "properties": {
+            "Polarity": "Nonpolar",
+            "Charge": "Neutral",
+            "Chemical Formula": "C9H11NO2",
+            "Component Groups": "Benzyl side chain",
+            "Hydrogen Bonds": 0,
+            "Essential": true,
+            "Applications": "Precursor to tyrosine, neurotransmitter synthesis"
+        },
+        "markovChains": [
+            { "address": [2, 2, 1], "bits": 5, "codons": ["UUU", "UUC"] }
+        ]
+    },
+    "Proline": {
+        "codons": ["CCU", "CCC", "CCA", "CCG"],
+        "properties": {
+            "Polarity": "Nonpolar",
+            "Charge": "Neutral",
+            "Chemical Formula": "C5H9NO2",
+            "Component Groups": "Pyrrolidine ring",
+            "Hydrogen Bonds": 0,
+            "Essential": false,
+            "Applications": "Collagen stability, protein folding"
+        },
+        "markovChains": [
+            { "address": [2, 2, 0], "bits": 4, "codons": ["CCU", "CCC", "CCA", "CCG"] }
+        ]
+    },
+    "Serine": {
+        "codons": ["UCU", "UCC", "UCA", "UCG", "AGU", "AGC"],
+        "properties": {
+            "Polarity": "Polar",
+            "Charge": "Neutral",
+            "Chemical Formula": "C3H7NO3",
+            "Component Groups": "Hydroxyl group",
+            "Hydrogen Bonds": 2,
+            "Essential": false,
+            "Applications": "Metabolism, enzyme activity"
+        },
+        "markovChains": [
+            { "address": [2, 2, 0], "bits": 4, "codons": ["UCU", "UCC", "UCA", "UCG"] },
+            { "address": [2, 2, 1], "bits": 5, "codons": ["AGU", "AGC"] }
+        ]
+    },
+    "Threonine": {
+        "codons": ["ACU", "ACC", "ACA", "ACG"],
+        "properties": {
+            "Polarity": "Polar",
+            "Charge": "Neutral",
+            "Chemical Formula": "C4H9NO3",
+            "Component Groups": "Hydroxyl group",
+            "Hydrogen Bonds": 3,
+            "Essential": true,
+            "Applications": "Protein synthesis, immune function"
+        },
+        "markovChains": [
+            { "address": [2, 2, 0], "bits": 4, "codons": ["ACU", "ACC", "ACA", "ACG"] }
+        ]
+    },
+    "Tryptophan": {
+        "codons": ["UGG"],
+        "properties": {
+            "Polarity": "Nonpolar",
+            "Charge": "Neutral",
+            "Chemical Formula": "C11H12N2O2",
+            "Component Groups": "Indole ring",
+            "Hydrogen Bonds": 1,
+            "Essential": true,
+            "Applications": "Serotonin precursor, melatonin synthesis"
+        },
+        "markovChains": [
+            { "address": [2, 2, 2], "bits": 6, "codons": ["UGG"] }
+        ]
+    },
+    "Tyrosine": {
+        "codons": ["UAU", "UAC"],
+        "properties": {
+            "Polarity": "Polar",
+            "Charge": "Neutral",
+            "Chemical Formula": "C9H11NO3",
+            "Component Groups": "Phenolic hydroxyl group",
+            "Hydrogen Bonds": 1,
+            "Essential": false,
+            "Applications": "Neurotransmitter synthesis, signal transduction"
+        },
+        "markovChains": [
+            { "address": [2, 2, 1], "bits": 5, "codons": ["UAU", "UAC"] }
+        ]
+    },
+    "Valine": {
+        "codons": ["GUU", "GUC", "GUA", "GUG"],
+        "properties": {
+            "Polarity": "Nonpolar",
+            "Charge": "Neutral",
+            "Chemical Formula": "C5H11NO2",
+            "Component Groups": "Branched aliphatic side chain",
+            "Hydrogen Bonds": 0,
+            "Essential": true,
+            "Applications": "Muscle growth, tissue repair"
+        },
+        "markovChains": [
+            { "address": [2, 2, 0], "bits": 4, "codons": ["GUU", "GUC", "GUA", "GUG"] }
+        ]
+    },
+    "Selenocysteine": {
+        "codons": ["UGA"],
+        "properties": {
+            "Polarity": "Polar",
+            "Charge": "Neutral",
+            "Chemical Formula": "C3H7NO2Se",
+            "Component Groups": "Selenol group",
+            "Hydrogen Bonds": 2,
+            "Essential": false,
+            "Applications": "Antioxidant enzymes, thyroid hormone metabolism"
+        },
+        "markovChains": [
+            { "address": [2, 2, 2], "bits": 6, "codons": ["UGA"] }
+        ]
+    },
+    "Pyrrolysine": {
+        "codons": ["UAG"],
+        "properties": {
+            "Polarity": "Polar",
+            "Charge": "Neutral",
+            "Chemical Formula": "C12H21N3O3",
+            "Component Groups": "Pyrroline ring",
+            "Hydrogen Bonds": 2,
+            "Essential": false,
+            "Applications": "Methanogenesis, enzyme catalysis"
+        },
+        "markovChains": [
+            { "address": [2, 2, 1], "bits": 5, "codons": ["UAG"] }
+        ]
+    },
+    "Stop Codon": {
+        "codons": ["UAA", "UAG", "UGA"],
+        "properties": {
+            "Polarity": "N/A",
+            "Charge": "N/A",
+            "Chemical Formula": "N/A",
+            "Component Groups": "N/A",
+            "Hydrogen Bonds": "N/A",
+            "Essential": "N/A",
+            "Applications": "Termination of translation"
+        },
+        "markovChains": [
+            { "address": [2, 2, 1], "bits": 5, "codons": ["UAA", "UAG"] },
+            { "address": [2, 2, 2], "bits": 6, "codons": ["UGA"] }
+        ]
+    }
+};
+
 
         // Codon to Amino Acid Map
         const codonToAminoAcid = {};
