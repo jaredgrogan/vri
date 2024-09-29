@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AAB Logic Gate - Events Based Logic Processor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Berkeley Mono', monospace;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border: 1px solid #ddd;
+        }
+        h1, h2, h3 {
+            font-weight: 400;
+            color: #222;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        label {
+            font-size: 18px;
+            font-weight: 400;
+            color: #555;
+            margin-right: 10px;
+        }
+        input[type="number"] {
+            width: 100px;
+            padding: 8px;
+            margin: 5px 0 20px;
+            border-radius: 5px;
+            border: 1px solid #bbb;
+            font-size: 16px;
+            font-family: 'Berkeley Mono', monospace;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            font-family: 'Berkeley Mono', monospace;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #chart {
+            margin-top: 30px;
+        }
+        #visual-display {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #1e1e1e;
+            color: #ffffff;
+            border-radius: 8px;
+            height: 150px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            font-size: 16px;
+            border: 1px solid #444;
+            white-space: pre-wrap; /* Wrap text */
+            word-wrap: break-word;  /* Wrap long words */
+        }
+        .metrics {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .metrics div {
+            flex: 1;
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .metrics div h3 {
+            margin-bottom: 5px;
+            font-size: 18px;
+        }
+        /* Subtle Gradient and Background */
+        body {
+            background: linear-gradient(135deg, #f4f4f4 25%, #ebebeb 100%);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AAB Logic Gate - Events Based Logic Processor</h1>
+        <div class="input-area" style="text-align: center;">
+            <label for="eventCount">Enter Number of Events:</label>
+            <input type="number" id="eventCount" min="1" value="100">
+            <button onclick="runSimulation()">Run Simulation</button>
+        </div>
+
+        <canvas id="chart"></canvas>
+
+        <div id="visual-display"></div>
+
+        <div class="metrics">
+            <div>
+                <h3>Total A Events</h3>
+                <span id="totalA">0</span>
+            </div>
+            <div>
+                <h3>Signal 1 (AA)</h3>
+                <span id="signal1">0</span>
+            </div>
+            <div>
+                <h3>Signal 0 (B)</h3>
+                <span id="signal0">0</span>
+            </div>
+            <div>
+                <h3>AAA Count</h3>
+                <span id="aaaCount">0</span>
+            </div>
+            <div>
+                <h3>AAB Count</h3>
+                <span id="aabCount">0</span>
+            </div>
+            <div>
+                <h3>Non-Signal Events</h3>
+                <span id="noSignal">0</span>
+            </div>
+            <div>
+                <h3>Unique Ternary Sequences</h3>
+                <span id="uniqueTernary">0</span>
+            </div>
+            <div>
+                <h3>Unique Binary Sequences</h3>
+                <span id="uniqueBinary">0</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Define phi using the exact arithmetic expression
+        const phi = (1 + Math.sqrt(5)) / 2;
+
+        // Calculate A and B using the golden ratio
+        const A = 2 / (1 + Math.sqrt(5));  // A = 1/phi
+        const B = 1 - A;  // B = A^2 (or equivalently 1 - A)
+
+        function runSimulation() {
+            const eventCount = document.getElementById('eventCount').value;
+            let eventHistory = [];
+            let totalA = 0, signal1 = 0, signal0 = 0, noSignal = 0, aaaCount = 0, aabCount = 0;
+            let signalData = [];
+            let visualDisplay = '';
+            
+            // For binary and ternary counts, based on total n events
+            let binaryCount = 0;
+            let ternaryCount = 0;
+
+            // Generate events based on the probabilities A and B
+            for (let i = 0; i < eventCount; i++) {
+                const event = generateEvent(A);  // Use A as the probability for generating 'A'
+                eventHistory.push(event);
+
+                if (event === 'A') totalA++;
+
+                // Visual display logic for 1s and 0s
+                if (i > 0 && eventHistory[i] === 'A' && eventHistory[i-1] === 'A') {
+                    signal1++;
+                    signalData.push(1);  // Signal 1 for AA
+                    visualDisplay += '1 ';  // Visual display output for AA -> 1
+                } else if (event === 'B') {
+                    signal0++;
+                    signalData.push(0);  // Signal 0 for B
+                    visualDisplay += '0 ';  // Visual display output for B -> 0
+                } else {
+                    signalData.push(null);  // No signal
+                    visualDisplay += '_ ';  // Visual display output for no signal
+                    noSignal++;  // Increment non-signal events
+                }
+
+                // Track AAA sequences
+                if (i > 2 && eventHistory[i] === 'A' && eventHistory[i-1] === 'A' && eventHistory[i-2] === 'A') {
+                    aaaCount++;
+                }
+
+                // Track AAB sequences
+                if (i > 2 && eventHistory[i] === 'B' && eventHistory[i-1] === 'A' && eventHistory[i-2] === 'A') {
+                    aabCount++;
+                }
+
+                // Increment binary sequence count (n-1 binary sequences)
+                if (i > 0) {
+                    binaryCount++;
+                }
+
+                // Increment ternary sequence count (n-2 ternary sequences)
+                if (i > 1) {
+                    ternaryCount++;
+                }
+            }
+
+            // Update the dashboard
+            document.getElementById('totalA').innerText = totalA;
+            document.getElementById('signal1').innerText = signal1;
+            document.getElementById('signal0').innerText = signal0;
+            document.getElementById('aaaCount').innerText = aaaCount;
+            document.getElementById('aabCount').innerText = aabCount;
+            document.getElementById('noSignal').innerText = noSignal;  // Fix non-signal counter
+            document.getElementById('uniqueTernary').innerText = ternaryCount;  // Dynamic ternary sequence count
+            document.getElementById('uniqueBinary').innerText = binaryCount;    // Dynamic binary sequence count
+
+            // Update the visual display with 1s for AA, 0s for B, and _ for no signal
+            document.getElementById('visual-display').innerText = visualDisplay.trim();
+
+                      // Draw the chart
+            const ctx = document.getElementById('chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [...Array(parseInt(eventCount)).keys()],
+                    datasets: [{
+                        label: 'Signal Data',
+                        data: signalData,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        fill: false,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: { 
+                            title: { 
+                                display: true, 
+                                text: 'Event Number' 
+                            }
+                        },
+                        y: { 
+                            title: { 
+                                display: true, 
+                                text: 'Signal (1=AA, 0=B)' 
+                            },
+                            min: 0, 
+                            max: 1
+                        }
+                    }
+                }
+            });
+        }
+
+        // Helper function to generate A or B based on probability A
+        function generateEvent(probA) {
+            return Math.random() < probA ? 'A' : 'B';
+        }
+    </script>
+</body>
+</html>
