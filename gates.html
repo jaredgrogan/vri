@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Sequence Simulation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        #chart {
+            width: 100%;
+            height: 400px;
+        }
+        .metrics {
+            margin-top: 20px;
+        }
+        .metrics div {
+            margin-bottom: 10px;
+        }
+        .metrics h3 {
+            margin-bottom: 5px;
+        }
+        input[type="number"] {
+            width: 100px;
+            padding: 5px;
+            margin: 5px 0;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #visual-display {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e9e9e9;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            height: 150px;
+            overflow-y: scroll;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Event Sequence Simulation</h1>
+        <label for="eventCount">Enter Number of Events:</label>
+        <input type="number" id="eventCount" min="1" value="100">
+        <button onclick="runSimulation()">Run Simulation</button>
+
+        <div id="chart"></div>
+
+        <div id="visual-display"></div>
+
+        <div class="metrics">
+            <h3>Simulation Results</h3>
+            <div><strong>Total A Events:</strong> <span id="totalA">0</span></div>
+            <div><strong>Signal 1 (AA):</strong> <span id="signal1">0</span></div>
+            <div><strong>Signal 0 (B):</strong> <span id="signal0">0</span></div>
+            <div><strong>AAA Count:</strong> <span id="aaaCount">0</span></div>
+            <div><strong>AAB Count:</strong> <span id="aabCount">0</span></div>
+            <div><strong>Non-Signal Events:</strong> <span id="noSignal">0</span></div>
+            <div><strong>Unique Ternary Sequences:</strong> <span id="uniqueTernary">0</span></div>
+            <div><strong>Unique Binary Sequences:</strong> <span id="uniqueBinary">0</span></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        function generateEvent(probA) {
+            return Math.random() < probA ? 'A' : 'B';
+        }
+
+        function runSimulation() {
+            const eventCount = document.getElementById('eventCount').value;
+            const probA = 0.618;
+            let eventHistory = [];
+            let totalA = 0, signal1 = 0, signal0 = 0, noSignal = 0, aaaCount = 0, aabCount = 0;
+            let uniqueTernarySequences = new Set();
+            let uniqueBinarySequences = new Set();
+            let signalData = [];
+            let visualDisplay = '';
+
+            for (let i = 0; i < eventCount; i++) {
+                const event = generateEvent(probA);
+                eventHistory.push(event);
+
+                if (event === 'A') totalA++;
+                
+                // Visual display logic for 1s and 0s
+                if (i > 0 && eventHistory[i] === 'A' && eventHistory[i-1] === 'A') {
+                    signal1++;
+                    signalData.push(1);  // Signal 1 for AA
+                    visualDisplay += '1 ';  // Visual display output for AA -> 1
+                } else if (event === 'B') {
+                    signal0++;
+                    signalData.push(0);  // Signal 0 for B
+                    visualDisplay += '0 ';  // Visual display output for B -> 0
+                } else {
+                    signalData.push(null);  // No signal
+                    visualDisplay += '_ ';  // Visual display output for no signal
+                }
+
+                if (i > 1 && eventHistory[i] === 'A' && eventHistory[i-1] === 'A' && eventHistory[i-2] === 'A') {
+                    aaaCount++;
+                }
+
+                if (i > 1 && eventHistory[i] === 'B' && eventHistory[i-1] === 'A' && eventHistory[i-2] === 'A') {
+                    aabCount++;
+                }
+
+                if (!(i > 0 && eventHistory[i] === 'A' && eventHistory[i-1] === 'A') && event !== 'B') {
+                    noSignal++;
+                }
+
+                if (i > 1) {
+                    const ternarySequence = `${eventHistory[i-2]}${eventHistory[i-1]}${eventHistory[i]}`;
+                    uniqueTernarySequences.add(ternarySequence);
+                }
+
+                if (i > 0) {
+                    const binarySequence = `${eventHistory[i-1]}${eventHistory[i]}`;
+                    uniqueBinarySequences.add(binarySequence);
+                }
+            }
+
+            // Update the dashboard
+            document.getElementById('totalA').innerText = totalA;
+            document.getElementById('signal1').innerText = signal1;
+            document.getElementById('signal0').innerText = signal0;
+            document.getElementById('aaaCount').innerText = aaaCount;
+            document.getElementById('aabCount').innerText = aabCount;
+            document.getElementById('noSignal').innerText = noSignal;
+            document.getElementById('uniqueTernary').innerText = uniqueTernarySequences.size;
+            document.getElementById('uniqueBinary').innerText = uniqueBinarySequences.size;
+
+            // Update the visual display with 1s for AA, 0s for B, and _ for no signal
+            document.getElementById('visual-display').innerText = visualDisplay.trim();
+
+            // Draw chart
+            const ctx = document.getElementById('chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [...Array(parseInt(eventCount)).keys()],
+                    datasets: [{
+                        label: 'Signal Data',
+                        data: signalData,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        fill: false,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: { title: { display: true, text: 'Event Number' } },
+                        y: { title: { display: true, text: 'Signal (1=AA, 0=B)' }, min: 0, max: 1 }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
