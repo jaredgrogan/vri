@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amino Acids: Markov Addresses & Information Content</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+            color: #4CAF50;
+        }
+
+        h2 {
+            color: #333;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #333;
+            color: #fff;
+            font-size: 1.2em;
+        }
+
+        td {
+            font-size: 1em;
+        }
+
+        .group1 {
+            background-color: #87CEFA; /* Light Blue for 4 bits */
+        }
+
+        .group2 {
+            background-color: #90EE90; /* Light Green for 5 bits */
+        }
+
+        .group3 {
+            background-color: #FFB6C1; /* Light Pink for 6 bits */
+        }
+
+        .group4, .group5 {
+            background-color: #FFD700; /* Gold for multi-address amino acids */
+            font-style: italic;
+        }
+
+        .info {
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        .legend {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 1.1em;
+        }
+
+        .exception {
+            border: 2px dotted #FFA07A; /* Dotted lines for Isoleucine */
+        }
+
+        .fraction-note {
+            color: #FF8C00;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Amino Acids: Information Address & Bit Content</h1>
+
+    <h2>Group 1 - 4 Bits (High Redundancy)</h2>
+    <table>
+        <tr>
+            <th>Amino Acid</th>
+            <th>Codons</th>
+            <th>Charge</th>
+            <th>Electrochemical Properties</th>
+            <th>Information Address</th>
+            <th>Bits</th>
+        </tr>
+        <tr class="group1">
+            <td>Glycine</td>
+            <td>GGU, GGC, GGA, GGG</td>
+            <td>Neutral</td>
+            <td>Non-polar</td>
+            <td class="info">[2,2,0]</td>
+            <td>4 bits</td>
+        </tr>
+        <tr class="group1">
+            <td>Alanine</td>
+            <td>GCU, GCC, GCA, GCG</td>
+            <td>Neutral</td>
+            <td>Non-polar</td>
+            <td class="info">[2,2,0]</td>
+            <td>4 bits</td>
+        </tr>
+        <tr class="group1">
+            <td>Leucine*</td>
+            <td>CUU, CUC, CUA, CUG*</td>
+            <td>Neutral</td>
+            <td>Non-polar</td>
+            <td class="info">[2,2,0]</td>
+            <td>4 bits</td>
+        </tr>
+        <tr class="group1">
+            <td>Valine</td>
+            <td>GUU, GUC, GUA, GUG</td>
+            <td>Neutral</td>
+            <td>Non-polar</td>
+            <td class="info">[2,2,0]</td>
+            <td>4 bits</td>
+        </tr>
+        <tr class="group1">
+            <td>Serine*</td>
+            <td>UCU, UCC, UCA, UCG*</td>
+            <td>Neutral</td>
+            <td>Hydroxyl</td>
+            <td class="info">[2,2,0]</td>
+            <td>4 bits</td>
+        </tr>
+        <tr class="group1">
+            <td>Threonine</td>
+            <td>ACU, ACC, ACA, ACG</td>
+            <td>Neutral</td>
+            <td>Hydroxyl</td>
+            <td class="info">[2,2,0]</td>
+            <td>4 bits</td>
+        </tr>
+    </table>
+
+    <h2>Group 2 - 5 Bits (Moderate Redundancy & Precision)</h2>
+    <table>
+        <tr>
+            <th>Amino Acid</th>
+            <th>Codons</th>
+            <th>Charge</th>
+            <th>Electrochemical Properties</th>
+            <th>Information Address</th>
+            <th>Bits</th>
+        </tr>
+        <tr class="group2">
+            <td>Serine*</td>
+            <td>AGU, AGC*</td>
+            <td>Neutral</td>
+            <td>Hydroxyl</td>
+            <td class="info">[2,2,1]</td>
+            <td>5 bits</td>
+        </tr>
+        <tr class="group2">
+            <td>Lysine</td>
+            <td>AAA, AAG</td>
+            <td>Positive</td>
+            <td>Basic</td>
+            <td class="info">[2,2,1]</td>
+            <td>5 bits</td>
+        </tr>
+        <tr class="group2">
+            <td>Aspartic Acid</td>
+            <td>GAU, GAC</td>
+            <td>Negative</td>
+            <td>Acidic</td>
+            <td class="info">[2,2,1]</td>
+            <td>5 bits</td>
+        </tr>
+        <tr class="group2">
+            <td>Leucine*</td>
+            <td>UUA, UUG*</td>
+            <td>Neutral</td>
+            <td>Non-polar</td>
+            <td class="info">[2,2,1]</td>
+            <td>5 bits</td>
+        </tr>
+        <tr class="group2">
+            <td>Arginine*</td>
+            <td>AGA, AGG*</td>
+            <td>Positive</td>
+            <td>Basic</td>
+            <td class="info">[2,2,1]</td>
+            <td>5 bits</td>
+        </tr>
+    </table>
+
+    <h2>Group 3 - 6 Bits (High Precision)</h2>
+    <table>
+        <tr>
+            <th>Amino Acid</th>
+            <th>Codons</th>
+            <th>Charge</th>
+            <th>Electrochemical Properties</th>
+            <th>Information Address</th>
+            <th>Bits</th>
+        </tr>
+        <tr class="group3">
+            <td>Methionine</td>
+            <td>AUG</td>
+            <td>Neutral</td>
+            <td>Sulfur-containing, non-polar</td>
+            <td class="info">[2,2,2]</td>
+            <td>6 bits</td>
+        </tr>
+        <tr class="group3">
+            <td>Tryptophan</td>
+            <td>UGG</td>
+            <td>Neutral</td>
+            <td>Aromatic, polar</td>
+            <td class="info">[2,2,2]</td>
+            <td>6 bits</td>
+        </tr>
+        <tr class="group3">
+            <td>Selenocysteine</td>
+            <td>UGA</td>
+            <td>Neutral</td>
+            <td>Sulfur-containing, polar</td>
+            <td class="info">[2,2,2]</td>
+            <td>6 bits</td>
+        </tr>
+        <tr class="group3">
+            <td>Stop Codon</td>
+            <td>UGA</td>
+            <td>N/A</td>
+            <td>Termination codon</td>
+            <td class="info">[2,2,2]</td>
+            <td>6 bits</td>
+        </tr>
+    </table>
+
+    <h2>Group 4: [2,2,0] & [2,2,1] (4 bits and 5 bits)</h2>
+    <table>
+        <tr>
+            <th>Amino Acid</th>
+            <th>Codons</th>
+            <th>Charge</th>
+            <th>Electrochemical Properties</th>
+            <th>Information Address</th>
+            <th>Bits</th>
+        </tr>
+        <tr class="group4">
+            <td>Leucine*</td>
+            <td>CUU, CUC, CUA, CUG* / UUA, UUG*</td>
+            <td>Neutral</td>
+            <td>Non-polar</td>
+            <td class="info">[2,2,0] / [2,2,1]</td>
+            <td>*4 bits* / *5 bits*</td>
+        </tr>
+        <tr class="group4">
+            <td>Serine*</td>
+            <td>UCU, UCC, UCA, UCG* / AGU, AGC*</td>
+            <td>Neutral</td>
+            <td>Hydroxyl</td>
+            <td class="info">[2,2,0] / [2,2,1]</td>
+            <td>*4 bits* / *5 bits*</td>
+        </tr>
+        <tr class="group4">
+            <td>Arginine*</td>
+            <td>CGU, CGC, CGA, CGG* / AGA, AGG*</td>
+            <td>Positive</td>
+            <td>Guanidino group, basic</td>
+            <td class="info">[2,2,0] / [2,2,1]</td>
+            <td>*4 bits* / *5 bits*</td>
+        </tr>
+    </table>
+
+    <h2>Group 5: [2,2,1] & [2,2,2] (5 bits and 6 bits)</h2>
+    <table>
+        <tr>
+            <th>Type</th>
+            <th>Codons</th>
+            <th>Charge</th>
+            <th>Electrochemical Properties</th>
+            <th>Information Address</th>
+            <th>Bits</th>
+        </tr>
+        <tr class="group5">
+            <td>Stop Codon</td>
+            <td>UAA, UAG / UGA</td>
+            <td>N/A</td>
+            <td>Termination codon</td>
+            <td class="info">[2,2,1] / [2,2,2]</td>
+            <td>*5 bits* / *6 bits*</td>
+        </tr>
+    </table>
+
+    <h2>Exception: Isoleucine (Unique Information Content)</h2>
+    <table>
+        <tr>
+            <th>Amino Acid</th>
+            <th>Codons</th>
+            <th>Charge</th>
+            <th>Electrochemical Properties</th>
+            <th>Information Address</th>
+            <th>Bits</th>
+        </tr>
+        <tr class="exception">
+            <td>Isoleucine</td>
+            <td>AUU, AUC, AUA</td>
+            <td>Neutral</td>
+            <td>Non-polar</td>
+            <td class="info">[2,2, log2(4/3)]</td>
+            <td>log2(64/3) bits</td>
+        </tr>
+    </table>
+
+    <div class="legend">
+        <h3>Legend:</h3>
+        <p><strong>Group 1 (4 bits):</strong> High redundancy – Blue</p>
+        <p><strong>Group 2 (5 bits):</strong> Moderate redundancy and precision – Green</p>
+        <p><strong>Group 3 (6 bits):</strong> High precision – Red</p>
+        <p><strong>Group 4 & Group 5:</strong> Amino acids or stop codons with multiple Markov chains – Gold</p>
+        <p class="fraction-note">Group 4: Total fractional information content 4.376 bits</p>
+        <p class="fraction-note">Group 5: Total fractional information content 5.858 bits</p>
+        <p>Asterisk (*) indicates the amino acid appears in both Group 1 and Group 2 due to its dual Markov chains.</p>
+    </div>
+
+</body>
+</html>
