@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Adaptive Computational Models</title>
+  
+  <!-- Berkeley Mono Font -->
+  <style>
+    @font-face {
+      font-family: 'BerkeleyMono';
+      src: url('https://fonts.gstatic.com/s/berkeleymono/v1/4sP_GwHqgG3s7n8FQ0NHCxj1kt8k2O4R2d5fW2A.woff2') format('woff2');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    body {
+      font-family: 'BerkeleyMono', monospace;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      margin: 0;
+      padding: 0;
+      color: #ffffff;
+    }
+
+    .container {
+      width: 95%;
+      max-width: 1000px;
+      margin: 40px auto;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    h1, h2 {
+      text-align: center;
+      font-weight: 400;
+      margin-bottom: 20px;
+      color: #ffffff;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 25px;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .tab-button {
+      background: none;
+      border: none;
+      padding: 12px 25px;
+      cursor: pointer;
+      margin: 0 10px;
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.7);
+      transition: color 0.3s, border-bottom 0.3s;
+      border-bottom: 3px solid transparent;
+    }
+
+    .tab-button.active {
+      color: #ffffff;
+      border-bottom: 3px solid #ff6ec7;
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.5s;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: #ffffff;
+    }
+
+    input[type="number"],
+    textarea {
+      width: 100%;
+      padding: 12px;
+      box-sizing: border-box;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      font-size: 16px;
+      resize: vertical;
+    }
+
+    textarea {
+      font-family: 'BerkeleyMono', monospace;
+    }
+
+    button.run-button {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(45deg, #ff6ec7, #7873f5);
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 18px;
+      transition: background 0.3s;
+    }
+
+    button.run-button:hover {
+      background: linear-gradient(45deg, #ff6ec7, #5a5af5);
+    }
+
+    canvas {
+      margin-top: 30px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 10px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .tabs {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .tab-button {
+        margin: 5px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Adaptive Computational Models</h1>
+    <div class="tabs">
+      <button class="tab-button active" data-tab="optionA">Option A: Magic Coin Model</button>
+      <button class="tab-button" data-tab="optionB">Option B: Programmable Logic</button>
+      <button class="tab-button" data-tab="optionC">Option C: Custom Patterns</button>
+    </div>
+    
+    <div class="tab-content active" id="optionA">
+      <h2>Magic Coin Model</h2>
+      <div class="form-group">
+        <label for="optionA-events">Number of Events:</label>
+        <input type="number" id="optionA-events" value="1000" min="1">
+      </div>
+      <button class="run-button" id="optionA-run">Run Simulation</button>
+      <canvas id="optionA-chart" width="800" height="400"></canvas>
+    </div>
+    
+    <div class="tab-content" id="optionB">
+      <h2>Programmable Event-Based Logic</h2>
+      <div class="form-group">
+        <label for="optionB-events">Number of Events:</label>
+        <input type="number" id="optionB-events" value="1000" min="1">
+      </div>
+      <button class="run-button" id="optionB-run">Run Simulation</button>
+      <canvas id="optionB-chart" width="800" height="400"></canvas>
+    </div>
+    
+    <div class="tab-content" id="optionC">
+      <h2>Customizable Patterns</h2>
+      <div class="form-group">
+        <label for="optionC-events">Number of Events:</label>
+        <input type="number" id="optionC-events" value="1000" min="1">
+      </div>
+      <div class="form-group">
+        <label for="optionC-patterns">Define Patterns (JSON):</label>
+        <textarea id="optionC-patterns" rows="6">{
+  "A,A,B": 1,
+  "B,B": 0,
+  "A,B,A": 1
+}</textarea>
+      </div>
+      <button class="run-button" id="optionC-run">Run Simulation</button>
+      <canvas id="optionC-chart" width="800" height="400"></canvas>
+    </div>
+  </div>
+
+  <!-- Include Chart.js Library -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <script>
+    // Constants
+    const PHI = (1 + Math.sqrt(5)) / 2; // Golden Ratio ≈1.618
+    const PSI = 1 / PHI;                // Inverse Golden Ratio ≈0.618
+    const PSI_SQUARED = PSI * PSI;      // ≈0.382
+
+    // Utility Functions
+    function getRandomEvent(probA) {
+      return Math.random() < probA ? 'A' : 'B';
+    }
+
+    // Option A: Magic Coin Model
+    function runOptionA() {
+      const numEvents = parseInt(document.getElementById('optionA-events').value);
+      if (isNaN(numEvents) || numEvents < 1) {
+        alert('Please enter a valid number of events for Option A.');
+        return;
+      }
+      const probOne = PSI;
+      const events = [];
+      for (let i = 0; i < numEvents; i++) {
+        const event = Math.random() < probOne ? 1 : 0;
+        events.push(event);
+      }
+      displayChart('optionA-chart', events, 'Magic Coin Model Results');
+    }
+
+    // Option B: Programmable Event-Based Logic (AAB Gate)
+    function runOptionB() {
+      const numEvents = parseInt(document.getElementById('optionB-events').value);
+      if (isNaN(numEvents) || numEvents < 1) {
+        alert('Please enter a valid number of events for Option B.');
+        return;
+      }
+      const probA = PSI;
+      // const probB = PSI_SQUARED; // Not directly used since A and B are exclusive
+
+      let eventSequence = [];
+      const outputs = [];
+
+      for (let i = 0; i < numEvents; i++) {
+        const event = getRandomEvent(probA);
+        eventSequence.push(event);
+        if (eventSequence.length > 3) {
+          eventSequence.shift();
+        }
+
+        let output = null;
+        if (eventSequence.slice(-3).join('') === 'AAB') {
+          output = 1;
+          eventSequence = [];
+        } else if (event === 'B') {
+          output = 0;
+          eventSequence = [];
+        }
+        if (output !== null) {
+          outputs.push(output);
+        }
+      }
+      displayChart('optionB-chart', outputs, 'Programmable Logic Results');
+    }
+
+    // Option C: Customizable Patterns
+    function runOptionC() {
+      const numEvents = parseInt(document.getElementById('optionC-events').value);
+      if (isNaN(numEvents) || numEvents < 1) {
+        alert('Please enter a valid number of events for Option C.');
+        return;
+      }
+      const patternInput = document.getElementById('optionC-patterns').value;
+      let patternOutputMap;
+      try {
+        // Ensure the JSON uses double quotes and proper key formatting
+        patternOutputMap = JSON.parse(patternInput);
+      } catch (error) {
+        alert('Invalid JSON format in patterns. Please ensure it uses double quotes and proper syntax.');
+        return;
+      }
+
+      const probA = PSI;
+      let eventSequence = [];
+      const outputs = [];
+      const patterns = Object.keys(patternOutputMap).map(pattern => {
+        const sequence = pattern.split(',');
+        return { sequence, output: patternOutputMap[pattern] };
+      });
+      const maxPatternLength = Math.max(...patterns.map(p => p.sequence.length));
+
+      for (let i = 0; i < numEvents; i++) {
+        const event = getRandomEvent(probA);
+        eventSequence.push(event);
+        if (eventSequence.length > maxPatternLength) {
+          eventSequence.shift();
+        }
+
+        let matched = false;
+        for (const patternObj of patterns) {
+          const { sequence, output } = patternObj;
+          if (eventSequence.slice(-sequence.length).join('') === sequence.join('')) {
+            outputs.push(output);
+            eventSequence = [];
+            matched = true;
+            break;
+          }
+        }
+        // Default action for 'A' is no signal; do nothing
+        if (!matched && event === 'B') {
+          // If 'B' is not part of any pattern, it can optionally signal 0 or be treated as no signal
+          // Here, we treat it as no signal unless explicitly defined in patterns
+        }
+      }
+      displayChart('optionC-chart', outputs, 'Custom Patterns Results');
+    }
+
+    // Chart Display Function
+    function displayChart(canvasId, data, label) {
+      const ctx = document.getElementById(canvasId).getContext('2d');
+      const existingChart = Chart.getChart(canvasId);
+      if (existingChart) {
+        existingChart.destroy();
+      }
+
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: data.map((_, index) => index + 1),
+          datasets: [{
+            label: label,
+            data: data,
+            borderColor: '#ff6ec7',
+            backgroundColor: 'rgba(255, 110, 199, 0.2)',
+            fill: true,
+            tension: 0.3,
+            pointRadius: 0,
+            borderWidth: 2,
+          }],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+              labels: {
+                color: '#ffffff',
+                font: {
+                  size: 14,
+                }
+              }
+            },
+            tooltip: {
+              enabled: true,
+            }
+          },
+          scales: {
+            x: {
+              display: true,
+              title: {
+                display: true,
+                text: 'Event Number',
+                color: '#ffffff',
+                font: {
+                  size: 14,
+                }
+              },
+              ticks: {
+                color: '#dddddd',
+                font: {
+                  size: 12,
+                }
+              }
+            },
+            y: {
+              display: true,
+              title: {
+                display: true,
+                text: 'Output',
+                color: '#ffffff',
+                font: {
+                  size: 14,
+                }
+              },
+              ticks: {
+                stepSize: 1,
+                color: '#dddddd',
+                font: {
+                  size: 12,
+                },
+                callback: function(value) {
+                  return value === 1 ? '1 (Signal)' : value === 0 ? '0 (No Signal)' : value;
+                }
+              },
+              min: 0,
+              max: 1,
+            },
+          },
+        },
+      });
+    }
+
+    // Tab Navigation
+    document.querySelectorAll('.tab-button').forEach(button => {
+      button.addEventListener('click', () => {
+        const targetTab = button.getAttribute('data-tab');
+
+        // Remove 'active' class from all buttons
+        document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+        // Add 'active' class to the clicked button
+        button.classList.add('active');
+
+        // Hide all tab contents
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        // Show the target tab content
+        document.getElementById(targetTab).classList.add('active');
+      });
+    });
+
+    // Event Listeners for Run Buttons
+    document.getElementById('optionA-run').addEventListener('click', runOptionA);
+    document.getElementById('optionB-run').addEventListener('click', runOptionB);
+    document.getElementById('optionC-run').addEventListener('click', runOptionC);
+  </script>
+</body>
+</html>
