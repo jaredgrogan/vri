@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Adaptive Computational Models</title>
+  
+  <!-- Berkeley Mono Font (Fallback to 'Courier New' if not available) -->
+  <style>
+    @font-face {
+      font-family: 'BerkeleyMono';
+      src: url('https://github.com/rizonesoft/berkeley-mono-font/raw/master/ttf/BerkeleyMono-Regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    body {
+      font-family: 'BerkeleyMono', 'Courier New', monospace;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      margin: 0;
+      padding: 0;
+      color: #ffffff;
+      transition: background 0.5s, color 0.5s;
+    }
+
+    .container {
+      width: 95%;
+      max-width: 1000px;
+      margin: 40px auto;
+      background: rgba(30, 30, 30, 0.8);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      position: relative;
+      transition: background 0.5s, color 0.5s;
+      overflow: hidden;
+      max-height: 90vh;
+    }
+
+    h1, h2 {
+      text-align: center;
+      font-weight: 400;
+      margin-bottom: 20px;
+      color: #ffffff;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 25px;
+      border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .tab-button {
+      background: none;
+      border: none;
+      padding: 12px 25px;
+      cursor: pointer;
+      margin: 0 10px;
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.7);
+      transition: color 0.3s, border-bottom 0.3s;
+      border-bottom: 3px solid transparent;
+    }
+
+    .tab-button.active {
+      color: #00ff00; /* Bright Green */
+      border-bottom: 3px solid #00ff00;
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.5s;
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: #ffffff;
+    }
+
+    input[type="number"],
+    textarea {
+      width: 100%;
+      padding: 12px;
+      box-sizing: border-box;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      font-size: 16px;
+      resize: vertical;
+    }
+
+    textarea {
+      font-family: 'BerkeleyMono', 'Courier New', monospace;
+    }
+
+    button.run-button {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(45deg, #00ff00, #00cc00);
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 18px;
+      transition: background 0.3s;
+    }
+
+    button.run-button:hover {
+      background: linear-gradient(45deg, #00cc00, #009900);
+    }
+
+    canvas {
+      margin-top: 30px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 10px;
+      max-height: 400px;
+    }
+
+    table.analysis-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      color: #ffffff;
+    }
+
+    table.analysis-table th,
+    table.analysis-table td {
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 8px;
+      text-align: center;
+    }
+
+    table.analysis-table th {
+      background: rgba(0, 255, 0, 0.2); /* Bright Green */
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Toggle Button Styles */
+    .toggle-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s;
+    }
+
+    .toggle-button svg {
+      width: 100%;
+      height: 100%;
+      fill: #ffffff;
+      transition: fill 0.3s;
+    }
+
+    body.night-mode {
+      background: linear-gradient(135deg, #1e1e1e 0%, #2a5298 100%);
+      color: #00ff00; /* Bright Green */
+    }
+
+    body.night-mode .container {
+      background: rgba(30, 30, 30, 0.9);
+      border: 1px solid rgba(0, 255, 0, 0.3);
+    }
+
+    body.night-mode .tab-button {
+      color: rgba(0, 255, 0, 0.7);
+    }
+
+    body.night-mode .tab-button.active {
+      color: #00ff00;
+      border-bottom: 3px solid #00ff00;
+    }
+
+    body.night-mode label {
+      color: #00ff00;
+    }
+
+    body.night-mode input[type="number"],
+    body.night-mode textarea {
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(0, 255, 0, 0.3);
+    }
+
+    body.night-mode button.run-button {
+      background: linear-gradient(45deg, #00ff00, #00cc00);
+    }
+
+    body.night-mode table.analysis-table th {
+      background: rgba(0, 255, 0, 0.3);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .tabs {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .tab-button {
+        margin: 5px 0;
+      }
+
+      .container {
+        padding: 20px;
+      }
+
+      canvas {
+        max-height: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <button class="toggle-button" id="theme-toggle" aria-label="Toggle Theme">
+      <!-- Sun Icon (Day Mode) -->
+      <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M6.995 12c0 2.761 2.246 5 5.005 5s5.005-2.239 5.005-5-2.246-5-5.005-5-5.005 2.239-5.005 5zm13.004-.5h2v1h-2v-1zm-18 0h2v1h-2v-1zm9-9h1v2h-1V2zm0 18h1v2h-1v-2zm9-9h2v1h-2v-1zm-18 0h2v1h-2v-1zm13.364-7.364l1.414 1.414-1.414 1.414-1.414-1.414 1.414-1.414zm-14.142 14.142l1.414 1.414-1.414 1.414-1.414-1.414 1.414-1.414z"/>
+      </svg>
+      <!-- Moon Icon (Night Mode) -->
+      <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="display: none;">
+        <path d="M21.752 15.002A9 9 0 0112 3a9 9 0 000 18 9 9 0 009.752-6z"/>
+      </svg>
+    </button>
+
+    <h1>Adaptive Computational Models</h1>
+    <div class="tabs">
+      <button class="tab-button active" data-tab="model1">Model 1: Magic Coin Gate</button>
+      <button class="tab-button" data-tab="model2">Model 2: AAB Gate</button>
+      <button class="tab-button" data-tab="model3">Model 3: Programmable Pattern Gate</button>
+    </div>
+    
+    <!-- Model 1: Magic Coin Gate -->
+    <div class="tab-content active" id="model1">
+      <h2>Model 1: Magic Coin Gate</h2>
+      <div class="form-group">
+        <label for="model1-events">Number of Events:</label>
+        <input type="number" id="model1-events" value="1000" min="1">
+      </div>
+      <button class="run-button" id="model1-run">Run Simulation</button>
+      <canvas id="model1-chart" width="800" height="400"></canvas>
+      <table class="analysis-table" id="model1-table" style="display: none;">
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Total 1s</td>
+            <td id="model1-ones">0</td>
+          </tr>
+          <tr>
+            <td>Total 0s</td>
+            <td id="model1-zeros">0</td>
+          </tr>
+          <tr>
+            <td>Occurrences of 11</td>
+            <td id="model1-11">0</td>
+          </tr>
+          <tr>
+            <td>Occurrences of 111</td>
+            <td id="model1-111">0</td>
+          </tr>
+          <tr>
+            <td>Occurrences of 1111</td>
+            <td id="model1-1111">0</td>
+          </tr>
+          <tr>
+            <td>Occurrences of 00</td>
+            <td id="model1-00">0</td>
+          </tr>
+          <tr>
+            <td>Occurrences of 101</td>
+            <td id="model1-101">0</td>
+          </tr>
+          <tr>
+            <td>Occurrences of 110</td>
+            <td id="model1-110">0</td>
+          </tr>
+          <tr>
+            <td>Occurrences of 001</td>
+            <td id="model1-001">0</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- Model 2: AAB Gate -->
+    <div class="tab-content" id="model2">
+      <h2>Model 2: AAB Gate</h2>
+      <div class="form-group">
+        <label for="model2-events">Number of Events:</label>
+        <input type="number" id="model2-events" value="1000" min="1">
+      </div>
+      <button class="run-button" id="model2-run">Run Simulation</button>
+      <canvas id="model2-chart" width="800" height="400"></canvas>
+      <table class="analysis-table" id="model2-table" style="display: none;">
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Total 1s</td>
+            <td id="model2-ones">0</td>
+          </tr>
+          <tr>
+            <td>Total 0s</td>
+            <td id="model2-zeros">0</td>
+          </tr>
+          <tr>
+            <td>No Signals</td>
+            <td id="model2-no-signals">0</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- Model 3: Programmable Pattern Gate -->
+    <div class="tab-content" id="model3">
+      <h2>Model 3: Programmable Pattern Gate</h2>
+      <div class="form-group">
+        <label for="model3-events">Number of Events:</label>
+        <input type="number" id="model3-events" value="1000" min="1">
+      </div>
+      <div class="form-group">
+        <label for="model3-patterns">Define Patterns (JSON):</label>
+        <textarea id="model3-patterns" rows="6">{
+  "A,A,B": 1,
+  "B,B": 0,
+  "A,B,A": 1
+}</textarea>
+      </div>
+      <button class="run-button" id="model3-run">Run Simulation</button>
+      <canvas id="model3-chart" width="800" height="400"></canvas>
+      <table class="analysis-table" id="model3-table" style="display: none;">
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Total 1s</td>
+            <td id="model3-ones">0</td>
+          </tr>
+          <tr>
+            <td>Total 0s</td>
+            <td id="model3-zeros">0</td>
+          </tr>
+          <tr>
+            <td>No Signals</td>
+            <td id="model3-no-signals">0</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Include Chart.js Library -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <script>
+    // Constants
+    const PHI = (1 + Math.sqrt(5)) / 2; // Golden Ratio ≈1.618
+    const PSI = 1 / PHI;                // Inverse Golden Ratio ≈0.618
+    const PSI_SQUARED = PSI * PSI;      // ≈0.382
+
+    // Utility Functions
+    function getRandomEvent(probA) {
+      return Math.random() < probA ? 'A' : 'B';
+    }
+
+    // Toggle Theme Functionality
+    const themeToggle = document.getElementById('theme-toggle');
+    const sunIcon = document.getElementById('sun-icon');
+    const moonIcon = document.getElementById('moon-icon');
+
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('night-mode');
+      if (document.body.classList.contains('night-mode')) {
+        sunIcon.style.display = 'none';
+        moonIcon.style.display = 'block';
+      } else {
+        sunIcon.style.display = 'block';
+        moonIcon.style.display = 'none';
+      }
+    });
+
+    // Model 1: Magic Coin Gate
+    function runModel1() {
+      const numEvents = parseInt(document.getElementById('model1-events').value);
+      if (isNaN(numEvents) || numEvents < 1) {
+        alert('Please enter a valid number of events for Model 1.');
+        return;
+      }
+      const probOne = PSI;
+      const events = [];
+      for (let i = 0; i < numEvents; i++) {
+        const event = Math.random() < probOne ? 1 : 0;
+        events.push(event);
+      }
+      displayChart('model1-chart', events, 'Model 1: Magic Coin Gate Results');
+      analyzeModel1(events);
+    }
+
+    function analyzeModel1(events) {
+      let totalOnes = 0;
+      let totalZeros = 0;
+      let count11 = 0, count111 = 0, count1111 = 0;
+      let count00 = 0, count101 = 0, count110 = 0, count001 = 0;
+
+      for (let i = 0; i < events.length; i++) {
+        if (events[i] === 1) totalOnes++;
+        else totalZeros++;
+
+        if (i >= 1 && events[i] === 1 && events[i-1] === 1) count11++;
+        if (i >= 2 && events[i] === 1 && events[i-1] === 1 && events[i-2] === 1) count111++;
+        if (i >= 3 && events[i] === 1 && events[i-1] === 1 && events[i-2] === 1 && events[i-3] === 1) count1111++;
+
+        if (i >= 1 && events[i] === 0 && events[i-1] === 0) count00++;
+
+        if (i >= 2 && events[i] === 1 && events[i-1] === 0 && events[i-2] === 1) count101++;
+        if (i >= 2 && events[i] === 0 && events[i-1] === 1 && events[i-2] === 1) count110++;
+        if (i >= 2 && events[i] === 1 && events[i-1] === 0 && events[i-2] === 0) count001++;
+      }
+
+      document.getElementById('model1-ones').innerText = totalOnes;
+      document.getElementById('model1-zeros').innerText = totalZeros;
+      document.getElementById('model1-11').innerText = count11;
+      document.getElementById('model1-111').innerText = count111;
+      document.getElementById('model1-1111').innerText = count1111;
+      document.getElementById('model1-00').innerText = count00;
+      document.getElementById('model1-101').innerText = count101;
+      document.getElementById('model1-110').innerText = count110;
+      document.getElementById('model1-001').innerText = count001;
+
+      document.getElementById('model1-table').style.display = 'table';
+    }
+
+    // Model 2: AAB Gate
+    function runModel2() {
+      const numEvents = parseInt(document.getElementById('model2-events').value);
+      if (isNaN(numEvents) || numEvents < 1) {
+        alert('Please enter a valid number of events for Model 2.');
+        return;
+      }
+      const probA = PSI;
+      let eventSequence = [];
+      const outputs = [];
+      let totalOnes = 0;
+      let totalZeros = 0;
+      let noSignals = 0;
+
+      for (let i = 0; i < numEvents; i++) {
+        const event = getRandomEvent(probA);
+        eventSequence.push(event);
+        if (eventSequence.length > 3) {
+          eventSequence.shift();
+        }
+
+        if (event === 1) totalOnes++;
+        else totalZeros++;
+
+        let output = null;
+        if (eventSequence.slice(-3).join('') === 'AAB') {
+          output = 1;
+          outputs.push(output);
+          eventSequence = [];
+        } else if (event === 'B') {
+          output = 0;
+          outputs.push(output);
+          eventSequence = [];
+        } else {
+          noSignals++;
+        }
+
+        if (output === null && i === numEvents - 1) {
+          noSignals++;
+        }
+      }
+      displayChart('model2-chart', outputs, 'Model 2: AAB Gate Results');
+      analyzeModel2(totalOnes, totalZeros, noSignals);
+    }
+
+    function analyzeModel2(ones, zeros, noSignals) {
+      document.getElementById('model2-ones').innerText = ones;
+      document.getElementById('model2-zeros').innerText = zeros;
+      document.getElementById('model2-no-signals').innerText = noSignals;
+
+      document.getElementById('model2-table').style.display = 'table';
+    }
+
+    // Model 3: Programmable Pattern Gate
+    function runModel3() {
+      const numEvents = parseInt(document.getElementById('model3-events').value);
+      if (isNaN(numEvents) || numEvents < 1) {
+        alert('Please enter a valid number of events for Model 3.');
+        return;
+      }
+      const patternInput = document.getElementById('model3-patterns').value;
+      let patternOutputMap;
+      try {
+        patternOutputMap = JSON.parse(patternInput);
+      } catch (error) {
+        alert('Invalid JSON format in patterns. Please ensure it uses double quotes and proper syntax.');
+        return;
+      }
+
+      const probA = PSI;
+      let eventSequence = [];
+      const outputs = [];
+      let totalOnes = 0;
+      let totalZeros = 0;
+      let noSignals = 0;
+
+      const patterns = Object.keys(patternOutputMap).map(pattern => {
+        const sequence = pattern.split(',');
+        return { sequence, output: patternOutputMap[pattern] };
+      });
+      const maxPatternLength = Math.max(...patterns.map(p => p.sequence.length));
+
+      for (let i = 0; i < numEvents; i++) {
+        const event = getRandomEvent(probA);
+        eventSequence.push(event);
+        if (eventSequence.length > maxPatternLength) {
+          eventSequence.shift();
+        }
+
+        if (event === 1) totalOnes++;
+        else totalZeros++;
+
+        let matched = false;
+        for (const patternObj of patterns) {
+          const { sequence, output } = patternObj;
+          if (eventSequence.slice(-sequence.length).join('') === sequence.join('')) {
+            outputs.push(output);
+            if (output === 1) totalOnes++;
+            else totalZeros++;
+            eventSequence = [];
+            matched = true;
+            break;
+          }
+        }
+        if (!matched && event === 'B') {
+          // Define behavior for 'B' not part of any pattern
+          noSignals++;
+        }
+      }
+      displayChart('model3-chart', outputs, 'Model 3: Programmable Pattern Gate Results');
+      analyzeModel3(totalOnes, totalZeros, noSignals);
+    }
+
+    function analyzeModel3(ones, zeros, noSignals) {
+      document.getElementById('model3-ones').innerText = ones;
+      document.getElementById('model3-zeros').innerText = zeros;
+      document.getElementById('model3-no-signals').innerText = noSignals;
+
+      document.getElementById('model3-table').style.display = 'table';
+    }
+
+    // Chart Display Function
+    function displayChart(canvasId, data, label) {
+      const ctx = document.getElementById(canvasId).getContext('2d');
+      const existingChart = Chart.getChart(canvasId);
+      if (existingChart) {
+        existingChart.destroy();
+      }
+
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: data.map((_, index) => index + 1),
+          datasets: [{
+            label: label,
+            data: data,
+            borderColor: '#00ff00', // Bright Green
+            backgroundColor: 'rgba(0, 255, 0, 0.2)',
+            fill: true,
+            tension: 0.3,
+            pointRadius: 0,
+            borderWidth: 2,
+          }],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+              labels: {
+                color: document.body.classList.contains('night-mode') ? '#00ff00' : '#ffffff',
+                font: {
+                  size: 14,
+                }
+              }
+            },
+            tooltip: {
+              enabled: true,
+            }
+          },
+          scales: {
+            x: {
+              display: true,
+              title: {
+                display: true,
+                text: 'Event Number',
+                color: document.body.classList.contains('night-mode') ? '#00ff00' : '#ffffff',
+                font: {
+                  size: 14,
+                }
+              },
+              ticks: {
+                color: document.body.classList.contains('night-mode') ? '#00ff00' : '#dddddd',
+                font: {
+                  size: 12,
+                }
+              }
+            },
+            y: {
+              display: true,
+              title: {
+                display: true,
+                text: 'Output',
+                color: document.body.classList.contains('night-mode') ? '#00ff00' : '#ffffff',
+                font: {
+                  size: 14,
+                }
+              },
+              ticks: {
+                stepSize: 1,
+                color: document.body.classList.contains('night-mode') ? '#00ff00' : '#dddddd',
+                font: {
+                  size: 12,
+                },
+                callback: function(value) {
+                  return value === 1 ? '1 (Signal)' : value === 0 ? '0 (No Signal)' : value;
+                }
+              },
+              min: 0,
+              max: 1,
+            },
+          },
+        },
+      });
+    }
+
+    // Tab Navigation
+    document.querySelectorAll('.tab-button').forEach(button => {
+      button.addEventListener('click', () => {
+        const targetTab = button.getAttribute('data-tab');
+
+        // Remove 'active' class from all buttons
+        document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+        // Add 'active' class to the clicked button
+        button.classList.add('active');
+
+        // Hide all tab contents
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        // Show the target tab content
+        document.getElementById(targetTab).classList.add('active');
+      });
+    });
+
+    // Event Listeners for Run Buttons
+    document.getElementById('model1-run').addEventListener('click', runModel1);
+    document.getElementById('model2-run').addEventListener('click', runModel2);
+    document.getElementById('model3-run').addEventListener('click', runModel3);
+  </script>
+</body>
+</html>
