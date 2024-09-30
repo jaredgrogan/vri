@@ -1,0 +1,31 @@
+<div class="terminal">
+  <pre id="typed-text"></pre>
+</div>
+
+<script>
+  const textToType = "Welcome to the AI Research Assistant! How can I help with your research today?";
+  let i = 0;
+  const speed = 50; // Speed of typing
+
+  function typeText() {
+    if (i < textToType.length) {
+      document.getElementById('typed-text').innerHTML += textToType.charAt(i);
+      i++;
+      setTimeout(typeText, speed);
+    }
+  }
+
+  typeText(); // Start typing effect
+</script>
+
+<style>
+  .terminal {
+    background-color: #000;
+    color: #0f0;
+    padding: 20px;
+    border-radius: 5px;
+    font-family: 'Courier New', monospace;
+    max-width: 100%;
+    min-height: 150px;
+  }
+</style>
