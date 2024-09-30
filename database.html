@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Herakles AI - Research Assistant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Styles Here */
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f9;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .logo {
+            height: 40px;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+        .settings-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 20px;
+            cursor: pointer;
+        }
+        .time-display {
+            font-family: 'Berkeley Mono', monospace;
+            font-size: 14px;
+        }
+        /* Rest of the CSS... */
+        /* ... */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #fff;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <img src="assets/logo.svg" alt="Herakles AI Logo" class="logo">
+    <div class="header-right">
+        <img src="assets/settings.svg" alt="Settings" class="settings-icon">
+        <div class="time-display" id="timeDisplay"></div>
+    </div>
+</header>
+
+<main>
+    <!-- LLM-Powered Chat Workspace -->
+    <section id="chatWorkspace">
+        <!-- Chat Interface -->
+        <!-- ... -->
+    </section>
+
+    <!-- Search-Based Workspace -->
+    <section id="searchWorkspace">
+        <!-- Search Interface -->
+        <!-- ... -->
+    </section>
+
+    <!-- Actions Menu -->
+    <section id="actionsMenu">
+        <!-- Buttons for Actions -->
+        <!-- ... -->
+    </section>
+</main>
+
+<footer>
+    &copy; 2024 UNIVERSITAS AI
+</footer>
+
+<script>
+    // JavaScript Code Here
+
+    // Time Display Function
+    function updateTime() {
+        const now = new Date();
+        const options = { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' };
+        const timeString = now.toLocaleDateString('en-US', options).replace(',', '');
+        document.getElementById('timeDisplay').textContent = timeString;
+    }
+    updateTime();
+    setInterval(updateTime, 60000);
+
+    // Typing Effect for Assistant Responses
+    function typeEffect(element, text) {
+        let i = 0;
+        const speed = 50;
+        function typing() {
+            if (i < text.length) {
+                element.innerHTML += text.charAt(i);
+                i++;
+                setTimeout(typing, speed);
+            }
+        }
+        typing();
+    }
+
+    // Example Usage:
+    // const assistantResponse = document.getElementById('assistantResponse');
+    // typeEffect(assistantResponse, "Hello! How can I assist you today?");
+
+    // Rest of the JavaScript...
+    // ...
+</script>
+
+</body>
+</html>
