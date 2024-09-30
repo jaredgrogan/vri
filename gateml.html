@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Adaptive Computational Models</title>
+  
+  <!-- Berkeley Mono Font (Fallback to 'Courier New' if not available) -->
+  <style>
+    @font-face {
+      font-family: 'BerkeleyMono';
+      src: url('https://github.com/rizonesoft/berkeley-mono-font/raw/master/ttf/BerkeleyMono-Regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    :root {
+      /* Day Mode Variables */
+      --day-bg: #ffffff;
+      --day-text: #1e1e1e;
+      --day-accent: #009966; /* Pleasant Green */
+      
+      /* Night Mode Variables */
+      --night-bg: #1e1e1e;
+      --night-container-bg: #2a2a2a;
+      --night-text: #008855; /* 10% Darker Neon Green */
+      --night-accent: #008855;
+      
+      /* Common Variables */
+      --transition-duration: 0.5s;
+      --toggle-size: 40px;
+    }
+
+    body {
+      font-family: 'BerkeleyMono', 'Courier New', monospace;
+      background: var(--day-bg);
+      margin: 0;
+      padding: 0;
+      color: var(--day-text);
+      transition: background var(--transition-duration), color var(--transition-duration);
+    }
+
+    body.night-mode {
+      background: var(--night-bg);
+      color: var(--night-text);
+    }
+
+    .container {
+      width: 95%;
+      max-width: 1000px;
+      margin: 40px auto;
+      background: var(--day-bg);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(0, 0, 0, 0.18);
+      position: relative;
+      transition: background var(--transition-duration), color var(--transition-duration);
+      overflow: hidden;
+      max-height: 90vh;
+    }
+
+    body.night-mode .container {
+      background: var(--night-container-bg);
+      border: 1px solid var(--night-accent);
+    }
+
+    h1, h2 {
+      text-align: center;
+      font-weight: 400;
+      margin-bottom: 20px;
+      color: inherit;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 25px;
+      border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+      transition: border-bottom var(--transition-duration);
+    }
+
+    body.night-mode .tabs {
+      border-bottom: 2px solid rgba(0, 136, 85, 0.3); /* Darker Green */
+    }
+
+    .tab-button {
+      background: none;
+      border: none;
+      padding: 12px 25px;
+      cursor: pointer;
+      margin: 0 10px;
+      font-size: 18px;
+      color: var(--day-text);
+      transition: color 0.3s, border-bottom 0.3s;
+      border-bottom: 3px solid transparent;
+    }
+
+    body.night-mode .tab-button {
+      color: var(--night-text);
+    }
+
+    .tab-button.active {
+      color: var(--day-accent);
+      border-bottom: 3px solid var(--day-accent);
+    }
+
+    body.night-mode .tab-button.active {
+      color: var(--night-accent);
+      border-bottom: 3px solid var(--night-accent);
+    }
+
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.5s;
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: inherit;
+    }
+
+    input[type="number"],
+    textarea {
+      width: 100%;
+      padding: 12px;
+      box-sizing: border-box;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      background: var(--day-bg);
+      color: var(--day-text);
+      font-size: 16px;
+      resize: vertical;
+      transition: background var(--transition-duration), color var(--transition-duration), border 0.3s;
+    }
+
+    body.night-mode input[type="number"],
+    body.night-mode textarea {
+      background: var(--night-container-bg);
+      color: var(--night-text);
+      border: 1px solid var(--night-accent);
+    }
+
+    textarea {
+      font-family: 'BerkeleyMono', 'Courier New', monospace;
+    }
+
+    button.run-button,
+    button.export-button {
+      display: inline-block;
+      padding: 10px 20px;
+      background: linear-gradient(45deg, #00cc66, #009966);
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s;
+      margin-right: 10px;
+      margin-top: 10px;
+    }
+
+    button.run-button:hover,
+    button.export-button:hover {
+      background: linear-gradient(45deg, #009966, #007a4d);
+    }
+
+    body.night-mode button.run-button,
+    body.night-mode button.export-button {
+      background: linear-gradient(45deg, #00cc66, #009966);
+    }
+
+    body.night-mode button.run-button:hover,
+    body.night-mode button.export-button:hover {
+      background: linear-gradient(45deg, #009966, #007a4d);
+    }
+
+    canvas {
+      margin-top: 30px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 10px;
+      max-height: 400px;
+    }
+
+    table.analysis-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      color: inherit;
+    }
+
+    table.analysis-table th,
+    table.analysis-table td {
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      padding: 8px;
+      text-align: center;
+    }
+
+    table.analysis-table th {
+      background: var(--day-accent);
+      color: #ffffff;
+      transition: background var(--transition-duration), color var(--transition-duration);
+    }
+
+    body.night-mode table.analysis-table th {
+      background: var(--night-accent);
+      color: #000000;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Toggle Button Styles */
+    .toggle-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      width: var(--toggle-size);
+      height: var(--toggle-size);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s;
+    }
+
+    .toggle-button svg {
+      width: 100%;
+      height: 100%;
+      fill: #1e1e1e; /* Dark for day mode */
+      transition: fill 0.3s;
+    }
+
+    body.night-mode .toggle-button svg {
+      fill: var(--night-accent);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .tabs {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .tab-button {
+        margin: 5px 0;
+      }
+
+      .container {
+        padding: 20px;
+      }
+
+      canvas {
+        max-height: 300px;
+      }
+
+      button.run-button,
+      button.export-button {
+        width: 100%;
+        margin-right: 0;
+      }
+    }
+
+    /* Footer Styles */
+    footer {
+      text-align: center;
+      margin-top: 20px;
+      color: rgba(0, 0, 0, 0.5);
+      transition: color var(--transition-duration);
+    }
+
+    body.night-mode footer {
+      color: rgba(0, 136, 85, 0.5); /* Darker Neon Green */
+    }
+  </style>
+</head>
+<body class="day-mode">
+  <!-- Theme Toggle Button -->
+  <div class="container">
+    <button class="toggle-button" id="theme-toggle" aria-label="Toggle Theme">
+      <!-- Sun Icon (Day Mode) -->
+      <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M6.995 12c0 2.761 2.246 5 5.005 5s5.005-2.239 5.005-5-2.246-5-5.005-5-5.005 2.239-5.005 5zm13.004-.5h2v1h-2v-1zm-18 0h2v1h-2v-1zm9-9h1v2h-1V2zm0 18h1v2h-1v-2zm9-9h2v1h-2v-1zm-18 0h2v1h-2v-1zm13.364-7.364l1.414 1.414-1.414 1.414-1.414-1.414 1.414-1.414zm-14.142 14.142l1.414 1.414-1.414 1.414-1.414-1.414 1.414-1.414z"/>
+      </svg>
+      <!-- Moon Icon (Night Mode) -->
+      <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="display: none;">
+        <path d="M21.752 15.002A9 9 0 0112 3a9 9 0 000 18 9 9 0 009.752-6z"/>
+      </svg>
+    </button>
+    
+    <h1>Adaptive Computational Models</h1>
+    <div class="tabs">
+      <button class="tab-button active" data-tab="model1">Model 1: Magic Coin Gate</button>
+      <button class="tab-button" data-tab="model2">Model 2: AAB Gate</button>
+      <button class="tab-button" data-tab="model3">Model 3: Programmable Pattern Gate</button>
+    </div>
+    
+    <!-- Model 1: Magic Coin Gate -->
+    <div class="tab-content active" id="model1">
+      <h2>Model 1: Magic Coin Gate</h2>
+      <div class="form-group">
+        <label for="model1-events">Number of Events:</label>
+        <input type="number" id="model1-events" value="1000" min="1">
+      </div>
+      <button class="run-button" id="model1-run">Run Simulation</button>
+      <button class="export-button" id="model1-export-csv">Export CSV</button>
+      <button class="export-button" id="model1-export-json">Export JSON</button>
+      <canvas id="model1-chart" width="800" height="400"></canvas>
+      <table class="analysis-table" id="model1-table" style="display: none;">
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Total 1s</td>
+            <td id="model1-ones">0</td>
+          </tr>
+          <tr>
+            <td>Total 0s</td>
+            <td id="model1-zeros">0</td>
+          </tr>
+          <tr>
+            <td>Occurrences of 11</td>
+            <td id="model1-11">0</td>
+          </tr>
+          <tr>
+            <td>Occurrences of 111</td>
+            <td id="model1-111">0</td>
+          </tr>
+          <tr>
+            <td>Occurrences of 1111</td>
+            <td id="model1-1111">0</td>
+          </tr>
+          <tr>
+            <td>Occurrences of 00</td>
+            <td id="model1-00">0</td>
+          </tr>
+          <tr>
+            <td>Occurrences of 101</td>
+            <td id="model1-101">0</td>
+          </tr>
+          <tr>
+            <td>Occurrences of 110</td>
+            <td id="model1-110">0</td>
+          </tr>
+          <tr>
+            <td>Occurrences of 001</td>
+            <td id="model1-001">0</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- Model 2: AAB Gate -->
+    <div class="tab-content" id="model2">
+      <h2>Model 2: AAB Gate</h2>
+      <div class="form-group">
+        <label for="model2-events">Number of Events:</label>
+        <input type="number" id="model2-events" value="1000" min="1">
+      </div>
+      <button class="run-button" id="model2-run">Run Simulation</button>
+      <button class="export-button" id="model2-export-csv">Export CSV</button>
+      <button class="export-button" id="model2-export-json">Export JSON</button>
+      <canvas id="model2-chart" width="800" height="400"></canvas>
+      <table class="analysis-table" id="model2-table" style="display: none;">
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Total 1s (Signals)</td>
+            <td id="model2-ones">0</td>
+          </tr>
+          <tr>
+            <td>Total 0s</td>
+            <td id="model2-zeros">0</td>
+          </tr>
+          <tr>
+            <td>No Signals</td>
+            <td id="model2-no-signals">0</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- Model 3: Programmable Pattern Gate -->
+    <div class="tab-content" id="model3">
+      <h2>Model 3: Programmable Pattern Gate</h2>
+      <div class="form-group">
+        <label for="model3-events">Number of Events:</label>
+        <input type="number" id="model3-events" value="1000" min="1">
+      </div>
+      <div class="form-group">
+        <label for="model3-patterns">Define Patterns (JSON):</label>
+        <textarea id="model3-patterns" rows="6">{
+  "A,A,B": 1,
+  "B,B": 0,
+  "A,B,A": 1
+}</textarea>
+      </div>
+      <button class="run-button" id="model3-run">Run Simulation</button>
+      <button class="export-button" id="model3-export-csv">Export CSV</button>
+      <button class="export-button" id="model3-export-json">Export JSON</button>
+      <canvas id="model3-chart" width="800" height="400"></canvas>
+      <table class="analysis-table" id="model3-table" style="display: none;">
+        <thead>
+          <tr>
+            <th>Metric</th>
+            <th>Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Total 1s</td>
+            <td id="model3-ones">0</td>
+          </tr>
+          <tr>
+            <td>Total 0s</td>
+            <td id="model3-zeros">0</td>
+          </tr>
+          <tr>
+            <td>No Signals</td>
+            <td id="model3-no-signals">0</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <!-- Footer -->
+    <footer>
+      &copy; 137science.com
+    </footer>
+  </div>
+
+  <!-- Include TensorFlow.js Library -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.21.0/dist/tf.min.js"></script>
+  
+  <!-- Include Chart.js Library -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <script>
+    // Constants
+    const PHI = (1 + Math.sqrt(5)) / 2; // Golden Ratio ≈1.618
+    const PSI = 1 / PHI;                // Inverse Golden Ratio ≈0.618
+    const PSI_SQUARED = PSI * PSI;      // ≈0.382
+
+    // Utility Functions
+    function getRandomEvent(probA) {
+      return Math.random() < probA ? 'A' : 'B';
+    }
+
+    // Machine Learning Model (Simple Neural Network for Next Event Prediction)
+    let mlModels = {
+      model1: null,
+      model2: null,
+      model3: null
+    };
+
+    async function createMLModel() {
+      // Define a simple sequential model
+      const model = tf.sequential();
+      model.add(tf.layers.dense({inputShape: [5], units: 16, activation: 'relu'}));
+      model.add(tf.layers.dense({units: 16, activation: 'relu'}));
+      model.add(tf.layers.dense({units: 2, activation: 'softmax'})); // Output: A or B
+
+      // Compile the model
+      model.compile({
+        optimizer: tf.train.adam(),
+        loss: 'categoricalCrossentropy',
+        metrics: ['accuracy']
+      });
+
+      return model;
+    }
+
+    async function trainMLModel(model, data, labels) {
+      const xs = tf.tensor2d(data);
+      const ys = tf.tensor2d(labels);
+
+      await model.fit(xs, ys, {
+        epochs: 10,
+        batchSize: 32,
+        shuffle: true,
+        verbose: 0
+      });
+
+      xs.dispose();
+      ys.dispose();
+    }
+
+    function encodeEvent(event) {
+      return event === 'A' ? 1 : 0;
+    }
+
+    function oneHotEncode(label) {
+      return label === 'A' ? [1, 0] : [0, 1];
+    }
+
+    async function initializeMLModels() {
+      mlModels.model1 = await createMLModel();
+      mlModels.model2 = await createMLModel();
+      mlModels.model3 = await createMLModel();
+    }
+
+    initializeMLModels();
+
+    // Theme Toggle Functionality
+    const themeToggle = document.getElementById('theme-toggle');
+    const sunIcon = document.getElementById('sun-icon');
+    const moonIcon = document.getElementById('moon-icon');
+
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('night-mode');
+      document.body.classList.toggle('day-mode');
+      if (document.body.classList.contains('night-mode')) {
+        sunIcon.style.display = 'none';
+        moonIcon.style.display = 'block';
+      } else {
+        sunIcon.style.display = 'block';
+        moonIcon.style.display = 'none';
+      }
+      updateChartColors();
+    });
+
+    // Update Chart Colors Based on Theme
+    function updateChartColors() {
+      const charts = Chart.instances;
+      for (let key in charts) {
+        if (charts.hasOwnProperty(key)) {
+          const chart = charts[key];
+          chart.options.plugins.legend.labels.color = document.body.classList.contains('night-mode') ? '#008855' : '#ffffff';
+          chart.options.scales.x.title.color = document.body.classList.contains('night-mode') ? '#008855' : '#ffffff';
+          chart.options.scales.x.ticks.color = document.body.classList.contains('night-mode') ? '#008855' : '#dddddd';
+          chart.options.scales.y.title.color = document.body.classList.contains('night-mode') ? '#008855' : '#ffffff';
+          chart.options.scales.y.ticks.color = document.body.classList.contains('night-mode') ? '#008855' : '#dddddd';
+          chart.update();
+        }
+      }
+    }
+
+    // Model 1: Magic Coin Gate
+    let model1Data = [];
+    let model1Outputs = [];
+
+    async function runModel1() {
+      const numEvents = parseInt(document.getElementById('model1-events').value);
+      if (isNaN(numEvents) || numEvents < 1) {
+        alert('Please enter a valid number of events for Model 1.');
+        return;
+      }
+      const probOne = PSI;
+      model1Data = [];
+      model1Outputs = [];
+      for (let i = 0; i < numEvents; i++) {
+        const event = Math.random() < probOne ? 1 : 0;
+        model1Data.push(event);
+      }
+      displayChart('model1-chart', model1Data, 'Model 1: Magic Coin Gate Results');
+      analyzeModel1(model1Data);
+      // Prepare data for ML
+      prepareMLData('model1', model1Data, model1Outputs);
+    }
+
+    function analyzeModel1(events) {
+      let totalOnes = 0;
+      let totalZeros = 0;
+      let count11 = 0, count111 = 0, count1111 = 0;
+      let count00 = 0, count101 = 0, count110 = 0, count001 = 0;
+
+      for (let i = 0; i < events.length; i++) {
+        if (events[i] === 1) totalOnes++;
+        else totalZeros++;
+
+        if (i >= 1 && events[i] === 1 && events[i-1] === 1) count11++;
+        if (i >= 2 && events[i] === 1 && events[i-1] === 1 && events[i-2] === 1) count111++;
+        if (i >= 3 && events[i] === 1 && events[i-1] === 1 && events[i-2] === 1 && events[i-3] === 1) count1111++;
+
+        if (i >= 1 && events[i] === 0 && events[i-1] === 0) count00++;
+
+        if (i >= 2 && events[i] === 1 && events[i-1] === 0 && events[i-2] === 1) count101++;
+        if (i >= 2 && events[i] === 0 && events[i-1] === 1 && events[i-2] === 1) count110++;
+        if (i >= 2 && events[i] === 1 && events[i-1] === 0 && events[i-2] === 0) count001++;
+      }
+
+      document.getElementById('model1-ones').innerText = totalOnes;
+      document.getElementById('model1-zeros').innerText = totalZeros;
+      document.getElementById('model1-11').innerText = count11;
+      document.getElementById('model1-111').innerText = count111;
+      document.getElementById('model1-1111').innerText = count1111;
+      document.getElementById('model1-00').innerText = count00;
+      document.getElementById('model1-101').innerText = count101;
+      document.getElementById('model1-110').innerText = count110;
+      document.getElementById('model1-001').innerText = count001;
+
+      document.getElementById('model1-table').style.display = 'table';
+    }
+
+    // Model 2: AAB Gate
+    let model2Data = [];
+    let model2Outputs = [];
+
+    async function runModel2() {
+      const numEvents = parseInt(document.getElementById('model2-events').value);
+      if (isNaN(numEvents) || numEvents < 1) {
+        alert('Please enter a valid number of events for Model 2.');
+        return;
+      }
+      const probA = PSI;
+      model2Data = [];
+      model2Outputs = [];
+      for (let i = 0; i < numEvents; i++) {
+        model2Data.push(getRandomEvent(probA));
+      }
+      analyzeModel2(model2Data, numEvents);
+      // Prepare data for ML
+      prepareMLData('model2', model2Data, model2Outputs);
+    }
+
+    function analyzeModel2(events, numEvents) {
+      let signals = 0; // Count of 'AA' patterns
+      let zeros = 0;   // Count of 'B's
+
+      // Count 'AA' patterns (overlapping allowed)
+      for (let i = 1; i < events.length; i++) {
+        if (events[i] === 'A' && events[i - 1] === 'A') {
+          signals++;
+        }
+      }
+
+      // Count 'B's
+      zeros = events.filter(e => e === 'B').length;
+
+      // Calculate No Signals
+      let noSignals = numEvents - (signals + zeros);
+
+      // Display chart with '1's for signals and '0's for zeros
+      let chartData = [];
+      for (let i = 1; i < events.length; i++) {
+        if (events[i] === 'A' && events[i - 1] === 'A') {
+          chartData.push(1); // Signal
+        } else if (events[i] === 'B') {
+          chartData.push(0); // Zero
+        }
+      }
+
+      displayChart('model2-chart', chartData, 'Model 2: AAB Gate Results');
+
+      // Update analysis table
+      document.getElementById('model2-ones').innerText = signals;
+      document.getElementById('model2-zeros').innerText = zeros;
+      document.getElementById('model2-no-signals').innerText = noSignals;
+
+      document.getElementById('model2-table').style.display = 'table';
+    }
+
+    // Model 3: Programmable Pattern Gate
+    let model3Data = [];
+    let model3Outputs = [];
+
+    async function runModel3() {
+      const numEvents = parseInt(document.getElementById('model3-events').value);
+      if (isNaN(numEvents) || numEvents < 1) {
+        alert('Please enter a valid number of events for Model 3.');
+        return;
+      }
+      const patternInput = document.getElementById('model3-patterns').value;
+      let patternOutputMap;
+      try {
+        // Ensure the JSON uses double quotes and proper key formatting
+        patternOutputMap = JSON.parse(patternInput);
+      } catch (error) {
+        alert('Invalid JSON format in patterns. Please ensure it uses double quotes and proper syntax.');
+        return;
+      }
+
+      const probA = PSI;
+      model3Data = [];
+      model3Outputs = [];
+      for (let i = 0; i < numEvents; i++) {
+        model3Data.push(getRandomEvent(probA));
+      }
+      analyzeModel3(model3Data, patternOutputMap, numEvents);
+      // Prepare data for ML
+      prepareMLData('model3', model3Data, model3Outputs);
+    }
+
+    function analyzeModel3(events, patternOutputMap, numEvents) {
+      let signals = 0; // Count of '1' outputs
+      let zeros = 0;   // Count of '0' outputs
+
+      // Prepare patterns with arrays for easier matching
+      const patterns = Object.keys(patternOutputMap).map(pattern => {
+        return {
+          sequence: pattern.split(','),
+          output: patternOutputMap[pattern]
+        };
+      });
+
+      // Sort patterns by length descending to match longer patterns first
+      patterns.sort((a, b) => b.sequence.length - a.sequence.length);
+
+      let outputs = [];
+      let matchedIndices = new Array(events.length).fill(false);
+
+      for (let i = 0; i < events.length; i++) {
+        if (matchedIndices[i]) continue; // Skip if already matched
+
+        let matched = false;
+        for (let pattern of patterns) {
+          const len = pattern.sequence.length;
+          if (i >= len - 1) {
+            let slice = events.slice(i - len + 1, i + 1);
+            if (slice.join(',') === pattern.sequence.join(',')) {
+              outputs.push(pattern.output);
+              if (pattern.output === 1) signals++;
+              else if (pattern.output === 0) zeros++;
+              // Mark indices as matched
+              for (let j = i - len + 1; j <= i; j++) {
+                matchedIndices[j] = true;
+              }
+              matched = true;
+              break;
+            }
+          }
+        }
+        if (!matched) {
+          // Handle individual events not part of any pattern
+          if (events[i] === 'A') {
+            // 'A' not part of any pattern is considered No Signal
+            // Do not add to outputs
+          } else if (events[i] === 'B') {
+            // 'B' not part of any pattern is considered Zero
+            outputs.push(0);
+            zeros++;
+          }
+        }
+      }
+
+      // Calculate No Signals
+      let noSignals = numEvents - (signals + zeros);
+
+      // Display chart with '1's for signals and '0's for zeros
+      displayChart('model3-chart', outputs, 'Model 3: Programmable Pattern Gate Results');
+
+      // Update analysis table
+      document.getElementById('model3-ones').innerText = signals;
+      document.getElementById('model3-zeros').innerText = zeros;
+      document.getElementById('model3-no-signals').innerText = noSignals;
+
+      document.getElementById('model3-table').style.display = 'table';
+    }
+
+    // Chart Display Function
+    function displayChart(canvasId, data, label) {
+      const ctx = document.getElementById(canvasId).getContext('2d');
+      const existingChart = Chart.getChart(canvasId);
+      if (existingChart) {
+        existingChart.destroy();
+      }
+
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: data.map((_, index) => index + 1),
+          datasets: [{
+            label: label,
+            data: data,
+            borderColor: '#009966', // Pleasant Green
+            backgroundColor: 'rgba(0, 153, 102, 0.2)',
+            fill: true,
+            tension: 0.3,
+            pointRadius: 0,
+            borderWidth: 2,
+          }],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+              labels: {
+                color: document.body.classList.contains('night-mode') ? '#008855' : '#ffffff',
+                font: {
+                  size: 14,
+                }
+              }
+            },
+            tooltip: {
+              enabled: true,
+            }
+          },
+          scales: {
+            x: {
+              display: true,
+              title: {
+                display: true,
+                text: 'Event Number',
+                color: document.body.classList.contains('night-mode') ? '#008855' : '#ffffff',
+                font: {
+                  size: 14,
+                }
+              },
+              ticks: {
+                color: document.body.classList.contains('night-mode') ? '#008855' : '#dddddd',
+                font: {
+                  size: 12,
+                }
+              }
+            },
+            y: {
+              display: true,
+              title: {
+                display: true,
+                text: 'Output',
+                color: document.body.classList.contains('night-mode') ? '#008855' : '#ffffff',
+                font: {
+                  size: 14,
+                }
+              },
+              ticks: {
+                stepSize: 1,
+                color: document.body.classList.contains('night-mode') ? '#008855' : '#dddddd',
+                font: {
+                  size: 12,
+                },
+                callback: function(value) {
+                  return value === 1 ? '1 (Signal)' : value === 0 ? '0 (No Signal)' : value;
+                }
+              },
+              min: 0,
+              max: 1,
+            },
+          },
+        },
+      });
+    }
+
+    // Data Export Functionality
+    function exportToCSV(data, filename) {
+      let csvContent = "data:text/csv;charset=utf-8,";
+      csvContent += "Event Number,Output\n";
+      data.forEach((row, index) => {
+        csvContent += `${index + 1},${row}\n`;
+      });
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", filename);
+      document.body.appendChild(link); // Required for FF
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function exportToJSON(data, filename) {
+      const jsonString = JSON.stringify(data, null, 2);
+      const blob = new Blob([jsonString], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", filename);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    // Event Listeners for Export Buttons
+    document.getElementById('model1-export-csv').addEventListener('click', () => {
+      exportToCSV(model1Data, 'model1_magic_coin_gate.csv');
+    });
+
+    document.getElementById('model1-export-json').addEventListener('click', () => {
+      exportToJSON(model1Data, 'model1_magic_coin_gate.json');
+    });
+
+    document.getElementById('model2-export-csv').addEventListener('click', () => {
+      exportToCSV(model2Data, 'model2_aab_gate.csv');
+    });
+
+    document.getElementById('model2-export-json').addEventListener('click', () => {
+      exportToJSON(model2Data, 'model2_aab_gate.json');
+    });
+
+    document.getElementById('model3-export-csv').addEventListener('click', () => {
+      exportToCSV(model3Data, 'model3_programmable_pattern_gate.csv');
+    });
+
+    document.getElementById('model3-export-json').addEventListener('click', () => {
+      exportToJSON(model3Data, 'model3_programmable_pattern_gate.json');
+    });
+
+    // Prepare Data for Machine Learning
+    function prepareMLData(modelName, data, outputs) {
+      // For simplicity, use the last 5 events to predict the next event
+      if (data.length < 6) return; // Not enough data
+      for (let i = 5; i < data.length; i++) {
+        const inputSequence = data.slice(i - 5, i).map(e => encodeEvent(e));
+        const label = data[i];
+        outputs.push({
+          input: inputSequence,
+          label: oneHotEncode(label)
+        });
+      }
+      // Convert to tensors and train the model
+      const inputs = outputs.map(o => o.input);
+      const labels = outputs.map(o => o.label);
+      trainMLModel(mlModels[modelName], inputs, labels);
+    }
+
+    // Predict Next Event using Machine Learning
+    async function predictNextEvent(modelName, recentEvents) {
+      if (!mlModels[modelName]) return null;
+      if (recentEvents.length < 5) return null;
+
+      const input = recentEvents.slice(-5).map(e => encodeEvent(e));
+      const inputTensor = tf.tensor2d([input]);
+      const prediction = mlModels[modelName].predict(inputTensor);
+      const predictedClass = prediction.argMax(-1).dataSync()[0];
+      inputTensor.dispose();
+      prediction.dispose();
+      return predictedClass === 0 ? 'A' : 'B';
+    }
+
+    // Tab Navigation
+    document.querySelectorAll('.tab-button').forEach(button => {
+      button.addEventListener('click', () => {
+        const targetTab = button.getAttribute('data-tab');
+
+        // Remove 'active' class from all buttons
+        document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+        // Add 'active' class to the clicked button
+        button.classList.add('active');
+
+        // Hide all tab contents
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+        // Show the target tab content
+        document.getElementById(targetTab).classList.add('active');
+      });
+    });
+
+    // Event Listeners for Run Buttons
+    document.getElementById('model1-run').addEventListener('click', runModel1);
+    document.getElementById('model2-run').addEventListener('click', runModel2);
+    document.getElementById('model3-run').addEventListener('click', runModel3);
+  </script>
+</body>
+</html>
