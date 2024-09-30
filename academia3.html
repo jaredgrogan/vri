@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Herakles AI - Research Assistant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Basic Styles */
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo {
+            width: 50px;
+            height: 50px;
+            margin-left: 20px;
+            margin-top: 20px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .settings-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 20px;
+            cursor: pointer;
+        }
+
+        .time-display {
+            font-family: 'Berkeley Mono', monospace;
+            font-size: 14px;
+        }
+
+        /* Main Section */
+        main {
+            max-width: 1200px;
+            width: 100%;
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        /* Chat Workspace */
+        #chatWorkspace {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        #chatArea {
+            height: 300px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+
+        .mic, .speaker {
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+        }
+
+        .mic.recording {
+            background-color: red;
+        }
+
+        /* Search Workspace */
+        #searchWorkspace {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .api-checkbox {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        /* Actions Panel */
+        #actionsMenu {
+            margin-top: 20px;
+        }
+
+        .action-button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        /* Export Options */
+        #exportOptions {
+            margin-top: 20px;
+        }
+
+        footer {
+            margin-top: 50px;
+            font-size: 14px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <img src="logo1.svg" alt="" class="logo">
+    <div class="header-right">
+        <img src="settings.svg" alt="Settings" class="settings-icon">
+        <div class="time-display" id="timeDisplay"></div>
+    </div>
+</header>
+
+<main>
+    <!-- Chat Workspace -->
+    <section id="chatWorkspace">
+        <h2>General Chat</h2>
+        <div id="chatArea"></div>
+        <input type="text" id="chatInput" placeholder="Type your message here" style="width: 80%;">
+        <button id="sendBtn" class="action-button">Send</button>
+        <div>
+            <img src="mic.svg" alt="Mic" id="mic" class="mic">
+            <img src="speaker.svg" alt="Speaker" id="speaker" class="speaker">
+        </div>
+    </section>
+
+    <!-- Search Workspace -->
+    <section id="searchWorkspace">
+        <h2>Search Databases</h2>
+        <label class="api-checkbox">
+            <input type="checkbox" id="scopusCheckbox"> Scopus
+        </label>
+        <label class="api-checkbox">
+            <input type="checkbox" id="ieeeCheckbox"> IEEE
+        </label>
+        <label class="api-checkbox">
+            <input type="checkbox" id="googleBooksCheckbox"> Google Books
+        </label>
+        <button id="searchBtn" class="action-button">Search</button>
+    </section>
+</main>
+
+<!-- Actions Panel -->
+<section id="actionsMenu">
+    <h2>Actions</h2>
+    <button id="summarizeBtn" class="action-button">Auto Summarize</button>
+    <button id="citationBtn" class="action-button">Generate Citation</button>
+    <button id="relatedWorkBtn" class="action-button">Find Related Work</button>
+    <button id="glossaryBtn" class="action-button">Generate Glossary</button>
+</section>
+
+<!-- Export Options -->
+<section id="exportOptions">
+    <h2>Export</h2>
+    <button id="exportChatBtn" class="action-button">Export Chat</button>
+    <button id="exportActionsBtn" class="action-button">Export Actions</button>
+    <button id="exportSearchBtn" class="action-button">Export Search Results</button>
+</section>
+
+<footer>
+    &copy; 2024 UNIVERSITAS AI
+</footer>
+
+<script>
+    // Time Display
+    function updateTime() {
+        const now = new Date();
+        const options = { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' };
+        const timeString = now.toLocaleDateString('en-US', options).replace(',', '');
+        document.getElementById('timeDisplay').textContent = timeString;
+    }
+    updateTime();
+    setInterval(updateTime, 60000);
+
+    // Mic Button Logic
+    const micButton = document.getElementById('mic');
+    micButton.addEventListener('click', function() {
+        micButton.classList.toggle('recording');
+        if (micButton.classList.contains('recording')) {
+            // Logic to start recording
+        } else {
+            // Logic to stop recording and send to Whisper API
+        }
+    });
+
+    // Speaker Button Logic
+    const speakerButton = document.getElementById('speaker');
+    speakerButton.addEventListener('click', function() {
+        // Logic to play LLM audio output
+    });
+
+    // Send Button Logic for Chat
+    const sendBtn = document.getElementById('sendBtn');
+    sendBtn.addEventListener('click', function() {
+        const chatInput = document.getElementById('chatInput').value;
+        if (chatInput) {
+            const chatArea = document.getElementById('chatArea');
+            const messageElement = document.createElement('p');
+            messageElement.textContent = chatInput;
+            chatArea.appendChild(messageElement);
+            // Send to LLM (GPT-4 API) logic
+            document.getElementById('chatInput').value = '';
+        }
+    });
+
+    // Search Button Logic
+    const searchBtn = document.getElementById('searchBtn');
+    searchBtn.addEventListener('click', function() {
+        const scopus = document.getElementById('scopusCheckbox').checked;
+        const ieee = document.getElementById('ieeeCheckbox').checked;
+        const googleBooks = document.getElementById('googleBooksCheckbox').checked;
+        // Make API calls to selected databases
+    });
+
+    // Actions Button Logic (e.g., Auto Summarize, Generate Citation)
+    document.getElementById('summarizeBtn').addEventListener('click', function() {
+        // Logic for summarizing via LLM
+    });
+    document.getElementById('citationBtn').addEventListener('click', function() {
+        // Logic for generating citations via CrossRef
+    });
+    document.getElementById('relatedWorkBtn').addEventListener('click', function() {
+        // Logic for finding related work via selected databases
+    });
+    document.getElementById('glossaryBtn').addEventListener('click', function() {
+        // Logic for generating glossary (definitions and vocab)
+    });
+
+    // Export Button Logic
+    document.getElementById('exportChatBtn').addEventListener('click', function() {
+        // Logic to export chat as PDF, CSV, etc.
+    });
+    document.getElementById('exportActionsBtn').addEventListener('click', function() {
+        // Logic to export Actions results
+    });
+    document.getElementById('exportSearchBtn').addEventListener('click', function() {
+        // Logic to export search results
+    });
+</script>
+
+</body>
+</html>
