@@ -1,0 +1,373 @@
+// server.js
+
+const express = require('express');
+const axios = require('axios');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const app = express();
+
+app.use(bodyParser.json());
+app.use(cors());
+
+// Environment Variables (Ensure these are set in Vercel)
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+const WHISPER_API_KEY = process.env.WHISPER_API_KEY;
+const PINECONE_API_KEY = process.env.PINECONE_API_KEY;
+const SCOPUS_API_KEY = process.env.SCOPUS_API_KEY;
+const CROSSREF_API_KEY = process.env.CROSSREF_API_KEY;
+const DOI_LOOKUP_API_KEY = process.env.DOI_LOOKUP_API_KEY;
+const ALTMETRIC_API_KEY = process.env.ALTMETRIC_API_KEY;
+const GOOGLE_BOOKS_API_KEY = process.env.GOOGLE_BOOKS_API_KEY;
+const SEMANTIC_SCHOLAR_API_KEY = process.env.SEMANTIC_SCHOLAR_API_KEY;
+const GPT4_MODEL_VERSION = process.env.GPT4_MODEL_VERSION || 'gpt-4';
+
+// Route: GPT-4 Chat
+app.post('/api/gpt4', async (req, res) => {
+    const { message } = req.body;
+    try {
+        const response = await axios.post(
+            'https://api.openai.com/v1/chat/completions',
+            {
+                model: GPT4_MODEL_VERSION,
+                messages: [{ role: 'user', content: message }],
+            },
+            {
+                headers: {
+                    'Authorization': `Bearer ${OPENAI_API_KEY}`,
+                    'Content-Type': 'application/json',
+                },
+            }
+        );
+        res.json(response.data);
+    } catch (error) {
+        console.error('Error with GPT-4 API:', error.response ? error.response.data : error.message);
+        res.status(500).json({ error: 'An error occurred while communicating with GPT-4 API' });
+    }
+});
+
+// Route: Text-to-Speech (for audio responses)
+app.post('/api/text-to-speech', async (req, res) => {
+    const { text } = req.body;
+    try {
+        const response = await axios.post(
+            'https://api.openai.com/v1/audio/synthesize', // Hypothetical endpoint
+            {
+                text: text,
+                voice: 'herakles', // Specify voice parameters as needed
+                speed: 1.0, // Default speed
+            },
+            {
+                headers: {
+                    'Authorization': `Bearer ${OPENAI_API_KEY}`,
+                    'Content-Type': 'application/json',
+                },
+                responseType: 'arraybuffer', // To handle binary data
+            }
+        );
+        // Assuming the API returns a URL to the audio file
+        res.json({ audioUrl: 'path_to_audio_file.mp3' });
+    } catch (error) {
+        console.error('Error with Text-to-Speech API:', error.response ? error.response.data : error.message);
+        res.status(500).json({ error: 'An error occurred while generating audio' });
+    }
+});
+
+// Route: Search Across Databases
+app.post('/api/search', async (req, res) => {
+    const { query, apis } = req.body;
+    try {
+        let results = [];
+
+        // Sequentially call each selected API
+        for (const api of apis) {
+            if (api === 'scopus') {
+                const scopusResults = await searchScopus(query);
+                results = results.concat(scopusResults);
+            } else if (api === 'ieee') {
+                const ieeeResults = await searchIEEE(query);
+                results = results.concat(ieeeResults);
+            } else if (api === 'googlebooks') {
+                const googleBooksResults = await searchGoogleBooks(query);
+                results = results.concat(googleBooksResults);
+            } else if (api === 'semanticscholar') {
+                const semanticScholarResults = await searchSemanticScholar(query);
+                results = results.concat(semanticScholarResults);
+            }
+            // Add other APIs as needed
+        }
+
+        res.json({ results: results });
+    } catch (error) {
+        console.error('Error in search:', error);
+        res.status(500).json({ error: 'An error occurred during search' });
+    }
+});
+
+// Function: Search Scopus
+async function searchScopus(query) {
+    try {
+        const response = await axios.get('https://api.elsevier.com/content/search/scopus', {
+            params: {
+                query: query,
+                apiKey: SCOPUS_API_KEY,
+                count: 5, // Number of results
+            }
+        });
+        // Process and return results
+        return response.data.searchResults.entry.map(entry => ({
+            title: entry.dc:title,
+            author: entry.dc:creator,
+            year: entry.prism:coverDate.split('-')[0],
+            doi: entry.prism:doi,
+        }));
+    } catch (error) {
+        console.error('Error searching Scopus:', error.response ? error.response.data : error.message);
+        return [];
+    }
+}
+
+// Function: Search IEEE
+async function searchIEEE(query) {
+    try {
+        const response = await axios.get('https://ieeexploreapi.ieee.org/api/v1/search/articles', {
+            params: {
+                querytext: query,
+                apiKey: process.env.IEEE_API_KEY,
+                format: 'json',
+                max_records: 5,
+            }
+        });
+        // Process and return results
+        return response.data.articles.map(article => ({
+            title: article.title,
+            author: article.authors.map(author => author.name).join(', '),
+            year: article.publication_year,
+            doi: article.doi,
+        }));
+    } catch (error) {
+        console.error('Error searching IEEE:', error.response ? error.response.data : error.message);
+        return [];
+    }
+}
+
+// Function: Search Google Books
+async function searchGoogleBooks(query) {
+    try {
+        const response = await axios.get('https://www.googleapis.com/books/v1/volumes', {
+            params: {
+                q: query,
+                key: GOOGLE_BOOKS_API_KEY,
+                maxResults: 5,
+            }
+        });
+        // Process and return results
+        return response.data.items.map(item => ({
+            title: item.volumeInfo.title,
+            author: item.volumeInfo.authors ? item.volumeInfo.authors.join(', ') : 'Unknown',
+            year: item.volumeInfo.publishedDate ? item.volumeInfo.publishedDate.split('-')[0] : 'N/A',
+            doi: item.volumeInfo.industryIdentifiers ? item.volumeInfo.industryIdentifiers[0].identifier : 'N/A',
+        }));
+    } catch (error) {
+        console.error('Error searching Google Books:', error.response ? error.response.data : error.message);
+        return [];
+    }
+}
+
+// Function: Search Semantic Scholar
+async function searchSemanticScholar(query) {
+    try {
+        const response = await axios.get(`https://api.semanticscholar.org/graph/v1/paper/search`, {
+            params: {
+                query: query,
+                limit: 5,
+                fields: 'title,authors,year,doi',
+            },
+            headers: {
+                'x-api-key': SEMANTIC_SCHOLAR_API_KEY,
+            }
+        });
+        // Process and return results
+        return response.data.data.map(paper => ({
+            title: paper.title,
+            author: paper.authors.map(author => author.name).join(', '),
+            year: paper.year,
+            doi: paper.doi,
+        }));
+    } catch (error) {
+        console.error('Error searching Semantic Scholar:', error.response ? error.response.data : error.message);
+        return [];
+    }
+}
+
+// Route: Summarize Text
+app.post('/api/summarize', async (req, res) => {
+    const { text, format } = req.body;
+    try {
+        const prompt = `Summarize the following text in ${format} format:\n\n${text}`;
+        const response = await axios.post(
+            'https://api.openai.com/v1/chat/completions',
+            {
+                model: GPT4_MODEL_VERSION,
+                messages: [{ role: 'user', content: prompt }],
+            },
+            {
+                headers: {
+                    'Authorization': `Bearer ${OPENAI_API_KEY}`,
+                    'Content-Type': 'application/json',
+                },
+            }
+        );
+        res.json({ summary: response.data.choices[0].message.content });
+    } catch (error) {
+        console.error('Error summarizing text:', error.response ? error.response.data : error.message);
+        res.status(500).json({ error: 'An error occurred while summarizing text' });
+    }
+});
+
+// Route: Generate Citation
+app.post('/api/citation', async (req, res) => {
+    const { doi, format } = req.body;
+    try {
+        // Use CrossRef API to get citation data
+        const crossRefResponse = await axios.get(`https://api.crossref.org/works/${doi}`);
+        const citationData = crossRefResponse.data.message;
+
+        // Format citation based on the requested format
+        let citation = '';
+        if (format.toLowerCase() === 'apa') {
+            citation = `${citationData.author.map(a => `${a.given} ${a.family}`).join(', ')}, (${citationData.created['date-parts'][0][0]}). ${citationData.title}. ${citationData['container-title'][0]}, ${citationData['volume'] ? citationData['volume'] + '(' + (citationData['issue'] || '') + '),' : ''} ${citationData['page']}. https://doi.org/${citationData.DOI}`;
+        }
+        // Add other formats (MLA, Chicago, etc.) as needed
+
+        res.json({ citation: citation });
+    } catch (error) {
+        console.error('Error generating citation:', error.response ? error.response.data : error.message);
+        res.status(500).json({ error: 'An error occurred while generating citation' });
+    }
+});
+
+// Route: Find Related Work
+app.post('/api/related-work', async (req, res) => {
+    const { query } = req.body;
+    try {
+        // Use Pinecone and GPT-4 for finding related work
+        // Placeholder for actual implementation
+        res.json({ relatedWork: ['Related Paper 1', 'Related Paper 2', 'Related Book 1'] });
+    } catch (error) {
+        console.error('Error finding related work:', error);
+        res.status(500).json({ error: 'An error occurred while finding related work' });
+    }
+});
+
+// Route: Generate Glossary
+app.post('/api/glossary', async (req, res) => {
+    const { term } = req.body;
+    try {
+        const prompt = `Define the following academic term: ${term}`;
+        const response = await axios.post(
+            'https://api.openai.com/v1/chat/completions',
+            {
+                model: GPT4_MODEL_VERSION,
+                messages: [{ role: 'user', content: prompt }],
+            },
+            {
+                headers: {
+                    'Authorization': `Bearer ${OPENAI_API_KEY}`,
+                    'Content-Type': 'application/json',
+                },
+            }
+        );
+        res.json({ definition: response.data.choices[0].message.content });
+    } catch (error) {
+        console.error('Error generating glossary:', error.response ? error.response.data : error.message);
+        res.status(500).json({ error: 'An error occurred while generating glossary' });
+    }
+});
+
+// Route: Citation Analysis
+app.post('/api/citation-analysis', async (req, res) => {
+    const { doi } = req.body;
+    try {
+        // Fetch citation count from Scopus
+        const scopusResponse = await axios.get(`https://api.elsevier.com/content/abstract/scopus_id/${doi}`, {
+            headers: { 'X-ELS-APIKey': SCOPUS_API_KEY },
+        });
+        const citationCount = scopusResponse.data['abstracts-retrieval-response'].coredata.citedbycount;
+
+        // Fetch Altmetric score
+        const altmetricResponse = await axios.get(`https://api.altmetric.com/v1/citations/${doi}`, {
+            params: { key: ALTMETRIC_API_KEY },
+        });
+        const altmetricScore = altmetricResponse.data.score;
+
+        res.json({
+            scopus: { citationCount: citationCount },
+            altmetric: { score: altmetricScore }
+        });
+    } catch (error) {
+        console.error('Error in citation analysis:', error.response ? error.response.data : error.message);
+        res.status(500).json({ error: 'An error occurred during citation analysis' });
+    }
+});
+
+// Route: Text-to-Speech for Audio Export
+app.post('/api/export-audio', async (req, res) => {
+    const { text } = req.body;
+    try {
+        // Use OpenAI or another TTS API to generate audio
+        const response = await axios.post(
+            'https://api.openai.com/v1/audio/synthesize', // Hypothetical endpoint
+            {
+                text: text,
+                voice: 'Herakles', // Specify voice parameters
+                speed: 1.0, // Default speed
+            },
+            {
+                headers: {
+                    'Authorization': `Bearer ${OPENAI_API_KEY}`,
+                    'Content-Type': 'application/json',
+                },
+                responseType: 'arraybuffer',
+            }
+        );
+        // Assuming the API returns audio data directly
+        const audioBuffer = Buffer.from(response.data, 'binary').toString('base64');
+        res.json({ audio: `data:audio/mp3;base64,${audioBuffer}` });
+    } catch (error) {
+        console.error('Error exporting audio:', error.response ? error.response.data : error.message);
+        res.status(500).json({ error: 'An error occurred while exporting audio' });
+    }
+});
+
+// Route: Export Citations in Various Formats
+app.post('/api/export-citations', async (req, res) => {
+    const { citations, format } = req.body;
+    try {
+        // Implement citation export logic based on the selected format
+        // This could involve formatting the citations server-side and sending back the file
+        // Placeholder response
+        res.json({ message: `Citations exported in ${format} format.` });
+    } catch (error) {
+        console.error('Error exporting citations:', error);
+        res.status(500).json({ error: 'An error occurred while exporting citations' });
+    }
+});
+
+// Route: Search with Pinecone Integration (Placeholder)
+app.post('/api/pinecone-search', async (req, res) => {
+    const { query } = req.body;
+    try {
+        // Implement Pinecone search and RAG logic here
+        // Placeholder response
+        res.json({ results: ['Wiki Article 1', 'Wiki Article 2'] });
+    } catch (error) {
+        console.error('Error with Pinecone search:', error);
+        res.status(500).json({ error: 'An error occurred during Pinecone search' });
+    }
+});
+
+// Start Server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Herakles AI server is running on port ${PORT}`);
+});
