@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Research Assistant</title>
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&family=Courier+New&display=swap" rel="stylesheet">
+  <!-- Berkeley Mono is a premium font and may not be available via Google Fonts. If you have the font file, you can include it using @font-face. -->
+  <style>
+    /* CSS Styles */
+
+    /* Font Definitions */
+    @font-face {
+      font-family: 'Berkeley Mono';
+      src: url('BerkeleyMono-Regular.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f9f9fb;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      padding-top: 20px;
+      padding-left: 20px;
+    }
+
+    .logo {
+      width: 50px;
+      height: 50px;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 40px;
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      font-weight: 600;
+      margin-bottom: 30px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 15px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    #mic-container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .mic, .speaker {
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      margin-right: 15px;
+      transition: transform 0.2s;
+    }
+
+    .mic:hover, .speaker:hover {
+      transform: scale(1.1);
+    }
+
+    .database-section {
+      margin-bottom: 20px;
+    }
+
+    #database-select label {
+      display: inline-block;
+      margin-right: 15px;
+      font-weight: normal;
+    }
+
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .button-group button {
+      background-color: #007BFF;
+      color: white;
+      padding: 12px 20px;
+      margin: 5px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .button-group button:hover {
+      background-color: #0056b3;
+    }
+
+    .button-group .auto-suggestion {
+      margin-left: 10px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .results {
+      margin-top: 30px;
+    }
+
+    .results pre {
+      font-family: 'Courier New', monospace;
+      background-color: #f4f4f4;
+      padding: 15px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #f9f9fb;
+      font-size: 14px;
+    }
+
+    /* Smooth Animations */
+    .button-group button,
+    .mic,
+    .speaker {
+      transition: all 0.3s ease;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+      }
+
+      .button-group {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .button-group button {
+        width: 100%;
+        margin: 5px 0;
+      }
+
+      #mic-container {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <img src="logo1.svg" alt="Logo" class="logo">
+  </header>
+
+  <div class="container">
+    <h1>AI Research Assistant</h1>
+    
+    <label for="query">Enter your research query or ask a question:</label>
+    <input type="text" id="query" placeholder="Ask something or search papers..." />
+
+    <div id="mic-container">
+      <img src="mic.svg" id="mic" class="mic" alt="Mic">
+      <img src="speaker.svg" id="speaker" class="speaker" alt="Speaker">
+    </div>
+
+    <div class="database-section">
+      <label>Select Databases:</label>
+      <div id="database-select">
+        <label><input type="checkbox" id="arxiv" value="arxiv" checked> ArXiv</label>
+        <label><input type="checkbox" id="semanticscholar" value="semanticscholar"> Semantic Scholar</label>
+        <label><input type="checkbox" id="core" value="core"> CORE</label>
+        <label><input type="checkbox" id="pubmed" value="pubmed"> PubMed</label>
+      </div>
+    </div>
+
+    <div class="button-group">
+      <button id="search-btn">Search</button>
+      <button id="summarize-btn">Auto Summarize</button>
+      <button id="citation-btn">Generate Citations</button>
+      <span class="auto-suggestion">Search papers, auto summarize...</span>
+    </div>
+
+    <div class="results" id="results">
+      <!-- Results will be displayed here -->
+    </div>
+  </div>
+
+  <footer>
+    &copy; UNIVERSITAS AI
+  </footer>
+
+  <script>
+    // JavaScript Code
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const micButton = document.getElementById('mic');
+      const speakerButton = document.getElementById('speaker');
+      const searchButton = document.getElementById('search-btn');
+      const summarizeButton = document.getElementById('summarize-btn');
+      const citationButton = document.getElementById('citation-btn');
+      const queryInput = document.getElementById('query');
+      const resultsContainer = document.getElementById('results');
+
+      micButton.addEventListener('click', handleMicClick);
+      speakerButton.addEventListener('click', handleSpeakerClick);
+      searchButton.addEventListener('click', handleSearch);
+      summarizeButton.addEventListener('click', handleSummarize);
+      citationButton.addEventListener('click', handleCitation);
+    });
+
+    function handleMicClick() {
+      const micButton = document.getElementById('mic');
+      micButton.classList.toggle('recording');
+
+      if (micButton.classList.contains('recording')) {
+        // Start recording
+        startRecording();
+      } else {
+        // Stop recording
+        stopRecording();
+      }
+    }
+
+    function handleSpeakerClick() {
+      // Implement voice synthesis using OpenAI or ElevenLabs
+      playVoiceOutput();
+    }
+
+    function handleSearch() {
+      const query = document.getElementById('query').value;
+      if (query.trim() === '') {
+        alert('Please enter a query.');
+        return;
+      }
+      // Implement search functionality
+      performSearch(query);
+    }
+
+    function handleSummarize() {
+      // Implement auto summarization
+      autoSummarize();
+    }
+
+    function handleCitation() {
+      // Implement citation generation
+      generateCitations();
+    }
+
+    // Placeholder functions for recording and API calls
+
+    function startRecording() {
+      // Start recording audio from the microphone
+      console.log('Recording started...');
+      // Implement actual recording logic here
+    }
+
+    function stopRecording() {
+      // Stop recording and process the audio
+      console.log('Recording stopped.');
+      // Implement audio processing and Whisper API call here
+    }
+
+    function playVoiceOutput() {
+      // Fetch GPT response and convert to voice
+      console.log('Playing voice output...');
+      // Implement voice synthesis logic here
+    }
+
+    function performSearch(query) {
+      // Call backend API to perform search
+      console.log('Performing search for:', query);
+      // Implement search API call and display results
+      // Example:
+      // fetch('/api/search', { method: 'POST', body: JSON.stringify({ query }) })
+      //   .then(response => response.json())
+      //   .then(data => displayResults(data));
+    }
+
+    function autoSummarize() {
+      // Implement auto summarization functionality
+      console.log('Auto summarizing...');
+    }
+
+    function generateCitations() {
+      // Implement citation generation functionality
+      console.log('Generating citations...');
+    }
+
+    function displayResults(data) {
+      const resultsContainer = document.getElementById('results');
+      // Clear previous results
+      resultsContainer.innerHTML = '';
+
+      // Display new results
+      const pre = document.createElement('pre');
+      pre.textContent = JSON.stringify(data, null, 2);
+      resultsContainer.appendChild(pre);
+    }
+  </script>
+</body>
+</html>
