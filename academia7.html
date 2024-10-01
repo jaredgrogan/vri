@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Herakles AI - Research Assistant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Berkeley+Mono&display=swap" rel="stylesheet">
+    <!-- Styles -->
+    <style>
+        /* Styles omitted for brevity; include all previous styles and new styles for updated features */
+        /* ... */
+        /* Workspace Menu Styles */
+        .workspace-menu {
+            position: absolute;
+            top: 60px;
+            right: 40px;
+            background-color: #f9f9f9;
+            min-width: 220px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            padding: 12px 16px;
+            z-index: 1;
+            border-radius: 8px;
+            display: none;
+        }
+        .workspace-menu.show {
+            display: block;
+        }
+        .workspace-menu label,
+        .workspace-menu input[type="text"],
+        .workspace-menu button {
+            display: block;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+        /* ... */
+    </style>
+</head>
+<body>
+
+<header>
+    <img src="logo1.svg" alt="" class="logo">
+    <div class="header-right">
+        <!-- Workspace Dropdown -->
+        <div class="workspace-dropdown">
+            <button id="workspaceBtn" class="settings-icon">
+                <img src="workspace.svg" alt="Workspace" width="24" height="24">
+            </button>
+            <div id="workspaceMenu" class="workspace-menu">
+                <h3>Workspace</h3>
+                <button id="newWorkspaceBtn">New Workspace</button>
+                <button id="saveWorkspaceBtn">Save Workspace</button>
+                <label for="workspaceSelector">Switch Workspace:</label>
+                <select id="workspaceSelector">
+                    <!-- Options will be populated dynamically -->
+                </select>
+            </div>
+        </div>
+        <!-- Settings Dropdown -->
+        <div class="settings-dropdown">
+            <img src="gear.svg" alt="Settings" class="settings-icon" id="settingsBtn">
+            <div id="settingsMenu" class="dropdown-content">
+                <h3>Herakles Audio</h3>
+                <label for="volumeSlider">Volume:</label>
+                <input type="range" id="volumeSlider" min="0" max="100" value="100">
+                <label for="genderToggle">Gender:</label>
+                <select id="genderToggle">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+                <h3>Time</h3>
+                <label for="timeFormat">Time Format:</label>
+                <select id="timeFormat">
+                    <option value="12hr">12 Hour</option>
+                    <option value="24hr">24 Hour</option>
+                </select>
+            </div>
+        </div>
+        <div class="time-display" id="timeDisplay"></div>
+    </div>
+</header>
+
+<main>
+    <!-- Chat Workspace -->
+    <section id="chatWorkspace">
+        <h2>General Chat</h2>
+        <div id="chatArea"></div>
+        <div class="chat-input-container">
+            <input type="text" id="chatInput" placeholder="Type your message here">
+            <button id="sendBtn" class="action-button" data-tooltip="Send Message">
+                <img src="play.svg" alt="Send" width="24" height="24">
+            </button>
+            <img src="mic.svg" alt="Mic" id="mic" class="mic" title="Start Recording">
+            <img src="speaker.svg" alt="Speaker" id="speaker" class="speaker" title="Toggle Audio">
+        </div>
+    </section>
+
+    <!-- Search Workspace -->
+    <section id="searchWorkspace">
+        <h2>Search Databases</h2>
+        <div id="databases">
+            <label class="api-checkbox">
+                <input type="checkbox" id="scopusCheckbox"> Scopus
+            </label>
+            <label class="api-checkbox">
+                <input type="checkbox" id="ieeeCheckbox"> IEEE Xplore
+            </label>
+            <label class="api-checkbox">
+                <input type="checkbox" id="googleBooksCheckbox"> Google Books
+            </label>
+            <label class="api-checkbox">
+                <input type="checkbox" id="openAlexCheckbox"> OpenAlex
+            </label>
+            <label class="api-checkbox">
+                <input type="checkbox" id="jstorCheckbox"> JSTOR Open Access
+            </label>
+            <label class="api-checkbox">
+                <input type="checkbox" id="europePmcCheckbox"> Europe PMC
+            </label>
+            <!-- Add other databases as needed -->
+        </div>
+        <button id="searchBtn" class="action-button" data-tooltip="Search Selected Databases">Search</button>
+        <div id="searchResults">
+            <!-- Search results will be displayed here -->
+        </div>
+    </section>
+</main>
+
+<!-- Actions Panel -->
+<section id="actionsMenu">
+    <h2>Actions</h2>
+    <button id="summarizeBtn" class="action-button" data-tooltip="Auto Summarize">Auto Summarize</button>
+    <button id="citationBtn" class="action-button" data-tooltip="Generate Citation">Generate Citation</button>
+    <button id="relatedWorkBtn" class="action-button" data-tooltip="Find Related Work">Find Related Work</button>
+    <button id="citationAnalysisBtn" class="action-button" data-tooltip="Citation Analysis">Citation Analysis</button>
+</section>
+
+<!-- Export Options -->
+<section id="exportOptions">
+    <h2>Export</h2>
+    <button id="exportChatBtn" class="export-button" data-tooltip="Export Chat History">Export Chat</button>
+    <button id="exportActionsBtn" class="export-button" data-tooltip="Export Actions Output">Export Actions</button>
+    <button id="exportSearchBtn" class="export-button" data-tooltip="Export Search Results">Export Search Results</button>
+    <button id="exportChatAudioBtn" class="export-button" data-tooltip="Export Chat as Audio">Export Chat as Audio</button>
+    <button id="exportCitationsBtn" class="export-button" data-tooltip="Export Citations">Export Citations</button>
+</section>
+
+<footer>
+    <p style="font-family: 'Berkeley Mono', monospace;">&copy; 2024 UNIVERSITAS AI</p>
+</footer>
+
+<script>
+    // JavaScript code implementing frontend logic
+    // Include code for:
+    // - Workspace management
+    // - Audio control
+    // - Time display settings
+    // - Search functionality
+    // - Actions panel
+    // - Export options
+    // For brevity, not all code is included here. Below are examples for the key features.
+
+    // Time Display
+    let is12HourFormat = true; // Default to 12-hour format
+    function updateTime() {
+        const now = new Date();
+        const options = {
+            weekday: 'short',
+            month: 'short',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: is12HourFormat,
+        };
+        const timeString = now.toLocaleDateString('en-US', options).replace(',', '');
+        document.getElementById('timeDisplay').textContent = timeString;
+    }
+    updateTime();
+    setInterval(updateTime, 60000);
+
+    // Time Format Setting
+    document.getElementById('timeFormat').addEventListener('change', function() {
+        is12HourFormat = this.value === '12hr';
+        updateTime();
+    });
+
+    // Workspace Menu Toggle
+    document.getElementById('workspaceBtn').addEventListener('click', function() {
+        document.getElementById('workspaceMenu').classList.toggle('show');
+    });
+
+    // Save Workspace
+    document.getElementById('saveWorkspaceBtn').addEventListener('click', function() {
+        const workspaceName = prompt("Enter a name for your workspace:");
+        if (workspaceName) {
+            // Save workspace via API call
+            saveWorkspace(workspaceName);
+        }
+    });
+
+    // New Workspace
+    document.getElementById('newWorkspaceBtn').addEventListener('click', function() {
+        if (confirm("Are you sure you want to create a new workspace? Unsaved changes will be lost.")) {
+            // Clear current workspace data
+            clearWorkspace();
+        }
+    });
+
+    // Workspace Selector
+    function populateWorkspaceSelector() {
+        // Fetch list of workspaces via API and populate the selector
+    }
+
+    document.getElementById('workspaceSelector').addEventListener('change', function() {
+        const workspaceId = this.value;
+        // Load selected workspace
+        loadWorkspace(workspaceId);
+    });
+
+    // Herakles Audio Controls
+    document.getElementById('volumeSlider').addEventListener('input', function() {
+        const volumeLevel = this.value / 100;
+        // Adjust audio elements volume
+        adjustVolume(volumeLevel);
+    });
+
+    document.getElementById('genderToggle').addEventListener('change', function() {
+        const selectedGender = this.value;
+        // Set voice gender for TTS
+        setVoiceGender(selectedGender);
+    });
+
+    // Mic and Speaker Logic (same as before)
+    // ...
+
+    // Search Functionality
+    document.getElementById('searchBtn').addEventListener('click', function() {
+        const selectedDatabases = [];
+        if (document.getElementById('scopusCheckbox').checked) selectedDatabases.push('scopus');
+        if (document.getElementById('ieeeCheckbox').checked) selectedDatabases.push('ieee');
+        if (document.getElementById('googleBooksCheckbox').checked) selectedDatabases.push('googlebooks');
+        if (document.getElementById('openAlexCheckbox').checked) selectedDatabases.push('openalex');
+        if (document.getElementById('jstorCheckbox').checked) selectedDatabases.push('jstor');
+        if (document.getElementById('europePmcCheckbox').checked) selectedDatabases.push('europepmc');
+        // Prompt for search query
+        const query = prompt("Enter your search query:");
+        if (query) {
+            // Perform search via API
+            performSearch(query, selectedDatabases);
+        }
+    });
+
+    function performSearch(query, databases) {
+        // Implement API call to backend
+    }
+
+    // Actions Panel Logic
+    document.getElementById('summarizeBtn').addEventListener('click', function() {
+        // Get selected search results
+        const selectedItems = getSelectedSearchResults();
+        if (selectedItems.length > 0) {
+            // Call API to summarize selected items
+            summarizeSelectedItems(selectedItems);
+        } else {
+            alert("Please select at least one search result to summarize.");
+        }
+    });
+
+    // Similar logic for other action buttons
+
+    // Export Options Logic
+    // ...
+
+    // Chat History Management
+    // Implement functionality to save and view chat history by day, week, month
+    // ...
+
+    // Functions to save, load, and clear workspaces
+    function saveWorkspace(name) {
+        // Collect current workspace data
+        const workspaceData = {
+            name: name,
+            searchResults: currentSearchResults,
+            citations: currentCitations,
+            chatHistory: currentChatHistory,
+        };
+        // Send data to backend via API
+        fetch('/api/workspaces', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(workspaceData),
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert("Workspace saved successfully.");
+            populateWorkspaceSelector();
+        })
+        .catch(error => {
+            console.error('Error saving workspace:', error);
+        });
+    }
+
+    function loadWorkspace(workspaceId) {
+        // Fetch workspace data from backend via API
+        fetch(`/api/workspaces/${workspaceId}`)
+        .then(response => response.json())
+        .then(data => {
+            // Load workspace data into the application
+            currentSearchResults = data.searchResults;
+            currentCitations = data.citations;
+            currentChatHistory = data.chatHistory;
+            // Update UI accordingly
+            updateSearchResultsUI();
+            updateCitationsUI();
+            updateChatHistoryUI();
+        })
+        .catch(error => {
+            console.error('Error loading workspace:', error);
+        });
+    }
+
+    function clearWorkspace() {
+        // Clear all current data
+        currentSearchResults = [];
+        currentCitations = [];
+        currentChatHistory = [];
+        // Update UI accordingly
+        updateSearchResultsUI();
+        updateCitationsUI();
+        updateChatHistoryUI();
+    }
+
+    // Helper functions to update UI
+    function updateSearchResultsUI() { /* ... */ }
+    function updateCitationsUI() { /* ... */ }
+    function updateChatHistoryUI() { /* ... */ }
+
+    // Other necessary functions and event listeners
+    // ...
+
+</script>
+
+</body>
+</html>
