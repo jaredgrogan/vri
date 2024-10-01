@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Herakles AI - Research Assistant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+ <style>
+    /* Header Styles */
+    header {
+        display: flex;
+        align-items: center;
+        padding: 10px 20px;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-left, .header-right {
+        display: flex;
+        align-items: center;
+    }
+
+    .logo-link {
+        margin: 0 auto;
+    }
+
+    .logo {
+        height: 50px;
+        width: 50px;
+        transition: transform 0.3s ease;
+    }
+
+    .logo:hover {
+        transform: scale(1.1);
+    }
+
+    .time-display {
+        font-family: 'Berkeley Mono', monospace;
+        font-size: 14px;
+    }
+
+    /* Icon Button Styles */
+    .icon-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 5px;
+        margin: 0 5px;
+        transition: background-color 0.3s ease;
+        border-radius: 50%;
+    }
+
+    .icon-button:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .icon {
+        width: 24px;
+        height: 24px;
+        fill: #333;
+    }
+
+    /* Tooltip Styles */
+    .tooltip {
+        position: relative;
+    }
+
+    .tooltip::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #333;
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
+
+    .tooltip:hover::after {
+        opacity: 1;
+    }
+
+    /* Main Container Styles */
+    .main-container {
+        display: flex;
+        flex: 1;
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+        width: 250px;
+        background-color: #f0f0f0;
+        padding: 20px;
+        transition: transform 0.3s ease;
+    }
+
+    .sidebar.collapsed {
+        transform: translateX(-250px);
+    }
+
+    .sidebar h3 {
+        margin-top: 0;
+    }
+
+    /* Panel Styles */
+    .panel {
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Input Styles */
+    input[type="text"], textarea, select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+
+    textarea {
+        resize: vertical;
+    }
+
+    .char-counter {
+        text-align: right;
+        font-size: 12px;
+        color: #666;
+    }
+
+    /* Button Styles */
+    .action-button, .export-button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.3s ease;
+    }
+
+    .action-button:hover, .export-button:hover {
+        background-color: #0056b3;
+    }
+
+    .button-row {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+    }
+
+    /* Chat Area Styles */
+    #chatArea {
+        height: 300px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    .chat-message {
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 4px;
+    }
+
+    .chat-message.assistant {
+        background-color: #e6f3ff;
+        align-self: flex-start;
+    }
+
+    .chat-message.user {
+        background-color: #f0f0f0;
+        align-self: flex-end;
+    }
+
+    /* Database Checkbox Styles */
+    .api-checkbox {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .main-container {
+            flex-direction: column;
+        }
+
+        .sidebar {
+            width: 100%;
+            order: -1;
+        }
+
+        .sidebar.collapsed {
+            transform: translateY(-100%);
+        }
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .fade-in {
+        animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+        from { transform: translateY(-20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    .slide-in {
+        animation: slideIn 0.3s ease;
+    }
+
+    /* Loading Spinner */
+    .spinner {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #3498db;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        animation: spin 1s linear infinite;
+        display: none;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <button id="sidebarToggle" class="icon-button tooltip" data-tooltip="Toggle Sidebar">
+                <svg viewBox="0 0 24 24" class="icon">
+                    <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+                </svg>
+            </button>
+            <button id="fileBtn" class="icon-button tooltip" data-tooltip="File Options">
+                <svg viewBox="0 0 24 24" class="icon">
+                    <path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/>
+                </svg>
+            </button>
+            <button id="settingsBtn" class="icon-button tooltip" data-tooltip="Settings">
+                <svg viewBox="0 0 24 24" class="icon">
+                    <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
+                </svg>
+            </button>
+        </div>
+        <a href="index.html" class="logo-link">
+            <img src="logo1.svg" alt="Herakles AI Logo" class="logo">
+        </a>
+        <div class="header-right">
+            <div id="timeDisplay" class="time-display"></div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <aside id="sidebar" class="sidebar">
+            <h3>Quick Actions</h3>
+            <button id="autoSummarizeBtn" class="action-button tooltip" data-tooltip="Generate a concise summary">
+                <svg viewBox="0 0 24 24" class="icon"><path d="M14 17H4v2h10v-2zm6-8H4v2h16V9zM4 15h16v-2H4v2zM4 5v2h16V5H4z"/></svg>
+                Auto Summarize
+            </button>
+            <button id="relatedWorkBtn" class="action-button tooltip" data-tooltip="Find similar research papers">
+                <svg viewBox="0 0 24 24" class="icon"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
+                Find Related Work
+            </button>
+            <button id="generateGlossaryBtn" class="action-button tooltip" data-tooltip="Create a list of key terms and definitions">
+                <svg viewBox="0 0 24 24" class="icon"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"/></svg>
+                Generate Glossary
+            </button>
+        </aside>
+
+        <main>
+            <section id="chatSection" class="panel">
+                <h2>Chat with Herakles AI</h2>
+                <input type="text" id="tagInput" placeholder="Enter up to 5 tags (separated by spaces)">
+                <textarea id="noteInput" placeholder="Enter up to 250 characters as a note" maxlength="250"></textarea>
+                <div class="char-counter"><span id="charCount">0</span> / 250</div>
+                <div id="chatArea">
+                    <div class="chat-message assistant">
+                        <p>Hi, I'm Herakles, your intelligent assistant. What are you researching?</p>
+                    </div>
+                </div>
+                <div class="chat-input-container">
+                    <input type="text" id="chatInput" placeholder="Type your message here...">
+                    <button id="sendBtn" class="icon-button tooltip" data-tooltip="Send Message">
+                        <svg viewBox="0 0 24 24" class="icon">
+                            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                        </svg>
+                    </button>
+                    <button id="micBtn" class="icon-button tooltip" data-tooltip="Voice Input">
+                        <svg viewBox="0 0 24 24" class="icon">
+                            <path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/>
+                        </svg>
+                    </button>
+                    <button id="speakerBtn" class="icon-button tooltip" data-tooltip="Toggle Text-to-Speech">
+                        <svg viewBox="0 0 24 24" class="icon">
+                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="button-row">
+                    <button id="exportChatBtn" class="export-button tooltip" data-tooltip="Download Chat Transcript">
+                        <svg viewBox="0 0 24 24" class="icon">
+                            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                        </svg>
+                        Export Chat
+                    </button>
+                    <button id="exportChatAudioBtn" class="export-button tooltip" data-tooltip="Save Conversation as MP3">
+                        <svg viewBox="0 0 24 24" class="icon">
+                            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                        </svg>
+                        Export Audio
+                    </button>
+                </div>
+            </section>
+
+            <section id="searchSection" class="panel">
+                <h2>Search Databases</h2>
+                <input type="text" id="searchTerms" placeholder="Enter search terms">
+                <div id="databases">
+                    <label class="api-checkbox">
+                        <input type="checkbox" id="arxivCheckbox"> arXiv
+                    </label>
+                    <label class="api-checkbox">
+                        <input type="checkbox" id="crossrefCheckbox"> Crossref
+                    </label>
+                    <label class="api-checkbox">
+                        <input type="checkbox" id="doajCheckbox"> DOAJ
+                    </label>
+                    <label class="api-checkbox">
+                        <input type="checkbox" id="magCheckbox"> Microsoft Academic Graph
+                    </label>
+                    <label class="api-checkbox">
+                        <input type="checkbox" id="orcidCheckbox"> ORCID
+                    </label>
+                    <label class="api-checkbox">
+                        <input type="checkbox" id="pubmedCheckbox"> PubMed
+                    </label>
+                    <label class="api-checkbox">
+                        <input type="checkbox" id="scopusCheckbox"> Scopus
+                    </label>
+                    <label class="api-checkbox">
+                        <input type="checkbox" id="semanticScholarCheckbox"> Semantic Scholar
+                    </label>
+                    <label class="api-checkbox">
+                        <input type="checkbox" id="unpaywallCheckbox"> Unpaywall
+                    </label>
+                    <label class="api-checkbox">
+                        <input type="checkbox" id="webOfScienceCheckbox"> Web of Science
+                    </label>
+                </div>
+                <div class="button-row">
+                    <button id="searchBtn" class="action-button tooltip" data-tooltip="Execute Multi-Database Search">Search</button>
+                    <button id="exportSearchBtn" class="export-button tooltip" data-tooltip="Save Search Results as CSV">
+                        <svg viewBox="0 0 24 24" class="icon">
+                            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                        </svg>
+                        Export Results
+                    </button>
+                </div>
+                <div id="searchResults">
+                    <!-- Search results will be displayed here -->
+                </div>
+            </section>
+
+            <section id="citationSection" class="panel">
+                <h2>Citation Tools</h2>
+                <div class="button-row">
+                    <button id="citationBtn" class="action-button tooltip" data-tooltip="Format Citation">Generate Citation</button>
+                    <button id="citationAnalysisBtn" class="action-button tooltip" data-tooltip="Analyze Citation Impact">Citation Analysis</button>
+                </div>
+                <select id="citationFormat">
+                    <option value="">Select Citation Format</option>
+                    <option value="apa">APA</option>
+                    <option value="mla">MLA</option>
+                    <option value="chicago">Chicago</option>
+                    <option value="harvard">Harvard</option>
+                    <option value="ieee">IEEE</option>
+                    <!-- Add more citation formats as needed -->
+                </select>
+                <div class="button-row">
+                    <button id="exportCitationsBtn" class="export-button tooltip" data-tooltip="Download Formatted Citations">
+                        <svg viewBox="0 0 24 24" class="icon">
+                            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                        </svg>
+                        Export Citations
+                    </button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 UNIVERSITAS AI</p>
+    </footer>
+
+    <script>
+    // DOM Elements
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebar = document.getElementById('sidebar');
+    const timeDisplay = document.getElementById('timeDisplay');
+    const noteInput = document.getElementById('noteInput');
+    const charCount = document.getElementById('charCount');
+    const chatInput = document.getElementById('chatInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const chatArea = document.getElementById('chatArea');
+    const searchBtn = document.getElementById('searchBtn');
+    const searchResults = document.getElementById('searchResults');
+
+    // Toggle sidebar
+    sidebarToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('collapsed');
+    });
+
+    // Update time display
+    function updateTime() {
+        const now = new Date();
+        const options = { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true };
+        timeDisplay.textContent = now.toLocaleString('en-US', options).replace(',', '');
+    }
+    updateTime();
+    setInterval(updateTime, 60000);
+
+    // Character counter for note input
+    noteInput.addEventListener('input', () => {
+        charCount.textContent = noteInput.value.length;
+    });
+
+    // Send chat message
+    function sendMessage() {
+        const message = chatInput.value.trim();
+        if (message) {
+            appendMessage('user', message);
+            chatInput.value = '';
+            
+            // Simulate AI response (replace with actual API call)
+            setTimeout(() => {
+                appendMessage('assistant', "I'm processing your request. Please wait...");
+            }, 500);
+        }
+    }
+
+    function appendMessage(sender, text) {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('chat-message', sender, 'slide-in');
+        messageElement.textContent = text;
+        chatArea.appendChild(messageElement);
+        chatArea.scrollTop = chatArea.scrollHeight;
+    }
+
+    sendBtn.addEventListener('click', sendMessage);
+    chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+
+    // Typing indicator
+    let typingTimer;
+    const typingIndicator = document.createElement('div');
+    typingIndicator.classList.add('chat-message', 'assistant', 'typing-indicator');
+    typingIndicator.textContent = 'AI is typing...';
+
+    chatInput.addEventListener('input', () => {
+        clearTimeout(typingTimer);
+        if (!typingIndicator.parentNode) {
+            chatArea.appendChild(typingIndicator);
+        }
+        typingTimer = setTimeout(() => {
+            typingIndicator.remove();
+        }, 1000);
+    });
+
+    // Search functionality (simulate for now)
+    searchBtn.addEventListener('click', () => {
+        searchResults.innerHTML = '<div class="spinner"></div>';
+        document.querySelector('.spinner').style.display = 'block';
+        
+        setTimeout(() => {
+            document.querySelector('.spinner').style.display = 'none';
+            searchResults.innerHTML = `
+                <div class="search-result fade-in">
+                    <h3>Sample Research Paper</h3>
+                    <p>Authors: John Doe, Jane Smith</p>
+                    <p>Published: 2023</p>
+                </div>
+                <div class="search-result fade-in">
+                    <h3>Another Relevant Study</h3>
+                    <p>Authors: Alice Johnson, Bob Williams</p>
+                    <p>Published: 2022</p>
+                </div>
+            `;
+        }, 2000);
+    });
+
+    // Add smooth scrolling
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+
+    // Add hover effects
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(button => {
+        button.addEventListener('mouseover', () => {
+            button.style.transform = 'scale(1.05)';
+        });
+        button.addEventListener('mouseout', () => {
+            button.style.transform = 'scale(1)';
+        });
+    });
+
+    // Simulate database search (replace with actual API calls)
+    function searchDatabases() {
+        const searchTerms = document.getElementById('searchTerms').value;
+        const selectedDatabases = Array.from(document.querySelectorAll('#databases input:checked'))
+            .map(checkbox => checkbox.id.replace('Checkbox', ''));
+
+        console.log('Searching:', searchTerms);
+        console.log('Selected databases:', selectedDatabases);
+
+        // Here you would make API calls to the selected databases
+        // For now, we'll just show a loading spinner and then some dummy results
+        searchResults.innerHTML = '<div class="spinner"></div>';
+        
+        setTimeout(() => {
+            searchResults.innerHTML = `
+                <h3>Search Results</h3>
+                <ul>
+                    <li>Result 1 from ${selectedDatabases[0] || 'Database'}</li>
+                    <li>Result 2 from ${selectedDatabases[1] || 'Database'}</li>
+                    <li>Result 3 from ${selectedDatabases[2] || 'Database'}</li>
+                </ul>
+            `;
+        }, 2000);
+    }
+
+    document.getElementById('searchBtn').addEventListener('click', searchDatabases);
+
+    // Citation Analysis (simulate for now)
+    document.getElementById('citationAnalysisBtn').addEventListener('click', () => {
+        alert('Citation analysis with Scopus and Altmetric integration would be performed here.');
+    });
+
+    // Export functions (simulate for now)
+    document.getElementById('exportChatBtn').addEventListener('click', () => {
+        alert('Chat transcript would be exported here.');
+    });
+
+    document.getElementById('exportChatAudioBtn').addEventListener('click', () => {
+        alert('Chat audio would be exported as MP3 here.');
+    });
+
+    document.getElementById('exportSearchBtn').addEventListener('click', () => {
+        alert('Search results would be exported as CSV here.');
+    });
+
+    document.getElementById('exportCitationsBtn').addEventListener('click', () => {
+        alert('Formatted citations would be exported here.');
+    });
+</script>
+</body>
+</html>
