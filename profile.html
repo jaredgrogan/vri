@@ -1,0 +1,378 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universitas Network - Research Networking Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        /* Color Scheme */
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --background-color: #f4f6f9;
+            --text-color: #333;
+            --light-gray: #ecf0f1;
+            --dark-gray: #7f8c8d;
+        }
+
+        /* Typography */
+        body {
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        h1, h2, h3 {
+            font-weight: 700;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 10px 0;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        /* Profile Summary */
+        .profile-summary {
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .profile-image, .banner-image {
+            width: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .profile-image {
+            height: 200px;
+        }
+
+        .banner-image {
+            height: 150px;
+        }
+
+        /* Research Interests */
+        .research-interests {
+            margin-top: 20px;
+        }
+
+        .tag {
+            display: inline-block;
+            background-color: var(--light-gray);
+            padding: 5px 10px;
+            border-radius: 20px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        /* Suggested Collaborators */
+        .suggested-collaborators {
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .collaborator {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .collaborator img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+
+        /* Recent Activity */
+        .recent-activity {
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--secondary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #27ae60;
+        }
+
+        /* QR Code */
+        #qrcode {
+            margin-top: 20px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            background-color: var(--dark-gray);
+            color: white;
+            margin-top: 40px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Edit Mode */
+        .edit-mode input[type="text"],
+        .edit-mode textarea {
+            width: 100%;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+
+        .edit-mode .tag {
+            cursor: pointer;
+        }
+
+        .edit-mode .tag:hover {
+            background-color: #e74c3c;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Universitas Network</h1>
+            <nav>
+                <ul>
+                    <li><a href="#dashboard">Dashboard</a></li>
+                    <li><a href="#profile">Profile</a></li>
+                    <li><a href="#messages">Messages</a></li>
+                    <li><a href="#groups">Groups</a></li>
+                    <li><a href="#search">Search</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <h2>Research Networking Dashboard</h2>
+        <div class="dashboard-grid">
+            <div class="main-content">
+                <section class="profile-summary" id="profileSummary">
+                    <img src="https://via.placeholder.com/800x150" alt="Profile Banner" class="banner-image" id="bannerImage">
+                    <img src="https://via.placeholder.com/200" alt="Profile Picture" class="profile-image" id="profileImage">
+                    <h3 id="userName">Dr. Jane Doe</h3>
+                    <p id="userTitle">Associate Professor of Computer Science</p>
+                    <p id="userInstitution">University of Example</p>
+                    <div class="research-interests">
+                        <h4>Research Interests</h4>
+                        <div id="interestTags">
+                            <span class="tag">Machine Learning</span>
+                            <span class="tag">Natural Language Processing</span>
+                            <span class="tag">Computer Vision</span>
+                        </div>
+                    </div>
+                    <button id="editProfileBtn" class="btn">Edit Profile</button>
+                    <div id="qrcode"></div>
+                </section>
+
+                <section class="recent-activity">
+                    <h3>Recent Activity</h3>
+                    <ul>
+                        <li>Published a new paper: "Advances in Deep Learning for NLP"</li>
+                        <li>Joined the "AI Ethics" research group</li>
+                        <li>Commented on Dr. Smith's latest publication</li>
+                    </ul>
+                </section>
+            </div>
+
+            <aside>
+                <section class="suggested-collaborators">
+                    <h3>Suggested Collaborators</h3>
+                    <div class="collaborator">
+                        <img src="https://via.placeholder.com/50" alt="Dr. John Smith">
+                        <div>
+                            <h4>Dr. John Smith</h4>
+                            <p>Expert in Deep Learning</p>
+                            <a href="#connect" class="btn">Connect</a>
+                        </div>
+                    </div>
+                    <div class="collaborator">
+                        <img src="https://via.placeholder.com/50" alt="Prof. Emily Brown">
+                        <div>
+                            <h4>Prof. Emily Brown</h4>
+                            <p>Researcher in NLP</p>
+                            <a href="#connect" class="btn">Connect</a>
+                        </div>
+                    </div>
+                </section>
+            </aside>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 UNIVERSITAS AI</p>
+    </footer>
+
+    <script>
+        const profileSummary = document.getElementById('profileSummary');
+        const editProfileBtn = document.getElementById('editProfileBtn');
+        const userName = document.getElementById('userName');
+        const userTitle = document.getElementById('userTitle');
+        const userInstitution = document.getElementById('userInstitution');
+        const interestTags = document.getElementById('interestTags');
+        const profileImage = document.getElementById('profileImage');
+        const bannerImage = document.getElementById('bannerImage');
+
+        let isEditing = false;
+
+        editProfileBtn.addEventListener('click', () => {
+            isEditing = !isEditing;
+            if (isEditing) {
+                enterEditMode();
+            } else {
+                exitEditMode();
+            }
+        });
+
+        function enterEditMode() {
+            profileSummary.classList.add('edit-mode');
+            editProfileBtn.textContent = 'Save Profile';
+
+            userName.innerHTML = `<input type="text" value="${userName.textContent}">`;
+            userTitle.innerHTML = `<input type="text" value="${userTitle.textContent}">`;
+            userInstitution.innerHTML = `<input type="text" value="${userInstitution.textContent}">`;
+
+            const tags = interestTags.getElementsByClassName('tag');
+            Array.from(tags).forEach(tag => {
+                tag.addEventListener('click', () => tag.remove());
+            });
+
+            const addTagInput = document.createElement('input');
+            addTagInput.type = 'text';
+            addTagInput.placeholder = 'Add new interest';
+            addTagInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && e.target.value) {
+                    const newTag = document.createElement('span');
+                    newTag.className = 'tag';
+                    newTag.textContent = e.target.value;
+                    newTag.addEventListener('click', () => newTag.remove());
+                    interestTags.insertBefore(newTag, addTagInput);
+                    e.target.value = '';
+                }
+            });
+            interestTags.appendChild(addTagInput);
+
+            addImageUploadButton(profileImage, 'Upload Profile Picture');
+            addImageUploadButton(bannerImage, 'Upload Banner Image');
+        }
+
+        function exitEditMode() {
+            profileSummary.classList.remove('edit-mode');
+            editProfileBtn.textContent = 'Edit Profile';
+
+            userName.textContent = userName.querySelector('input').value;
+            userTitle.textContent = userTitle.querySelector('input').value;
+            userInstitution.textContent = userInstitution.querySelector('input').value;
+
+            const addTagInput = interestTags.querySelector('input');
+            if (addTagInput) {
+                addTagInput.remove();
+            }
+
+            removeImageUploadButtons();
+        }
+
+        function addImageUploadButton(imgElement, buttonText) {
+            const uploadBtn = document.createElement('button');
+            uploadBtn.textContent = buttonText;
+            uploadBtn.className = 'btn';
+            uploadBtn.style.marginTop = '10px';
+            uploadBtn.addEventListener('click', () => {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'image/*';
+                input.onchange = (e) => {
+                    const file = e.target.files[0];
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        imgElement.src = event.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                };
+                input.click();
+            });
+            imgElement.insertAdjacentElement('afterend', uploadBtn);
+        }
+
+        function removeImageUploadButtons() {
+            const uploadBtns = profileSummary.querySelectorAll('button:not(#editProfileBtn)');
+            uploadBtns.forEach(btn => btn.remove());
+        }
+
+        // Generate QR Code
+        const qr = new QRCode(document.getElementById("qrcode"), {
+            text: window.location.href,
+            width: 128,
+            height: 128
+        });
+    </script>
+</body>
+</html>
