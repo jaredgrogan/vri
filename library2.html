@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Herakles AI - Research Assistant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'Berkeley Mono';
+            src: url('fonts/BerkeleyMono-Regular.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #fff;
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            height: 50px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.3);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+            margin-right: 120px;
+        }
+
+        .menu-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-left: 20px;
+            position: relative;
+            outline: none;
+        }
+
+        .menu-icon {
+            width: 24px;
+            height: 24px;
+            fill: #333;
+        }
+
+        .time-display {
+            font-family: 'Berkeley Mono', monospace;
+            font-size: 14px;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 40px;
+            right: 0;
+            background-color: #fff;
+            min-width: 220px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            z-index: 1000;
+            padding: 15px;
+            transition: opacity 0.3s, transform 0.3s;
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        .menu-button.active .dropdown-menu {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .tooltip {
+            position: relative;
+        }
+
+        .tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 130%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: #fff;
+            padding: 6px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .tooltip:hover::after {
+            opacity: 1;
+        }
+
+        main {
+            display: flex;
+            flex: 1;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .panel {
+            background-color: #fff;
+            border-radius: 8px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #chatArea {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fafafa;
+        }
+
+        .chat-message {
+            margin-bottom: 10px;
+        }
+
+        .chat-message.assistant {
+            text-align: left;
+            font-family: 'Berkeley Mono', monospace;
+            background-color: #e6f3ff;
+            border-radius: 10px;
+            padding: 10px;
+            max-width: 80%;
+            margin-left: 0;
+        }
+
+        .chat-message.user {
+            text-align: right;
+        }
+
+        .chat-input-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .chat-input-container input {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .chat-input-container button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-left: 10px;
+            outline: none;
+        }
+
+        .chat-input-container button svg {
+            width: 24px;
+            height: 24px;
+            fill: #333;
+        }
+
+        #searchBtn {
+            background-color: #1e1e1e;
+            color: #fff;
+            font-family: 'Roboto', sans-serif;
+            text-transform: uppercase;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: fit-content;
+        }
+
+        #searchBtn:hover {
+            background-color: #333;
+        }
+
+        #actionsMenu, #exportOptions {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+        }
+
+        #actionsMenu h2, #exportOptions h2 {
+            margin-top: 0;
+        }
+
+        .action-button, .export-button {
+            background-color: #1e1e1e;
+            color: #fff;
+            font-family: 'Roboto', sans-serif;
+            text-transform: uppercase;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-button:hover, .export-button:hover {
+            background-color: #333;
+        }
+
+        #tagInput, #noteInput {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #noteInput {
+            resize: none;
+        }
+
+        .char-counter {
+            text-align: right;
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        #searchTerms {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .search-result {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .search-result input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        #citationFormat {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .button-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .button-row .action-button,
+        .button-row .export-button {
+            flex: 1;
+            margin: 0 5px;
+        }
+
+        @media (max-width: 768px) {
+            main {
+                flex-direction: column;
+            }
+        }
+
+        footer p {
+            font-family: 'Courier New', monospace;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="index.html">
+        <img src="logo1.svg" alt="Herakles AI Logo" class="logo">
+    </a>
+    <div class="header-right">
+        <div class="menu-button tooltip" data-tooltip="File">
+            <svg class="menu-icon" viewBox="0 0 24 24">
+                <path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/>
+            </svg>
+            <div class="dropdown-menu">
+                <h3>File</h3>
+                <button id="newWorkspaceBtn">New Workspace</button>
+                <button id="saveWorkspaceBtn">Save Workspace</button>
+                <label for="workspaceSelector">Switch Workspace:</label>
+                <select id="workspaceSelector">
+                    <!-- Options populated dynamically -->
+                </select>
+            </div>
+        </div>
+        <div class="menu-button tooltip" data-tooltip="Settings">
+            <svg class="menu-icon" viewBox="0 0 24 24">
+                <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
+            </svg>
+            <div class="dropdown-menu">
+                <h3>Herakles Audio</h3>
+                <label for="volumeSlider">Volume:</label>
+                <input type="range" id="volumeSlider" min="0" max="100" value="100">
+                <label for="genderToggle">Gender:</label>
+                <select id="genderToggle">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+                <h3>Time</h3>
+                <label for="timeFormat">Time Format:</label>
+                <select id="timeFormat">
+                    <option value="12hr">12 Hour</option>
+                    <option value="24hr">24 Hour</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="time-display" id="timeDisplay"></div>
+</header>
+
+<main>
+    <section class="panel" id="chatWorkspace">
+        <h2>Chat with Herakles AI</h2>
+        <input type="text" id="tagInput" placeholder="Enter up to 5 tags (separated by spaces)">
+        <textarea id="noteInput" placeholder="Enter up to 250 characters as a note" maxlength="250"></textarea>
+        <div class="char-counter"><span id="charCount">0</span> / 250</div>
+        <div id="chatArea">
+            <div class="chat-message assistant">
+                <p>Hi, I'm Herakles, your intelligent assistant. What are you researching?</p>
+            </div>
+        </div>
+        <div class="chat-input-container">
+            <input type="text" id="chatInput" placeholder="// Type your message here.">
+            <button id="sendBtn" class="tooltip" data-tooltip="Send Message">
+                <svg viewBox="0 0 24 24">
+                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                </svg>
+            </button>
+           <button id="micBtn" class="tooltip" data-tooltip="Start Recording">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/>
+                </svg>
+            </button>
+            <button id="speakerBtn" class="tooltip" data-tooltip="Toggle Audio">
+                <svg viewBox="0 0 24 24">
+                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                </svg>
+            </button>
+        </div>
+        <div class="button-row">
+            <button id="exportChatBtn" class="export-button tooltip" data-tooltip="Export Chat History">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M13 5V11H14.17L12 13.17L9.83 11H11V5H13ZM15 3H9V9H5L12 16L19 9H15V3ZM19 18H5V20H19V18Z" fill="white"/>
+                </svg>
+                Chat
+            </button>
+            <button id="exportChatAudioBtn" class="export-button tooltip" data-tooltip="Export Chat as Audio">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M13 5V11H14.17L12 13.17L9.83 11H11V5H13ZM15 3H9V9H5L12 16L19 9H15V3ZM19 18H5V20H19V18Z" fill="white"/>
+                </svg>
+                Chat as mp3
+            </button>
+        </div>
+    </section>
+
+    <section class="panel" id="searchWorkspace">
+        <h2>Search Databases</h2>
+        <input type="text" id="searchTerms" placeholder="Enter search terms">
+        <div id="databases">
+            <label class="api-checkbox">
+                <input type="checkbox" id="ieeeCheckbox"> IEEE Xplore
+            </label>
+            <label class="api-checkbox">
+                <input type="checkbox" id="googleBooksCheckbox"> Google Books
+            </label>
+            <label class="api-checkbox">
+                <input type="checkbox" id="openAlexCheckbox"> OpenAlex
+            </label>
+            <label class="api-checkbox">
+                <input type="checkbox" id="jstorCheckbox"> JSTOR Open Access
+            </label>
+            <label class="api-checkbox">
+                <input type="checkbox" id="europePmcCheckbox"> Europe PMC
+            </label>
+        </div>
+        <div class="button-row">
+            <button id="searchBtn" class="tooltip" data-tooltip="Search Selected Databases">Search</button>
+            <button id="exportSearchBtn" class="export-button tooltip" data-tooltip="Export Search Results">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M13 5V11H14.17L12 13.17L9.83 11H11V5H13ZM15 3H9V9H5L12 16L19 9H15V3ZM19 18H5V20H19V18Z" fill="white"/>
+                </svg>
+                Search Results
+            </button>
+        </div>
+        <div id="searchResults">
+            <!-- Search results will be displayed here -->
+        </div>
+    </section>
+</main>
+
+<section id="actionsMenu">
+    <h2>Actions</h2>
+    <div class="button-row">
+        <button id="summarizeBtn" class="action-button tooltip" data-tooltip="Auto Summarize">Auto Summarize</button>
+        <button id="relatedWorkBtn" class="action-button tooltip" data-tooltip="Find Related Work">Find Related Work</button>
+        <button id="glossaryBtn" class="action-button tooltip" data-tooltip="Generate Glossary">Generate Glossary</button>
+    </div>
+    <h3>Citation Tools</h3>
+    <div class="button-row">
+        <button id="citationBtn" class="action-button tooltip" data-tooltip="Generate Citation">Generate Citation</button>
+        <button id="citationAnalysisBtn" class="action-button tooltip" data-tooltip="Citation Analysis">Citation Analysis</button>
+    </div>
+    <select id="citationFormat">
+        <option value="">Select Citation Format</option>
+        <option value="apa">APA</option>
+        <option value="mla">MLA</option>
+        <option value="chicago">Chicago</option>
+        <option value="harvard">Harvard</option>
+        <option value="ieee">IEEE</option>
+        <option value="ama">AMA</option>
+        <option value="asa">ASA</option>
+        <option value="bluebook">Bluebook</option>
+        <option value="cse">CSE</option>
+        <option value="vancouver">Vancouver</option>
+        <option value="apa-7">APA 7th Edition</option>
+        <option value="mla-9">MLA 9th Edition</option>
+        <option value="turabian">Turabian</option>
+        <option value="oscola">OSCOLA</option>
+        <option value="nlm">NLM</option>
+    </select>
+    <div class="button-row">
+        <button id="exportCitationsBtn" class="export-button tooltip" data-tooltip="Export Citations">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13 5V11H14.17L12 13.17L9.83 11H11V5H13ZM15 3H9V9H5L12 16L19 9H15V3ZM19 18H5V20H19V18Z" fill="white"/>
+            </svg>
+            Citations
+        </button>
+        <button id="exportActionsBtn" class="export-button tooltip" data-tooltip="Export Actions Output">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13 5V11H14.17L12 13.17L9.83 11H11V5H13ZM15 3H9V9H5L12 16L19 9H15V3ZM19 18H5V20H19V18Z" fill="white"/>
+            </svg>
+            Actions
+        </button>
+    </div>
+</section>
+
+<footer>
+    <p>&copy; 2024 UNIVERSITAS AI</p>
+</footer>
+
+<script>
+    let is12HourFormat = true;
+    function updateTime() {
+        const now = new Date();
+        const options = {
+            weekday: 'short',
+            month: 'short',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: is12HourFormat,
+        };
+        const timeString = now.toLocaleDateString('en-US', options).replace(',', '');
+        document.getElementById('timeDisplay').textContent = timeString;
+    }
+    updateTime();
+    setInterval(updateTime, 60000);
+
+    document.getElementById('timeFormat').addEventListener('change', function() {
+        is12HourFormat = this.value === '12hr';
+        updateTime();
+    });
+
+    const menuButtons = document.querySelectorAll('.menu-button');
+    menuButtons.forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.stopPropagation();
+            this.classList.toggle('active');
+            menuButtons.forEach(btn => {
+                if (btn !== this) {
+                    btn.classList.remove('active');
+                }
+            });
+        });
+    });
+
+    document.addEventListener('click', () => {
+        menuButtons.forEach(button => {
+            button.classList.remove('active');
+        });
+    });
+
+    document.getElementById('saveWorkspaceBtn').addEventListener('click', function() {
+        const workspaceName = prompt("Enter a name for your workspace:");
+        if (workspaceName) {
+            saveWorkspace(workspaceName);
+        }
+    });
+
+    document.getElementById('newWorkspaceBtn').addEventListener('click', function() {
+        if (confirm("Are you sure you want to create a new workspace? Unsaved changes will be lost.")) {
+            clearWorkspace();
+        }
+    });
+
+    function populateWorkspaceSelector() {
+        // Fetch workspaces from backend and populate the selector
+    }
+
+    document.getElementById('workspaceSelector').addEventListener('change', function() {
+        const workspaceId = this.value;
+        loadWorkspace(workspaceId);
+    });
+
+    document.getElementById('volumeSlider').addEventListener('input', function() {
+        const volumeLevel = this.value / 100;
+        // Adjust audio elements volume
+    });
+
+    document.getElementById('genderToggle').addEventListener('change', function() {
+        const selectedGender = this.value;
+        // Set voice gender for TTS
+    });
+
+    const noteInput = document.getElementById('noteInput');
+    const charCount = document.getElementById('charCount');
+
+    noteInput.addEventListener('input', function() {
+        charCount.textContent = this.value.length;
+    });
+
+    // Smooth dropdown animation
+    menuButtons.forEach(button => {
+        button.addEventListener('mouseenter', function() {
+            clearTimeout(this.closeTimeout);
+            this.classList.add('active');
+        });
+
+        button.addEventListener('mouseleave', function() {
+            this.closeTimeout = setTimeout(() => {
+                this.classList.remove('active');
+            }, 2000);
+        });
+    });
+
+    // Add any additional JavaScript functionality here
+</script>
+</body>
+</html>
