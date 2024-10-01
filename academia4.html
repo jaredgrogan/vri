@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Herakles AI - Research Assistant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Berkeley Mono Font (Assuming you have the font file) -->
+    <style>
+        @font-face {
+            font-family: 'Berkeley Mono';
+            src: url('fonts/BerkeleyMono-Regular.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        /* Basic Styles */
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            padding-left: 20px;
+            padding-top: 20px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            padding-right: 20px;
+        }
+
+        .settings-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 20px;
+            cursor: pointer;
+        }
+
+        .time-display {
+            font-family: 'Berkeley Mono', monospace;
+            font-size: 14px;
+        }
+
+        /* Main Section */
+        main {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 100px; /* To avoid overlap with fixed header */
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Chat Workspace */
+        #chatWorkspace {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+        }
+
+        #chatArea {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #fafafa;
+        }
+
+        .chat-message {
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .chat-message p {
+            margin: 0;
+        }
+
+        .playResponseBtn {
+            position: absolute;
+            right: 0;
+            top: 0;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .chat-input-container {
+            display: flex;
+            align-items: center;
+        }
+
+        #chatInput {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        #sendBtn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        /* Mic and Speaker */
+        .mic, .speaker {
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: transform 0.2s;
+        }
+
+        .mic.recording {
+            filter: brightness(0) saturate(100%) invert(24%) sepia(80%) saturate(7500%) hue-rotate(340deg) brightness(95%) contrast(102%);
+        }
+
+        .mic:hover, .speaker:hover {
+            transform: scale(1.1);
+        }
+
+        /* Search Workspace */
+        #searchWorkspace {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            flex: 1;
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #searchWorkspace h2 {
+            margin-top: 0;
+        }
+
+        .api-checkbox {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        #searchBtn {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        #searchBtn:hover {
+            background-color: #218838;
+        }
+
+        /* Actions Panel */
+        #actionsMenu {
+            width: 100%;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        #actionsMenu h2 {
+            margin-top: 0;
+        }
+
+        .action-button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            transition: background-color 0.3s ease;
+            position: relative;
+        }
+
+        .action-button:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            white-space: nowrap;
+            font-size: 12px;
+            z-index: 100;
+            opacity: 1;
+        }
+
+        .action-button::after {
+            content: '';
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        /* Export Options */
+        #exportOptions {
+            width: 100%;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        #exportOptions h2 {
+            margin-top: 0;
+        }
+
+        .export-button {
+            background-color: #17a2b8;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .export-button:hover {
+            background-color: #138496;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 50px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            main {
+                flex-direction: column;
+            }
+
+            #searchWorkspace {
+                margin-top: 20px;
+                height: auto;
+            }
+
+            #chatWorkspace, #searchWorkspace {
+                width: 100%;
+            }
+        }
+
+        /* Volume Slider Pop-up */
+        #volumeSliderContainer {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+            z-index: 1000;
+        }
+
+        #volumeSlider {
+            width: 100%;
+        }
+
+        /* Settings Dropdown */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 40px;
+            top: 60px;
+            background-color: #f9f9f9;
+            min-width: 200px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            padding: 12px 16px;
+            z-index: 1;
+            border-radius: 8px;
+        }
+
+        .settings-icon:hover + .dropdown-content,
+        .dropdown-content:hover {
+            display: block;
+        }
+
+        .dropdown-content label,
+        .dropdown-content select,
+        .dropdown-content input[type="range"] {
+            display: block;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <img src="logo1.svg" alt="" class="logo">
+    <div class="header-right">
+        <img src="gear.svg" alt="Settings" class="settings-icon">
+        <div class="dropdown-content">
+            <label for="timeFormat">Time Format:</label>
+            <select id="timeFormat">
+                <option value="12hr">12 Hour</option>
+                <option value="24hr">24 Hour</option>
+            </select>
+
+            <label for="voiceOption">Herakles Voice:</label>
+            <select id="voiceOption">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+
+            <label for="speechSpeed">Speech Speed:</label>
+            <input type="range" id="speechSpeed" min="0.5" max="2.0" step="0.1" value="1.0">
+        </div>
+        <div class="time-display" id="timeDisplay"></div>
+    </div>
+</header>
+
+<main>
+    <!-- Chat Workspace -->
+    <section id="chatWorkspace">
+        <h2>General Chat</h2>
+        <div id="chatArea"></div>
+        <div class="chat-input-container">
+            <input type="text" id="chatInput" placeholder="Type your message here">
+            <button id="sendBtn" class="action-button" data-tooltip="Send Message">
+                <img src="play.svg" alt="Send" width="24" height="24">
+            </button>
+            <img src="mic.svg" alt="Mic" id="mic" class="mic" title="Start Recording">
+            <img src="speaker.svg" alt="Speaker" id="speaker" class="speaker" title="Toggle Audio">
+        </div>
+    </section>
+
+    <!-- Search Workspace -->
+    <section id="searchWorkspace">
+        <h2>Search Databases</h2>
+        <div id="databases">
+            <label class="api-checkbox">
+                <input type="checkbox" id="scopusCheckbox"> Scopus
+            </label>
+            <label class="api-checkbox">
+                <input type="checkbox" id="ieeeCheckbox"> IEEE
+            </label>
+            <label class="api-checkbox">
+                <input type="checkbox" id="googleBooksCheckbox"> Google Books
+            </label>
+            <label class="api-checkbox">
+                <input type="checkbox" id="semanticScholarCheckbox"> Semantic Scholar
+            </label>
+            <!-- Add other databases as needed -->
+        </div>
+        <button id="searchBtn" class="action-button" data-tooltip="Search Selected Databases">Search</button>
+    </section>
+</main>
+
+<!-- Actions Panel -->
+<section id="actionsMenu">
+    <h2>Actions</h2>
+    <button id="summarizeBtn" class="action-button" data-tooltip="Auto Summarize">Auto Summarize</button>
+    <button id="citationBtn" class="action-button" data-tooltip="Generate Citation">Generate Citation</button>
+    <button id="relatedWorkBtn" class="action-button" data-tooltip="Find Related Work">Find Related Work</button>
+    <button id="glossaryBtn" class="action-button" data-tooltip="Generate Glossary">Generate Glossary</button>
+    <button id="citationAnalysisBtn" class="action-button" data-tooltip="Citation Analysis">Citation Analysis</button>
+</section>
+
+<!-- Export Options -->
+<section id="exportOptions">
+    <h2>Export</h2>
+    <button id="exportChatBtn" class="export-button" data-tooltip="Export Chat History">Export Chat</button>
+    <button id="exportActionsBtn" class="export-button" data-tooltip="Export Actions Output">Export Actions</button>
+    <button id="exportSearchBtn" class="export-button" data-tooltip="Export Search Results">Export Search Results</button>
+    <button id="exportChatAudioBtn" class="export-button" data-tooltip="Export Chat as Audio">Export Chat as Audio</button>
+    <button id="exportCitationsBtn" class="export-button" data-tooltip="Export Citations">Export Citations</button>
+</section>
+
+<!-- Volume Slider Pop-up -->
+<div id="volumeSliderContainer">
+    <label for="volumeSlider">Volume Control:</label>
+    <input type="range" id="volumeSlider" min="0" max="1" step="0.1" value="1">
+</div>
+
+<footer>
+    &copy; 2024 UNIVERSITAS AI
+</footer>
+
+<script>
+    // Time Display
+    function updateTime() {
+        const now = new Date();
+        const options = {
+            weekday: 'short', month: 'short', day: 'numeric',
+            hour: 'numeric', minute: '2-digit', hour12: true
+        };
+        const timeString = now.toLocaleDateString('en-US', options).replace(',', '');
+        document.getElementById('timeDisplay').textContent = timeString;
+    }
+    updateTime();
+    setInterval(updateTime, 60000);
+
+    // Settings Dropdown
+    document.getElementById('timeFormat').addEventListener('change', function() {
+        const selectedFormat = this.value;
+        const now = new Date();
+        let options = {
+            weekday: 'short', month: 'short', day: 'numeric',
+            hour: 'numeric', minute: '2-digit'
+        };
+        options.hour12 = selectedFormat === '12hr';
+        const timeString = now.toLocaleDateString('en-US', options).replace(',', '');
+        document.getElementById('timeDisplay').textContent = timeString;
+    });
+
+    document.getElementById('voiceOption').addEventListener('change', function() {
+        const selectedVoice = this.value;
+        // Logic to change Herakles' voice
+    });
+
+    document.getElementById('speechSpeed').addEventListener('input', function() {
+        const speed = this.value;
+        // Logic to adjust Herakles' speech speed
+    });
+
+    // Mic Button Logic
+    const micButton = document.getElementById('mic');
+    micButton.addEventListener('click', function() {
+        micButton.classList.toggle('recording');
+        if (micButton.classList.contains('recording')) {
+            // Start recording
+            // Implement voice recording logic here
+            micButton.title = "Stop Recording";
+        } else {
+            // Stop recording and send to Whisper API
+            // Implement stop recording and transcription logic here
+            micButton.title = "Start Recording";
+        }
+    });
+
+    // Speaker Button Logic
+    const speakerButton = document.getElementById('speaker');
+    const volumeSliderContainer = document.getElementById('volumeSliderContainer');
+    speakerButton.addEventListener('click', function() {
+        volumeSliderContainer.style.display = volumeSliderContainer.style.display === 'none' || volumeSliderContainer.style.display === '' ? 'block' : 'none';
+    });
+
+    // Volume Slider Logic
+    const volumeSlider = document.getElementById('volumeSlider');
+    volumeSlider.addEventListener('input', function() {
+        const volume = this.value;
+        // Logic to adjust volume of audio outputs
+    });
+
+    // Send Button Logic for Chat
+    const sendBtn = document.getElementById('sendBtn');
+    sendBtn.addEventListener('click', function() {
+        const chatInput = document.getElementById('chatInput').value.trim();
+        if (chatInput) {
+            const chatArea = document.getElementById('chatArea');
+            const userMessage = document.createElement('div');
+            userMessage.classList.add('chat-message');
+            userMessage.innerHTML = `<p><strong>You:</strong> ${chatInput}</p>`;
+            chatArea.appendChild(userMessage);
+            // Scroll to bottom
+            chatArea.scrollTop = chatArea.scrollHeight;
+
+            // Send to LLM (GPT-4 API) logic
+            fetch('/api/gpt4', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: chatInput })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const assistantMessage = document.createElement('div');
+                assistantMessage.classList.add('chat-message');
+                assistantMessage.innerHTML = `<p><strong>Herakles:</strong> ${data.choices[0].message.content}</p>
+                                             <button class="playResponseBtn" data-tooltip="Play Response">
+                                                 <img src="play.svg" alt="Play" width="16" height="16">
+                                             </button>`;
+                chatArea.appendChild(assistantMessage);
+                chatArea.scrollTop = chatArea.scrollHeight;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+            document.getElementById('chatInput').value = '';
+        }
+    });
+
+    // Play Response Audio
+    document.addEventListener('click', function(event) {
+        if (event.target.closest('.playResponseBtn')) {
+            const messageDiv = event.target.closest('.chat-message');
+            const messageText = messageDiv.querySelector('p').textContent.replace('Herakles: ', '');
+            // Use Text-to-Speech API to generate audio and play
+            fetch('/api/text-to-speech', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: messageText })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const audio = new Audio(data.audioUrl);
+                audio.play();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    });
+
+    // Search Button Logic
+    const searchBtn = document.getElementById('searchBtn');
+    searchBtn.addEventListener('click', function() {
+        const scopus = document.getElementById('scopusCheckbox').checked;
+        const ieee = document.getElementById('ieeeCheckbox').checked;
+        const googleBooks = document.getElementById('googleBooksCheckbox').checked;
+        const semanticScholar = document.getElementById('semanticScholarCheckbox').checked;
+        const query = prompt("Enter your search query:");
+        if (query) {
+            // Make API calls to selected databases
+            const selectedAPIs = [];
+            if (scopus) selectedAPIs.push('scopus');
+            if (ieee) selectedAPIs.push('ieee');
+            if (googleBooks) selectedAPIs.push('googlebooks');
+            if (semanticScholar) selectedAPIs.push('semanticscholar');
+
+            fetch('/api/search', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query: query, apis: selectedAPIs })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const searchArea = document.getElementById('searchWorkspace');
+                searchArea.innerHTML += `<h3>Search Results for "${query}":</h3>`;
+                data.results.forEach(result => {
+                    searchArea.innerHTML += `<div class="search-result">
+                        <p><strong>${result.title}</strong> by ${result.author} (${result.year})</p>
+                        <button class="playResponseBtn" data-tooltip="Play Summary">
+                            <img src="play.svg" alt="Play" width="16" height="16">
+                        </button>
+                    </div>`;
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    });
+
+    // Actions Button Logic
+    document.getElementById('summarizeBtn').addEventListener('click', function() {
+        // Logic for summarizing via LLM
+        const selectedText = prompt("Enter text to summarize:");
+        if (selectedText) {
+            fetch('/api/summarize', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: selectedText, format: 'paragraph' }) // or 'bullets'
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert("Summary: " + data.summary);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    });
+
+    document.getElementById('citationBtn').addEventListener('click', function() {
+        // Logic for generating citations via CrossRef and DOI Lookup
+        const paperDOI = prompt("Enter DOI for citation:");
+        if (paperDOI) {
+            fetch('/api/citation', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ doi: paperDOI, format: 'APA' }) // Allow format selection
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert("Citation: " + data.citation);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    });
+
+    document.getElementById('relatedWorkBtn').addEventListener('click', function() {
+        // Logic for finding related work via selected databases
+        const currentQuery = prompt("Enter your current research topic:");
+        if (currentQuery) {
+            fetch('/api/related-work', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query: currentQuery })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert("Related Work: " + JSON.stringify(data.relatedWork));
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    });
+
+    document.getElementById('glossaryBtn').addEventListener('click', function() {
+        // Logic for generating glossary (definitions and vocab)
+        const term = prompt("Enter the term to define:");
+        if (term) {
+            fetch('/api/glossary', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ term: term })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(`Definition: ${data.definition}`);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    });
+
+    document.getElementById('citationAnalysisBtn').addEventListener('click', function() {
+        // Logic for citation analysis using Scopus and Altmetric
+        const paperDOI = prompt("Enter DOI for citation analysis:");
+        if (paperDOI) {
+            fetch('/api/citation-analysis', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ doi: paperDOI })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(`Citation Count: ${data.scopus.citationCount}\nAltmetric Score: ${data.altmetric.score}`);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    });
+
+    // Export Button Logic
+    document.getElementById('exportChatBtn').addEventListener('click', function() {
+        // Logic to export chat as PDF, Word, etc.
+        const chatContent = document.getElementById('chatArea').innerText;
+        // Implement export functionality using libraries like jsPDF or similar
+        alert("Export Chat functionality is not yet implemented.");
+    });
+
+    document.getElementById('exportActionsBtn').addEventListener('click', function() {
+        // Logic to export Actions results
+        alert("Export Actions functionality is not yet implemented.");
+    });
+
+    document.getElementById('exportSearchBtn').addEventListener('click', function() {
+        // Logic to export search results
+        alert("Export Search Results functionality is not yet implemented.");
+    });
+
+    document.getElementById('exportChatAudioBtn').addEventListener('click', function() {
+        // Logic to export chat as audio (MP3)
+        alert("Export Chat as Audio functionality is not yet implemented.");
+    });
+
+    document.getElementById('exportCitationsBtn').addEventListener('click', function() {
+        // Logic to export citations in selected formats
+        const format = prompt("Enter citation format (APA, MLA, Chicago, etc.):");
+        if (format) {
+            // Implement export functionality based on selected format
+            alert(`Export Citations in ${format} format is not yet implemented.`);
+        }
+    });
+
+</script>
+
+</body>
+</html>
