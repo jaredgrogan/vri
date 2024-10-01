@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citation Network Visualization</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+        #graph { width: 100%; height: 600px; border: 1px solid #ddd; }
+        .controls { margin-bottom: 20px; }
+        .node { stroke: #fff; stroke-width: 1.5px; }
+        .link { stroke: #999; stroke-opacity: 0.6; }
+        .tooltip { position: absolute; background: white; border: 1px solid #ddd; padding: 10px; display: none; }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <label for="yearRange">Year Range:</label>
+        <input type="range" id="yearRange" min="1900" max="2023" value="2000">
+        <span id="yearValue">2000</span>
+
+        <label for="subjectArea">Subject Area:</label>
+        <select id="subjectArea">
+            <option value="all">All</option>
+            <option value="physics">Physics</option>
+            <option value="biology">Biology</option>
+            <option value="computerScience">Computer Science</option>
+        </select>
+
+        <label for="citationCount">Min Citations:</label>
+        <input type="number" id="citationCount" min="0" value="0">
+
+        <button id="switchLayout">Switch to Radial Layout</button>
+        <button id="exportSVG">Export SVG</button>
+        <button id="exportPNG">Export PNG</button>
+        <button id="exportData">Export Data</button>
+    </div>
+
+    <div id="graph"></div>
+    <div class="tooltip"></div>
+
+    <script>
+        // Sample data structure
+        const sampleData = {
+            nodes: [
+                { id: 1, title: "Paper 1", year: 2000, area: "physics", citations: 50 },
+                { id: 2, title: "Paper 2", year: 2005, area: "biology", citations: 30 },
+                { id: 3, title: "Paper 3", year: 2010, area: "computerScience", citations: 20 },
+                // ... more nodes ...
+            ],
+            links: [
+                { source: 1, target: 2, strength: 3 },
+                { source: 1, target: 3, strength: 1 },
+                { source: 2, target: 3, strength: 2 },
+                // ... more links ...
+            ]
+        };
+
+        // Set up SVG
+        const width = document.getElementById('graph').clientWidth;
+        const height = 600;
+        const svg = d3.select("#graph")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        // Create zoom behavior
+        const zoom = d3.zoom()
+            .scaleExtent([0.1, 10])
+            .on("zoom", zoomed);
+
+        svg.call(zoom);
+
+        const g = svg.append("g");
+
+        function zoomed(event) {
+            g.attr("transform", event.transform);
+        }
+
+        // Color scale for research areas
+        const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+        // Create force simulation
+        const simulation = d3.forceSimulation()
+            .force("link", d3.forceLink().id(d => d.id).distance(100))
+            .force("charge", d3.forceManyBody().strength(-200))
+            .force("center", d3.forceCenter(width / 2, height / 2));
+
+        // Create links
+        const link = g.append("g")
+            .selectAll("line")
+            .data(sampleData.links)
+            .enter().append("line")
+            .attr("class", "link")
+            .attr("stroke-width", d => Math.sqrt(d.strength));
+
+        // Create nodes
+        const node = g.append("g")
+            .selectAll("circle")
+            .data(sampleData.nodes)
+            .enter().append("circle")
+            .attr("class", "node")
+            .attr("r", d => Math.sqrt(d.citations) * 2)
+            .attr("fill", d => color(d.area))
+            .call(d3.drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended));
+
+        // Add titles for hover
+        node.append("title")
+            .text(d => `${d.title}\nYear: ${d.year}\nCitations: ${d.citations}`);
+
+        // Update force simulation
+        simulation
+            .nodes(sampleData.nodes)
+            .on("tick", ticked);
+
+        simulation.force("link")
+            .links(sampleData.links);
+
+        function ticked() {
+            link
+                .attr("x1", d => d.source.x)
+                .attr("y1", d => d.source.y)
+                .attr("x2", d => d.target.x)
+                .attr("y2", d => d.target.y);
+
+            node
+                .attr("cx", d => d.x)
+                .attr("cy", d => d.y);
+        }
+
+        function dragstarted(event, d) {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+        }
+
+        function dragged(event, d) {
+            d.fx = event.x;
+            d.fy = event.y;
+        }
+
+        function dragended(event, d) {
+            if (!event.active) simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+        }
+
+        // Tooltip functionality
+        const tooltip = d3.select(".tooltip");
+        node.on("mouseover", function(event, d) {
+            tooltip.style("display", "block")
+                .html(`Title: ${d.title}<br>Year: ${d.year}<br>Citations: ${d.citations}<br>Area: ${d.area}`)
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 10) + "px");
+        })
+        .on("mouseout", function() {
+            tooltip.style("display", "none");
+        });
+
+        // Filter functionality
+        d3.select("#yearRange").on("input", function() {
+            const year = this.value;
+            d3.select("#yearValue").text(year);
+            updateGraph();
+        });
+
+        d3.select("#subjectArea").on("change", updateGraph);
+        d3.select("#citationCount").on("input", updateGraph);
+
+        function updateGraph() {
+            const year = d3.select("#yearRange").property("value");
+            const area = d3.select("#subjectArea").property("value");
+            const minCitations = d3.select("#citationCount").property("value");
+
+            node.style("display", d => 
+                (d.year >= year && (area === "all" || d.area === area) && d.citations >= minCitations) 
+                    ? "block" : "none"
+            );
+
+            link.style("display", d => 
+                (node.filter(n => n.id === d.source.id || n.id === d.target.id)
+                    .style("display") === "block")
+                    ? "block" : "none"
+            );
+        }
+
+        // Switch layout
+        let isRadial = false;
+        d3.select("#switchLayout").on("click", function() {
+            isRadial = !isRadial;
+            if (isRadial) {
+                simulation
+                    .force("r", d3.forceRadial(height / 3, width / 2, height / 2))
+                    .force("center", null);
+            } else {
+                simulation
+                    .force("r", null)
+                    .force("center", d3.forceCenter(width / 2, height / 2));
+            }
+            simulation.alpha(1).restart();
+        });
+
+        // Export functionality
+        d3.select("#exportSVG").on("click", function() {
+            const svgData = new XMLSerializer().serializeToString(svg.node());
+            const svgBlob = new Blob([svgData], {type: "image/svg+xml;charset=utf-8"});
+            const svgUrl = URL.createObjectURL(svgBlob);
+            const downloadLink = document.createElement("a");
+            downloadLink.href = svgUrl;
+            downloadLink.download = "citation_network.svg";
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+        });
+
+        d3.select("#exportPNG").on("click", function() {
+            const svgData = new XMLSerializer().serializeToString(svg.node());
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+            const img = new Image();
+            img.onload = function() {
+                canvas.width = width;
+                canvas.height = height;
+                ctx.drawImage(img, 0, 0);
+                const pngUrl = canvas.toDataURL("image/png");
+                const downloadLink = document.createElement("a");
+                downloadLink.href = pngUrl;
+                downloadLink.download = "citation_network.png";
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+            };
+            img.src = "data:image/svg+xml;base64," + btoa(svgData);
+        });
+
+        d3.select("#exportData").on("click", function() {
+            const jsonData = JSON.stringify(sampleData);
+            const dataBlob = new Blob([jsonData], {type: "application/json"});
+            const dataUrl = URL.createObjectURL(dataBlob);
+            const downloadLink = document.createElement("a");
+            downloadLink.href = dataUrl;
+            downloadLink.download = "citation_network_data.json";
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+        });
+
+        // Function to load data from file or API (not implemented in this mockup)
+        function loadData(source) {
+            // Implementation would depend on the specific data source and format
+            console.log("Loading data from:", source);
+        }
+
+        // Progressive loading (not fully implemented in this mockup)
+        function loadNodeDetails(node) {
+            // Simulating an asynchronous load of additional details
+            setTimeout(() => {
+                node.details = "Additional details loaded";
+                console.log("Loaded details for node:", node.id);
+            }, 1000);
+        }
+
+        // Call loadNodeDetails when a node is clicked
+        node.on("click", function(event, d) {
+            loadNodeDetails(d);
+        });
+    </script>
+</body>
+</html>
