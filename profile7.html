@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIVERSITAS AI</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f6f9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header styles */
+        header {
+            background: linear-gradient(135deg, #1e1e1e, #2a2a2a);
+            color: white;
+            padding: 10px 0;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-title {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            margin-right: 20px;
+        }
+
+        h1 {
+            font-family: 'Courier New', monospace;
+            font-size: 24px;
+            font-weight: normal;
+            margin: 0;
+        }
+
+        .current-time {
+            font-size: 14px;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 10px 0 0 0;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        /* Main content styles */
+        main {
+            padding: 20px 0;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        /* Profile summary styles */
+        .profile-summary {
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .profile-image-container {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+            position: relative;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .profile-image-container:hover {
+            opacity: 0.8;
+        }
+
+        .profile-image, #qrcode {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        #qrcode {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: white;
+        }
+
+        #qrcode img {
+            width: 90%;
+            height: 90%;
+        }
+
+        .upload-photo-btn {
+            display: none;
+            margin: 5px auto 0;
+        }
+
+        .edit-profile-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .edit-profile-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: #7f8c8d;
+        }
+
+        .edit-profile-btn.active svg {
+            fill: #e74c3c;
+        }
+
+        .research-interests {
+            margin-top: 20px;
+        }
+
+        .tag {
+            display: inline-block;
+            background-color: #ecf0f1;
+            padding: 5px 10px;
+            border-radius: 20px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+
+        /* Location input styles */
+        .location-input {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .location-input input[type="text"] {
+            margin-right: 10px;
+            padding: 5px;
+            border-radius: 5px;
+            background-color: #f0f0f0;
+            border: none;
+            font-size: 14px;
+        }
+
+        .share-location-icon {
+            cursor: pointer;
+            transition: fill 0.3s ease;
+        }
+
+        .share-location-icon.active {
+            fill: #2ecc71;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Stream of Thoughts styles */
+        .stream-of-thoughts {
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+
+        .thought {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .thought-timestamp {
+            font-size: 0.8em;
+            color: #666;
+        }
+
+        #thoughtsToggle {
+            margin-bottom: 10px;
+        }
+
+        #newThoughtText {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        #thoughtsList {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .thought-tags input {
+            margin-top: 5px;
+            width: 100%;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .share-icon {
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .like-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #7f8c8d;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+
+        .like-btn.active {
+            color: #e74c3c;
+        }
+
+        .like-btn svg {
+            margin-right: 5px;
+        }
+
+        /* Research Collaboration styles */
+        .suggested-collaborators {
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .collaborator {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .collaborator img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+
+        .collaborator-info {
+            flex-grow: 1;
+        }
+
+        .collaborator-info h4, .collaborator-info p {
+            margin: 0 0 5px 0;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+
+        /* Research statement styles */
+        .research-statement {
+            margin-top: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .research-statement p {
+            max-height: 100px;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .research-statement p.expanded {
+            max-height: none;
+        }
+
+        .expand-btn {
+            background: none;
+            border: none;
+            color: #3498db;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        /* Activity panel styles */
+        .activity-panel {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .activity-section {
+            flex: 1;
+            margin-right: 10px;
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .activity-section:last-child {
+            margin-right: 0;
+        }
+
+        /* Starbase Press Tools Menu */
+        .starbase-press {
+            position: relative;
+        }
+
+        .tools-menu {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .tools-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .tools-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: #fff;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 10px;
+        }
+
+        .tools-dropdown.active {
+            display: block;
+        }
+
+        .tools-dropdown button {
+            display: block;
+            width: 100%;
+            padding: 5px 10px;
+            margin-bottom: 5px;
+            background: none;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .tools-dropdown button:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Footer styles */
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            background-color: #1e1e1e;
+            color: white;
+            margin-top: 40px;
+            font-size: 12px;
+        }
+
+        /* Tooltip styles */
+        [data-tooltip] {
+            position: relative;
+            cursor: pointer;
+        }
+
+        [data-tooltip]:before {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 5px 10px;
+            background-color: #333;
+            color: white;
+            border-radius: 5px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        [data-tooltip]:hover:before {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+            }
+            
+            nav ul li {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-title">
+                    <img src="favicon5.svg" alt="Universitas AI Logo" class="logo">
+                    <h1>UNIVERSITAS AI</h1>
+                </div>
+                <div class="current-time" id="currentTime"></div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#dashboard">Dashboard</a></li>
+                    <li><a href="#profile">Profile</a></li>
+                    <li><a href="#messages">Messages</a></li>
+                    <li><a href="#groups">Groups</a></li>
+                    <li><a href="#search">Search</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="dashboard-grid">
+            <div class="main-content">
+                <section class="profile-summary" id="profileSummary">
+                    <button class="edit-profile-btn" id="editProfileBtn" data-tooltip="Edit Profile">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                        </svg>
+                    </button>
+                    <div class="profile-image-container" id="profileImageContainer" data-tooltip="Click to toggle QR code">
+                        <div id="qrcode"></div>
+                        <img src="https://via.placeholder.com/150" alt="Profile Picture" class="profile-image" id="profileImage">
+                    </div>
+                    <button class="btn upload-photo-btn" id="uploadPhotoBtn">Upload Photo</button>
+                    <h3 id="userName">Jared James Grogan</h3>
+                    <p id="userTitle">Associate Professor of Computer Science</p>
+                    <p id="userInstitution">Universitas AI</p>
+                    <div class="research-interests">
+                        <h4>Research Interests</h4>
+                        <div id="interestTags">
+                            <span class="tag">Machine Learning</span>
+                            <span class="tag">Natural Language Processing</span>
+                            <span class="tag">Computer Vision</span>
+                        </div>
+                    </div>
+                    <div class="location-input">
+                        <input type="text" id="locationInput" placeholder="City, Country">
+                        <svg class="share-location-icon" data-tooltip="Share real-time location" width="24" height="24" viewBox="0 0 24 24">
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                        </svg>
+                    </div>
+                    <div id="researchStatement">
+                        <h4>Research Statement</h4>
+                        <p id="researchStatementText">Click to add your research statement (100 words max)</p>
+                        <button class="expand-btn" id="expandBtn">Read More</button>
+                    </div>
+                    <div class="cv-upload">
+                        <input type="file" id="cvUpload" accept=".pdf,.doc,.docx" style="display: none;">
+                        <button class="btn" onclick="document.getElementById('cvUpload').click()">Upload CV</button>
+                        <span id="cvFileName"></span>
+                        <button class="btn" id="downloadCV" style="display: none;">Download CV</button>
+                    </div>
+                </section>
+
+                <section class="starbase-press">
+                    <h3>Starbase Press</h3>
+                    <div class="tools-menu">
+                        <button class="tools-btn" id="toolsBtn">
+                            <svg width="24" height="24" viewBox="0 0 24 24">
+                                <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+                            </svg>
+                        </button>
+                        <div class="tools-dropdown" id="toolsDropdown">
+                            <button id="exportTxtBtn">Export as TXT</button>
+                            <button id="exportMp3Btn">Export as MP3</button>
+                        </div>
+                    </div>
+                    <div id="thoughtsToggle">
+                        <button id="viewStreamBtn" class="btn">View Stream</button>
+                        <button id="createNewThought" class="btn">New Thought</button>
+                    </div>
+                    <div id="thoughtsList">
+                        <!-- Thoughts will be dynamically added here -->
+                    </div>
+                    <div id="newThoughtForm" style="display:none;">
+                        <textarea id="newThoughtText" maxlength="300" placeholder="What's on your mind? (300 characters max)"></textarea>
+                        <input type="text" id="thoughtTags" placeholder="Add up to 5 tags (start with #)">
+                        <button id="postThought" class="btn">Post</button>
+                    </div>
+                </section>
+
+                <section class="activity-panel">
+                    <div class="activity-section">
+                        <h4>Recent Activity</h4>
+                        <ul>
+                            <li>Published a new paper: "Advances in Deep Learning for NLP"</li>
+                            <li>Joined the "AI Ethics" research group</li>
+                            <li>Commented on Dr. Smith's latest publication</li>
+                        </ul>
+                    </div>
+                    <div class="activity-section">
+                        <h4>Works in Progress</h4>
+                        <ul>
+                            <li>Developing new algorithm for efficient natural language understanding</li>
+                            <li>Collaborating on cross-disciplinary study on AI in healthcare</li>
+                            <li>Writing review paper on recent advancements in computer vision</li>
+                        </ul>
+                    </div>
+                    <div class="activity-section">
+                        <h4>Events</h4>
+                        <ul>
+                            <li>Upcoming conference: International Conference on Machine Learning (July 15-20)</li>
+                            <li>Guest lecture at Stanford University (August 5)</li>
+                            <li>Research group meeting: AI Ethics (Every Tuesday, 2 PM)</li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
+
+            <aside>
+                <section class="suggested-collaborators">
+                    <h3>Research Collaboration</h3>
+                    <input type="text" class="search-bar" placeholder="Search collaborators...">
+                    <div class="collaborator">
+                        <img src="https://via.placeholder.com/50" alt="Dr. John Smith">
+                        <div class="collaborator-info">
+                            <h4>Dr. John Smith</h4>
+                            <p>Expert in Deep Learning</p>
+                            <button class="follow-btn">Follow</button>
+                            <button class="dm-btn">Message</button>
+                        </div>
+                    </div>
+                    <div class="collaborator">
+                        <img src="https://via.placeholder.com/50" alt="Prof. Emily Brown">
+                        <div class="collaborator-info">
+                            <h4>Prof. Emily Brown</h4>
+                            <p>Researcher in NLP</p>
+                            <button class="follow-btn">Follow</button>
+                            <button class="dm-btn">Message</button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="research-statement">
+                    <h4>Research Statement</h4>
+                    <p id="researchStatementText">Click to add your research statement (100 words max)</p>
+                    <button class="expand-btn" id="expandBtn">Read More</button>
+                </section>
+            </aside>
+        </div>
+    </main>
+
+    <div class="voice-input" id="voiceInput" data-tooltip="Voice Input">
+        <svg viewBox="0 0 24 24">
+            <path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/>
+        </svg>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 UNIVERSITAS AI</p>
+    </footer>
+
+    <script>
+        const profileSummary = document.getElementById('profileSummary');
+        const editProfileBtn = document.getElementById('editProfileBtn');
+        const userName = document.getElementById('userName');
+        const userTitle = document.getElementById('userTitle');
+        const userInstitution = document.getElementById('userInstitution');
+        const interestTags = document.getElementById('interestTags');
+        const profileImage = document.getElementById('profileImage');
+        const profileImageContainer = document.getElementById('profileImageContainer');
+        const qrcodeElement = document.getElementById('qrcode');
+        const uploadPhotoBtn = document.getElementById('uploadPhotoBtn');
+        const cvUpload = document.getElementById('cvUpload');
+        const cvFileName = document.getElementById('cvFileName');
+        const downloadCV = document.getElementById('downloadCV');
+        const locationInput = document.getElementById('locationInput');
+        const researchStatementText = document.getElementById('researchStatementText');
+        const expandBtn = document.getElementById('expandBtn');
+        const viewStreamBtn = document.getElementById('viewStreamBtn');
+        const createNewThought = document.getElementById('createNewThought');
+        const thoughtsList = document.getElementById('thoughtsList');
+        const newThoughtForm = document.getElementById('newThoughtForm');
+        const newThoughtText = document.getElementById('newThoughtText');
+        const thoughtTags = document.getElementById('thoughtTags');
+        const postThought = document.getElementById('postThought');
+        const toolsBtn = document.getElementById('toolsBtn');
+        const toolsDropdown = document.getElementById('toolsDropdown');
+        const exportTxtBtn = document.getElementById('exportTxtBtn');
+        const exportMp3Btn = document.getElementById('exportMp3Btn');
+        const voiceInput = document.getElementById('voiceInput');
+        const currentTime = document.getElementById('currentTime');
+
+        let isEditing = false;
+        let cvFile = null;
+
+        // Generate QR Code
+        new QRCode(qrcodeElement, {
+            text: window.location.href,
+            width: 135,
+            height: 135
+        });
+
+        // Toggle between QR code and profile image
+        profileImageContainer.addEventListener('click', () => {
+            profileImage.style.opacity = profileImage.style.opacity === '0' ? '1' : '0';
+            qrcodeElement.style.opacity = qrcodeElement.style.opacity === '0' ? '1' : '0';
+        });
+
+        // Upload photo functionality
+        uploadPhotoBtn.addEventListener('click', () => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    profileImage.src = event.target.result;
+                    profileImage.style.opacity = '1';
+                    qrcodeElement.style.opacity = '0';
+                };
+                reader.readAsDataURL(file);
+            };
+            input.click();
+        });
+
+        // Edit profile functionality
+        editProfileBtn.addEventListener('click', () => {
+            isEditing = !isEditing;
+            editProfileBtn.classList.toggle('active', isEditing);
+            uploadPhotoBtn.style.display = isEditing ? 'block' : 'none';
+            if (isEditing) {
+                enterEditMode();
+            } else {
+                exitEditMode();
+            }
+        });
+
+        function enterEditMode() {
+            profileSummary.classList.add('edit-mode');
+
+            userName.innerHTML = `<input type="text" value="${userName.textContent}">`;
+            userTitle.innerHTML = `<input type="text" value="${userTitle.textContent}">`;
+            userInstitution.innerHTML = `<input type="text" value="${userInstitution.textContent}">`;
+
+            const tags = interestTags.getElementsByClassName('tag');
+            Array.from(tags).forEach(tag => {
+                tag.addEventListener('click', () => tag.remove());
+            });
+
+            const addTagInput = document.createElement('input');
+            addTagInput.type = 'text';
+            addTagInput.placeholder = 'Add new interest';
+            addTagInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && e.target.value) {
+                    const newTag = document.createElement('span');
+                    newTag.className = 'tag';
+                    newTag.textContent = e.target.value;
+                    newTag.addEventListener('click', () => newTag.remove());
+                    interestTags.insertBefore(newTag, addTagInput);
+                    e.target.value = '';
+                }
+            });
+            interestTags.appendChild(addTagInput);
+        }
+
+        function exitEditMode() {
+            profileSummary.classList.remove('edit-mode');
+
+            userName.textContent = userName.querySelector('input').value;
+            userTitle.textContent = userTitle.querySelector('input').value;
+            userInstitution.textContent = userInstitution.querySelector('input').value;
+
+            const addTagInput = interestTags.querySelector('input');
+            if (addTagInput) {
+                addTagInput.remove();
+            }
+        }
+
+        // CV Upload functionality
+        cvUpload.addEventListener('change', (e) => {
+            cvFile = e.target.files[0];
+            if (cvFile) {
+                cvFileName.textContent = cvFile.name;
+                downloadCV.style.display = 'inline-block';
+            }
+        });
+
+        downloadCV.addEventListener('click', () => {
+            if (cvFile) {
+                const url = URL.createObjectURL(cvFile);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = cvFile.name;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            }
+        });
+
+        // Location input functionality
+        locationInput.addEventListener('change', function() {
+            this.setAttribute('readonly', true);
+            console.log(`Location set to: ${this.value}`);
+            // In a real implementation, you would update the user's location in the backend
+        });
+
+        // Research statement editing
+        researchStatementText.addEventListener('click', function() {
+            if (!this.isContentEditable) {
+                this.contentEditable = true;
+                this.focus();
+            }
+        });
+
+        researchStatementText.addEventListener('blur', function() {
+            this.contentEditable = false;
+            if (this.textContent.length > 300) {
+                this.textContent = this.textContent.slice(0, 300);
+            }
+        });
+
+        expandBtn.addEventListener('click', function() {
+            researchStatementText.classList.toggle('expanded');
+            this.textContent = researchStatementText.classList.contains('expanded') ? 'Read Less' : 'Read More';
+        });
+
+        // Stream of Thoughts functionality
+        viewStreamBtn.addEventListener('click', function() {
+            thoughtsList.style.display = 'block';
+            newThoughtForm.style.display = 'none';
+        });
+
+        createNewThought.addEventListener('click', function() {
+            thoughtsList.style.display = 'none';
+            newThoughtForm.style.display = 'block';
+        });
+
+        postThought.addEventListener('click', function() {
+            const thoughtText = newThoughtText.value;
+            const tags = thoughtTags.value.split(' ').filter(tag => tag.startsWith('#')).slice(0, 5);
+            if (thoughtText.trim() !== '') {
+                const thought = document.createElement('div');
+                thought.className = 'thought';
+                thought.innerHTML = `
+                    <p>${thoughtText}</p>
+                    <p>${tags.join(' ')}</p>
+                    <span class="thought-timestamp">${new Date().toLocaleString()}</span>
+                    <svg class="share-icon" data-tooltip="Share thought" width="24" height="24" viewBox="0 0 24 24">
+                        <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
+                    </svg>
+                `;
+                thoughtsList.prepend(thought);
+                newThoughtText.value = '';
+                thoughtTags.value = '';
+                thoughtsList.style.display = 'block';
+                newThoughtForm.style.display = 'none';
+            }
+        });
+
+        // Tools menu functionality
+        toolsBtn.addEventListener('click', function() {
+            toolsDropdown.classList.toggle('active');
+        });
+
+        exportTxtBtn.addEventListener('click', function() {
+            console.log('Exporting as TXT');
+        });
+
+        exportMp3Btn.addEventListener('click', function() {
+            console.log('Exporting as MP3');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!toolsBtn.contains(event.target) && !toolsDropdown.contains(event.target)) {
+                toolsDropdown.classList.remove('active');
+            }
+        });
+
+        // Follow button functionality
+        document.querySelectorAll('.follow-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.textContent = this.textContent === 'Follow' ? 'Following' : 'Follow';
+            });
+        });
+
+        // Direct messaging functionality
+        document.querySelectorAll('.dm-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const recipient = this.closest('.collaborator-info').querySelector('h4').textContent;
+                console.log(`Opening chat with ${recipient}`);
+            });
+        });
+
+        // Voice input functionality
+        voiceInput.addEventListener('click', function() {
+            this.classList.toggle('active');
+            if (this.classList.contains('active')) {
+                console.log("Voice input started");
+            } else {
+                console.log("Voice input stopped");
+            }
+        });
+
+        // Like button functionality
+        function createLikeButton() {
+            const likeBtn = document.createElement('button');
+            likeBtn.className = 'like-btn';
+            likeBtn.innerHTML = `
+                <svg width="16" height="16" viewBox="0 0 24 24">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+                Like
+            `;
+            likeBtn.addEventListener('click', function() {
+                this.classList.toggle('active');
+            });
+            return likeBtn;
+        }
+
+        function addLikeButton(thought) {
+            thought.appendChild(createLikeButton());
+        }
+
+        document.querySelectorAll('.thought').forEach(addLikeButton);
+
+        const originalPrepend = thoughtsList.prepend;
+        thoughtsList.prepend = function() {
+            originalPrepend.apply(this, arguments);
+            addLikeButton(this.firstChild);
+        };
+
+        // Current time display
+        function updateTime() {
+            const now = new Date();
+            const options = { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', hour12: true };
+            currentTime.textContent = now.toLocaleString('en-US', options).replace(/,/g, '');
+        }
+
+        updateTime();
+        setInterval(updateTime, 60000); // Update every minute
+
+        // Initialize profile image and QR code visibility
+        profileImage.style.opacity = '1';
+        qrcodeElement.style.opacity = '0';
+
+        profileImageContainer.style.transition = 'opacity 0.5s ease';
+        qrcodeElement.style.transition = 'opacity 0.5s ease';
+    </script>
+</body>
+</html>
