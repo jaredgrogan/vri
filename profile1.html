@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universitas Network</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        /* Color Scheme */
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --background-color: #f4f6f9;
+            --text-color: #333;
+            --light-gray: #ecf0f1;
+            --dark-gray: #7f8c8d;
+        }
+
+        /* Typography */
+        body {
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        h1, h2, h3 {
+            font-weight: 700;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 5px 0;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        /* Profile Summary */
+        .profile-summary {
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .banner {
+            height: 100px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 8px 8px 0 0;
+            margin: -20px -20px 20px -20px;
+        }
+
+        .profile-image-container {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .profile-image, #qrcode {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #qrcode {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: white;
+        }
+
+        #qrcode img {
+            width: 90%;
+            height: 90%;
+        }
+
+        .edit-profile-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .edit-profile-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--dark-gray);
+        }
+
+        /* Research Interests */
+        .research-interests {
+            margin-top: 20px;
+        }
+
+        .tag {
+            display: inline-block;
+            background-color: var(--light-gray);
+            padding: 5px 10px;
+            border-radius: 20px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        /* Suggested Collaborators */
+        .suggested-collaborators {
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .collaborator {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .collaborator img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+
+        /* Panels */
+        .panel {
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--secondary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #27ae60;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            background-color: #1e1e1e;
+            color: white;
+            margin-top: 40px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Edit Mode */
+        .edit-mode input[type="text"],
+        .edit-mode textarea {
+            width: 100%;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+
+        .edit-mode .tag {
+            cursor: pointer;
+        }
+
+        .edit-mode .tag:hover {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        /* CV Upload */
+        .cv-upload {
+            margin-top: 20px;
+        }
+
+        #cvFileName {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Universitas Network</h1>
+            <nav>
+                <ul>
+                    <li><a href="#dashboard">Dashboard</a></li>
+                    <li><a href="#profile">Profile</a></li>
+                    <li><a href="#messages">Messages</a></li>
+                    <li><a href="#groups">Groups</a></li>
+                    <li><a href="#search">Search</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <h2>Universitas Network</h2>
+        <div class="dashboard-grid">
+            <div class="main-content">
+                <section class="profile-summary" id="profileSummary">
+                    <div class="banner"></div>
+                    <button class="edit-profile-btn" id="editProfileBtn">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                        </svg>
+                    </button>
+                    <div class="profile-image-container" id="profileImageContainer">
+                        <div id="qrcode"></div>
+                        <img src="https://via.placeholder.com/150" alt="Profile Picture" class="profile-image" id="profileImage">
+                    </div>
+                    <h3 id="userName">Jared James Grogan</h3>
+                    <p id="userTitle">Associate Professor of Computer Science</p>
+                    <p id="userInstitution">University of Example</p>
+                    <div class="research-interests">
+                        <h4>Research Interests</h4>
+                        <div id="interestTags">
+                            <span class="tag">Machine Learning</span>
+                            <span class="tag">Natural Language Processing</span>
+                            <span class="tag">Computer Vision</span>
+                        </div>
+                    </div>
+                    <div class="cv-upload">
+                        <input type="file" id="cvUpload" accept=".pdf,.doc,.docx" style="display: none;">
+                        <button class="btn" onclick="document.getElementById('cvUpload').click()">Upload CV</button>
+                        <span id="cvFileName"></span>
+                        <button class="btn" id="downloadCV" style="display: none;">Download CV</button>
+                    </div>
+                </section>
+
+                <section class="panel">
+                    <h3>Recent Activity</h3>
+                    <ul>
+                        <li>Published a new paper: "Advances in Deep Learning for NLP"</li>
+                        <li>Joined the "AI Ethics" research group</li>
+                        <li>Commented on Dr. Smith's latest publication</li>
+                    </ul>
+                </section>
+
+                <section class="panel">
+                    <h3>Works in Progress</h3>
+                    <ul>
+                        <li>Developing a new algorithm for efficient natural language understanding</li>
+                        <li>Collaborating on a cross-disciplinary study on AI in healthcare</li>
+                        <li>Writing a review paper on recent advancements in computer vision</li>
+                    </ul>
+                </section>
+
+                <section class="panel">
+                    <h3>Events</h3>
+                    <ul>
+                        <li>Upcoming conference presentation: International Conference on Machine Learning (July 15-20)</li>
+                        <li>Guest lecture at Stanford University (August 5)</li>
+                        <li>Research group meeting: AI Ethics (Every Tuesday, 2 PM)</li>
+                    </ul>
+                </section>
+            </div>
+
+            <aside>
+                <section class="suggested-collaborators">
+                    <h3>Suggested Collaborators</h3>
+                    <div class="collaborator">
+                        <img src="https://via.placeholder.com/50" alt="Dr. John Smith">
+                        <div>
+                            <h4>Dr. John Smith</h4>
+                            <p>Expert in Deep Learning</p>
+                            <a href="#connect" class="btn">Connect</a>
+                        </div>
+                    </div>
+                    <div class="collaborator">
+                        <img src="https://via.placeholder.com/50" alt="Prof. Emily Brown">
+                        <div>
+                            <h4>Prof. Emily Brown</h4>
+                            <p>Researcher in NLP</p>
+                            <a href="#connect" class="btn">Connect</a>
+                        </div>
+                    </div>
+                </section>
+            </aside>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 UNIVERSITAS AI</p>
+    </footer>
+
+    <script>
+        const profileSummary = document.getElementById('profileSummary');
+        const editProfileBtn = document.getElementById('editProfileBtn');
+        const userName = document.getElementById('userName');
+        const userTitle = document.getElementById('userTitle');
+        const userInstitution = document.getElementById('userInstitution');
+        const interestTags = document.getElementById('interestTags');
+        const profileImage = document.getElementById('profileImage');
+        const profileImageContainer = document.getElementById('profileImageContainer');
+        const qrcodeElement = document.getElementById('qrcode');
+        const cvUpload = document.getElementById('cvUpload');
+        const cvFileName = document.getElementById('cvFileName');
+        const downloadCV = document.getElementById('downloadCV');
+
+        let isEditing = false;
+        let cvFile = null;
+
+        // Generate QR Code
+        new QRCode(qrcodeElement, {
+            text: window.location.href,
+            width: 135,
+            height: 135
+        });
+
+        // Toggle between QR code and profile image
+        profileImageContainer.addEventListener('click', () => {
+            if (profileImage.style.opacity === '0') {
+                profileImage.style.opacity = '1';
+                qrcodeElement.style.opacity = '0';
+            } else {
+                profileImage.style.opacity = '0';
+                qrcodeElement.style.opacity = '1';
+            }
+        });
+
+        editProfileBtn.addEventListener('click', () => {
+            isEditing = !isEditing;
+            if (isEditing) {
+                enterEditMode();
+            } else {
+                exitEditMode();
+            }
+        });
+
+        function enterEditMode() {
+            profileSummary.classList.add('edit-mode');
+
+            userName.innerHTML = `<input type="text" value="${userName.textContent}">`;
+            userTitle.innerHTML = `<input type="text" value="${userTitle.textContent}">`;
+            userInstitution.innerHTML = `<input type="text" value="${userInstitution.textContent}">`;
+
+            const tags = interestTags.getElementsByClassName('tag');
+            Array.from(tags).forEach(tag => {
+                tag.addEventListener('click', () => tag.remove());
+            });
+
+            const addTagInput = document.createElement('input');
+            addTagInput.type = 'text';
+            addTagInput.placeholder = 'Add new interest';
+            addTagInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && e.target.value) {
+                    const newTag = document.createElement('span');
+                    newTag.className = 'tag';
+                    newTag.textContent = e.target.value;
+                    newTag.addEventListener('click', () => newTag.remove());
+                    interestTags.insertBefore(newTag, addTagInput);
+                    e.target.value = '';
+                }
+            });
+            interestTags.appendChild(addTagInput);
+
+            addImageUploadButton(profileImage, 'Upload Profile Picture');
+        }
+
+        function exitEditMode() {
+            profileSummary.classList.remove('edit-mode');
+
+            userName.textContent = userName.querySelector('input').value;
+            userTitle.textContent = userTitle.querySelector('input').value;
+            userInstitution.textContent = userInstitution.querySelector('input').value;
+
+            const addTagInput = interestTags.querySelector('input');
+            if (addTagInput) {
+                addTagInput.remove();
+            }
+
+            removeImageUploadButtons();
+        }
+
+    function addImageUploadButton(imgElement, buttonText) {
+            const uploadBtn = document.createElement('button');
+            uploadBtn.textContent = buttonText;
+            uploadBtn.className = 'btn';
+            uploadBtn.style.marginTop = '10px';
+            uploadBtn.addEventListener('click', () => {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'image/*';
+                input.onchange = (e) => {
+                    const file = e.target.files[0];
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        imgElement.src = event.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                };
+                input.click();
+            });
+            imgElement.insertAdjacentElement('afterend', uploadBtn);
+        }
+
+        function removeImageUploadButtons() {
+            const uploadBtns = profileSummary.querySelectorAll('button:not(#editProfileBtn)');
+            uploadBtns.forEach(btn => btn.remove());
+        }
+
+        // CV Upload functionality
+        cvUpload.addEventListener('change', (e) => {
+            cvFile = e.target.files[0];
+            if (cvFile) {
+                cvFileName.textContent = cvFile.name;
+                downloadCV.style.display = 'inline-block';
+            }
+        });
+
+        downloadCV.addEventListener('click', () => {
+            if (cvFile) {
+                const url = URL.createObjectURL(cvFile);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = cvFile.name;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            }
+        });
+
+        // Initialize profile image and QR code visibility
+        profileImage.style.opacity = '0';
+        qrcodeElement.style.opacity = '1';
+    </script>
+</body>
+</html>
