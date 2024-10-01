@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Herakles AI - Research Assistant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Fonts -->
+    <!-- Include Roboto font -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Include Berkeley Mono font -->
+    <style>
+        @font-face {
+            font-family: 'Berkeley Mono';
+            src: url('fonts/BerkeleyMono-Regular.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        /* General Styles */
+        body {
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #fff;
+            position: relative;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            height: 50px;
+            cursor: pointer;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+            margin-right: 10px; /* Space to the left of the time display */
+        }
+
+        .menu-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-left: 10px;
+            position: relative;
+            outline: none;
+        }
+
+        .menu-icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Time Display */
+        .time-display {
+            font-family: 'Berkeley Mono', monospace;
+            font-size: 14px;
+            margin-left: auto;
+            padding-right: 10px;
+        }
+
+        /* Position time display at top-right corner */
+        .time-display {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        /* Menus */
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 40px;
+            right: 0;
+            background-color: #fff;
+            min-width: 220px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            z-index: 1000;
+            padding: 15px;
+        }
+
+        .menu-button:focus .dropdown-menu,
+        .menu-button.active .dropdown-menu {
+            display: block;
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+        }
+
+        .tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 130%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #333;
+            color: #fff;
+            padding: 6px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .tooltip:hover::after {
+            opacity: 1;
+        }
+
+        /* Main Content */
+        main {
+            display: flex;
+            flex: 1;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        /* Panels */
+        .panel {
+            background-color: #fff;
+            border-radius: 8px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Chat Area */
+        #chatArea {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fafafa;
+        }
+
+        .chat-message {
+            margin-bottom: 10px;
+        }
+
+        .chat-message.assistant {
+            text-align: left;
+        }
+
+        .chat-message.user {
+            text-align: right;
+        }
+
+        .chat-input-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .chat-input-container input {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .chat-input-container input::placeholder {
+            color: grey;
+        }
+
+        .chat-input-container button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-left: 10px;
+            outline: none;
+        }
+
+        .chat-input-container button img {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Search Button */
+        #searchBtn {
+            background-color: #1e1e1e;
+            color: #fff;
+            font-family: 'Roboto', sans-serif;
+            text-transform: uppercase;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: auto;
+            margin-top: 10px;
+        }
+
+        #searchBtn:hover {
+            background-color: #333;
+        }
+
+        /* Actions and Export Panels */
+        #actionsMenu, #exportOptions {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+        }
+
+        #actionsMenu h2, #exportOptions h2 {
+            margin-top: 0;
+        }
+
+        .action-button, .export-button {
+            background-color: #1e1e1e;
+            color: #fff;
+            font-family: 'Roboto', sans-serif;
+            text-transform: uppercase;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .action-button:hover, .export-button:hover {
+            background-color: #333;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            main {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <img src="logo1.svg" alt="Herakles AI Logo" class="logo">
+    <div class="header-right">
+        <!-- File Menu -->
+        <div class="menu-button tooltip" data-tooltip="File">
+            <img src="workspace.svg" alt="File" class="menu-icon">
+            <div class="dropdown-menu">
+                <h3>File</h3>
+                <button id="newWorkspaceBtn">New Workspace</button>
+                <button id="saveWorkspaceBtn">Save Workspace</button>
+                <label for="workspaceSelector">Switch Workspace:</label>
+                <select id="workspaceSelector">
+                    <!-- Options populated dynamically -->
+                </select>
+            </div>
+        </div>
+        <!-- Settings Menu (unlabeled) -->
+        <div class="menu-button tooltip" data-tooltip="Settings">
+            <img src="gear.svg" alt="Settings" class="menu-icon">
+            <div class="dropdown-menu">
+                <h3>Herakles Audio</h3>
+                <label for="volumeSlider">Volume:</label>
+                <input type="range" id="volumeSlider" min="0" max="100" value="100">
+                <label for="genderToggle">Gender:</label>
+                <select id="genderToggle">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+                <h3>Time</h3>
+                <label for="timeFormat">Time Format:</label>
+                <select id="timeFormat">
+                    <option value="12hr">12 Hour</option>
+                    <option value="24hr">24 Hour</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="time-display" id="timeDisplay"></div>
+</header>
+
+<main>
+    <!-- Chat Workspace -->
+    <section class="panel" id="chatWorkspace">
+        <h2>General Chat</h2>
+        <div id="chatArea">
+            <div class="chat-message assistant">
+                <p>Hi, I'm Herakles, your intelligent assistant. What are you researching?</p>
+            </div>
+        </div>
+        <div class="chat-input-container">
+            <input type="text" id="chatInput" placeholder="// Type your message here.">
+            <button id="sendBtn" class="tooltip" data-tooltip="Send Message">
+                <img src="play.svg" alt="Send">
+            </button>
+            <button id="micBtn" class="tooltip" data-tooltip="Start Recording">
+                <img src="mic.svg" alt="Mic">
+            </button>
+            <button id="speakerBtn" class="tooltip" data-tooltip="Toggle Audio">
+                <img src="speaker.svg" alt="Speaker">
+            </button>
+        </div>
+    </section>
+
+    <!-- Search Workspace -->
+    <section class="panel" id="searchWorkspace">
+        <h2>Search Databases</h2>
+        <div id="databases">
+            <label class="api-checkbox">
+                <input type="checkbox" id="scopusCheckbox"> Scopus
+            </label>
+            <label class="api-checkbox">
+                <input type="checkbox" id="ieeeCheckbox"> IEEE Xplore
+            </label>
+            <label class="api-checkbox">
+                <input type="checkbox" id="googleBooksCheckbox"> Google Books
+            </label>
+            <label class="api-checkbox">
+                <input type="checkbox" id="openAlexCheckbox"> OpenAlex
+            </label>
+            <label class="api-checkbox">
+                <input type="checkbox" id="jstorCheckbox"> JSTOR Open Access
+            </label>
+            <label class="api-checkbox">
+                <input type="checkbox" id="europePmcCheckbox"> Europe PMC
+            </label>
+            <!-- Other databases -->
+        </div>
+        <button id="searchBtn" class="tooltip" data-tooltip="Search Selected Databases">Search</button>
+        <div id="searchResults">
+            <!-- Search results will be displayed here -->
+        </div>
+    </section>
+</main>
+
+<!-- Actions Panel -->
+<section id="actionsMenu">
+    <h2>Actions</h2>
+    <button id="summarizeBtn" class="action-button tooltip" data-tooltip="Auto Summarize">Auto Summarize</button>
+    <button id="citationBtn" class="action-button tooltip" data-tooltip="Generate Citation">Generate Citation</button>
+    <button id="relatedWorkBtn" class="action-button tooltip" data-tooltip="Find Related Work">Find Related Work</button>
+    <button id="glossaryBtn" class="action-button tooltip" data-tooltip="Generate Glossary">Generate Glossary</button>
+    <button id="citationAnalysisBtn" class="action-button tooltip" data-tooltip="Citation Analysis">Citation Analysis</button>
+</section>
+
+<!-- Export Options -->
+<section id="exportOptions">
+    <h2>Export</h2>
+    <button id="exportChatBtn" class="export-button tooltip" data-tooltip="Export Chat History">Export Chat</button>
+    <button id="exportActionsBtn" class="export-button tooltip" data-tooltip="Export Actions Output">Export Actions</button>
+    <button id="exportSearchBtn" class="export-button tooltip" data-tooltip="Export Search Results">Export Search Results</button>
+    <button id="exportChatAudioBtn" class="export-button tooltip" data-tooltip="Export Chat as Audio">Export Chat as Audio</button>
+    <button id="exportCitationsBtn" class="export-button tooltip" data-tooltip="Export Citations">Export Citations</button>
+</section>
+
+<footer>
+    <p style="font-family: 'Berkeley Mono', monospace; text-align: center;">&copy; 2024 UNIVERSITAS AI</p>
+</footer>
+
+<script>
+    // JavaScript code implementing functionality
+
+    // Time Display
+    let is12HourFormat = true;
+    function updateTime() {
+        const now = new Date();
+        const options = {
+            weekday: 'short',
+            month: 'short',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: is12HourFormat,
+        };
+        const timeString = now.toLocaleDateString('en-US', options).replace(',', '');
+        document.getElementById('timeDisplay').textContent = timeString;
+    }
+    updateTime();
+    setInterval(updateTime, 60000);
+
+    // Time Format Setting
+    document.getElementById('timeFormat').addEventListener('change', function() {
+        is12HourFormat = this.value === '12hr';
+        updateTime();
+    });
+
+    // Menu Toggle
+    const menuButtons = document.querySelectorAll('.menu-button');
+    menuButtons.forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.stopPropagation();
+            this.classList.toggle('active');
+            // Close other menus
+            menuButtons.forEach(btn => {
+                if (btn !== this) {
+                    btn.classList.remove('active');
+                }
+            });
+        });
+    });
+
+    document.addEventListener('click', () => {
+        menuButtons.forEach(button => {
+            button.classList.remove('active');
+        });
+    });
+
+    // Workspace Management
+    document.getElementById('saveWorkspaceBtn').addEventListener('click', function() {
+        const workspaceName = prompt("Enter a name for your workspace:");
+        if (workspaceName) {
+            saveWorkspace(workspaceName);
+        }
+    });
+
+    document.getElementById('newWorkspaceBtn').addEventListener('click', function() {
+        if (confirm("Are you sure you want to create a new workspace? Unsaved changes will be lost.")) {
+            clearWorkspace();
+        }
+    });
+
+    // Populate Workspace Selector
+    function populateWorkspaceSelector() {
+        // Fetch workspaces from backend and populate the selector
+    }
+
+    document.getElementById('workspaceSelector').addEventListener('change', function() {
+        const workspaceId = this.value;
+        loadWorkspace(workspaceId);
+    });
+
+    // Herakles Audio Controls
+    document.getElementById('volumeSlider').addEventListener('input', function() {
+        const volumeLevel = this.value / 100;
+        // Adjust audio elements volume
+    });
+
+    document.getElementById('genderToggle').addEventListener('change', function() {
+        const selectedGender = this.value;
+        // Set voice gender for TTS
+    });
+
+    // Placeholder for chat input
+    document.getElementById('chatInput').placeholder = '// Type your message here.';
+
+</script>
+
+</body>
+</html>
