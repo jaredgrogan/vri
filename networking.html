@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universitas AI - Research Networking Dashboard</title>
+    <style>
+        /* Color Scheme */
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --background-color: #f4f6f9;
+            --text-color: #333;
+            --light-gray: #ecf0f1;
+            --dark-gray: #7f8c8d;
+        }
+
+        /* Typography */
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        h1, h2, h3 {
+            font-weight: 700;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        /* Profile Summary */
+        .profile-summary {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .profile-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* Research Interests */
+        .research-interests {
+            margin-top: 20px;
+        }
+
+        .tag {
+            display: inline-block;
+            background-color: var(--light-gray);
+            padding: 5px 10px;
+            border-radius: 20px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        /* Suggested Collaborators */
+        .suggested-collaborators {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .collaborator {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .collaborator img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+
+        /* Recent Activity */
+        .recent-activity {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--secondary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #27ae60;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Universitas AI</h1>
+            <nav>
+                <ul>
+                    <li><a href="#dashboard">Dashboard</a></li>
+                    <li><a href="#profile">Profile</a></li>
+                    <li><a href="#messages">Messages</a></li>
+                    <li><a href="#groups">Groups</a></li>
+                    <li><a href="#search">Search</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <h2>Research Networking Dashboard</h2>
+        <div class="dashboard-grid">
+            <div class="main-content">
+                <section class="profile-summary">
+                    <img src="https://via.placeholder.com/100" alt="Profile Picture" class="profile-image">
+                    <h3>Dr. Jane Doe</h3>
+                    <p>Associate Professor of Computer Science</p>
+                    <p>University of Example</p>
+                    <div class="research-interests">
+                        <h4>Research Interests</h4>
+                        <span class="tag">Machine Learning</span>
+                        <span class="tag">Natural Language Processing</span>
+                        <span class="tag">Computer Vision</span>
+                    </div>
+                    <a href="#edit-profile" class="btn">Edit Profile</a>
+                </section>
+
+                <section class="recent-activity">
+                    <h3>Recent Activity</h3>
+                    <ul>
+                        <li>Published a new paper: "Advances in Deep Learning for NLP"</li>
+                        <li>Joined the "AI Ethics" research group</li>
+                        <li>Commented on Dr. Smith's latest publication</li>
+                    </ul>
+                </section>
+            </div>
+
+            <aside>
+                <section class="suggested-collaborators">
+                    <h3>Suggested Collaborators</h3>
+                    <div class="collaborator">
+                        <img src="https://via.placeholder.com/50" alt="Dr. John Smith">
+                        <div>
+                            <h4>Dr. John Smith</h4>
+                            <p>Expert in Deep Learning</p>
+                            <a href="#connect" class="btn">Connect</a>
+                        </div>
+                    </div>
+                    <div class="collaborator">
+                        <img src="https://via.placeholder.com/50" alt="Prof. Emily Brown">
+                        <div>
+                            <h4>Prof. Emily Brown</h4>
+                            <p>Researcher in NLP</p>
+                            <a href="#connect" class="btn">Connect</a>
+                        </div>
+                    </div>
+                </section>
+            </aside>
+        </div>
+    </main>
+</body>
+</html>
