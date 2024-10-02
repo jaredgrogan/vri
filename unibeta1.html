@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Get Universitas Pro - Beta Access</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&display=swap" rel="stylesheet">
+  <link rel="icon" href="/favicon10.svg" type="image/svg+xml">
+  <style>
+    body {
+      background-color: #f3f4f6;
+      color: #111827;
+      font-family: 'Berkeley Mono', monospace;
+    }
+
+    .light-mode {
+      background-color: #f3f4f6;
+      color: #111827;
+    }
+
+    .dark-mode {
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+    }
+
+    .header-container {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+    }
+
+    .header-container img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 20px;
+    }
+
+    .header-container h1 {
+      font-family: 'Courier New', monospace;
+      font-size: 27px;
+      font-weight: bold;
+      color: black;
+      transition: color 0.3s;
+    }
+
+    @media (max-width: 640px) {
+      .header-container h1 {
+        font-size: 20px;
+      }
+    }
+
+    @media (max-width: 455px) {
+      .header-container h1 {
+        font-size: 18px;
+        display: none;
+      }
+
+      .header-container::after {
+        content: "";
+        font-family: 'Courier New', monospace;
+        font-size: 18px;
+        color: black;
+      }
+    }
+
+    .nav-header {
+      position: fixed;
+      top: 24px;
+      right: 230px;
+      display: flex;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .nav-header ul {
+      display: flex;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      gap: 20px;
+      font-family: 'Berkeley Mono', monospace;
+    }
+
+    .nav-header ul li {
+      position: relative;
+    }
+
+    .nav-header ul li a {
+      text-decoration: none;
+      font-size: 16px;
+      transition: color 0.3s;
+    }
+
+    .nav-header ul li ul {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background-color: #d5d5d5;
+      border-radius: 5px;
+      padding: 10px;
+    }
+
+    .nav-header ul li ul li a {
+      font-weight: normal;
+      font-size: 14px;
+      padding: 5px 10px;
+      border-radius: 4px;
+      display: block;
+      color: #111827;
+    }
+
+    .hero-section {
+      height: 70vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      font-family: 'Courier New', monospace;
+    }
+
+    .circle {
+      display: inline-block;
+      width: 100px;
+      height: 100px;
+      border: 2px solid currentColor;
+      border-radius: 50%;
+      line-height: 100px;
+      text-align: center;
+      font-size: 5rem;
+    }
+
+    .u {
+      color: #000;
+      font-size: 5rem;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    .dark-mode .u {
+      color: #fff;
+    }
+
+    .content {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .enter-btn {
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 27px;
+      font-family: 'Courier New', monospace;
+      transition: transform 0.3s ease;
+    }
+
+    .enter-btn:hover {
+      transform: scale(1.2);
+    }
+
+    .enter-btn a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .signup-container {
+      margin-top: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .signup-form input[type="email"] {
+      font-family: 'Courier New', monospace;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: 1px solid #111827;
+      background-color: transparent;
+      border-radius: 5px;
+      margin-right: 10px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .signup-form input[type="email"]:focus {
+      border-color: #007bff;
+    }
+
+    .signup-form input[type="submit"] {
+      padding: 10px 20px;
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .signup-form input[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+
+<body class="light-mode" id="app">
+  <!-- Navigation Header with Day/Night Toggle -->
+  <div class="nav-header">
+    <ul id="navMenu">
+      <li>
+        <a href="javascript:void(0)" id="navMenuItem">Menu</a>
+        <ul>
+          <li><a href="newconsole.html" id="navHeraklesItem">Herakles AI</a></li>
+          <li><a href="docuchat5.html" id="navResearchItem">Research</a></li>
+          <li><a href="todotoday.html" id="navProjectsItem">Projects</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Hero Section with Beta Sign-Up Form -->
+  <div class="hero-section">
+    <a href="index.html" class="minilogo">
+      <img src="/favicon5.svg" alt="miniLogo">
+    </a>
+    <div class="container">
+      <a href="app.html">
+        <div class="logo">
+          <div class="circle">
+            <span class="u">U</span>
+          </div>
+        </div>
+      </a>
+      <div class="content">
+        <button class="enter-btn">
+          <a href="app.html" id="slogan">Your Cognitive Computer.</a>
+        </button>
+      </div>
+    </div>
+
+    <!-- Sign-Up for Beta Access -->
+    <div class="signup-container">
+      <form class="signup-form" action="/signup" method="post">
+        <input type="email" name="email" placeholder="Enter your email" required>
+        <input type="submit" value="Request Beta Access">
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2024 UNIVERSITAS AI
+  </footer>
+
+  <script>
+    const app = document.getElementById('app');
+    const darkModeBtn = document.getElementById('darkModeBtn');
+    const darkModeIcon = document.getElementById('darkModeIcon');
+    const languageSelect = document.getElementById('languageSelect');
+    const navMenuItem = document.getElementById('navMenuItem');
+    const navHeraklesItem = document.getElementById('navHeraklesItem');
+    const navResearchItem = document.getElementById('navResearchItem');
+    const navProjectsItem = document.getElementById('navProjectsItem');
+    const slogan = document.getElementById('slogan');
+
+    let isDarkMode = false;
+    let language = 'en';
+
+    const translations = {
+      en: {
+        navMenu: "Menu",
+        navHerakles: "Herakles AI",
+        navResearch: "Research",
+        navProjects: "Projects",
+        slogan: "Your Cognitive Computer."
+      },
+      es: {
+        navMenu: "Menú",
+        navHerakles: "Herakles AI",
+        navResearch: "Investigación",
+        navProjects: "Proyectos",
+        slogan: "Tu Computadora Cognitiva."
+      },
+    };
+
+    function changeLanguage() {
+      language = languageSelect.value;
+      updateLanguage();
+    }
+
+    function updateLanguage() {
+      navMenuItem.textContent = translations[language].navMenu;
+      navHeraklesItem.textContent = translations[language].navHerakles;
+      navResearchItem.textContent = translations[language].navResearch;
+      navProjectsItem.textContent = translations[language].navProjects;
+      slogan.textContent = translations[language].slogan;
+    }
+
+    // Day/Night mode toggle
+    function toggleDarkMode() {
+      isDarkMode = !isDarkMode;
+      if (isDarkMode) {
+        app.classList.remove('light-mode');
+        app.classList.add('dark-mode');
+        darkModeIcon.innerHTML = '<path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
+      } else {
+        app.classList.remove('dark-mode');
+        app.classList.add('light-mode');
+        darkModeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+      }
+    }
+
+    // Initialize the page with the default language
+    updateLanguage();
+  </script>
+</body>
+
+</html>
