@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIVERSITAS AI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background: #005a87;
+            color: #fff;
+            padding: 1rem;
+        }
+        header h1 {
+            margin: 0;
+        }
+        nav ul {
+            padding: 0;
+            list-style-type: none;
+        }
+        nav ul li {
+            display: inline;
+            margin-right: 10px;
+        }
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+        }
+        main {
+            padding: 2rem;
+        }
+        section {
+            margin-bottom: 2rem;
+        }
+        form {
+            display: grid;
+            gap: 1rem;
+            max-width: 600px;
+        }
+        input, select, button {
+            padding: 0.5rem;
+            font-size: 1rem;
+        }
+        button {
+            background: #005a87;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #003d5c;
+        }
+        #search-results, #user-library {
+            margin-top: 1rem;
+        }
+        #analytics-dashboard {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        #search-volume-chart, #top-queries-chart {
+            width: 48%;
+            height: 300px;
+            margin-bottom: 1rem;
+        }
+        #citation-network {
+            width: 100%;
+            height: 500px;
+        }
+        footer {
+            background: #005a87;
+            color: #fff;
+            text-align: center;
+            padding: 1rem;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        @media (max-width: 768px) {
+            #search-volume-chart, #top-queries-chart {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>UNIVERSITAS AI</h1>
+        <nav>
+            <ul>
+                <li><a href="#search">Search</a></li>
+                <li><a href="#library">Library</a></li>
+                <li><a href="#analytics">Analytics</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="search">
+            <h2>Advanced Search</h2>
+            <form id="search-form">
+                <input type="text" id="query" placeholder="Enter search query" required>
+                <input type="date" id="start-date" placeholder="Start Date">
+                <input type="date" id="end-date" placeholder="End Date">
+                <input type="text" id="author" placeholder="Author">
+                <input type="text" id="journal" placeholder="Journal">
+                <select id="source">
+                    <option value="all">All Sources</option>
+                    <option value="arxiv">ArXiv</option>
+                    <option value="ieee">IEEE Xplore</option>
+                    <option value="springer">Springer Nature</option>
+                    <option value="crossref">Crossref</option>
+                </select>
+                <button type="submit">Search</button>
+            </form>
+            <div id="search-results"></div>
+        </section>
+
+        <section id="library">
+            <h2>User Library</h2>
+            <div id="user-library"></div>
+        </section>
+
+        <section id="analytics">
+            <h2>Search Analytics</h2>
+            <div id="analytics-dashboard">
+                <canvas id="search-volume-chart"></canvas>
+                <canvas id="top-queries-chart"></canvas>
+            </div>
+        </section>
+
+        <section id="citation-analysis">
+            <h2>Citation Analysis</h2>
+            <div id="citation-network"></div>
+            <div id="citation-context"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 UNIVERSITAS AI. All rights reserved.</p>
+    </footer>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchForm = document.getElementById('search-form');
+            const searchResults = document.getElementById('search-results');
+            const userLibrary = document.getElementById('user-library');
+            const searchVolumeChart = document.getElementById('search-volume-chart');
+            const topQueriesChart = document.getElementById('top-queries-chart');
+            const citationNetwork = document.getElementById('citation-network');
+            const citationContext = document.getElementById('citation-context');
+
+            let searchVolumeChartInstance, topQueriesChartInstance;
+
+            searchForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const formData = new FormData(searchForm);
+                const searchParams = Object.fromEntries(formData);
+                const results = await searchPapers(searchParams);
+                displaySearchResults(results);
+            });
+
+            async function searchPapers(params) {
+                try {
+                    const response = await fetch('/api/search', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(params),
+                    });
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return await response.json();
+                } catch (error) {
+                    console.error('Error searching papers:', error);
+                    searchResults.innerHTML = `<p>Error searching papers: ${error.message}</p>`;
+                    return [];
+                }
+            }
+
+            function displaySearchResults(results) {
+                searchResults.innerHTML = results.map(paper => `
+                    <div class="paper">
+                        <h3>${paper.title}</h3>
+                        <p>Authors: ${paper.authors.join(', ')}</p>
+                        <p>Published: ${paper.published}</p>
+                        <p>Source: ${paper.source}</p>
+                        <button onclick="addToLibrary('${paper.id}')">Add to Library</button>
+                    </div>
+                `).join('');
+            }
+
+            async function addToLibrary(paperId) {
+                try {
+                    const response = await fetch('/api/user-library/add', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ paperId }),
+                    });
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    updateUserLibrary();
+                } catch (error) {
+                    console.error('Error adding paper to library:', error);
+                    alert(`Error adding paper to library: ${error.message}`);
+                }
+            }
+
+            async function updateUserLibrary() {
+                try {
+                    const response = await fetch('/api/user-library');
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const library = await response.json();
+                    userLibrary.innerHTML = library.map(paper => `
+                        <div class="paper">
+                            <h3>${paper.title}</h3>
+                            <p>Authors: ${paper.authors.join(', ')}</p>
+                            <button onclick="showCitationAnalysis('${paper.id}')">Citation Analysis</button>
+                        </div>
+                    `).join('');
+                } catch (error) {
+                    console.error('Error updating user library:', error);
+                    userLibrary.innerHTML = `<p>Error updating library: ${error.message}</p>`;
+                }
+            }
+
+            async function showCitationAnalysis(paperId) {
+                try {
+                    const response = await fetch(`/api/citations/${paperId}`);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const citationData = await response.json();
+                    renderCitationNetwork(citationData.network);
+                    renderCitationContext(citationData.context);
+                } catch (error) {
+                    console.error('Error fetching citation analysis:', error);
+                    citationNetwork.innerHTML = `<p>Error fetching citation analysis: ${error.message}</p>`;
+                    citationContext.innerHTML = '';
+                }
+            }
+
+            function renderCitationNetwork(networkData) {
+                // Use D3.js to render the citation network
+                const width = citationNetwork.clientWidth;
+                const height = citationNetwork.clientHeight;
+
+                const svg = d3.select(citationNetwork)
+                    .append('svg')
+                    .attr('width', width)
+                    .attr('height', height);
+
+                const simulation = d3.forceSimulation(networkData.nodes)
+                    .force('link', d3.forceLink(networkData.links).id(d => d.id))
+                    .force('charge', d3.forceManyBody())
+                    .force('center', d3.forceCenter(width / 2, height / 2));
+
+                const link = svg.append('g')
+                    .selectAll('line')
+                    .data(networkData.links)
+                    .enter().append('line')
+                    .attr('stroke', '#999')
+                    .attr('stroke-opacity', 0.6);
+
+                const node = svg.append('g')
+                    .selectAll('circle')
+                    .data(networkData.nodes)
+                    .enter().append('circle')
+                    .attr('r', 5)
+                    .attr('fill', d => d.group === 1 ? '#ff0000' : '#0000ff');
+
+                node.append('title')
+                    .text(d => d.id);
+
+                simulation.on('tick', () => {
+                    link
+                        .attr('x1', d => d.source.x)
+                        .attr('y1', d => d.source.y)
+                        .attr('x2', d => d.target.x)
+                        .attr('y2', d => d.target.y);
+
+                    node
+                        .attr('cx', d => d.x)
+                        .attr('cy', d => d.y);
+                });
+            }
+
+            function renderCitationContext(contextData) {
+                citationContext.innerHTML = `
+                    <h3>Citation Context</h3>
+                    <p>${contextData.summary}</p>
+                    <h4>Key Phrases:</h4>
+                    <ul>
+                        ${contextData.keyPhrases.map(phrase => `<li>${phrase}</li>`).join('')}
+                    </ul>
+                `;
+            }
+
+            async function updateAnalyticsDashboard() {
+                try {
+                    const response = await fetch('/api/analytics');
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const analyticsData = await response.json();
+                    renderSearchVolumeChart(analyticsData.searchVolume);
+                    renderTopQueriesChart(analyticsData.topQueries);
+                } catch (error) {
+                    console.error('Error updating analytics dashboard:', error);
+                    document.getElementById('analytics-dashboard').innerHTML = `<p>Error updating analytics: ${error.message}</p>`;
+                }
+            }
+
+            function renderSearchVolumeChart(searchVolumeData) {
+                if (searchVolumeChartInstance) {
+                    searchVolumeChartInstance.destroy();
+                }
+                searchVolumeChartInstance = new Chart(searchVolumeChart, {
+                    type: 'line',
+                    data: {
+                        labels: searchVolumeData.map(d => d.date),
+                        datasets: [{
+                            label: 'Search Volume',
+                            data: searchVolumeData.map(d => d.volume),
+                            borderColor: 'rgb(75, 192, 192)',
+                            tension: 0.1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            }
+
+            function renderTopQueriesChart(topQueriesData) {
+                if (topQueriesChartInstance) {
+                    topQueriesChartInstance.destroy();
+                }
+                topQueriesChartInstance = new Chart(topQueriesChart, {
+                    type: 'bar',
+                    data: {
+                        labels: topQueriesData.map(d => d.query),
+                        datasets: [{
+                            label: 'Query Frequency',
+                            data: topQueriesData.map(d => d.frequency),
+                            backgroundColor: 'rgb(75, 192, 192)'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            }
+
+            // Initial setup
+            updateUserLibrary();
+            updateAnalyticsDashboard();
+
+            // Make functions globally accessible
+            window.addToLibrary = addToLibrary;
+            window.showCitationAnalysis = showCitationAnalysis;
+        });
+    </script>
+</body>
+</html>
