@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Herakles AI - Research Assistant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&family=Roboto:wght@400;700&family=Source+Sans+Pro:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Font Definitions */
+        @font-face {
+            font-family: 'Berkeley Mono';
+            src: url('path-to-berkeley-mono-font.woff2') format('woff2');
+        }
+
+        /* Root Variables */
+        :root {
+            --primary-bg: #f3f4f6;
+            --secondary-bg: #ffffff;
+            --text-color: #333333;
+            --accent-color: #ff4b4b;
+            --glassmorphism-bg: rgba(255, 255, 255, 0.1);
+            --glassmorphism-border: 1px solid rgba(255, 255, 255, 0.18);
+            --glassmorphism-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            --tooltip-bg: #333333;
+            --tooltip-text: #ffffff;
+            --hover-bg-color: #ff4b4b;
+            --hover-text-color: #ffffff;
+        }
+
+        /* Dark Mode Variables */
+        body.dark-mode {
+            --primary-bg: #1a1a1a;
+            --secondary-bg: #2a2a2a;
+            --text-color: #ffffff;
+            --glassmorphism-bg: rgba(0, 0, 0, 0.1);
+            --glassmorphism-border: 1px solid rgba(255, 255, 255, 0.18);
+            --glassmorphism-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            --tooltip-bg: #ffffff;
+            --tooltip-text: #333333;
+        }
+
+        /* Global Styles */
+        body {
+            font-family: 'Source Sans Pro', 'Courier New', monospace;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: var(--glassmorphism-bg);
+            backdrop-filter: blur(10px);
+            border: var(--glassmorphism-border);
+            box-shadow: var(--glassmorphism-shadow);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            transition: transform 0.3s;
+        }
+
+        .logo:hover {
+            transform: scale(1.5); /* Enlarge by 50% on hover */
+        }
+
+        .logo-link {
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .logo-link:hover {
+            text-decoration: none;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+        }
+
+        .header-title {
+            margin-left: 10px;
+            font-family: 'Berkeley Mono', 'Courier New', monospace;
+            font-size: 1.2em;
+            cursor: default;
+            white-space: nowrap;
+            font-weight: normal;
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        /* Button and Select Styles */
+        button, select {
+            font-family: 'Berkeley Mono', 'Courier New', monospace;
+            background: var(--secondary-bg);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s, color 0.3s;
+            color: var(--text-color);
+            position: relative;
+            appearance: none;
+        }
+
+        button:hover, select:hover {
+            background-color: var(--hover-bg-color);
+            transform: scale(1.05);
+            color: var(--hover-text-color);
+        }
+
+        select {
+            background-image: url('data:image/svg+xml;charset=US-ASCII,<svg%20xmlns="http://www.w3.org/2000/svg"%20viewBox="0%200%204%205"><path%20fill="%23' + encodeURIComponent('333333') + '"%20d="M2%200L0%202h4z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 10px;
+        }
+
+        /* Mic Button Styles */
+        .mic-button {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+            z-index: 1000;
+        }
+
+        .mic-button:hover {
+            transform: scale(1.3);
+        }
+
+        .mic-icon {
+            width: 24px;
+            height: 24px;
+            fill: white;
+            transition: fill 0.3s;
+        }
+
+        .mic-button.active {
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* Main Content Styles */
+        main {
+            margin-top: 40px;
+        }
+
+        h1, h2 {
+            font-family: 'Roboto', sans-serif;
+            font-weight: bold;
+        }
+
+        .main-title {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            cursor: default;
+            font-weight: normal;
+            font-family: 'Berkeley Mono', 'Courier New', monospace;
+        }
+
+        .search-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Search Bar Styles */
+        .search-bar {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 10px 20px;
+            margin: 20px;
+            display: flex;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .search-bar input {
+            flex-grow: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-color);
+            font-size: 1em;
+            outline: none;
+            padding: 0 10px;
+        }
+
+        .icon-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            position: relative;
+        }
+
+        .icon-button:hover {
+            transform: scale(1.1);
+            color: #ffffff;
+        }
+
+        .icon {
+            width: 24px;
+            height: 24px;
+            fill: var(--text-color);
+            transition: fill 0.3s;
+        }
+
+        /* Search Options Styles */
+        .search-options {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+
+        .sources-dropdown {
+            flex-grow: 1;
+            margin-right: 20px;
+            min-width: 200px;
+        }
+
+        .date-range {
+            display: flex;
+            align-items: center;
+        }
+
+        .date-input {
+            width: 130px;
+            margin-left: 10px;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid var(--text-color);
+            background: var(--secondary-bg);
+            color: var(--text-color);
+            transition: border-color 0.3s;
+        }
+
+        .calendar-icon, .info-icon {
+            width: 16px;
+            height: 16px;
+            margin-right: 5px;
+            fill: var(--text-color);
+        }
+
+        /* Footer Styles */
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        /* Tooltip Styles */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: max-content;
+            background-color: var(--tooltip-bg);
+            color: var(--tooltip-text);
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8em;
+            white-space: nowrap;
+            margin-top: 5px;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Night Mode Adjustments */
+        body.dark-mode select {
+            color: #ffffff;
+        }
+
+        body.dark-mode .tooltip .tooltiptext {
+            background-color: #ffffff;
+            color: #333333;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .search-form {
+                flex-direction: column;
+            }
+
+            .search-bar, .sources-dropdown, .date-range {
+                width: 100%;
+                margin: 10px 0;
+            }
+
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .header-title {
+                display: none;
+            }
+        }
+
+        /* Results Section Styles */
+        #results-section {
+            margin-top: 40px;
+        }
+
+        #search-results, #llm-results, #bibliography {
+            margin-bottom: 40px;
+        }
+
+        .result-item {
+            background: var(--secondary-bg);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+
+        .result-item h3 {
+            margin-top: 0;
+        }
+
+        .result-item p {
+            margin: 5px 0;
+        }
+
+        .result-item button {
+            margin-right: 10px;
+            background-color: var(--accent-color);
+            color: #ffffff;
+            transition: background-color 0.3s, color 0.3s;
+            border-radius: 5px;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .result-item button:hover {
+            background-color: var(--hover-bg-color);
+            color: var(--hover-text-color);
+        }
+
+        /* Bibliography Styles */
+        #bibliography-list .result-item {
+            background: var(--secondary-bg);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+
+        #bibliography-list .result-item h3 {
+            margin-top: 0;
+        }
+
+        #bibliography-list .result-item p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div style="display: flex; align-items: center;">
+            <a href="index.html" class="logo-link">
+                <img src="favicon5.svg" alt="Herakles AI Logo" class="logo">
+            </a>
+            <h1 id="workspaceTitle" class="header-title">// Discover the Universe</h1>
+        </div>
+        <div class="header-right">
+            <div class="tooltip">
+                <button id="theme-toggle" class="icon-button" title="Toggle Theme">
+                    <svg id="darkModeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="icon">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+                <span class="tooltiptext">Toggle Light/Dark Mode</span>
+            </div>
+            <div class="tooltip">
+                <select id="language-select" title="Select Language">
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                    <option value="fr">Français</option>
+                    <!-- Add more languages as needed -->
+                </select>
+                <span class="tooltiptext">Select Language</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="search-bar">
+            <input type="text" id="searchTerms" placeholder="Enter your research query..." title="Enter your research query">
+            <button id="searchBtn" class="icon-button" title="Search">
+                <svg viewBox="0 0 24 24" class="icon">
+                    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                </svg>
+            </button>
+        </div>
+
+        <div class="search-options">
+            <div class="tooltip">
+                <select id="sourceSelect" class="sources-dropdown" title="Select Source">
+                    <option value="">All Sources</option>
+                    <option value="arxiv">arXiv</option>
+                    <option value="crossref">Crossref</option>
+                    <option value="doaj">DOAJ</option>
+                    <option value="mag">Microsoft Academic Graph</option>
+                    <option value="orcid">ORCID</option>
+                    <option value="pubmed">PubMed</option>
+                    <option value="scopus">Scopus</option>
+                    <option value="semantic-scholar">Semantic Scholar</option>
+                    <option value="unpaywall">Unpaywall</option>
+                    <option value="wos">Web of Science</option>
+                </select>
+                <span class="tooltiptext">Select Source Database</span>
+            </div>
+            <div class="date-range">
+                <svg class="calendar-icon" viewBox="0 0 24 24">
+                    <path d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/>
+                </svg>
+                <input type="date" class="date-input" id="startDate" title="Start Date">
+                <span>to</span>
+                <input type="date" class="date-input" id="endDate" title="End Date">
+                <svg class="info-icon" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Space for Search Results and LLM Actions -->
+        <div id="results-section">
+            <section id="search-results">
+                <h2>Search Results</h2>
+                <!-- Search results will be dynamically inserted here -->
+            </section>
+
+            <section id="llm-results">
+                <h2>LLM Actions Output</h2>
+                <!-- LLM action results will be dynamically inserted here -->
+            </section>
+        </div>
+
+        <!-- Bibliography Section -->
+        <section id="bibliography">
+            <h2>Saved Papers / Bibliography</h2>
+            <div id="bibliography-list">
+                <!-- Saved papers will be dynamically inserted here -->
+            </div>
+        </section>
+    </main>
+
+    <button id="micBtn" class="mic-button" title="Voice Input">
+        <svg class="mic-icon" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1 1.93c-3.94-.49-7-3.85-7-7.93V7h2v1c0 2.76 2.24 5 5 5s5-2.24 5-5V7h2v1c0 4.08-3.06 7.44-7 7.93V18h4v2H8v-2h4v-2.07z"/>
+        </svg>
+    </button>
+
+    <footer>
+        <p>&copy; 2024 UNIVERSITAS AI</p>
+    </footer>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('theme-toggle');
+        const darkModeIcon = document.getElementById('darkModeIcon');
+        const languageSelect = document.getElementById('language-select');
+
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                darkModeIcon.innerHTML = '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"></path>';
+            } else {
+                darkModeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+            }
+            adjustLanguageSelectColor();
+        });
+
+        // Adjust language select color in dark mode
+        function adjustLanguageSelectColor() {
+            if (document.body.classList.contains('dark-mode')) {
+                languageSelect.style.color = '#ffffff';
+            } else {
+                languageSelect.style.color = '#333333';
+            }
+        }
+
+        // Initialize language select color
+        adjustLanguageSelectColor();
+
+        // Mic button functionality
+        const micButton = document.getElementById('micBtn');
+        let recognition;
+
+        if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+            recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                document.getElementById('searchTerms').value = transcript;
+            };
+
+            recognition.onend = () => {
+                micButton.classList.remove('active');
+            };
+
+            micButton.addEventListener('click', () => {
+                if (micButton.classList.contains('active')) {
+                    recognition.stop();
+                } else {
+                    recognition.start();
+                    micButton.classList.add('active');
+                }
+            });
+        } else {
+            micButton.style.display = 'none';
+            console.log('Speech recognition not supported');
+        }
+
+        // Search functionality
+        document.getElementById('searchBtn').addEventListener('click', async () => {
+            const query = document.getElementById('searchTerms').value;
+            const source = document.getElementById('sourceSelect').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+
+            // Perform search with these parameters
+            console.log(`Searching for "${query}" in ${source || 'all sources'} from ${startDate || 'any time'} to ${endDate || 'any time'}`);
+            
+            // TODO: Implement actual search functionality here
+            // For demonstration, we'll display mock results
+            const mockResults = [
+                {
+                    title: 'Deep Learning',
+                    authors: ['LeCun, Y.', 'Bengio, Y.', 'Hinton, G.'],
+                    published: '2015-09-01',
+                    abstract: 'A seminal paper that provides a comprehensive overview of deep learning, its techniques, and applications across various fields.',
+                    id: 'paper-1'
+                },
+                {
+                    title: 'Deep residual learning for image recognition',
+                    authors: ['He, K.', 'Zhang, X.', 'Ren, S.', 'Sun, J.'],
+                    published: '2016-12-01',
+                    abstract: 'This paper introduces ResNet, which significantly advanced the state-of-the-art in image recognition by using deep residual networks.',
+                    id: 'paper-2'
+                }
+                // Add more mock results as needed
+            ];
+
+            displaySearchResults(mockResults);
+        });
+
+        function displaySearchResults(results) {
+            const searchResultsSection = document.getElementById('search-results');
+            searchResultsSection.innerHTML = '<h2>Search Results</h2>';
+            results.forEach(result => {
+                const resultElement = document.createElement('div');
+                resultElement.className = 'result-item';
+                resultElement.innerHTML = `
+                    <h3>${result.title}</h3>
+                    <p><strong>Authors:</strong> ${result.authors.join(', ')}</p>
+                    <p><strong>Published:</strong> ${result.published}</p>
+                    <p>${result.abstract}</p>
+                    <button onclick="addToLibrary('${result.id}')">Add to Library</button>
+                    <button onclick="showLLMActions('${result.id}')">LLM Actions</button>
+                `;
+                searchResultsSection.appendChild(resultElement);
+            });
+        }
+
+        function addToLibrary(paperId) {
+            console.log(`Adding paper ${paperId} to library`);
+            // Implement actual add to library functionality here
+
+            // For demo, add to bibliography
+            const bibliographyList = document.getElementById('bibliography-list');
+            let paper;
+
+            // Define mock papers based on ID
+            const papers = {
+                'paper-1': {
+                    title: 'Deep Learning',
+                    authors: 'LeCun, Y., Bengio, Y., & Hinton, G.',
+                    year: '2015',
+                    journal: 'Nature',
+                    doi: '10.1038/nature14539',
+                    summary: 'A seminal paper that provides a comprehensive overview of deep learning, its techniques, and applications across various fields.'
+                },
+                'paper-2': {
+                    title: 'Deep residual learning for image recognition',
+                    authors: 'He, K., Zhang, X., Ren, S., & Sun, J.',
+                    year: '2016',
+                    conference: 'CVPR',
+                    doi: '10.1109/CVPR.2016.90',
+                    summary: 'This paper introduces ResNet, which significantly advanced the state-of-the-art in image recognition by using deep residual networks.'
+                }
+                // Add more papers as needed
+            };
+
+            paper = papers[paperId];
+            if (paper) {
+                const paperElement = document.createElement('div');
+                paperElement.className = 'result-item';
+                paperElement.innerHTML = `
+                    <h3>${paper.title}</h3>
+                    <p><strong>Authors:</strong> ${paper.authors}</p>
+                    <p><strong>Published:</strong> ${paper.year} in ${paper.journal || paper.conference}</p>
+                    <p><strong>DOI:</strong> <a href="https://doi.org/${paper.doi}" target="_blank">${paper.doi}</a></p>
+                    <p>${paper.summary}</p>
+                `;
+                bibliographyList.appendChild(paperElement);
+            } else {
+                console.log('Paper not found for ID:', paperId);
+            }
+        }
+
+        function showLLMActions(paperId) {
+            console.log(`Performing LLM actions on paper ${paperId}`);
+            // Implement LLM actions and display in LLM results section
+
+            // For demo, display a mock summary
+            const llmResultsSection = document.getElementById('llm-results');
+            llmResultsSection.innerHTML = `
+                <h2>LLM Actions Output</h2>
+                <div class="result-item">
+                    <h3>Summary for Paper ${paperId}</h3>
+                    <p>This is a summary generated by the LLM.</p>
+                </div>
+            `;
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            // Optionally, load initial data or perform other setup tasks
+        });
+    </script>
+</body>
+</html>
