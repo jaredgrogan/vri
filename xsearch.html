@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIVERSITAS AI</title>
+    <link rel="icon" type="image/svg+xml" href="favicon10.svg">
+    <style>
+        @font-face {
+            font-family: 'Berkeley Mono';
+            src: url('path-to-berkeley-mono-font.woff2') format('woff2');
+        }
+
+        :root {
+            --primary-bg: #ffffff;
+            --secondary-bg: #f0f0f0;
+            --text-color: #333333;
+            --accent-color: #ff4b4b;
+            --glassmorphism-bg: rgba(255, 255, 255, 0.1);
+            --glassmorphism-border: 1px solid rgba(255, 255, 255, 0.18);
+            --glassmorphism-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        body.dark-mode {
+            --primary-bg: #1a1a1a;
+            --secondary-bg: #2a2a2a;
+            --text-color: #ffffff;
+            --glassmorphism-bg: rgba(0, 0, 0, 0.1);
+            --glassmorphism-border: 1px solid rgba(255, 255, 255, 0.18);
+            --glassmorphism-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header, footer {
+            background: var(--glassmorphism-bg);
+            backdrop-filter: blur(10px);
+            border: var(--glassmorphism-border);
+            box-shadow: var(--glassmorphism-shadow);
+            padding: 10px 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            margin: 20px 0 0 20px;
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        button, select {
+            font-family: 'Berkeley Mono', 'Courier New', monospace;
+            background: var(--secondary-bg);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        button:hover, select:hover {
+            background-color: var(--accent-color);
+            transform: scale(1.05);
+        }
+
+        .mic-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .mic-icon {
+            width: 24px;
+            height: 24px;
+            fill: var(--text-color);
+            transition: fill 0.3s;
+        }
+
+        .mic-button.active .mic-icon {
+            fill: var(--accent-color);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        main {
+            margin-top: 40px;
+        }
+
+        h1, h2 {
+            font-family: 'Berkeley Mono', 'Courier New', monospace;
+            font-weight: normal;
+        }
+
+        .search-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-form input, .search-form select {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .date-range {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .date-range input {
+            flex: 1;
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, var(--accent-color), #ff7070);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .search-form {
+                flex-direction: column;
+            }
+
+            .search-form input, .search-form select {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="favicon10.svg" alt="UNIVERSITAS AI Logo" class="logo">
+        <nav>
+            <button class="mic-button">
+                <svg class="mic-icon" viewBox="0 0 24 24">
+                    <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1 1.93c-3.94-.49-7-3.85-7-7.93V7h2v1c0 2.76 2.24 5 5 5s5-2.24 5-5V7h2v1c0 4.08-3.06 7.44-7 7.93V18h4v2H8v-2h4v-2.07z"/>
+                </svg>
+            </button>
+            <button class="speaker-button">
+                <svg class="speaker-icon" viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                </svg>
+            </button>
+            <select id="language-select">
+                <option value="en">English</option>
+                <option value="es">Español</option>
+                <option value="fr">Français</option>
+            </select>
+            <button id="theme-toggle">🌓</button>
+        </nav>
+    </header>
+
+    <main class="container">
+        <h1>Your Cognitive Computer.</h1>
+        <form class="search-form">
+            <input type="text" placeholder="Enter your query" required>
+            <select id="source-select">
+                <option value="all">All Sources</option>
+                <option value="arxiv">ArXiv</option>
+                <option value="ieee">IEEE Xplore</option>
+                <option value="springer">Springer Nature</option>
+                <option value="crossref">Crossref</option>
+                <option value="pubmed">PubMed</option>
+                <option value="jstor">JSTOR</option>
+                <option value="google-scholar">Google Scholar</option>
+                <option value="semantic-scholar">Semantic Scholar</option>
+                <option value="acm">ACM Digital Library</option>
+            </select>
+            <div class="date-range">
+                <input type="date" placeholder="Start Date">
+                <input type="date" placeholder="End Date">
+            </div>
+            <button type="submit" class="cta-button">Discover the Universe</button>
+        </form>
+        
+        <section id="search-results">
+            <h2>Search Results</h2>
+            <!-- Search results will be dynamically inserted here -->
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2024 UNIVERSITAS AI</p>
+    </footer>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('theme-toggle');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+        });
+
+        // Mic button functionality
+        const micButton = document.querySelector('.mic-button');
+        micButton.addEventListener('click', () => {
+            micButton.classList.toggle('active');
+            // Add voice input logic here
+        });
+
+        // Add other necessary JavaScript for responsiveness and animations
+    </script>
+</body>
+</html>
