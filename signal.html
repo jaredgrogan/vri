@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIVERSITAS AI</title>
+    <link rel="icon" type="image/svg+xml" href="favicon5.svg">
+    <style>
+        @font-face {
+            font-family: 'Berkeley Mono';
+            src: url('path-to-berkeley-mono-font.woff2') format('woff2');
+        }
+
+        :root {
+            --primary-bg: #f3f4f6;
+            --secondary-bg: #ffffff;
+            --text-color: #333333;
+            --accent-color: #ff4b4b;
+            --glassmorphism-bg: rgba(255, 255, 255, 0.1);
+            --glassmorphism-border: 1px solid rgba(255, 255, 255, 0.18);
+            --glassmorphism-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        body.dark-mode {
+            --primary-bg: #1a1a1a;
+            --secondary-bg: #2a2a2a;
+            --text-color: #ffffff;
+            --glassmorphism-bg: rgba(0, 0, 0, 0.1);
+            --glassmorphism-border: 1px solid rgba(255, 255, 255, 0.18);
+            --glassmorphism-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header, footer {
+            background: var(--glassmorphism-bg);
+            backdrop-filter: blur(10px);
+            border: var(--glassmorphism-border);
+            box-shadow: var(--glassmorphism-shadow);
+            padding: 10px 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            margin: 20px 0 0 20px;
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        button, select {
+            font-family: 'Berkeley Mono', 'Courier New', monospace;
+            background: var(--secondary-bg);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        button:hover, select:hover {
+            background-color: var(--accent-color);
+            transform: scale(1.05);
+        }
+
+        .mic-button {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        .mic-button:hover {
+            transform: scale(1.1);
+        }
+
+        .mic-icon {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+
+        .mic-button.active {
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        main {
+            margin-top: 40px;
+        }
+
+        h1, h2 {
+            font-family: 'Berkeley Mono', 'Courier New', monospace;
+            font-weight: normal;
+        }
+
+        .search-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .search-form input, .search-form select {
+            flex: 1;
+            min-width: 200px;
+            color: var(--text-color);
+            background-color: var(--secondary-bg);
+        }
+
+        .date-range {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .date-range input {
+            flex: 1;
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, var(--accent-color), #ff7070);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+        }
+
+        #search-results, #user-library, #analytics-dashboard, #citation-analysis {
+            margin-top: 40px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .search-form {
+                flex-direction: column;
+            }
+
+            .search-form input, .search-form select, .date-range {
+                width: 100%;
+            }
+
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="favicon5.svg" alt="UNIVERSITAS AI Logo" class="logo">
+        <nav>
+            <button class="speaker-button">
+                <svg class="speaker-icon" viewBox="0 0 24 24" width="24" height="24">
+                    <path fill="currentColor" d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                </svg>
+            </button>
+            <select id="language-select">
+                <option value="en">English</option>
+                <option value="es">Español</option>
+                <option value="fr">Français</option>
+            </select>
+            <button id="theme-toggle">
+                <svg id="darkModeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </button>
+        </nav>
+    </header>
+
+    <main class="container">
+        <h1>Your Cognitive Computer.</h1>
+        <form class="search-form" id="search-form">
+            <input type="text" id="query" placeholder="Enter your query" required>
+            <select id="source-select">
+                <option value="all">All Sources</option>
+                <option value="arxiv">ArXiv</option>
+                <option value="ieee">IEEE Xplore</option>
+                <option value="springer">Springer Nature</option>
+                <option value="crossref">Crossref</option>
+                <option value="pubmed">PubMed</option>
+                <option value="jstor">JSTOR</option>
+                <option value="google-scholar">Google Scholar</option>
+                <option value="semantic-scholar">Semantic Scholar</option>
+                <option value="acm">ACM Digital Library</option>
+            </select>
+            <div class="date-range">
+                <input type="date" id="start-date" placeholder="Start Date">
+                <input type="date" id="end-date" placeholder="End Date">
+            </div>
+            <button type="submit" class="cta-button">Discover the Universe</button>
+        </form>
+        
+        <section id="search-results">
+            <h2>Search Results</h2>
+            <!-- Search results will be dynamically inserted here -->
+        </section>
+
+        <section id="user-library">
+            <h2>User Library</h2>
+            <!-- User library content will be dynamically inserted here -->
+        </section>
+
+        <section id="analytics-dashboard">
+            <h2>Search Analytics</h2>
+            <!-- Analytics dashboard content will be dynamically inserted here -->
+        </section>
+
+        <section id="citation-analysis">
+            <h2>Citation Analysis</h2>
+            <!-- Citation analysis content will be dynamically inserted here -->
+        </section>
+    </main>
+
+    <button class="mic-button" id="mic-button">
+        <svg class="mic-icon" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1 1.93c-3.94-.49-7-3.85-7-7.93V7h2v1c0 2.76 2.24 5 5 5s5-2.24 5-5V7h2v1c0 4.08-3.06 7.44-7 7.93V18h4v2H8v-2h4v-2.07z"/>
+        </svg>
+    </button>
+
+    <footer>
+        <p>&copy; 2024 UNIVERSITAS AI</p>
+    </footer>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('theme-toggle');
+        const darkModeIcon = document.getElementById('darkModeIcon');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                darkModeIcon.innerHTML = '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"></path>';
+            } else {
+                darkModeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+            }
+        });
+
+        // Mic button functionality
+        const micButton = document.getElementById('mic-button');
+        let recognition;
+
+        if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+            recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                document.getElementById('query').value = transcript;
+            };
+
+            recognition.onend = () => {
+                micButton.classList.remove('active');
+            };
+
+            micButton.addEventListener('click', () => {
+                if (micButton.classList.contains('active')) {
+                    recognition.stop();
+                } else {
+                    recognition.start();
+                    micButton.classList.add('active');
+                }
+            });
+        } else {
+            micButton.style.display = 'none';
+            console.log('Speech recognition not supported');
+        }
+
+        // Search form submission
+        document.getElementById('search-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const query = document.getElementById('query').value;
+            const source = document.getElementById('source-select').value;
+            const startDate = document.getElementById('start-date').value;
+            const endDate = document.getElementById('end-date').value;
+
+            try {
+                const response = await fetch('/api/search', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ query, source, startDate, endDate }),
+                });
+                const data = await response.json();
+                displaySearchResults(data);
+                updateAnalyticsDashboard(data);
+            } catch (error) {
+                console.error('Error performing search:', error);
+            }
+        });
+
+        function displaySearchResults(results) {
+            const searchResultsSection = document.getElementById('search-results');
+            searchResultsSection.innerHTML = '<h2>Search Results</h2>';
+            results.forEach(result => {
+                const resultElement = document.createElement('div');
+                resultElement.innerHTML = `
+                    <h3>${result.title}</h3>
+                    <p>Authors: ${result.authors.join(', ')}</p>
+                    <p>Published: ${result.published}</p>
+                    <button onclick="addToLibrary('${result.id}')">Add to Library</button>
+                    <button onclick="showCitationAnalysis('${result.id}')">Citation Analysis</button>
+                `;
+                searchResultsSection.appendChild(resultElement);
+            });
+        }
+
+        async function addToLibrary(paperId) {
+            try {
+                const response = await fetch('/api/user-library/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ paperId }),
+                });
+                if (response.ok) {
+                    updateUserLibrary();
+                }
+            } catch (error) {
+                console.error('Error adding to library:', error);
+            }
+        }
+
+      async function updateUserLibrary() {
+    try {
+        const response = await fetch('/api/user-library');
+        const library = await response.json();
+        const librarySection = document.getElementById('user-library');
+        librarySection.innerHTML = '<h2>User Library</h2>';
+        library.forEach(paper => {
+            const paperElement = document.createElement('div');
+            paperElement.innerHTML = `
+                <h3>${paper.title}</h3>
+                <p>Authors: ${paper.authors.join(', ')}</p>
+                <p>Published: ${paper.published}</p>
+                <button onclick="showCitationAnalysis('${paper.id}')">Citation Analysis</button>
+            `;
+            librarySection.appendChild(paperElement);
+        });
+    } catch (error) {
+        console.error('Error updating user library:', error);
+    }
+}
+
+async function showCitationAnalysis(paperId) {
+    try {
+        const response = await fetch(`/api/citations/${paperId}`);
+        const citationData = await response.json();
+        const citationSection = document.getElementById('citation-analysis');
+        citationSection.innerHTML = '<h2>Citation Analysis</h2>';
+
+        // Render citation network
+        const networkElement = document.createElement('div');
+        networkElement.id = 'citation-network';
+        networkElement.style.width = '100%';
+        networkElement.style.height = '400px';
+        citationSection.appendChild(networkElement);
+
+        const svg = d3.select('#citation-network')
+            .append('svg')
+            .attr('width', '100%')
+            .attr('height', '100%');
+
+        const simulation = d3.forceSimulation(citationData.nodes)
+            .force('link', d3.forceLink(citationData.links).id(d => d.id))
+            .force('charge', d3.forceManyBody())
+            .force('center', d3.forceCenter(networkElement.clientWidth / 2, networkElement.clientHeight / 2));
+
+        const link = svg.append('g')
+            .selectAll('line')
+            .data(citationData.links)
+            .enter().append('line')
+            .attr('stroke', '#999')
+            .attr('stroke-opacity', 0.6);
+
+        const node = svg.append('g')
+            .selectAll('circle')
+            .data(citationData.nodes)
+            .enter().append('circle')
+            .attr('r', 5)
+            .attr('fill', d => d.group === 1 ? '#ff4b4b' : '#4b4bff');
+
+        node.append('title')
+            .text(d => d.id);
+
+        simulation.on('tick', () => {
+            link
+                .attr('x1', d => d.source.x)
+                .attr('y1', d => d.source.y)
+                .attr('x2', d => d.target.x)
+                .attr('y2', d => d.target.y);
+
+            node
+                .attr('cx', d => d.x)
+                .attr('cy', d => d.y);
+        });
+
+        // Render citation context
+        const contextElement = document.createElement('div');
+        contextElement.innerHTML = `
+            <h3>Citation Context</h3>
+            <p>${citationData.context.summary}</p>
+            <h4>Key Phrases:</h4>
+            <ul>
+                ${citationData.context.keyPhrases.map(phrase => `<li>${phrase}</li>`).join('')}
+            </ul>
+        `;
+        citationSection.appendChild(contextElement);
+
+    } catch (error) {
+        console.error('Error showing citation analysis:', error);
+    }
+}
+
+async function updateAnalyticsDashboard(searchData) {
+    const analyticsSection = document.getElementById('analytics-dashboard');
+    analyticsSection.innerHTML = '<h2>Search Analytics</h2>';
+
+    // Create canvas elements for charts
+    const searchVolumeCanvas = document.createElement('canvas');
+    searchVolumeCanvas.id = 'search-volume-chart';
+    const topQueriesCanvas = document.createElement('canvas');
+    topQueriesCanvas.id = 'top-queries-chart';
+
+    analyticsSection.appendChild(searchVolumeCanvas);
+    analyticsSection.appendChild(topQueriesCanvas);
+
+    // Render search volume chart
+    new Chart(searchVolumeCanvas, {
+        type: 'line',
+        data: {
+            labels: searchData.volumeOverTime.map(d => d.date),
+            datasets: [{
+                label: 'Search Volume',
+                data: searchData.volumeOverTime.map(d => d.volume),
+                borderColor: '#ff4b4b',
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+
+    // Render top queries chart
+    new Chart(topQueriesCanvas, {
+        type: 'bar',
+        data: {
+            labels: searchData.topQueries.map(d => d.query),
+            datasets: [{
+                label: 'Query Frequency',
+                data: searchData.topQueries.map(d => d.frequency),
+                backgroundColor: '#4b4bff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+}
+
+// Initialize the page
+document.addEventListener('DOMContentLoaded', () => {
+    updateUserLibrary();
+});
+
+// Speech synthesis for text-to-speech functionality
+function speakText(text) {
+    if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        window.speechSynthesis.speak(utterance);
+    } else {
+        console.log('Text-to-speech not supported');
+    }
+}
+
+document.querySelector('.speaker-button').addEventListener('click', () => {
+    const currentText = document.querySelector('main').innerText;
+    speakText(currentText);
+});
+
+// Herakles AI chat functionality
+let chatHistory = [];
+
+async function chatWithHerakles(userInput) {
+    try {
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+                input: userInput, 
+                history: chatHistory 
+            }),
+        });
+        const data = await response.json();
+        chatHistory.push({ role: 'user', content: userInput });
+        chatHistory.push({ role: 'assistant', content: data.response });
+        return data.response;
+    } catch (error) {
+        console.error('Error chatting with Herakles:', error);
+        return 'Sorry, I encountered an error. Please try again.';
+    }
+}
+
+document.getElementById('search-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const query = document.getElementById('query').value;
+    const response = await chatWithHerakles(query);
+    displaySearchResults([{ title: 'Herakles AI Response', authors: ['AI'], published: new Date().toISOString(), id: 'ai-response', content: response }]);
+});
+</script>
+</body>
+</html>
