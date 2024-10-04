@@ -27,6 +27,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 header {
@@ -87,13 +88,22 @@ header {
 }
 
 .icon-button:hover {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: var(--accent-color);
+}
+
+.icon-button:hover .icon {
+    fill: var(--button-text-color);
 }
 
 .icon {
     width: 24px;
     height: 24px;
-    fill: var(--button-text-color);
+    fill: var(--text-color);
+    transition: fill 0.3s ease;
+}
+
+[data-theme="light"] .icon {
+    fill: #000000;
 }
 
 .dropdown-menu {
@@ -189,21 +199,25 @@ h2 {
 
 .search-bar {
     display: flex;
+    align-items: center;
+    background-color: var(--secondary-bg);
+    border-radius: 25px;
+    padding: 5px 15px;
     margin-bottom: 10px;
 }
 
 #searchTerms {
     flex-grow: 1;
-    border-radius: 10px 0 0 10px;
+    border: none;
+    background: transparent;
+    color: var(--text-color);
+    font-size: 16px;
+    padding: 10px;
 }
 
-#searchBtn {
-    background-color: var(--accent-color);
-    color: var(--button-text-color);
-    border: none;
-    border-radius: 0 10px 10px 0;
-    padding: 10px 15px;
-    cursor: pointer;
+#searchTerms::placeholder {
+    color: var(--text-color);
+    opacity: 0.7;
 }
 
 .database-options {
@@ -217,15 +231,17 @@ h2 {
     background-color: var(--secondary-bg);
     color: var(--text-color);
     border: 1px solid var(--text-color);
-    border-radius: 20px;
-    padding: 5px 15px;
+    border-radius: 25px;
+    padding: 8px 15px;
     font-size: 14px;
     cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.database-option.selected {
+.database-option:hover, .database-option.selected {
     background-color: var(--accent-color);
     color: var(--button-text-color);
+    border-color: var(--accent-color);
 }
 
 .date-range {
@@ -250,18 +266,20 @@ h2 {
 }
 
 .action-button, .export-button {
-    background-color: var(--accent-color);
-    color: var(--button-text-color);
-    border: none;
-    padding: 10px 15px;
-    border-radius: 10px;
-    cursor: pointer;
+    background-color: var(--secondary-bg);
+    color: var(--text-color);
+    border: 1px solid var(--text-color);
+    border-radius: 25px;
+    padding: 8px 15px;
     font-size: 14px;
-    transition: background-color 0.3s ease;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .action-button:hover, .export-button:hover {
-    background-color: var(--hover-bg-color);
+    background-color: var(--accent-color);
+    color: var(--button-text-color);
+    border-color: var(--accent-color);
 }
 
 #searchResults {
@@ -284,24 +302,24 @@ h2 {
 
 .chat-input-container {
     display: flex;
+    align-items: center;
+    background-color: var(--secondary-bg);
+    border-radius: 25px;
+    padding: 5px 15px;
 }
 
 #chatInput {
     flex-grow: 1;
-    padding: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 10px 0 0 10px;
-    font-size: 14px;
-    background-color: var(--secondary-bg);
+    border: none;
+    background: transparent;
     color: var(--text-color);
+    font-size: 14px;
+    padding: 10px;
 }
 
-.chat-input-container .icon-button {
-    background-color: var(--accent-color);
-    color: var(--button-text-color);
-    border: none;
-    border-radius: 0 10px 10px 0;
-    padding: 10px;
+#chatInput::placeholder {
+    color: var(--text-color);
+    opacity: 0.7;
 }
 
 .citation-section {
