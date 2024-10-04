@@ -1,0 +1,366 @@
+:root {
+    --primary-bg: #f4f4f9;
+    --secondary-bg: #ffffff;
+    --text-color: #333333;
+    --accent-color: #A51C30;
+    --hover-bg-color: #ED1B34;
+    --hover-text-color: #ffffff;
+}
+
+[data-theme="dark"] {
+    --primary-bg: #1a1a1a;
+    --secondary-bg: #2a2a2a;
+    --text-color: #ffffff;
+    --accent-color: #ED1B34;
+    --hover-bg-color: #A51C30;
+    --hover-text-color: #ffffff;
+}
+
+body {
+    font-family: 'Source Sans Pro', sans-serif;
+    background-color: var(--primary-bg);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: var(--secondary-bg);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.logo-link {
+    margin-right: 10px;
+}
+
+.logo {
+    height: 50px;
+    width: 50px;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.1);
+}
+
+.header-title {
+    font-family: 'Roboto', sans-serif;
+    font-weight: normal;
+    margin: 0;
+    color: var(--text-color);
+    font-size: 24px;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.menu-button {
+    position: relative;
+    margin-right: 15px;
+}
+
+.icon-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    transition: background-color 0.3s ease;
+    border-radius: 50%;
+}
+
+.icon-button:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.icon {
+    width: 24px;
+    height: 24px;
+    fill: var(--text-color);
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: var(--secondary-bg);
+    min-width: 220px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    z-index: 1000;
+    padding: 15px;
+}
+
+.menu-button.active .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu .menu-item {
+    font-size: 14px;
+    padding: 10px 0;
+    cursor: pointer;
+    color: var(--text-color);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-menu .menu-item:last-child {
+    border-bottom: none;
+}
+
+.dropdown-menu .menu-item:hover {
+    color: var(--accent-color);
+}
+
+main {
+    flex: 1;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.panel {
+    background-color: var(--secondary-bg);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    margin-top: 0;
+    color: var(--accent-color);
+}
+
+.workspace-info {
+    grid-column: 1 / -1;
+}
+
+#workspaceTitle {
+    font-size: 24px;
+    margin-bottom: 10px;
+    outline: none;
+}
+
+#tagInput, #noteInput {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+#noteInput {
+    resize: vertical;
+    height: 100px;
+}
+
+.char-counter {
+    text-align: right;
+    font-size: 12px;
+    color: #666;
+}
+
+.search-section {
+    grid-column: 1 / -1;
+}
+
+.search-bar {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+#searchTerms {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px 0 0 4px;
+    font-size: 16px;
+}
+
+#searchBtn {
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+.database-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.database-option {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 5px 15px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.database-option.selected {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.date-range {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.date-range input[type="date"] {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.button-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.action-button, .export-button {
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.action-button:hover, .export-button:hover {
+    background-color: var(--hover-bg-color);
+}
+
+#searchResults {
+    margin-top: 20px;
+}
+
+.rag-chat {
+    grid-column: 1 / 2;
+}
+
+#chatArea {
+    height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.chat-input-container {
+    display: flex;
+}
+
+#chatInput {
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px 0 0 4px;
+    font-size: 14px;
+}
+
+.chat-input-container .icon-button {
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    padding: 10px;
+}
+
+.citation-section {
+    grid-column: 2 / 3;
+}
+
+#citationFormat {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+#citationResults, #citationNetwork {
+    margin-top: 20px;
+}
+
+.bibliography-section {
+    grid-column: 1 / -1;
+}
+
+#bibliographyList {
+    margin-bottom: 20px;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: var(--secondary-bg);
+    color: var(--text-color);
+}
+
+@media (max-width: 768px) {
+    main {
+        grid-template-columns: 1fr;
+    }
+
+    .rag-chat, .citation-section {
+        grid-column: 1 / -1;
+    }
+}
+
+.chat-message {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    max-width: 80%;
+}
+
+.chat-message.user {
+    background-color: #e6f3ff;
+    align-self: flex-end;
+    margin-left: auto;
+}
+
+.chat-message.ai {
+    background-color: #f0f0f0;
+    align-self: flex-start;
+}
+
+#micBtn.recording {
+    background-color: #ff0000;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
