@@ -21,7 +21,6 @@ const summarizeBtn = document.getElementById('summarizeBtn');
 const generateGlossaryBtn = document.getElementById('generateGlossaryBtn');
 const findRelatedWorkBtn = document.getElementById('findRelatedWorkBtn');
 
-// Night Mode Toggle
 nightModeToggle.addEventListener('change', () => {
     const theme = nightModeToggle.checked ? 'dark' : 'light';
     document.body.setAttribute('data-theme', theme);
@@ -32,7 +31,7 @@ nightModeToggle.addEventListener('change', () => {
 function updateIconColors(theme) {
     const icons = document.querySelectorAll('.icon');
     icons.forEach(icon => {
-        icon.style.fill = theme === 'light' ? '#000000' : '#ffffff';
+        icon.style.fill = theme === 'light' ? '#A51C30' : '#ffffff';
     });
 }
 
@@ -630,3 +629,28 @@ document.getElementById('searchTerms').addEventListener('input', debouncedSearch
 
 // Add this line at the end of the initialization function in DOMContentLoaded event
 console.log('Enhanced features initialized');
+
+function setupMenuButtons() {
+    const menuButtons = document.querySelectorAll('.menu-button');
+    menuButtons.forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.stopPropagation();
+            this.classList.toggle('active');
+            menuButtons.forEach(btn => {
+                if (btn !== this) {
+                    btn.classList.remove('active');
+                }
+            });
+        });
+    });
+
+    document.addEventListener('click', () => {
+        menuButtons.forEach(button => button.classList.remove('active'));
+    });
+}
+
+// Call this function in the DOMContentLoaded event listener
+document.addEventListener('DOMContentLoaded', () => {
+    setupMenuButtons();
+    // ... other initialization code
+});
