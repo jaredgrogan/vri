@@ -20,8 +20,17 @@ const exportBibliographyBtn = document.getElementById('exportBibliographyBtn');
 
 // Night Mode Toggle
 nightModeToggle.addEventListener('change', () => {
-    document.body.setAttribute('data-theme', nightModeToggle.checked ? 'dark' : 'light');
+    const theme = nightModeToggle.checked ? 'dark' : 'light';
+    document.body.setAttribute('data-theme', theme);
+    updateIconColors(theme);
 });
+
+function updateIconColors(theme) {
+    const icons = document.querySelectorAll('.icon');
+    icons.forEach(icon => {
+        icon.style.fill = theme === 'light' ? '#000000' : '#ffffff';
+    });
+}
 
 // Time Display
 function updateTime() {
@@ -402,6 +411,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadWorkspace();
     setupMenuButtons();
     updateBibliographyDisplay();
+    updateIconColors(nightModeToggle.checked ? 'dark' : 'light');
 
     // Add event listeners for workspace management
     document.querySelector('.menu-item:nth-child(1)').addEventListener('click', createNewWorkspace);
