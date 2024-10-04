@@ -1,6 +1,6 @@
 :root {
-    --primary-bg: #f4f4f9;
-    --secondary-bg: rgba(255, 255, 255, 0.1);
+    --primary-bg: #ffffff;
+    --secondary-bg: #f4f4f9;
     --text-color: #333333;
     --accent-color: #A51C30;
     --hover-bg-color: #ED1B34;
@@ -10,8 +10,8 @@
 }
 
 [data-theme="dark"] {
-    --primary-bg: #1a1a1a;
-    --secondary-bg: rgba(42, 42, 42, 0.6);
+    --primary-bg: #1e1e1e;
+    --secondary-bg: #2a2a2a;
     --text-color: #ffffff;
     --accent-color: #ED1B34;
     --hover-bg-color: #A51C30;
@@ -106,7 +106,7 @@ header {
 .icon {
     width: 24px;
     height: 24px;
-    fill: var(--text-color);
+    fill: var(--button-text-color);
     transition: fill 0.3s ease;
 }
 
@@ -268,17 +268,41 @@ textarea {
     border-color: var(--accent-color);
 }
 
-#searchResults {
-    margin-top: 1rem;
+.search-results {
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid var(--accent-color);
+    border-radius: 10px;
+    padding: 10px;
 }
 
-.chat-area {
-    height: 300px;
+.search-result {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-bottom: 1px solid var(--accent-color);
+}
+
+.search-result input[type="checkbox"] {
+    margin-right: 10px;
+    margin-top: 5px;
+}
+
+.rag-chat {
+    display: flex;
+    flex-direction: column;
+}
+
+#chatArea {
+    flex-grow: 1;
+    min-height: 300px;
+    max-height: 500px;
     overflow-y: auto;
-    border: 1px solid var(--shadow-color);
-    border-radius: 10px;
-    padding: 1rem;
     margin-bottom: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--accent-color);
+    border-radius: 10px;
 }
 
 .chat-input-container {
@@ -294,6 +318,17 @@ textarea {
     border: none;
     background: transparent;
     font-size: 1rem;
+}
+
+.quick-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+
+.quick-actions .action-button {
+    flex-grow: 1;
+    margin: 0 5px;
 }
 
 .chat-message {
@@ -337,36 +372,31 @@ textarea {
     border-bottom: 0;
 }
 
-#micBtn.recording {
-    background-color: #ff0000;
-    animation: pulse 1s infinite;
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
-}
-
-.pagination {
+.citation-bibliography {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
+}
+
+.citation-tools, .bibliography {
+    margin-bottom: 1rem;
+}
+
+#citationNetwork {
+    width: 100%;
+    height: 300px;
+    border: 1px solid var(--accent-color);
+    border-radius: 10px;
     margin-top: 1rem;
 }
 
-.pagination button {
-    background-color: var(--accent-color);
-    color: var(--button-text-color);
-    border: none;
-    padding: 0.5rem 1rem;
-    margin: 0 0.5rem;
+.bibliography-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    background-color: var(--secondary-bg);
     border-radius: 5px;
-    cursor: pointer;
-}
-
-.pagination span {
-    margin: 0 1rem;
 }
 
 footer {
@@ -387,5 +417,17 @@ footer p {
 
     .header-title {
         display: none;
+    }
+
+    .search-bar, .chat-input-container {
+        flex-direction: column;
+    }
+
+    .quick-actions {
+        flex-direction: column;
+    }
+
+    .quick-actions .action-button {
+        margin: 5px 0;
     }
 }
