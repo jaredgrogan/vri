@@ -59,7 +59,11 @@ databaseOptions.forEach(option => {
 });
 
 // Search Functionality
-searchExecuteBtn.addEventListener('click', performSearch);
+let currentPage = 1;
+searchExecuteBtn.addEventListener('click', () => {
+    currentPage = 1;
+    performSearch();
+});
 
 async function performSearch() {
     const query = searchTerms.value;
@@ -68,21 +72,33 @@ async function performSearch() {
     const endDate = document.getElementById('endDate').value;
 
     // TODO: Implement actual API call
-    console.log('Searching:', { query, selectedDatabases, startDate, endDate });
+    console.log('Searching:', { query, selectedDatabases, startDate, endDate, page: currentPage });
 
     // Simulated search results
-    const results = [
-        { title: 'Sample Paper 1', authors: ['John Doe', 'Jane Smith'], year: 2021 },
-        { title: 'Sample Paper 2', authors: ['Alice Johnson'], year: 2020 },
-    ];
+    const results = simulateSearchResults(currentPage, 25);
 
     displaySearchResults(results);
+}
+
+function simulateSearchResults(page, perPage) {
+    // This is a placeholder function to simulate paginated results
+    const allResults = [
+        { title: "AI-driven experimentation: A/B testing using contextual bandits", authors: ["Tang, Z.", "Agarwal, D."], year: 2019 },
+        { title: "Highly accurate protein structure prediction with AlphaFold", authors: ["Jumper, J.", "Evans, R.", "Pritzel, A.", "Green, T.", "Figurnov, M.", "Tunyasuvunakool, K.", "Hassabis, D."], year: 2021 },
+        { title: "Learning transferable visual models from natural language supervision", authors: ["Radford, A.", "Kim, J. W.", "Hallacy, C.", "Ramesh, A.", "Goh, G.", "Agarwal, S.", "Sutskever, I."], year: 2021 },
+        { title: "Efficient neural audio synthesis", authors: ["Kalchbrenner, N.", "Elsen, E.", "Simonyan, K.", "Noury, S.", "Casagrande, N.", "Lockhart, E.", "Kavukcuoglu, K."], year: 2018 },
+        { title: "Federated learning: Strategies for improving communication efficiency", authors: ["Konečny, J.", "McMahan, H. B.", "Yu, F. X.", "Richtárik, P.", "Suresh, A. T.", "Bacon, D."], year: 2016 },
+        // Add more results as needed
+    ];
+
+    const startIndex = (page - 1) * perPage;
+    return allResults.slice(startIndex, startIndex + perPage);
 }
 
 function displaySearchResults(results) {
     const searchResults = document.getElementById('searchResults');
     searchResults.innerHTML = '';
-
+    
     results.forEach(result => {
         const resultElement = document.createElement('div');
         resultElement.classList.add('search-result');
@@ -90,9 +106,35 @@ function displaySearchResults(results) {
             <h3>${result.title}</h3>
             <p>Authors: ${result.authors.join(', ')}</p>
             <p>Year: ${result.year}</p>
+            <div class="result-actions">
+                <button onclick="addToBibliography('${result.title}')">Add to Bibliography</button>
+                <button onclick="generateCitation('${result.title}')">Generate Citation</button>
+            </div>
         `;
         searchResults.appendChild(resultElement);
     });
+
+    // Add pagination
+    const paginationElement = document.createElement('div');
+    paginationElement.classList.add('pagination');
+    paginationElement.innerHTML = `
+        <button onclick="previousPage()">Previous</button>
+        <span>Page ${currentPage}</span>
+        <button onclick="nextPage()">Next</button>
+    `;
+    searchResults.appendChild(paginationElement);
+}
+
+function previousPage() {
+    if (currentPage > 1) {
+        currentPage--;
+        performSearch();
+    }
+}
+
+function nextPage() {
+    currentPage++;
+    performSearch();
 }
 
 // Chat Functionality
@@ -164,7 +206,7 @@ function generateCitation() {
     const citationResults = document.getElementById('citationResults');
     
     // TODO: Implement actual citation generation
-    citationResults.textContent = `Generated citation in ${citationFormat} format.`;
+    citationResults.innerHTML += `<p>${citationFormat.toUpperCase()}: Sample citation in ${citationFormat} format.</p>`;
 }
 
 function analyzeCitations() {
@@ -192,6 +234,7 @@ function renderCitationNetwork(data) {
     const height = 300;
 
     const svg = d3.select("#citationNetwork")
+        .html("")
         .append("svg")
         .attr("width", width)
         .attr("height", height);
@@ -267,168 +310,6 @@ function exportData(type) {
     document.body.removeChild(a);
 }
 
-// Initialize
-document.addEventListener('DOMContentLoaded', () => {
-    // Load saved workspace data, if any
-    loadWorkspace();
-
-    // Initialize database options
-    initializeDatabaseOptions();
-
-    // Set up menu button functionality
-    setupMenuButtons();
-
-    // Initialize citation network
-    initializeCitationNetwork();
-
-    console.log('App initialized');
-});
-
-function loadWorkspace() {
-    // TODO: Implement actual workspace loading from local storage or server
-    const savedWorkspace = localStorage.getItem('currentWorkspace');
-    if (savedWorkspace) {
-        const workspace = JSON.parse(savedWorkspace);
-        workspaceTitle.textContent = workspace.title || 'Research Workspace';
-        tagInput.value = workspace.tags.join(' ') || '';
-        noteInput.value = workspace.note || '';
-        charCount.textContent = noteInput.value.length;
-    }
-}
-
-function initializeDatabaseOptions() {
-    const savedDatabases = JSON.parse(localStorage.getItem('selectedDatabases')) || [];
-    databaseOptions.forEach(option => {
-        if (savedDatabases.includes(option.textContent)) {
-            option.classList.add('selected');
-        }
-    });
-}
-
-function setupMenuButtons() {
-    const menuButtons = document.querySelectorAll('.menu-button');
-    menuButtons.forEach(button => {
-        button.addEventListener('click', function(event) {
-            event.stopPropagation();
-            this.classList.toggle('active');
-            menuButtons.forEach(btn => {
-                if (btn !== this) {
-                    btn.classList.remove('active');
-                }
-            });
-        });
-    });
-
-    document.addEventListener('click', () => {
-        menuButtons.forEach(button => button.classList.remove('active'));
-    });
-}
-
-function initializeCitationNetwork() {
-    // Create an empty SVG for the citation network
-    d3.select("#citationNetwork")
-        .append("svg")
-        .attr("width", 400)
-        .attr("height", 300);
-}
-
-// Workspace management functions
-function saveWorkspace() {
-    const workspace = {
-        title: workspaceTitle.textContent,
-        tags: tagInput.value.split(' ').filter(tag => tag.startsWith('#')),
-        note: noteInput.value
-    };
-    localStorage.setItem('currentWorkspace', JSON.stringify(workspace));
-    alert('Workspace saved successfully!');
-}
-
-function createNewWorkspace() {
-    if (confirm('Are you sure you want to create a new workspace? This will clear the current workspace.')) {
-        workspaceTitle.textContent = 'New Research Workspace';
-        tagInput.value = '';
-        noteInput.value = '';
-        charCount.textContent = '0';
-        localStorage.removeItem('currentWorkspace');
-        alert('New workspace created!');
-    }
-}
-
-// Add event listeners for workspace management
-document.querySelector('.menu-item:nth-child(1)').addEventListener('click', createNewWorkspace);
-document.querySelector('.menu-item:nth-child(2)').addEventListener('click', saveWorkspace);
-document.querySelector('.menu-item:nth-child(3)').addEventListener('click', loadWorkspace);
-
-// Implement infinite scrolling for search results
-let page = 1;
-const resultsPerPage = 20;
-let isLoading = false;
-let hasMore = true;
-
-window.addEventListener('scroll', () => {
-    if (isLoading || !hasMore) return;
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
-        loadMoreResults();
-    }
-});
-
-async function loadMoreResults() {
-    isLoading = true;
-    page++;
-    try {
-        // TODO: Implement actual API call for pagination
-        const newResults = await simulateSearchResults(page, resultsPerPage);
-        if (newResults.length < resultsPerPage) {
-            hasMore = false;
-        }
-        displaySearchResults(newResults, true);
-    } catch (error) {
-        console.error('Error loading more results:', error);
-    } finally {
-        isLoading = false;
-    }
-}
-
-function simulateSearchResults(page, perPage) {
-    // This is a placeholder function to simulate paginated results
-    return new Promise(resolve => {
-        setTimeout(() => {
-            const results = [];
-            for (let i = 0; i < perPage; i++) {
-                results.push({
-                    title: `Sample Paper ${(page - 1) * perPage + i + 1}`,
-                    authors: ['Author A', 'Author B'],
-                    year: 2020 + Math.floor(Math.random() * 5)
-                });
-            }
-            resolve(results);
-        }, 1000);
-    });
-}
-
-// Enhance search results display
-function displaySearchResults(results, append = false) {
-    const searchResults = document.getElementById('searchResults');
-    if (!append) {
-        searchResults.innerHTML = '';
-    }
-    
-    results.forEach(result => {
-        const resultElement = document.createElement('div');
-        resultElement.classList.add('search-result');
-        resultElement.innerHTML = `
-            <h3>${result.title}</h3>
-            <p>Authors: ${result.authors.join(', ')}</p>
-            <p>Year: ${result.year}</p>
-            <div class="result-actions">
-                <button onclick="addToBibliography('${result.title}')">Add to Bibliography</button>
-                <button onclick="generateCitation('${result.title}')">Generate Citation</button>
-            </div>
-        `;
-        searchResults.appendChild(resultElement);
-    });
-}
-
 // Bibliography management
 let bibliography = [];
 
@@ -458,73 +339,74 @@ function removeBibliographyItem(index) {
     updateBibliographyDisplay();
 }
 
-// Enhanced citation generation
-function generateCitation(paperTitle) {
-    const citationFormat = document.getElementById('citationFormat').value;
-    const citationResults = document.getElementById('citationResults');
-    
-    // TODO: Implement actual citation generation
-    // This is a placeholder
-    const citation = `${paperTitle}. (2023). Journal of Placeholder Studies, 1(1), 1-10.`;
-    
-    citationResults.innerHTML += `<p>${citationFormat.toUpperCase()}: ${citation}</p>`;
+// Workspace management functions
+function loadWorkspace() {
+    const savedWorkspace = localStorage.getItem('currentWorkspace');
+    if (savedWorkspace) {
+        const workspace = JSON.parse(savedWorkspace);
+        workspaceTitle.textContent = workspace.title || 'Research Workspace';
+        tagInput.value = workspace.tags.join(' ') || '';
+        noteInput.value = workspace.note || '';
+        charCount.textContent = noteInput.value.length;
+    }
 }
 
-// Implement command palette
-const commandPalette = document.createElement('div');
-commandPalette.id = 'commandPalette';
-commandPalette.innerHTML = `
-    <input type="text" id="commandInput" placeholder="Type a command...">
-    <div id="commandResults"></div>
-`;
-document.body.appendChild(commandPalette);
+function saveWorkspace() {
+    const workspace = {
+        title: workspaceTitle.textContent,
+        tags: tagInput.value.split(' ').filter(tag => tag.startsWith('#')),
+        note: noteInput.value
+    };
+    localStorage.setItem('currentWorkspace', JSON.stringify(workspace));
+    alert('Workspace saved successfully!');
+}
 
-const commandInput = document.getElementById('commandInput');
-const commandResults = document.getElementById('commandResults');
-
-const commands = [
-    { name: 'New Workspace', action: createNewWorkspace },
-    { name: 'Save Workspace', action: saveWorkspace },
-    { name: 'Load Workspace', action: loadWorkspace },
-    { name: 'Perform Search', action: performSearch },
-    { name: 'Generate Citation', action: generateCitation },
-    { name: 'Analyze Citations', action: analyzeCitations },
-    // Add more commands as needed
-];
-
-document.addEventListener('keydown', (e) => {
-    if (e.ctrlKey && e.key === 'k') {
-        e.preventDefault();
-        commandPalette.style.display = 'block';
-        commandInput.focus();
+function createNewWorkspace() {
+    if (confirm('Are you sure you want to create a new workspace? This will clear the current workspace.')) {
+        workspaceTitle.textContent = 'New Research Workspace';
+        tagInput.value = '';
+        noteInput.value = '';
+        charCount.textContent = '0';
+        localStorage.removeItem('currentWorkspace');
+        alert('New workspace created!');
     }
-});
+}
 
-commandInput.addEventListener('input', () => {
-    const query = commandInput.value.toLowerCase();
-    const filteredCommands = commands.filter(cmd => cmd.name.toLowerCase().includes(query));
-    displayCommands(filteredCommands);
-});
-
-function displayCommands(filteredCommands) {
-    commandResults.innerHTML = '';
-    filteredCommands.forEach(cmd => {
-        const cmdElement = document.createElement('div');
-        cmdElement.textContent = cmd.name;
-        cmdElement.addEventListener('click', () => {
-            cmd.action();
-            commandPalette.style.display = 'none';
-            commandInput.value = '';
+// Setup menu buttons
+function setupMenuButtons() {
+    const menuButtons = document.querySelectorAll('.menu-button');
+    menuButtons.forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.stopPropagation();
+            this.classList.toggle('active');
+            menuButtons.forEach(btn => {
+                if (btn !== this) {
+                    btn.classList.remove('active');
+                }
+            });
         });
-        commandResults.appendChild(cmdElement);
+
+        const dropdownMenu = button.querySelector('.dropdown-menu');
+        dropdownMenu.addEventListener('click', (event) => {
+            event.stopPropagation();
+        });
+    });
+
+    document.addEventListener('click', () => {
+        menuButtons.forEach(button => button.classList.remove('active'));
     });
 }
 
-document.addEventListener('click', (e) => {
-    if (!commandPalette.contains(e.target)) {
-        commandPalette.style.display = 'none';
-    }
-});
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+    loadWorkspace();
+    setupMenuButtons();
+    updateBibliographyDisplay();
 
-// Add this line at the end of the initialization function
-console.log('Enhanced features initialized');
+    // Add event listeners for workspace management
+    document.querySelector('.menu-item:nth-child(1)').addEventListener('click', createNewWorkspace);
+    document.querySelector('.menu-item:nth-child(2)').addEventListener('click', saveWorkspace);
+    document.querySelector('.menu-item:nth-child(3)').addEventListener('click', loadWorkspace);
+
+    console.log('App initialized');
+});
