@@ -17,12 +17,16 @@ const generateCitationBtn = document.getElementById('generateCitationBtn');
 const citationAnalysisBtn = document.getElementById('citationAnalysisBtn');
 const exportCitationsBtn = document.getElementById('exportCitationsBtn');
 const exportBibliographyBtn = document.getElementById('exportBibliographyBtn');
+const summarizeBtn = document.getElementById('summarizeBtn');
+const generateGlossaryBtn = document.getElementById('generateGlossaryBtn');
+const findRelatedWorkBtn = document.getElementById('findRelatedWorkBtn');
 
 // Night Mode Toggle
 nightModeToggle.addEventListener('change', () => {
     const theme = nightModeToggle.checked ? 'dark' : 'light';
     document.body.setAttribute('data-theme', theme);
     updateIconColors(theme);
+    localStorage.setItem('theme', theme);
 });
 
 function updateIconColors(theme) {
@@ -46,17 +50,20 @@ workspaceTitle.addEventListener('blur', () => {
     if (workspaceTitle.textContent.trim() === '') {
         workspaceTitle.textContent = 'Research Workspace';
     }
+    saveWorkspace();
 });
 
 // Tag Input
 tagInput.addEventListener('input', () => {
     const tags = tagInput.value.split(' ').slice(0, 5).map(tag => tag.startsWith('#') ? tag : '#' + tag);
     tagInput.value = tags.join(' ');
+    saveWorkspace();
 });
 
 // Note Input
 noteInput.addEventListener('input', () => {
     charCount.textContent = noteInput.value.length;
+    saveWorkspace();
 });
 
 // Database Selection
@@ -64,6 +71,7 @@ const databaseOptions = document.querySelectorAll('.database-option');
 databaseOptions.forEach(option => {
     option.addEventListener('click', () => {
         option.classList.toggle('selected');
+        saveWorkspace();
     });
 });
 
@@ -80,28 +88,25 @@ async function performSearch() {
     const startDate = document.getElementById('startDate').value;
     const endDate = document.getElementById('endDate').value;
 
-    // TODO: Implement actual API call
-    console.log('Searching:', { query, selectedDatabases, startDate, endDate, page: currentPage });
+    try {
+        const response = await fetch('/api/search', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ query, databases: selectedDatabases, startDate, endDate, page: currentPage }),
+        });
 
-    // Simulated search results
-    const results = simulateSearchResults(currentPage, 25);
+        if (!response.ok) {
+            throw new Error('Search request failed');
+        }
 
-    displaySearchResults(results);
-}
-
-function simulateSearchResults(page, perPage) {
-    // This is a placeholder function to simulate paginated results
-    const allResults = [
-        { title: "AI-driven experimentation: A/B testing using contextual bandits", authors: ["Tang, Z.", "Agarwal, D."], year: 2019 },
-        { title: "Highly accurate protein structure prediction with AlphaFold", authors: ["Jumper, J.", "Evans, R.", "Pritzel, A.", "Green, T.", "Figurnov, M.", "Tunyasuvunakool, K.", "Hassabis, D."], year: 2021 },
-        { title: "Learning transferable visual models from natural language supervision", authors: ["Radford, A.", "Kim, J. W.", "Hallacy, C.", "Ramesh, A.", "Goh, G.", "Agarwal, S.", "Sutskever, I."], year: 2021 },
-        { title: "Efficient neural audio synthesis", authors: ["Kalchbrenner, N.", "Elsen, E.", "Simonyan, K.", "Noury, S.", "Casagrande, N.", "Lockhart, E.", "Kavukcuoglu, K."], year: 2018 },
-        { title: "Federated learning: Strategies for improving communication efficiency", authors: ["Konečny, J.", "McMahan, H. B.", "Yu, F. X.", "Richtárik, P.", "Suresh, A. T.", "Bacon, D."], year: 2016 },
-        // Add more results as needed
-    ];
-
-    const startIndex = (page - 1) * perPage;
-    return allResults.slice(startIndex, startIndex + perPage);
+        const data = await response.json();
+        displaySearchResults(data.results);
+    } catch (error) {
+        console.error('Error performing search:', error);
+        alert('An error occurred while searching. Please try again.');
+    }
 }
 
 function displaySearchResults(results) {
@@ -112,12 +117,16 @@ function displaySearchResults(results) {
         const resultElement = document.createElement('div');
         resultElement.classList.add('search-result');
         resultElement.innerHTML = `
-            <h3>${result.title}</h3>
-            <p>Authors: ${result.authors.join(', ')}</p>
-            <p>Year: ${result.year}</p>
-            <div class="result-actions">
-                <button onclick="addToBibliography('${result.title}')">Add to Bibliography</button>
-                <button onclick="generateCitation('${result.title}')">Generate Citation</button>
+            <input type="checkbox" value="${result.id}">
+            <div>
+                <h3>${result.title}</h3>
+                <p>Authors: ${result.authors.join(', ')}</p>
+                <p>Year: ${result.year}</p>
+                <p>Source: ${result.source}</p>
+                <div class="result-actions">
+                    <button onclick="addToBibliography('${result.id}')">Add to Bibliography</button>
+                    <button onclick="generateCitation('${result.id}')">Generate Citation</button>
+                </div>
             </div>
         `;
         searchResults.appendChild(resultElement);
@@ -154,16 +163,31 @@ chatInput.addEventListener('keypress', (e) => {
     }
 });
 
-function sendMessage() {
+async function sendMessage() {
     const message = chatInput.value.trim();
     if (message) {
         appendMessage('user', message);
         chatInput.value = '';
 
-        // TODO: Implement actual API call for RAG
-        setTimeout(() => {
-            appendMessage('ai', "I'm processing your request. Please wait...");
-        }, 500);
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Chat request failed');
+            }
+
+            const data = await response.json();
+            appendMessage('ai', data.response);
+        } catch (error) {
+            console.error('Error sending chat message:', error);
+            appendMessage('ai', 'Sorry, an error occurred. Please try again.');
+        }
     }
 }
 
@@ -210,32 +234,45 @@ micBtn.addEventListener('click', () => {
 generateCitationBtn.addEventListener('click', generateCitation);
 citationAnalysisBtn.addEventListener('click', analyzeCitations);
 
-function generateCitation() {
+async function generateCitation() {
     const citationFormat = document.getElementById('citationFormat').value;
     const citationResults = document.getElementById('citationResults');
     
-    // TODO: Implement actual citation generation
-    citationResults.innerHTML += `<p>${citationFormat.toUpperCase()}: Sample citation in ${citationFormat} format.</p>`;
+    try {
+        const response = await fetch('/api/generate-citation', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ format: citationFormat }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Citation generation failed');
+        }
+
+        const data = await response.json();
+        citationResults.innerHTML += `<p>${citationFormat.toUpperCase()}: ${data.citation}</p>`;
+    } catch (error) {
+        console.error('Error generating citation:', error);
+        alert('An error occurred while generating the citation. Please try again.');
+    }
 }
 
-function analyzeCitations() {
-    // TODO: Implement actual citation analysis
-    console.log('Citation analysis requested');
-    
-    // Simulated citation network data
-    const data = {
-        nodes: [
-            { id: 'Paper A', group: 1 },
-            { id: 'Paper B', group: 1 },
-            { id: 'Paper C', group: 2 },
-        ],
-        links: [
-            { source: 'Paper A', target: 'Paper B', value: 1 },
-            { source: 'Paper B', target: 'Paper C', value: 1 },
-        ]
-    };
+async function analyzeCitations() {
+    try {
+        const response = await fetch('/api/analyze-citations');
+        
+        if (!response.ok) {
+            throw new Error('Citation analysis failed');
+        }
 
-    renderCitationNetwork(data);
+        const data = await response.json();
+        renderCitationNetwork(data);
+    } catch (error) {
+        console.error('Error analyzing citations:', error);
+        alert('An error occurred while analyzing citations. Please try again.');
+    }
 }
 
 function renderCitationNetwork(data) {
@@ -288,45 +325,55 @@ exportSearchBtn.addEventListener('click', () => exportData('search'));
 exportCitationsBtn.addEventListener('click', () => exportData('citations'));
 exportBibliographyBtn.addEventListener('click', () => exportData('bibliography'));
 
-function exportData(type) {
-    let data;
-    let filename;
+async function exportData(type) {
+    try {
+        const response = await fetch(`/api/export/${type}`);
+        
+        if (!response.ok) {
+            throw new Error(`Export ${type} failed`);
+        }
 
-    switch (type) {
-        case 'search':
-            data = document.getElementById('searchResults').innerText;
-            filename = 'search_results.txt';
-            break;
-        case 'citations':
-            data = document.getElementById('citationResults').innerText;
-            filename = 'citations.txt';
-            break;
-        case 'bibliography':
-            data = document.getElementById('bibliographyList').innerText;
-            filename = 'bibliography.txt';
-            break;
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = `${type}_export.txt`;
+        document.body.appendChild(a);
+        a.click();
+        URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+    } catch (error) {
+        console.error(`Error exporting ${type}:`, error);
+        alert(`An error occurred while exporting ${type}. Please try again.`);
     }
-
-    const blob = new Blob([data], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.style.display = 'none';
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    URL.revokeObjectURL(url);
-    document.body.removeChild(a);
 }
 
 // Bibliography management
 let bibliography = [];
 
-function addToBibliography(paperTitle) {
-    // In a real application, you would add the full paper details
-    bibliography.push({ title: paperTitle });
-    updateBibliographyDisplay();
-    alert(`"${paperTitle}" added to bibliography!`);
+async function addToBibliography(paperId) {
+    try {
+        const response = await fetch('/api/add-to-bibliography', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ paperId }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to add to bibliography');
+        }
+
+        const data = await response.json();
+        bibliography.push(data.paper);
+        updateBibliographyDisplay();
+        alert(`"${data.paper.title}" added to bibliography!`);
+    } catch (error) {
+        console.error('Error adding to bibliography:', error);
+        alert('An error occurred while adding to the bibliography. Please try again.');
+    }
 }
 
 function updateBibliographyDisplay() {
@@ -343,9 +390,23 @@ function updateBibliographyDisplay() {
     });
 }
 
-function removeBibliographyItem(index) {
-    bibliography.splice(index, 1);
-    updateBibliographyDisplay();
+async function removeBibliographyItem(index) {
+    try {
+        const paperId = bibliography[index].id;
+        const response = await fetch(`/api/remove-from-bibliography/${paperId}`, {
+            method: 'DELETE',
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to remove from bibliography');
+        }
+
+        bibliography.splice(index, 1);
+        updateBibliographyDisplay();
+    } catch (error) {
+        console.error('Error removing from bibliography:', error);
+        alert('An error occurred while removing from the bibliography. Please try again.');
+    }
 }
 
 // Workspace management functions
@@ -357,6 +418,16 @@ function loadWorkspace() {
         tagInput.value = workspace.tags.join(' ') || '';
         noteInput.value = workspace.note || '';
         charCount.textContent = noteInput.value.length;
+
+        // Load selected databases
+        const selectedDatabases = workspace.selectedDatabases || [];
+        databaseOptions.forEach(option => {
+            if (selectedDatabases.includes(option.textContent)) {
+                option.classList.add('selected');
+            } else {
+                option.classList.remove('selected');
+            }
+        });
     }
 }
 
@@ -364,10 +435,10 @@ function saveWorkspace() {
     const workspace = {
         title: workspaceTitle.textContent,
         tags: tagInput.value.split(' ').filter(tag => tag.startsWith('#')),
-        note: noteInput.value
+        note: noteInput.value,
+        selectedDatabases: Array.from(document.querySelectorAll('.database-option.selected')).map(el => el.textContent)
     };
     localStorage.setItem('currentWorkspace', JSON.stringify(workspace));
-    alert('Workspace saved successfully!');
 }
 
 function createNewWorkspace() {
@@ -376,6 +447,7 @@ function createNewWorkspace() {
         tagInput.value = '';
         noteInput.value = '';
         charCount.textContent = '0';
+        databaseOptions.forEach(option => option.classList.remove('selected'));
         localStorage.removeItem('currentWorkspace');
         alert('New workspace created!');
     }
@@ -388,7 +460,7 @@ function setupMenuButtons() {
         button.addEventListener('click', function(event) {
             event.stopPropagation();
             this.classList.toggle('active');
-            menuButtons.forEach(btn => {
+          menuButtons.forEach(btn => {
                 if (btn !== this) {
                     btn.classList.remove('active');
                 }
@@ -406,6 +478,49 @@ function setupMenuButtons() {
     });
 }
 
+// Quick Action Buttons
+summarizeBtn.addEventListener('click', () => performQuickAction('summarize'));
+generateGlossaryBtn.addEventListener('click', () => performQuickAction('generate-glossary'));
+findRelatedWorkBtn.addEventListener('click', () => performQuickAction('find-related-work'));
+
+async function performQuickAction(action) {
+    const selectedPapers = getSelectedPapers();
+    if (selectedPapers.length === 0) {
+        alert('Please select at least one paper to perform this action.');
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/${action}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ papers: selectedPapers }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`${action} request failed`);
+        }
+
+        const data = await response.json();
+        displayQuickActionResult(action, data);
+    } catch (error) {
+        console.error(`Error performing ${action}:`, error);
+        alert(`An error occurred while performing ${action}. Please try again.`);
+    }
+}
+
+function getSelectedPapers() {
+    const checkboxes = document.querySelectorAll('.search-result input[type="checkbox"]:checked');
+    return Array.from(checkboxes).map(checkbox => checkbox.value);
+}
+
+function displayQuickActionResult(action, data) {
+    const resultMessage = `${action.charAt(0).toUpperCase() + action.slice(1)} result:\n\n${data.result}`;
+    appendMessage('ai', resultMessage);
+}
+
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     loadWorkspace();
@@ -413,10 +528,105 @@ document.addEventListener('DOMContentLoaded', () => {
     updateBibliographyDisplay();
     updateIconColors(nightModeToggle.checked ? 'dark' : 'light');
 
+    // Load saved theme
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        document.body.setAttribute('data-theme', savedTheme);
+        nightModeToggle.checked = savedTheme === 'dark';
+        updateIconColors(savedTheme);
+    }
+
     // Add event listeners for workspace management
-    document.querySelector('.menu-item:nth-child(1)').addEventListener('click', createNewWorkspace);
-    document.querySelector('.menu-item:nth-child(2)').addEventListener('click', saveWorkspace);
-    document.querySelector('.menu-item:nth-child(3)').addEventListener('click', loadWorkspace);
+    document.getElementById('newWorkspaceBtn').addEventListener('click', createNewWorkspace);
+    document.getElementById('saveWorkspaceBtn').addEventListener('click', saveWorkspace);
+    document.getElementById('openWorkspaceBtn').addEventListener('click', loadWorkspace);
 
     console.log('App initialized');
 });
+
+// Error handling function
+function handleError(error, message) {
+    console.error(error);
+    alert(message);
+}
+
+// Use this function instead of inline error handling
+function safelyExecute(asyncFunction, errorMessage) {
+    return async (...args) => {
+        try {
+            await asyncFunction(...args);
+        } catch (error) {
+            handleError(error, errorMessage);
+        }
+    };
+}
+
+// Wrap our existing functions with error handling
+const safePerformSearch = safelyExecute(performSearch, 'An error occurred while searching. Please try again.');
+const safeSendMessage = safelyExecute(sendMessage, 'An error occurred while sending the message. Please try again.');
+const safeGenerateCitation = safelyExecute(generateCitation, 'An error occurred while generating the citation. Please try again.');
+const safeAnalyzeCitations = safelyExecute(analyzeCitations, 'An error occurred while analyzing citations. Please try again.');
+const safeAddToBibliography = safelyExecute(addToBibliography, 'An error occurred while adding to the bibliography. Please try again.');
+const safeRemoveBibliographyItem = safelyExecute(removeBibliographyItem, 'An error occurred while removing from the bibliography. Please try again.');
+
+// Replace direct function calls with safe versions
+searchExecuteBtn.addEventListener('click', () => {
+    currentPage = 1;
+    safePerformSearch();
+});
+
+sendBtn.addEventListener('click', safeSendMessage);
+generateCitationBtn.addEventListener('click', safeGenerateCitation);
+citationAnalysisBtn.addEventListener('click', safeAnalyzeCitations);
+
+// Implement infinite scrolling for search results
+let isLoading = false;
+let hasMore = true;
+
+window.addEventListener('scroll', () => {
+    if (isLoading || !hasMore) return;
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
+        loadMoreResults();
+    }
+});
+
+async function loadMoreResults() {
+    isLoading = true;
+    currentPage++;
+    try {
+        await safePerformSearch();
+    } finally {
+        isLoading = false;
+    }
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.key === 'f') {
+        e.preventDefault();
+        document.getElementById('searchTerms').focus();
+    }
+    if (e.ctrlKey && e.key === 's') {
+        e.preventDefault();
+        safePerformSearch();
+    }
+    // Add more shortcuts as needed
+});
+
+// Performance optimization
+const debounce = (func, delay) => {
+    let inDebounce;
+    return function() {
+        const context = this;
+        const args = arguments;
+        clearTimeout(inDebounce);
+        inDebounce = setTimeout(() => func.apply(context, args), delay);
+    }
+};
+
+const debouncedSearch = debounce(safePerformSearch, 300);
+
+document.getElementById('searchTerms').addEventListener('input', debouncedSearch);
+
+// Add this line at the end of the initialization function in DOMContentLoaded event
+console.log('Enhanced features initialized');
