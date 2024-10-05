@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universitas AI Chat Console</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: #ffffff;
+            --secondary-bg: #f4f4f9;
+            --text-color: #333333;
+            --accent-color: #A51C30;
+            --hover-bg-color: #ED1B34;
+            --hover-text-color: #ffffff;
+            --button-text-color: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --primary-bg: #1e1e1e;
+            --secondary-bg: #2a2a2a;
+            --text-color: #ffffff;
+            --accent-color: #ED1B34;
+            --hover-bg-color: #A51C30;
+            --hover-text-color: #ffffff;
+            --button-text-color: #ffffff;
+            --shadow-color: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background-color: var(--secondary-bg);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 4px var(--shadow-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-link {
+            margin-right: 1rem;
+        }
+
+        .logo {
+            height: 50px;
+            width: 50px;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.1);
+        }
+
+        .header-title {
+            font-family: 'Courier New', monospace;
+            font-weight: normal;
+            font-size: 1.5rem;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .icon-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            transition: background-color 0.3s ease;
+            border-radius: 50%;
+        }
+
+        .icon-button .icon {
+            fill: var(--text-color);
+            transition: fill 0.3s ease;
+        }
+
+        .icon-button:hover {
+            background-color: var(--accent-color);
+        }
+
+        .icon-button:hover .icon {
+            fill: var(--button-text-color);
+        }
+
+        main {
+            flex: 1;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #chatArea {
+            flex: 1;
+            overflow-y: auto;
+            border: 1px solid var(--accent-color);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .chat-message {
+            background-color: var(--secondary-bg);
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 10px;
+            max-width: 80%;
+        }
+
+        .chat-message.user {
+            align-self: flex-end;
+            background-color: var(--accent-color);
+            color: var(--button-text-color);
+        }
+
+        .chat-message.ai {
+            align-self: flex-start;
+        }
+
+        .chat-input-container {
+            display: flex;
+            align-items: center;
+            background-color: var(--secondary-bg);
+            border-radius: 25px;
+            padding: 0.5rem 1rem;
+        }
+
+        #messageInput {
+            flex-grow: 1;
+            border: none;
+            background: transparent;
+            font-size: 1rem;
+            color: var(--text-color);
+        }
+
+        #sendButton {
+            background-color: var(--accent-color);
+            color: var(--button-text-color);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #sendButton:hover {
+            background-color: var(--hover-bg-color);
+        }
+
+        .quick-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+
+        .action-button {
+            background-color: var(--secondary-bg);
+            color: var(--text-color);
+            border: 1px solid var(--text-color);
+            border-radius: 25px;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .action-button:hover {
+            background-color: var(--accent-color);
+            color: var(--button-text-color);
+            border-color: var(--accent-color);
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: var(--secondary-bg);
+            color: var(--text-color);
+        }
+
+        footer p {
+            font-family: 'Courier New', monospace;
+        }
+
+        @media (max-width: 768px) {
+            .header-title {
+                display: none;
+            }
+
+            .quick-actions {
+                flex-wrap: wrap;
+            }
+
+            .action-button {
+                margin: 5px;
+                flex-grow: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <a href="index.html" class="logo-link">
+                <img src="favicon5.svg" alt="Universitas AI Logo" class="logo">
+            </a>
+            <h1 class="header-title">Universitas AI Chat Console</h1>
+        </div>
+        <div class="header-right">
+            <button id="darkModeToggle" class="icon-button" aria-label="Toggle Dark Mode">
+                <svg class="icon" viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-16C7.59 4 4 7.59 4 12s3.59 8 8 8 8-3.59 8-8-3.59-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/>
+                </svg>
+            </button>
+            <button id="voiceOutputToggle" class="icon-button" aria-label="Toggle Voice Output">
+                <svg class="icon" viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <div class="chat-container">
+            <div id="chatArea"></div>
+            <div class="chat-input-container">
+                <input type="text" id="messageInput" placeholder="Type your message...">
+                <button id="sendButton">▶</button>
+            </div>
+            <div class="quick-actions">
+                <button class="action-button">Summarize</button>
+                <button class="action-button">Explain</button>
+                <button class="action-button">Analyze</button>
+                <button class="action-button">Actions</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Universitas AI</p>
+    </footer>
+
+    <script>
+        // JavaScript code will be added here in subsequent iterations
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const voiceOutputToggle = document.getElementById('voiceOutputToggle');
+        const chatArea = document.getElementById('chatArea');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+
+        let isDarkMode = false;
+        let isVoiceOutputEnabled = false;
+
+        darkModeToggle.addEventListener('click', () => {
+            isDarkMode = !isDarkMode;
+            document.body.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+        });
+
+        voiceOutputToggle.addEventListener('click', () => {
+            isVoiceOutputEnabled = !isVoiceOutputEnabled;
+            // TODO: Implement voice output functionality
+        });
+
+        sendButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (message) {
+                addMessageToChatArea('user', message);
+                messageInput.value = '';
+                // TODO: Send message to AI and get response
+                setTimeout(() => {
+                    addMessageToChatArea('ai', 'This is a placeholder AI response.');
+                }, 1000);
+            }
+        }
+
+        function addMessageToChatArea(sender, message) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('chat-message', sender);
+            messageElement.textContent = message;
+            chatArea.appendChild(messageElement);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+    </script>
+</body>
+</html>
