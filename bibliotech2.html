@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universitas AI - Research Assistant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Source+Sans+Pro:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="bibliotech2.css">
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <a href="index.html" class="logo-link">
+                <img src="favicon5.svg" alt="Herakles AI Logo" class="logo">
+            </a>
+            <h1 class="header-title">// Discover the Universe</h1>
+        </div>
+        <div class="header-right">
+            <div class="menu-button" id="fileMenu">
+                <button class="icon-button" title="File Options">
+                    <svg viewBox="0 0 24 24" class="icon">
+                        <path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/>
+                    </svg>
+                </button>
+                <div class="dropdown-menu">
+                    <div class="menu-item" id="newWorkspaceBtn">New Workspace</div>
+                    <div class="menu-item" id="saveWorkspaceBtn">Save Workspace</div>
+                    <div class="menu-item" id="openWorkspaceBtn">Open Workspace</div>
+                </div>
+            </div>
+            <div class="menu-button" id="settingsMenu">
+                <button class="icon-button" title="Settings">
+                    <svg viewBox="0 0 24 24" class="icon">
+                        <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
+                    </svg>
+                </button>
+                <div class="dropdown-menu">
+                    <h3>Settings</h3>
+                    <h4>Herakles Audio</h4>
+                    <label for="volumeSlider">Volume:</label>
+                    <input type="range" id="volumeSlider" min="0" max="100" value="100">
+                    <label for="genderToggle">Gender:</label>
+                    <select id="genderToggle">
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                    <h4>Display</h4>
+                    <label for="nightModeToggle">Night Mode:</label>
+                    <input type="checkbox" id="nightModeToggle">
+                    <h4>Time</h4>
+                    <label for="timeFormat">Time Format:</label>
+                    <select id="timeFormat">
+                        <option value="12hr">12 Hour</option>
+                        <option value="24hr">24 Hour</option>
+                    </select>
+                </div>
+            </div>
+            <div id="timeDisplay" class="time-display"></div>
+        </div>
+    </header>
+
+    <main>
+        <section class="workspace-info panel">
+            <h2 id="workspaceTitle" contenteditable="true">Research Workspace</h2>
+            <input type="text" id="tagInput" placeholder="Enter up to 5 tags (separated by spaces)">
+            <textarea id="noteInput" placeholder="Outline your research question in 250 characters." maxlength="250"></textarea>
+            <div class="char-counter"><span id="charCount">0</span> / 250</div>
+        </section>
+
+        <section class="search-section panel">
+            <h2>Search Academic Databases</h2>
+            <div class="search-bar">
+                <input type="text" id="searchTerms" placeholder="Enter your research query...">
+                <button id="searchBtn" class="icon-button" title="Search">
+                    <svg viewBox="0 0 24 24" class="icon">
+                        <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="database-options">
+                <span class="database-option">arXiv</span>
+                <span class="database-option">Crossref</span>
+                <span class="database-option">DOAJ</span>
+                <span class="database-option">Microsoft Academic Graph</span>
+                <span class="database-option">ORCID</span>
+                <span class="database-option">PubMed</span>
+                <span class="database-option">Scopus</span>
+                <span class="database-option">Semantic Scholar</span>
+                <span class="database-option">Unpaywall</span>
+                <span class="database-option">Web of Science</span>
+                <span class="database-option">Open Alex API</span>
+            </div>
+            <div class="date-range">
+                <label for="startDate">Start Date:</label>
+                <input type="date" id="startDate">
+                <label for="endDate">End Date:</label>
+                <input type="date" id="endDate">
+            </div>
+            <div class="button-row">
+                <button id="searchExecuteBtn" class="action-button">Search</button>
+                <button id="exportSearchBtn" class="export-button">Export Results</button>
+            </div>
+            <div id="searchResults" class="search-results"></div>
+        </section>
+
+        <section class="rag-chat panel">
+            <h2>Chat with Herakles AI</h2>
+            <div id="chatArea">
+                <div class="chat-message ai">Hi, I'm Herakles. How can I assist you with your research today?</div>
+            </div>
+            <div class="chat-input-container">
+                <input type="text" id="chatInput" placeholder="Type your message here...">
+                <button id="sendBtn" class="icon-button" title="Send Message">
+                    <svg viewBox="0 0 24 24" class="icon">
+                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                    </svg>
+                </button>
+                <button id="micBtn" class="icon-button" title="Voice Input">
+                    <svg viewBox="0 0 24 24" class="icon">
+                        <path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="quick-actions">
+                <button id="summarizeBtn" class="action-button">Summarize</button>
+                <button id="generateGlossaryBtn" class="action-button">Generate Glossary</button>
+                <button id="findRelatedWorkBtn" class="action-button">Find Related Work</button>
+            </div>
+        </section>
+
+        <section class="citation-bibliography">
+            <div class="citation-tools panel">
+                <h2>Citation Analysis & Management</h2>
+                <div class="button-row">
+                    <button id="generateCitationBtn" class="action-button">Generate Citation</button>
+                    <button id="citationAnalysisBtn" class="action-button">Citation Analysis</button>
+                </div>
+                <select id="citationFormat">
+                    <option value="">Select Citation Format</option>
+                    <option value="apa">APA</option>
+                    <option value="mla">MLA</option>
+                    <option value="chicago">Chicago</option>
+                    <option value="harvard">Harvard</option>
+                    <option value="ieee">IEEE</option>
+                </select>
+                <div id="citationResults"></div>
+                <div id="citationNetwork"></div>
+            </div>
+            <div class="bibliography panel">
+                <h2>Bibliography</h2>
+                <div id="bibliographyList"></div>
+                <button id="exportBibliographyBtn" class="export-button">Export Bibliography</button>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 UNIVERSITAS AI</p>
+    </footer>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="bibliotech2.js"></script>
+</body>
+</html>
