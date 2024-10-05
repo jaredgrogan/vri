@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universitas AI Chat Console</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Berkeley+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="newconsole.css">
+</head>
+<body class="light-mode" id="app">
+    <div class="header-container">
+        <a href="index.html">
+            <img src="favicon5.svg" alt="Favicon">
+        </a>
+    </div>
+
+    <div class="nav-header">
+        <ul id="navMenu">
+            <li>
+                <a href="javascript:void(0)" id="navMenuItem">Menu</a>
+                <ul>
+                    <li><a href="product.html" id="navAppsItem">Apps</a></li>
+                    <li><a href="tutorials.html" id="navLearnItem">Learn</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="language-select">
+        <select id="languageSelect" onchange="changeLanguage()">
+            <option value="en">English</option>
+            <option value="es">Español</option>
+            <option value="fr">Français</option>
+            <option value="it">Italiano</option>
+            <option value="de">Deutsch</option>
+            <option value="pt">Português</option>
+            <option value="ar">العربية</option>
+        </select>
+    </div>
+
+    <div class="toggle-container">
+        <button id="darkModeBtn" class="border border-gray-300 rounded-md p-2" onclick="toggleDarkMode()">
+            <svg id="darkModeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+        </button>
+    </div>
+
+    <div class="chat-container">
+        <div class="response-suggestions">
+            <button id="summarizeBtn">Summarize</button>
+            <button id="explainBtn">Explain</button>
+            <button id="analyzeBtn">Analyze</button>
+            <button id="actionsBtn">Actions</button>
+            <button id="translateBtn"><i class="fas fa-globe"></i></button>
+            <button id="webSearchBtn"><i class="fas fa-search"></i></button>
+            <button id="moreBtn">+</button>
+        </div>
+
+        <div id="summarizeMenu" class="language-menu"></div>
+        <div id="explainMenu" class="language-menu"></div>
+        <div id="analyzeMenu" class="language-menu"></div>
+        <div id="actionsMenu" class="language-menu"></div>
+        <div id="translateMenu" class="language-menu"></div>
+        <div id="moreMenu" class="language-menu"></div>
+
+        <div id="chatBox" class="dropzone">
+            <div class="chat-bubble ai" id="aiGreeting">
+                Hi, how can I assist you today?
+            </div>
+        </div>
+
+        <div class="input-container">
+            <button class="attachment-btn" id="attachmentBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-paperclip">
+                    <path d="M21.44 11.05l-9.19 9.19a5.64 5.64 0 0 1-7.98-7.98l9.19-9.19a4 4 0 1 1 5.66 5.66L9.64 16.34a2.82 2.82 0 1 1-4-4l8.48-8.48"></path>
+                </svg>
+            </button>
+            <input type="file" id="fileInput" style="display:none;">
+            <input type="text" id="messageInput" placeholder="Type a message...">
+            <button class="voice-input-btn" id="voiceInputBtn">
+                <svg id="micIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mic">
+                    <path d="M12 1a4 4 0 0 0-4 4v7a4 4 0 0 0 8 0V5a4 4 0 0 0-4-4z"></path>
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                    <line x1="12" y1="19" x2="12" y2="23"></line>
+                    <line x1="8" y1="23" x2="16" y2="23"></line>
+                </svg>
+            </button>
+            <button class="send-message-btn" id="sendMessageBtn">
+                &#x27A4;
+            </button>
+        </div>
+        
+        <button class="new-chat-btn" id="newChatBtn">
+            <i class="fas fa-plus"></i>
+        </button>
+    </div>
+
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2>Chat History</h2>
+            <button id="closeSidebarBtn">&times;</button>
+        </div>
+        <div id="chatList"></div>
+    </div>
+
+    <button id="sidebarToggle" class="sidebar-toggle">
+        <i class="fas fa-history"></i>
+    </button>
+
+    <footer style="text-align: center; font-family: 'Courier New', monospace; padding: 20px;">
+        &copy; 2024 UNIVERSITAS AI
+    </footer>
+
+    <script src="newconsole-script.js"></script>
+</body>
+</html>
