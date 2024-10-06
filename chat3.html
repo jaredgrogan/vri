@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universitas AI Chat Console</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600&family=Courier+New&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: rgba(255, 255, 255, 0.7);
+            --secondary-bg: rgba(244, 244, 249, 0.7);
+            --text-color: #333333;
+            --accent-color: #A51C30;
+            --hover-bg-color: #ED1B34;
+            --hover-text-color: #ffffff;
+            --button-text-color: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --input-stroke: #A51C30;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        [data-theme="dark"] {
+            --primary-bg: rgba(30, 30, 30, 0.7);
+            --secondary-bg: rgba(42, 42, 42, 0.7);
+            --text-color: #ffffff;
+            --accent-color: #ED1B34;
+            --hover-bg-color: #A51C30;
+            --hover-text-color: #ffffff;
+            --button-text-color: #ffffff;
+            --shadow-color: rgba(255, 255, 255, 0.1);
+            --input-stroke: #ED1B34;
+            --glass-bg: rgba(0, 0, 0, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background-color: #ffffff;
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        [data-theme="dark"] body {
+            background-color: #1e1e1e;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+            box-shadow: 0 4px 6px var(--shadow-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-link {
+            margin-right: 1rem;
+        }
+
+        .logo {
+            height: 50px;
+            width: 50px;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.1);
+        }
+
+        .header-title {
+            font-family: 'Courier New', monospace;
+            font-weight: normal;
+            font-size: 1.5rem;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .language-select {
+            margin-right: 1rem;
+        }
+
+        .language-select select {
+            background-color: var(--secondary-bg);
+            color: var(--text-color);
+            border: 1px solid var(--text-color);
+            padding: 0.3rem;
+            border-radius: 5px;
+        }
+
+        .datetime {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin-left: 10px;
+        }
+
+        .icon-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            transition: background-color 0.3s ease;
+            border-radius: 50%;
+            margin-left: 0.5rem;
+        }
+
+        .icon-button .icon {
+            fill: var(--text-color);
+            transition: fill 0.3s ease;
+        }
+
+        .icon-button:hover {
+            background-color: var(--accent-color);
+        }
+
+        .icon-button:hover .icon {
+            fill: var(--button-text-color);
+        }
+
+        main {
+            flex: 1;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        #chatArea {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .chat-message {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border-radius: 15px;
+            padding: 10px;
+            margin-bottom: 10px;
+            max-width: 80%;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .chat-message.user {
+            align-self: flex-end;
+            background: var(--primary-bg);
+            border: 1px solid var(--input-stroke);
+        }
+
+        .chat-message.ai {
+            align-self: flex-start;
+            background: var(--accent-color);
+            color: var(--button-text-color);
+        }
+
+        .chat-input-container {
+            display: flex;
+            align-items: center;
+            background-color: var(--primary-bg);
+            border: 1px solid var(--input-stroke);
+            border-radius: 25px;
+            padding: 0.5rem 1rem;
+            margin-top: 1rem;
+        }
+
+        #messageInput {
+            flex-grow: 1;
+            border: none;
+            background: transparent;
+            font-size: 1rem;
+            color: var(--text-color);
+        }
+
+        #sendButton, #micButton {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            transition: background-color 0.3s ease;
+        }
+
+        #sendButton .icon, #micButton .icon {
+            fill: var(--text-color);
+        }
+
+        #micButton.active {
+            background-color: #ff0000;
+            border-radius: 50%;
+        }
+
+        #micButton.active .icon {
+            fill: #ffffff;
+        }
+
+        .fab-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+        }
+
+        .fab {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+            color: var(--button-text-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 2px 10px var(--shadow-color);
+            transition: transform 0.3s ease;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+        }
+
+        .fab-menu {
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            display: none;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .fab-item {
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .fab-button {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--secondary-bg);
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px var(--shadow-color);
+            transition: transform 0.3s ease;
+        }
+
+        .fab-button:hover {
+            transform: scale(1.1);
+        }
+
+        .fab-submenu {
+            position: absolute;
+            right: 60px;
+            top: 0;
+            background-color: var(--secondary-bg);
+            border-radius: 5px;
+            padding: 5px;
+            display: none;
+            flex-direction: column;
+            min-width: 150px;
+        }
+
+        .fab-submenu-item {
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .fab-submenu-item:hover {
+            background-color: var(--accent-color);
+            color: var(--button-text-color);
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: var(--secondary-bg);
+            color: var(--text-color);
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .loading-indicator {
+            text-align: center;
+            padding: 10px;
+            font-style: italic;
+            color: var(--text-color);
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: var(--secondary-bg);
+            color: var(--text-color);
+        }
+
+        footer p {
+            font-family: 'Courier New', monospace;
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 768px) {
+            .header-title {
+                display: none;
+            }
+
+            .datetime {
+                display: none;
+            }
+
+            .fab-menu {
+                right: 1rem;
+                left: 1rem;
+                bottom: 5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <a href="index.html" class="logo-link">
+                <img src="favicon5.svg" alt="Universitas AI Logo" class="logo">
+            </a>
+            <h1 class="header-title">// Discover the Universe</h1>
+        </div>
+        <div class="header-right">
+            <div class="language-select">
+                <select id="languageSelect">
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                    <option value="it">Italiano</option>
+                    <option value="pt">Português</option>
+                    <option value="ar">العربية</option>
+                </select>
+            </div>
+            <button id="voiceOutputToggle" class="icon-button tooltip" aria-label="Toggle Voice Output">
+                <svg class="icon" viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                </svg>
+                <span class="tooltiptext">Toggle Voice Output</span>
+            </button>
+            <button id="darkModeToggle" class="icon-button tooltip" aria-label="Toggle Dark Mode">
+                <svg class="icon" viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+                <span class="tooltiptext">Toggle Dark Mode</span>
+            </button>
+            <div class="datetime" id="datetime"></div>
+        </div>
+    </header>
+
+    <main>
+        <div class="chat-container">
+            <div id="chatArea"></div>
+            <div class="chat-input-container">
+                <input type="text" id="messageInput" placeholder="Type your message...">
+                <button id="micButton" class="tooltip">
+                    <svg class="icon" viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm-1-9c0-.55.45-1 1-1s1 .45 1 1v6c0 .55-.45 1-1 1s-1-.45-1-1V5zm6 6c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+                    </svg>
+                    <span class="tooltiptext">Toggle Voice Input</span>
+                </button>
+               <button id="sendButton" class="tooltip">
+                <svg class="icon" viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                </svg>
+                <span class="tooltiptext">Send Message</span>
+            </button>
+        </div>
+    </div>
+</main>
+
+<div class="fab-container">
+    <div class="fab" id="mainFab">+</div>
+    <div class="fab-menu" id="fabMenu">
+        <div class="fab-item">
+            <div class="fab-button tooltip" data-action="summarize">
+                <svg viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M14 17h4v2h-4zm0-2h4v-2h-4zm0-4h4V9h-4zm-6 6h4v-2H8zm0-4h4v-2H8zm0-4h4V9H8zM5 7h2v2H5zm0 4h2v2H5zm0 4h2v2H5zM20 5H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2z"/>
+                </svg>
+                <span class="tooltiptext">Summarize</span>
+            </div>
+            <div class="fab-submenu">
+                <div class="fab-submenu-item" data-action="summarize-summary">Summary</div>
+                <div class="fab-submenu-item" data-action="summarize-bullets">Bullets</div>
+            </div>
+        </div>
+        <div class="fab-item">
+            <div class="fab-button tooltip" data-action="explain">
+                <svg viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
+                </svg>
+                <span class="tooltiptext">Explain</span>
+            </div>
+            <div class="fab-submenu">
+                <div class="fab-submenu-item" data-action="explain-concepts">Concepts</div>
+                <div class="fab-submenu-item" data-action="explain-step">Step by Step</div>
+                <div class="fab-submenu-item" data-action="explain-glossary">Glossary</div>
+            </div>
+        </div>
+        <div class="fab-item">
+            <div class="fab-button tooltip" data-action="analyze">
+                <svg viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+                </svg>
+                <span class="tooltiptext">Analyze</span>
+            </div>
+            <div class="fab-submenu">
+                <div class="fab-submenu-item" data-action="analyze-evaluate">Evaluate</div>
+                <div class="fab-submenu-item" data-action="analyze-improve">Improvements</div>
+                <div class="fab-submenu-item" data-action="analyze-extract">Extract Details</div>
+            </div>
+        </div>
+        <div class="fab-item">
+            <div class="fab-button tooltip" data-action="actions">
+                <svg viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                </svg>
+                <span class="tooltiptext">Actions</span>
+            </div>
+            <div class="fab-submenu">
+                <div class="fab-submenu-item" data-action="actions-next">Next Actions</div>
+                <div class="fab-submenu-item" data-action="actions-plan">Action Plan</div>
+            </div>
+        </div>
+        <div class="fab-item">
+            <div class="fab-button tooltip" data-action="translate">
+                <svg viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/>
+                </svg>
+                <span class="tooltiptext">Translate</span>
+            </div>
+            <div class="fab-submenu">
+                <div class="fab-submenu-item" data-action="translate-en">In English</div>
+                <div class="fab-submenu-item" data-action="translate-es">En Español</div>
+                <div class="fab-submenu-item" data-action="translate-fr">En Français</div>
+                <div class="fab-submenu-item" data-action="translate-it">In Italiano</div>
+                <div class="fab-submenu-item" data-action="translate-de">Auf Deutsch</div>
+                <div class="fab-submenu-item" data-action="translate-pt">Em Português</div>
+                <div class="fab-submenu-item" data-action="translate-ar">بالعربية</div>
+            </div>
+        </div>
+        <div class="fab-item">
+            <div class="fab-button tooltip" data-action="more">
+                <svg viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+                </svg>
+                <span class="tooltiptext">More</span>
+            </div>
+            <div class="fab-submenu">
+                <div class="fab-submenu-item" data-action="more-resources">Resources</div>
+                <div class="fab-submenu-item" data-action="more-qa">Q&A</div>
+                <div class="fab-submenu-item" data-action="more-quiz">Quiz</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2024 UNIVERSITAS AI</p>
+</footer>
+
+<script>
+    // Constants and Variables
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const voiceOutputToggle = document.getElementById('voiceOutputToggle');
+    const chatArea = document.getElementById('chatArea');
+    const messageInput = document.getElementById('messageInput');
+    const sendButton = document.getElementById('sendButton');
+    const micButton = document.getElementById('micButton');
+    const mainFab = document.getElementById('mainFab');
+    const fabMenu = document.getElementById('fabMenu');
+    const languageSelect = document.getElementById('languageSelect');
+    const datetimeDisplay = document.getElementById('datetime');
+
+    let isDarkMode = false;
+    let isVoiceOutputEnabled = false;
+    let isVoiceInputActive = false;
+    let currentLanguage = 'en';
+
+    // AI Configuration
+    const AI_CONFIG = {
+        identity: {
+            name: "Herakles AI",
+            role: "AI Research Assistant"
+        },
+        context: {
+            app: "Universitas AI",
+            capabilities: [
+                "RAG with Pinecone",
+                "External academic database searches",
+                "Learning assistance",
+                "Task assistance",
+                "General productivity"
+            ]
+        },
+        personality: {
+            traits: ["friendly", "professional", "helpful"]
+        },
+        target_users: [
+            "University students",
+            "Researchers",
+            "Knowledge workers"
+        ]
+    };
+
+    // Helper Functions
+    function updateDateTime() {
+        const now = new Date();
+        const options = { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true };
+        datetimeDisplay.textContent = now.toLocaleString('en-US', options).replace(/,/g, '');
+    }
+
+    function toggleDarkMode() {
+        isDarkMode = !isDarkMode;
+        document.body.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+        darkModeToggle.querySelector('svg').innerHTML = isDarkMode 
+            ? '<path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"></path>'
+            : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+    }
+
+    function toggleVoiceOutput() {
+        isVoiceOutputEnabled = !isVoiceOutputEnabled;
+        voiceOutputToggle.classList.toggle('active', isVoiceOutputEnabled);
+    }
+
+    function toggleVoiceInput() {
+        isVoiceInputActive = !isVoiceInputActive;
+        micButton.classList.toggle('active', isVoiceInputActive);
+        if (isVoiceInputActive) {
+            startSpeechRecognition();
+        } else {
+            stopSpeechRecognition();
+        }
+    }
+
+    function changeLanguage() {
+        currentLanguage = languageSelect.value;
+        updateDateTime();
+        // TODO: Implement actual language change functionality
+    }
+
+    function addMessageToChatArea(sender, message) {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('chat-message', sender);
+        messageElement.textContent = message;
+        chatArea.appendChild(messageElement);
+        chatArea.scrollTop = chatArea.scrollHeight;
+    }
+
+    // AI and API Integration
+    async function sendMessageToAI(message, action = null) {
+        // TODO: Replace with actual API call to GPT-4-turbo
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                const aiConfig = {...AI_CONFIG, action};
+                console.log("Sending to AI with config:", aiConfig);
+                
+                let response;
+                switch (action) {
+                    case 'summarize-summary':
+                        response = "Here's a summary of the key points: ...";
+                        break;
+                    case 'summarize-bullets':
+                        response = "Here's a bullet-point summary: \n• Point 1\n• Point 2\n• Point 3";
+                        break;
+                    case 'explain-concepts':
+                        response = "Let me explain the key concepts: ...";
+                        break;
+                    case 'explain-step':
+                        response = "Here's a step-by-step explanation: \n1. First...\n2. Then...\n3. Finally...";
+                        break;
+                    case 'explain-glossary':
+                        response = "Here's a glossary of key terms: \nTerm 1: Definition\nTerm 2: Definition";
+                        break;
+                    case 'analyze-evaluate':
+                        response = "After evaluating the information, here are my findings: ...";
+                        break;
+                    case 'analyze-improve':
+                        response = "Here are some suggestions for improvement: ...";
+                        break;
+                    case 'analyze-extract':
+                        response = "I've extracted the following key details: ...";
+                        break;
+                    case 'actions-next':
+                        response = "Here are the recommended next actions: \n1. ...\n2. ...\n3. ...";
+                        break;
+                    case 'actions-plan':
+                        response = "Here's an action plan: \nShort-term: ...\nMedium-term: ...\nLong-term: ...";
+                        break;
+                    case 'translate-en':
+                    case 'translate-es':
+                    case 'translate-fr':
+                    case 'translate-it':
+                    case 'translate-de':
+                    case 'translate-pt':
+                    case 'translate-ar':
+                        response = `Here's the translation in ${action.split('-')[1]}: ...`;
+                        break;
+                    case 'more-resources':
+                        response = "Here are some additional resources on this topic: ...";
+                        break;
+                    case 'more-qa':
+                        response = "Let's do a Q&A session. What would you like to know?";
+                        break;
+                    case 'more-quiz':
+                        response = "Let's start a quiz. Are you ready for the first question?";
+                        break;
+                    default:
+                        response = "I understand your query. Here's what I found: ...";
+                }
+                
+                resolve(response);
+            }, 1000 + Math.random() * 2000); // Random delay between 1-3 seconds
+        });
+    }
+
+    // Speech Recognition
+    let recognition;
+
+    function startSpeechRecognition() {
+        if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+            recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = currentLanguage;
+            recognition.continuous = true;
+            recognition.interimResults = true;
+
+            recognition.onresult = (event) => {
+                const transcript = Array.from(event.results)
+                    .map(result => result[0].transcript)
+                    .join('');
+                messageInput.value = transcript;
+            };
+
+            recognition.start();
+        } else {
+            console.error('Speech recognition not supported');
+            alert('Speech recognition is not supported in your browser.');
+        }
+    }
+
+    function stopSpeechRecognition() {
+        if (recognition) {
+            recognition.stop();
+        }
+    }
+
+    // Event Listeners
+    darkModeToggle.addEventListener('click', toggleDarkMode);
+    voiceOutputToggle.addEventListener('click', toggleVoiceOutput);
+    micButton.addEventListener('click', toggleVoiceInput);
+    languageSelect.addEventListener('change', changeLanguage);
+
+    sendButton.addEventListener('click', sendMessage);
+    messageInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+
+    async function sendMessage() {
+        const message = messageInput.value.trim();
+        if (message) {
+            addMessageToChatArea('user', message);
+            messageInput.value = '';
+            
+            const aiResponse = await sendMessageToAI(message);
+            addMessageToChatArea('ai', aiResponse);
+
+            if (isVoiceOutputEnabled) {
+                speakText(aiResponse);
+            }
+        }
+    }
+
+    // Voice Output
+    function speakText(text) {
+        // TODO: Implement Elevenlabs API for more natural voice
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = currentLanguage;
+        speechSynthesis.speak(utterance);
+    }
+
+    // FAB Menu Functionality
+    mainFab.addEventListener('click', () => {
+        fabMenu.style.display = fabMenu.style.display === 'flex' ? 'none' : 'flex';
+    });
+
+    document.querySelectorAll('.fab-item').forEach(item => {
+        const button = item.querySelector('.fab-button');
+        const submenu = item.querySelector('.fab-submenu');
+
+        button.addEventListener('click', (e) => {
+            e.stopPropagation();
+            submenu.style.display = submenu.style.display === 'flex' ? 'none' : 'flex';
+        });
+    });
+
+    document.querySelectorAll('.fab-submenu-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const action = item.dataset.action;
+            handleFabAction(action);
+            fabMenu.style.display = 'none';
+        });
+    });
+
+    async function handleFabAction(action) {
+        const aiResponse = await sendMessageToAI(messageInput.value, action);
+        addMessageToChatArea('ai', aiResponse);
+        if (isVoiceOutputEnabled) {
+            speakText(aiResponse);
+        }
+    }
+
+    // Initialize
+    function init() {
+        updateDateTime();
+        setInterval(updateDateTime, 60000); // Update every minute
+        
+        // Simulate initial AI greeting
+        setTimeout(() => {
+            addMessageToChatArea('ai', "Hello! I'm Herakles, your AI research assistant. How can I help you today?");
+        }, 1000);
+    }
+
+    init();
+
+    // Error handling
+    window.onerror = function(message, source, lineno, colno, error) {
+        console.error("An error occurred:", message, "at", source, ":", lineno);
+        // TODO: Implement proper error logging and reporting
+    };
+
+    // Responsive design adjustments
+    function handleResize() {
+        if (window.innerWidth <= 768) {
+            document.querySelector('.header-title').style.display = 'none';
+            document.querySelector('.datetime').style.display = 'none';
+        } else {
+            document.querySelector('.header-title').style.display = 'block';
+            document.querySelector('.datetime').style.display = 'block';
+        }
+    }
+
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Call once to set initial state
+</script>
+</body>
+</html>
