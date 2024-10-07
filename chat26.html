@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universitas AI Chat Console</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600&family=Courier+New&family=Noto+Sans+Arabic&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: rgba(255, 255, 255, 0.7);
+            --secondary-bg: rgba(244, 244, 249, 0.7);
+            --text-color: #333333;
+            --accent-color: #A51C30;
+            --hover-bg-color: #ED1B34;
+            --hover-text-color: #ffffff;
+            --button-text-color: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --input-stroke: #A51C30;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --user-bubble-bg: rgba(255, 255, 255, 0.3);
+            --hero-bg: #ffffff;
+        }
+
+        [data-theme="dark"] {
+            --primary-bg: rgba(30, 30, 30, 0.7);
+            --secondary-bg: rgba(42, 42, 42, 0.7);
+            --text-color: #ffffff;
+            --accent-color: #ED1B34;
+            --hover-bg-color: #A51C30;
+            --hover-text-color: #ffffff;
+            --button-text-color: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --input-stroke: #ED1B34;
+            --glass-bg: rgba(30, 30, 30, 0.8);
+            --glass-border: rgba(30, 30, 30, 0.5);
+            --user-bubble-bg: rgba(30, 30, 30, 0.5);
+            --hero-bg: #4a4a4a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background-color: var(--hero-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+            box-shadow: 0 4px 6px var(--shadow-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        [data-theme="dark"] header, [data-theme="dark"] footer {
+            background-color: #1e1e1e;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-link {
+            margin-right: 1rem;
+        }
+
+        .logo {
+            height: 50px;
+            width: 50px;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.1);
+        }
+
+        .header-title {
+            font-family: 'Courier New', monospace;
+            font-weight: normal;
+            font-size: 1.5rem;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .language-select {
+            margin-right: 1rem;
+        }
+
+        .language-select select {
+            background-color: var(--secondary-bg);
+            color: var(--text-color);
+            border: 1px solid var(--text-color);
+            padding: 0.3rem;
+            border-radius: 5px;
+        }
+
+        .datetime {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin-left: 10px;
+        }
+
+        .icon-button, .fab-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            transition: all 0.3s ease;
+            border-radius: 50%;
+            margin-left: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+        }
+
+        .icon-button .icon, .fab-button .icon {
+            fill: var(--text-color);
+            transition: fill 0.3s ease, stroke 0.3s ease;
+            width: 24px;
+            height: 24px;
+        }
+
+        .icon-button:hover, .fab-button:hover {
+            background-color: var(--accent-color);
+        }
+
+        .icon-button.active, .fab-button.active {
+            background-color: var(--accent-color);
+        }
+
+        .icon-button.active .icon, .fab-button.active .icon {
+            fill: var(--button-text-color);
+        }
+
+        [data-theme="dark"] .icon-button .sun-icon {
+            stroke: #ffffff !important;
+            fill: none !important;
+        }
+
+        .icon-button .moon-icon {
+            stroke: currentColor;
+            fill: none;
+        }
+
+        .icon-button:hover .moon-icon,
+        .icon-button.active .moon-icon,
+        [data-theme="dark"] .icon-button .moon-icon {
+            stroke: #ffffff !important;
+            fill: none !important;
+        }
+
+        .icon-button:hover .icon, .fab-button:hover .icon {
+            fill: var(--hover-text-color);
+        }
+
+        main {
+            flex: 1;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        #chatArea {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .chat-message {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border-radius: 15px;
+            padding: 10px;
+            margin-bottom: 10px;
+            max-width: 80%;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .chat-message.user {
+            align-self: flex-end;
+            background: var(--user-bubble-bg);
+            border: 1px solid var(--input-stroke);
+        }
+
+        .chat-message.ai {
+            align-self: flex-start;
+            background: rgba(42, 42, 42, 0.8);
+            border: 1px solid #0047ab;
+        }
+
+        [data-theme="light"] .chat-message.ai {
+            background: #ffffff;
+            border: 1px solid #0047ab;
+        }
+
+        .chat-input-container {
+            display: flex;
+            align-items: center;
+            background-color: var(--glass-bg);
+            border-radius: 25px;
+            padding: 0.5rem 1rem;
+            margin-top: 1rem;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        #messageInput {
+            flex-grow: 1;
+            border: none;
+            background: transparent;
+            font-size: 1rem;
+            color: var(--text-color);
+            outline: none;
+        }
+
+        #sendButton, #micButton, #speakerToggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+        }
+
+        #sendButton .icon, #micButton .icon, #speakerToggle .icon {
+            fill: var(--text-color);
+        }
+
+        #micButton.active, #speakerToggle.active {
+            background-color: var(--accent-color);
+        }
+
+        #micButton.active .icon, #speakerToggle.active .icon {
+            fill: var(--button-text-color);
+        }
+
+        .fab-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+        }
+
+        .fab-buffer {
+            height: 90px;
+        }
+
+        .fab {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #A51C30;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 2px 10px var(--shadow-color);
+            transition: transform 0.3s ease;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+        }
+
+        .fab-menu {
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            display: none;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .fab-item {
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .fab-button {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--secondary-bg);
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px var(--shadow-color);
+            transition: transform 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .fab-button:hover {
+            transform: scale(1.1);
+        }
+
+        .fab-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            z-index: 0;
+        }
+
+        .fab-button svg {
+            position: relative;
+            z-index: 1;
+            width: 24px;
+            height: 24px;
+            fill: var(--text-color);
+        }
+
+        [data-theme="dark"] .fab-button svg {
+            fill: #ffffff;
+        }
+
+        .fab-submenu {
+            position: absolute;
+            bottom: 100%;
+            right: 60px;
+            top: auto;
+            margin-bottom: 10px;
+            background-color: var(--secondary-bg);
+            border-radius: 5px;
+            padding: 5px;
+            display: none;
+            flex-direction: column;
+            min-width: 150px;
+        }
+
+        .fab-submenu-item {
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .fab-submenu-item:hover {
+            background-color: var(--accent-color);
+            color: var(--button-text-color);
+        }
+
+        .fab-submenu-item[data-action="translate-ar"] {
+            font-family: 'Noto Sans Arabic', sans-serif;
+            direction: rtl;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: var(--secondary-bg);
+            color: var(--text-color);
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: -30px;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .loading-indicator {
+            text-align: center;
+            padding: 10px;
+            font-style: italic;
+            color: var(--text-color);
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: var(--secondary-bg);
+            color: var(--text-color);
+        }
+
+        footer p {
+            font-family: 'Courier New', monospace;
+            text-transform: uppercase;
+        }
+
+        .audio-controls {
+            display: flex;
+            align-items: center;
+        }
+
+        .volume-control {
+            display: none;
+            align-items: center;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 5px 10px;
+            margin-left: 10px;
+        }
+
+        .volume-slider {
+            width: 100px;
+            margin: 0 10px;
+        }
+
+        .volume-percentage {
+            font-size: 0.8rem;
+            min-width: 40px;
+            text-align: right;
+        }
+
+        @media (max-width: 768px) {
+            .header-title {
+                display: none;
+            }
+
+           .datetime {
+                display: none;
+            }
+
+            .fab-menu {
+                right: 1rem;
+                left: 1rem;
+                bottom: 5rem;
+            }
+
+            .icon-button .sun-icon,
+            .icon-button .moon-icon {
+                stroke: var(--text-color);
+@media (max-width: 768px) {
+            .header-title {
+                display: none;
+            }
+
+            .datetime {
+                display: none;
+            }
+
+            .fab-menu {
+                right: 1rem;
+                left: 1rem;
+                bottom: 5rem;
+            }
+
+            .icon-button .sun-icon,
+            .icon-button .moon-icon {
+                stroke: var(--text-color);
+                fill: none;
+            }
+
+            [data-theme="dark"] .icon-button .sun-icon,
+            [data-theme="dark"] .icon-button .moon-icon {
+                stroke: #ffffff !important;
+                fill: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <a href="index.html" class="logo-link">
+                <img src="favicon5.svg" alt="Universitas AI Logo" class="logo">
+            </a>
+            <h1 class="header-title">// Discover the Universe</h1>
+        </div>
+        <div class="header-right">
+            <div class="language-select">
+                <select id="languageSelect">
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                    <option value="it">Italiano</option>
+                    <option value="pt">Português</option>
+                    <option value="ar">العربية</option>
+                </select>
+            </div>
+            <div class="audio-controls">
+                <button id="speakerToggle" class="icon-button tooltip" aria-label="Toggle Voice Output">
+                    <svg class="icon" viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                    </svg>
+                    <span class="tooltiptext">Toggle Voice Output</span>
+                </button>
+                <div class="volume-control">
+                    <input type="range" min="0" max="100" value="50" class="volume-slider" id="volumeSlider">
+                    <span class="volume-percentage">50%</span>
+                </div>
+            </div>
+            <button id="darkModeToggle" class="icon-button tooltip" aria-label="Toggle Dark Mode">
+                <svg class="icon sun-icon" viewBox="0 0 24 24" width="24" height="24" style="display: none;">
+                    <circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/>
+                    <line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2"/>
+                    <line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="2"/>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="currentColor" stroke-width="2"/>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="currentColor" stroke-width="2"/>
+                    <line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="2"/>
+                    <line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="2"/>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2"/>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2"/>
+                </svg>
+                <svg class="icon moon-icon" viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="none" stroke="currentColor" stroke-width="2"/>
+                </svg>
+                <span class="tooltiptext">Toggle Dark Mode</span>
+            </button>
+            <div class="datetime" id="datetime"></div>
+        </div>
+    </header>
+
+    <main>
+        <div class="chat-container">
+            <div id="chatArea"></div>
+            <div class="chat-input-container">
+                <input type="text" id="messageInput" placeholder="Type your message...">
+                <button id="micButton" class="icon-button tooltip">
+                    <svg class="icon" viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+                        <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+                    </svg>
+                    <span class="tooltiptext">Toggle Voice Input</span>
+                </button>
+                <button id="sendButton" class="icon-button tooltip">
+                    <svg class="icon" viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                    </svg>
+                    <span class="tooltiptext">Send Message</span>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <div class="fab-container">
+        <div class="fab-buffer"></div>
+        <div class="fab" id="mainFab">+</div>
+        <div class="fab-menu" id="fabMenu">
+            <div class="fab-item">
+                <div class="fab-button tooltip" data-action="summarize">
+                    <svg viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M14 17h4v2h-4zm0-2h4v-2h-4zm0-4h4V9h-4zm-6 6h4v-2H8zm0-4h4v-2H8zm0-4h4V9H8zM5 7h2v2H5zm0 4h2v2H5zm0 4h2v2H5zM20 5H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2z"/>
+                    </svg>
+                    <span class="tooltiptext">Summarize</span>
+                </div>
+                <div class="fab-submenu">
+                    <div class="fab-submenu-item" data-action="summarize-summary">Summary</div>
+                    <div class="fab-submenu-item" data-action="summarize-bullets">Bullets</div>
+                </div>
+            </div>
+            <div class="fab-item">
+                <div class="fab-button tooltip" data-action="explain">
+                    <svg viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
+                    </svg>
+                    <span class="tooltiptext">Explain</span>
+                </div>
+                <div class="fab-submenu">
+                    <div class="fab-submenu-item" data-action="explain-concepts">Explain Concepts</div>
+                    <div class="fab-submenu-item" data-action="explain-step-by-step">Step by Step</div>
+                    <div class="fab-submenu-item" data-action="explain-glossary">Glossary</div>
+                </div>
+            </div>
+            <div class="fab-item">
+                <div class="fab-button tooltip" data-action="analyze">
+                    <svg viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+                    </svg>
+                    <span class="tooltiptext">Analyze</span>
+                </div>
+                <div class="fab-submenu">
+                    <div class="fab-submenu-item" data-action="analyze-extract">Extract Details</div>
+                    <div class="fab-submenu-item" data-action="analyze-evaluate">Evaluate</div>
+                    <div class="fab-submenu-item" data-action="analyze-improve">Suggest Improvements</div>
+                </div>
+            </div>
+            <div class="fab-item">
+                <div class="fab-button tooltip" data-action="actions">
+                    <svg viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                    </svg>
+                    <span class="tooltiptext">Actions</span>
+                </div>
+                <div class="fab-submenu">
+                    <div class="fab-submenu-item" data-action="actions-next">Next Actions</div>
+                    <div class="fab-submenu-item" data-action="actions-plan">Action Plan</div>
+                </div>
+            </div>
+            <div class="fab-item">
+                <div class="fab-button tooltip" data-action="translate">
+                    <svg viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M12.87 15.07l-2.54-2.51.03-.03c1.74-1.94 2.98-4.17 3.71-6.53H17V4h-7V2H8v2H1v1.99h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/>
+                    </svg>
+                    <span class="tooltiptext">Translate</span>
+                </div>
+                <div class="fab-submenu">
+                    <div class="fab-submenu-item" data-action="translate-en">In English</div>
+                    <div class="fab-submenu-item" data-action="translate-es">En Español</div>
+                    <div class="fab-submenu-item" data-action="translate-fr">En Français</div>
+                    <div class="fab-submenu-item" data-action="translate-it">In Italiano</div>
+                    <div class="fab-submenu-item" data-action="translate-de">Auf Deutsch</div>
+                    <div class="fab-submenu-item" data-action="translate-pt">Em Português</div>
+                    <div class="fab-submenu-item" data-action="translate-ar">بالعربية</div>
+                </div>
+            </div>
+            <div class="fab-item">
+                <div class="fab-button tooltip" data-action="more">
+                    <svg viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+                    </svg>
+                    <span class="tooltiptext">More</span>
+                </div>
+                <div class="fab-submenu">
+                    <div class="fab-submenu-item" data-action="more-resources">Resources</div>
+                    <div class="fab-submenu-item" data-action="more-quiz">Quiz</div>
+                    <div class="fab-submenu-item" data-action="more-qa">QA</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+   <footer>
+        <p>&copy; 2024 UNIVERSITAS AI</p>
+    </footer>
+
+    <script>
+        // Constants and Variables
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const voiceOutputToggle = document.getElementById('speakerToggle');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const volumePercentage = document.querySelector('.volume-percentage');
+        const chatArea = document.getElementById('chatArea');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+        const micButton = document.getElementById('micButton');
+        const mainFab = document.getElementById('mainFab');
+        const fabMenu = document.getElementById('fabMenu');
+        const languageSelect = document.getElementById('languageSelect');
+        const datetimeDisplay = document.getElementById('datetime');
+
+        let isDarkMode = false;
+        let isVoiceOutputEnabled = false;
+        let isVoiceInputActive = false;
+        let currentLanguage = 'en';
+
+        // Helper Functions
+        function updateDateTime() {
+            const now = new Date();
+            const options = { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true };
+            datetimeDisplay.textContent = now.toLocaleString('en-US', options).replace(/,/g, '');
+        }
+
+        function toggleDarkMode() {
+            isDarkMode = !isDarkMode;
+            document.body.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+            const sunIcon = darkModeToggle.querySelector('.sun-icon');
+            const moonIcon = darkModeToggle.querySelector('.moon-icon');
+            sunIcon.style.display = isDarkMode ? 'inline' : 'none';
+            moonIcon.style.display = isDarkMode ? 'none' : 'inline';
+            
+            // Update chat message styles
+            document.querySelectorAll('.chat-message.ai').forEach(msg => {
+                msg.style.background = isDarkMode ? 'rgba(42, 42, 42, 0.8)' : '#ffffff';
+            });
+        }
+
+        function toggleVoiceOutput() {
+            isVoiceOutputEnabled = !isVoiceOutputEnabled;
+            voiceOutputToggle.classList.toggle('active', isVoiceOutputEnabled);
+            document.querySelector('.volume-control').style.display = isVoiceOutputEnabled ? 'flex' : 'none';
+
+            if (isVoiceOutputEnabled) {
+                // Call ElevenLabs API to start voice synthesis
+                startVoiceSynthesis();
+            } else {
+                // Call ElevenLabs API to stop voice synthesis
+                stopVoiceSynthesis();
+            }
+        }
+
+        function toggleVoiceInput() {
+            isVoiceInputActive = !isVoiceInputActive;
+            micButton.classList.toggle('active', isVoiceInputActive);
+            if (isVoiceInputActive) {
+                startSpeechRecognition();
+            } else {
+                stopSpeechRecognition();
+            }
+        }
+
+        function changeLanguage() {
+            currentLanguage = languageSelect.value;
+            updateDateTime();
+            // TODO: Implement actual language change functionality
+        }
+
+        function addMessageToChatArea(sender, message) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('chat-message', sender);
+            messageElement.textContent = message;
+            chatArea.appendChild(messageElement);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        // AI and API Integration
+        async function sendMessageToAI(message, action = null) {
+            // TODO: Replace with actual API call to GPT-4-turbo
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    let response = "I understand your query. Here's what I found: ...";
+                    resolve(response);
+                }, 1000 + Math.random() * 2000);
+            });
+        }
+
+        // Speech Recognition
+        let recognition;
+
+        function startSpeechRecognition() {
+            if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+                recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+                recognition.lang = currentLanguage;
+                recognition.continuous = true;
+                recognition.interimResults = true;
+
+                recognition.onresult = (event) => {
+                    const transcript = Array.from(event.results)
+                        .map(result => result[0].transcript)
+                        .join('');
+                    messageInput.value = transcript;
+                };
+
+                recognition.start();
+            } else {
+                console.error('Speech recognition not supported');
+                alert('Speech recognition is not supported in your browser.');
+            }
+        }
+
+        function stopSpeechRecognition() {
+            if (recognition) {
+                recognition.stop();
+            }
+        }
+
+        // Event Listeners
+        darkModeToggle.addEventListener('click', toggleDarkMode);
+        voiceOutputToggle.addEventListener('click', toggleVoiceOutput);
+        micButton.addEventListener('click', toggleVoiceInput);
+        languageSelect.addEventListener('change', changeLanguage);
+
+        sendButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        volumeSlider.addEventListener('input', () => {
+            const volume = volumeSlider.value;
+            volumePercentage.textContent = `${volume}%`;
+            updateElevenLabsVolume(volume);
+        });
+
+        async function sendMessage() {
+            const message = messageInput.value.trim();
+            if (message) {
+                addMessageToChatArea('user', message);
+                messageInput.value = '';
+                
+                const aiResponse = await sendMessageToAI(message);
+                addMessageToChatArea('ai', aiResponse);
+
+                if (isVoiceOutputEnabled) {
+                    speakText(aiResponse);
+                }
+            }
+        }
+
+        // Voice Output
+        function speakText(text) {
+            // TODO: Implement Elevenlabs API for more natural voice
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = currentLanguage;
+            utterance.volume = volumeSlider.value / 100;
+            speechSynthesis.speak(utterance);
+        }
+
+        function startVoiceSynthesis() {
+            // TODO: Implement ElevenLabs API call to start voice synthesis
+        }
+
+        function stopVoiceSynthesis() {
+            // TODO: Implement ElevenLabs API call to stop voice synthesis
+        }
+
+        // FAB Menu Functionality
+        mainFab.addEventListener('click', () => {
+            fabMenu.style.display = fabMenu.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        document.querySelectorAll('.fab-item').forEach(item => {
+            const button = item.querySelector('.fab-button');
+            const submenu = item.querySelector('.fab-submenu');
+
+            button.addEventListener('click', (e) => {
+                e.stopPropagation();
+                submenu.style.display = submenu.style.display === 'flex' ? 'none' : 'flex';
+            });
+        });
+
+        document.querySelectorAll('.fab-submenu-item').forEach(item => {
+            item.addEventListener('click', async (e) => {
+                e.stopPropagation();
+                const action = item.dataset.action;
+                const aiResponse = await sendMessageToAI(messageInput.value, action);
+                addMessageToChatArea('ai', aiResponse);
+                if (isVoiceOutputEnabled) {
+                    speakText(aiResponse);
+                }
+                fabMenu.style.display = 'none';
+            });
+        });
+
+        // Initialize
+        function init() {
+            updateDateTime();
+            setInterval(updateDateTime, 60000); // Update every minute
+            
+            // Simulate initial AI greeting
+            setTimeout(() => {
+                addMessageToChatArea('ai', "Hello! I'm Herakles, your AI research assistant. How can I help you today?");
+            }, 1000);
+
+            // Set initial theme
+            document.body.setAttribute('data-theme', 'light');
+        }
+
+        init();
+
+        // Error handling
+        window.onerror = function(message, source, lineno, colno, error) {
+            console.error("An error occurred:", message, "at", source, ":", lineno);
+            // TODO: Implement proper error logging and reporting
+        };
+
+        // Responsive design adjustments
+        function handleResize() {
+            if (window.innerWidth <= 768) {
+                document.querySelector('.header-title').style.display = 'none';
+                document.querySelector('.datetime').style.display = 'none';
+            } else {
+                document.querySelector('.header-title').style.display = 'block';
+                document.querySelector('.datetime').style.display = 'block';
+            }
+        }
+
+        window.addEventListener('resize', handleResize);
+        handleResize(); // Call once to set initial state
+
+        // Function to update ElevenLabs volume (placeholder)
+        function updateElevenLabsVolume(volume) {
+            // TODO: Implement actual ElevenLabs volume adjustment
+            console.log(`ElevenLabs volume set to ${volume}%`);
+        }
+    </script>
+</body>
+</html>
