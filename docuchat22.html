@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocuChat App - Universitas AI</title>
+    <meta name="description" content="A bilingual document chat application supporting English and Spanish">
+    <link rel="icon" href="favicon5.svg" type="image/svg+xml">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'universitas-red': {
+                            light: '#ED1B34',
+                            dark: '#A51C30',
+                        },
+                        background: {
+                            light: '#ffffff',
+                            dark: '#1e1e1e',
+                        },
+                        panel: {
+                            light: 'rgba(255, 255, 255, 0.7)',
+                            dark: 'rgba(42, 42, 42, 0.7)',
+                        }
+                    },
+                    fontFamily: {
+                        'sans': ['Source Sans Pro', 'sans-serif'],
+                    },
+                    borderRadius: {
+                        'universitas': '10px',
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+        }
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .dark .glass-morphism {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .button-primary {
+            background-color: white;
+            color: black;
+            border: 1px solid black;
+        }
+        .dark .button-primary {
+            background-color: #1e1e1e;
+            color: white;
+            border: 1px solid white;
+        }
+        .button-primary:hover {
+            background-color: #ED1B34;
+            color: white;
+        }
+        .dark .button-primary:hover {
+            background-color: #A51C30;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-gray-900 dark:text-gray-100 transition-colors duration-300">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        const DocumentUpload = ({ onFileUpload }) => {
+            const [dragOver, setDragOver] = useState(false);
+            const fileInputRef = useRef(null);
+
+            const handleDrop = (e) => {
+                e.preventDefault();
+                setDragOver(false);
+                const files = Array.from(e.dataTransfer.files);
+                onFileUpload(files);
+            };
+
+            const handleDragOver = (e) => {
+                e.preventDefault();
+                setDragOver(true);
+            };
+
+            const handleDragLeave = () => {
+                setDragOver(false);
+            };
+
+            return (
+                <div
+                    onDrop={handleDrop}
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    className={`glass-morphism border-2 border-dashed p-4 rounded-universitas text-center transition-colors duration-300 ${dragOver ? 'border-universitas-red-light dark:border-universitas-red-dark' : 'border-gray-300 dark:border-gray-700'}`}
+                >
+                    <p className="mb-2">Drag and drop files here or</p>
+                    <input
+                        type="file"
+                        multiple
+                        onChange={(e) => onFileUpload(Array.from(e.target.files))}
+                        className="hidden"
+                        ref={fileInputRef}
+                    />
+                    <button
+                        onClick={() => fileInputRef.current?.click()}
+                        className="button-primary px-4 py-2 rounded-universitas"
+                    >
+                        Select Files
+                    </button>
+                </div>
+            );
+        };
+
+        const DocumentChatApp = () => {
+            const [documents, setDocuments] = useState([]);
+
+            const handleFileUpload = (files) => {
+                setDocuments(prevDocs => [...prevDocs, ...files.map(file => file.name)]);
+            };
+
+            return (
+                <div className="container mx-auto p-4 max-w-4xl">
+                    <h1 className="text-3xl font-bold mb-4 text-center">DocuChat</h1>
+                    <DocumentUpload onFileUpload={handleFileUpload} />
+                    <footer className="mt-8 text-center text-gray-500 text-sm">
+                        © 2024 UNIVERSITAS AI
+                    </footer>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<DocumentChatApp />, document.getElementById('root'));
+    </script>
+</body>
+</html>
