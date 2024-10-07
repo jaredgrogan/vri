@@ -1,3 +1,5 @@
+// File: languages/chatconsole_translations.js
+
 const translations = {
   en: {
     discover: "Discover the Universe",
