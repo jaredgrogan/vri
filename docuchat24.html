@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocuChat App - Universitas AI</title>
+    <meta name="description" content="A bilingual document chat application supporting English and Spanish">
+    <link rel="icon" href="favicon5.svg" type="image/svg+xml">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'universitas-red': {
+                            light: '#ED1B34',
+                            dark: '#A51C30',
+                        },
+                        background: {
+                            light: '#ffffff',
+                            dark: '#1e1e1e',
+                        },
+                        panel: {
+                            light: 'rgba(255, 255, 255, 0.7)',
+                            dark: 'rgba(42, 42, 42, 0.7)',
+                        }
+                    },
+                    fontFamily: {
+                        'sans': ['Source Sans Pro', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+        }
+        .tooltip {
+            visibility: hidden;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            text-align: center;
+            padding: 5px 10px;
+            border-radius: 6px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip-container:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+        .dark .bg-background-light {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-gray-900 dark:text-gray-100 transition-colors duration-300">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // Translations
+        const translations = {
+            en: {
+                appTitle: "DocuChat App",
+                send: "Send",
+                voiceInput: "Voice input",
+                dragDropFiles: "Drag and drop files here or",
+                selectFiles: "Select Files",
+                searchPlaceholder: "Enter your search query...",
+                search: "Search",
+                generateCitation: "Generate Citation",
+                autoReader: "Auto-Reader",
+                analyzeDocument: "Analyze Document",
+                analyzing: "Analyzing...",
+                analysisResult: "Analysis Result:",
+                summary: "Summary:",
+                keyEntities: "Key Entities:",
+                suggestedTasks: "Suggested Tasks:",
+                keyInsights: "Key Insights:",
+                exportOptions: "Export Options",
+                uploadedDocuments: "Uploaded Documents",
+                previewDocument: "Preview document",
+                processing: "Processing your request...",
+                error: "Error",
+                changeLanguage: "Change language",
+                lightMode: "Switch to light mode",
+                darkMode: "Switch to dark mode",
+                close: "Close",
+            },
+            es: {
+                appTitle: "Aplicación DocuChat",
+                send: "Enviar",
+                voiceInput: "Entrada de voz",
+                dragDropFiles: "Arrastra y suelta archivos aquí o",
+                selectFiles: "Seleccionar Archivos",
+                searchPlaceholder: "Ingresa tu consulta de búsqueda...",
+                search: "Buscar",
+                generateCitation: "Generar Cita",
+                autoReader: "Lector Automático",
+                analyzeDocument: "Analizar Documento",
+                analyzing: "Analizando...",
+                analysisResult: "Resultado del Análisis:",
+                summary: "Resumen:",
+                keyEntities: "Entidades Clave:",
+                suggestedTasks: "Tareas Sugeridas:",
+                keyInsights: "Hallazgos Clave:",
+                exportOptions: "Opciones de Exportación",
+                uploadedDocuments: "Documentos Subidos",
+                previewDocument: "Vista previa del documento",
+                processing: "Procesando tu solicitud...",
+                error: "Error",
+                changeLanguage: "Cambiar idioma",
+                lightMode: "Cambiar a modo claro",
+                darkMode: "Cambiar a modo oscuro",
+                close: "Cerrar",
+            }
+        };
+
+        const Tooltip = ({ text, children }) => (
+            <div className="tooltip-container relative">
+                {children}
+                <span className="tooltip">{text}</span>
+            </div>
+        );
+
+        const LanguageToggle = ({ currentLanguage, onLanguageChange }) => {
+            const toggleLanguage = () => {
+                const newLanguage = currentLanguage === 'en' ? 'es' : 'en';
+                onLanguageChange(newLanguage);
+            };
+
+            return (
+                <Tooltip text={translations[currentLanguage].changeLanguage}>
+                    <button
+                        onClick={toggleLanguage}
+                        className="px-4 py-2 bg-universitas-red-dark hover:bg-universitas-red-light text-white transition-colors duration-300"
+                    >
+                        {currentLanguage.toUpperCase()}
+                    </button>
+                </Tooltip>
+            );
+        };
+
+        const DarkModeToggle = ({ darkMode, onToggle, language }) => {
+            return (
+                <Tooltip text={darkMode ? translations[language].lightMode : translations[language].darkMode}>
+                    <button
+                        onClick={onToggle}
+                        className="p-2 bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-300"
+                        aria-label={darkMode ? translations[language].lightMode : translations[language].darkMode}
+                    >
+                        {darkMode ? (
+                            <svg className="w-6 h-6 text-universitas-red-light" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                            </svg>
+                        ) : (
+                            <svg className="w-6 h-6 text-universitas-red-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                            </svg>
+                        )}
+                    </button>
+                </Tooltip>
+            );
+        };
+
+        const DocumentChatApp = () => {
+            const [darkMode, setDarkMode] = useState(false);
+            const [language, setLanguage] = useState(() => {
+                const savedLanguage = localStorage.getItem('language');
+                return savedLanguage || 'en';
+            });
+
+            useEffect(() => {
+                document.documentElement.lang = language;
+                localStorage.setItem('language', language);
+                if (darkMode) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            }, [darkMode, language]);
+
+            return (
+                <div className="container mx-auto p-4 max-w-4xl">
+                    <header className="flex items-center justify-between mb-6 p-4 shadow-lg">
+                        <div className="flex items-center">
+                            <img src="favicon5.svg" alt="Logo" className="w-10 h-10 mr-2" />
+                            <h1 className="text-2xl font-bold font-sans">{translations[language].appTitle}</h1>
+                        </div>
+                        <div className="flex items-center space-x-4">
+                            <LanguageToggle currentLanguage={language} onLanguageChange={setLanguage} />
+                            <DarkModeToggle darkMode={darkMode} onToggle={() => setDarkMode(!darkMode)} language={language} />
+                        </div>
+                    </header>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<DocumentChatApp />, document.getElementById('root'));
+    </script>
+</body>
+</html>
