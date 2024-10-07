@@ -1,4 +1,3 @@
-// File: languages/chatconsole_translations.js
 
 const translations = {
   en: {
