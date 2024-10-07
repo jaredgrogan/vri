@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universitas AI Chat Console</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600&family=Courier+New&family=Noto+Sans+Arabic&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: rgba(255, 255, 255, 0.7);
+            --secondary-bg: rgba(244, 244, 249, 0.7);
+            --text-color: #333333;
+            --accent-color: #A51C30;
+            --hover-bg-color: #ED1B34;
+            --hover-text-color: #ffffff;
+            --button-text-color: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --input-stroke: #A51C30;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --user-bubble-bg: rgba(255, 255, 255, 0.3);
+            --hero-bg: #ffffff;
+        }
+
+        [data-theme="dark"] {
+            --primary-bg: rgba(30, 30, 30, 0.7);
+            --secondary-bg: rgba(42, 42, 42, 0.7);
+            --text-color: #ffffff;
+            --accent-color: #ED1B34;
+            --hover-bg-color: #A51C30;
+            --hover-text-color: #ffffff;
+            --button-text-color: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --input-stroke: #ED1B34;
+            --glass-bg: rgba(30, 30, 30, 0.8);
+            --glass-border: rgba(30, 30, 30, 0.5);
+            --user-bubble-bg: rgba(30, 30, 30, 0.5);
+            --hero-bg: #4a4a4a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background-color: var(--hero-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+            box-shadow: 0 4px 6px var(--shadow-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-link {
+            margin-right: 1rem;
+        }
+
+        .logo {
+            height: 50px;
+            width: 50px;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.1);
+        }
+
+        .header-title {
+            font-family: 'Courier New', monospace;
+            font-weight: normal;
+            font-size: 1.5rem;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .language-select select {
+            background-color: var(--secondary-bg);
+            color: var(--text-color);
+            border: 1px solid var(--text-color);
+            padding: 0.3rem;
+            border-radius: 5px;
+            margin-right: 1rem;
+        }
+
+        .icon-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            transition: all 0.3s ease;
+        }
+
+        .icon-button svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--text-color);
+            stroke: currentColor;
+        }
+
+        .icon-button:hover {
+            background-color: var(--accent-color);
+        }
+
+        [data-theme="dark"] .icon-button .sun-icon {
+            stroke: #ffffff !important;
+            fill: none !important;
+        }
+
+        .icon-button .moon-icon {
+            stroke: #000000 !important;
+            fill: none !important;
+        }
+
+        [data-theme="dark"] .icon-button .moon-icon {
+            stroke: #ffffff !important;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: var(--secondary-bg);
+            color: var(--text-color);
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-top: 5px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .fab-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+        }
+
+        .fab {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #A51C30;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 2px 10px var(--shadow-color);
+            transition: transform 0.3s ease;
+        }
+
+        .fab:hover {
+            transform: scale(1.1);
+        }
+
+        .fab-menu {
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            display: none;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .fab-item {
+            margin-bottom: 10px;
+            position: relative;
+        }
+
+        .fab-button {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--secondary-bg);
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px var(--shadow-color);
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .fab-button svg {
+            display: block;
+            margin: auto;
+        }
+
+        .fab-button .tooltiptext {
+            visibility: hidden;
+            position: absolute;
+            background-color: var(--secondary-bg);
+            color: var(--text-color);
+            border-radius: 5px;
+            padding: 5px;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            margin-top: 5px;
+        }
+
+        .fab-button:hover .tooltiptext {
+            visibility: visible;
+        }
+
+        @media (max-width: 768px) {
+            .header-title {
+                display: none;
+            }
+
+            .datetime {
+                display: none;
+            }
+
+            .fab-menu {
+                right: 1rem;
+                left: 1rem;
+                bottom: 5rem;
+            }
+
+            .icon-button .sun-icon,
+            .icon-button .moon-icon {
+                stroke: var(--text-color);
+                fill: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <a href="index.html" class="logo-link">
+                <img src="favicon5.svg" alt="Universitas AI Logo" class="logo">
+            </a>
+            <h1 class="header-title">// Discover the Universe</h1>
+        </div>
+        <div class="header-right">
+            <div class="language-select">
+                <select id="languageSelect">
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                    <option value="it">Italiano</option>
+                    <option value="pt">Português</option>
+                    <option value="ar">العربية</option>
+                </select>
+            </div>
+            <button id="darkModeToggle" class="icon-button tooltip" aria-label="Toggle Dark Mode">
+                <svg class="icon sun-icon" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/>
+                    <line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2"/>
+                    <!-- Other sun rays here -->
+                </svg>
+                <svg class="icon moon-icon" viewBox="0 0 24 24">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="none" stroke="currentColor" stroke-width="2"/>
+                </svg>
+                <span class="tooltiptext">Toggle Dark Mode</span>
+            </button>
+        </div>
+    </header>
+    <main>
+        <div class="chat-container">
+            <!-- Chat messages and input area here -->
+        </div>
+    </main>
+    <div class="fab-container">
+        <div class="fab" id="mainFab">+</div>
+        <div class="fab-menu" id="fabMenu">
+            <div class="fab-item">
+                <div class="fab-button tooltip" data-action="summarize">
+                    <svg viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M14 17h4v2h-4zm0-2h4v-2h-4zm0-4h4V9h-4zm-6 6h4v-2H8zm0-4h4v-2H8zm0-4h4V9H8zM5 7h2v2H5zm0 4h2v2H5zm0 4h2v2H5zM20 5H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2z"/>
+                    </svg>
+                    <span class="tooltiptext">Summarize</span>
+                </div>
+                <!-- More fab buttons here -->
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>&copy; 2024 UNIVERSITAS AI</p>
+    </footer>
+    <script>
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const mainFab = document.getElementById('mainFab');
+        const fabMenu = document.getElementById('fabMenu');
+
+        let isDarkMode = false;
+
+        function toggleDarkMode() {
+            isDarkMode = !isDarkMode;
+            document.body.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+            const sunIcon = darkModeToggle.querySelector('.sun-icon');
+            const moonIcon = darkModeToggle.querySelector('.moon-icon');
+            sunIcon.style.display = isDarkMode ? 'inline' : 'none';
+            moonIcon.style.display = isDarkMode ? 'none' : 'inline';
+        }
+
+        mainFab.addEventListener('click', () => {
+            fabMenu.style.display = fabMenu.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        darkModeToggle.addEventListener('click', toggleDarkMode);
+    </script>
+</body>
+</html>
