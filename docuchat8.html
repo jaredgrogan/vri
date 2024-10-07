@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocuChat App - Universitas AI</title>
+    <meta name="description" content="A document chat application for university students">
+    <link rel="icon" href="favicon5.svg" type="image/svg+xml">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Source+Sans+Pro:wght@300;400;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'universitas-red': {
+                            light: '#ED1B34', // Bright red for hover in night mode.
+                            dark: '#A51C30', // Darker red for hover in day mode.
+                        },
+                        background: {
+                            light: '#ffffff',
+                            dark: '#1e1e1e',
+                        },
+                        panel: {
+                            light: 'rgba(255, 255, 255, 0.7)',
+                            dark: 'rgba(42, 42, 42, 0.7)',
+                        }
+                    },
+                    fontFamily: {
+                        'sans': ['Source Sans Pro', 'sans-serif'],
+                        'roboto': ['Roboto', 'sans-serif'],
+                        'mono': ['Courier New', 'monospace']
+                    },
+                    borderRadius: {
+                        'universitas': '15px',
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+        }
+        .tooltip {
+            visibility: hidden;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            text-align: center;
+            padding: 5px 10px;
+            border-radius: 6px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip-container:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .dark .glass-morphism {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .docu-title {
+            font-family: 'Roboto', sans-serif;
+            color: #A51C30;
+        }
+        .dark .docu-title {
+            color: #ED1B34;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-gray-900 dark:text-gray-100 transition-colors duration-300">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        const translations = {
+            en: {
+                appTitle: "DocuChat",
+                send: "Send",
+                voiceInput: "Voice input",
+                dragDropFiles: "Drag and drop files here or",
+                selectFiles: "Select Files",
+                searchPlaceholder: "Enter your search query...",
+                search: "Search",
+                generateCitation: "Generate Citation",
+                autoReader: "Auto-Reader",
+                analyzeDocument: "Analyze Document",
+                analyzing: "Analyzing...",
+                analysisResult: "Analysis Result:",
+                exportOptions: "Export Options",
+                uploadedDocuments: "Uploaded Documents",
+                previewDocument: "Preview document",
+                processing: "Processing your request...",
+                error: "Error",
+                close: "Close",
+            }
+        };
+
+        const Tooltip = ({ text, children }) => (
+            <div className="tooltip-container relative">
+                {children}
+                <span className="tooltip">{text}</span>
+            </div>
+        );
+
+        const DocumentUpload = ({ onFileUpload }) => {
+            const [dragOver, setDragOver] = useState(false);
+            const fileInputRef = useRef(null);
+
+            const handleDrop = (e) => {
+                e.preventDefault();
+                setDragOver(false);
+                const files = Array.from(e.dataTransfer.files);
+                onFileUpload(files);
+            };
+
+            const handleDragOver = (e) => {
+                e.preventDefault();
+                setDragOver(true);
+            };
+
+            const handleDragLeave = () => {
+                setDragOver(false);
+            };
+
+            return (
+                <div
+                    onDrop={handleDrop}
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    className={`glass-morphism border-2 border-dashed p-4 rounded-universitas text-center transition-colors duration-300 ${dragOver ? 'border-universitas-red-dark dark:border-universitas-red-light' : 'border-gray-300 dark:border-gray-700'}`}
+                >
+                    <p>{translations.en.dragDropFiles}</p>
+                    <input
+                        type="file"
+                        multiple
+                        onChange={(e) => onFileUpload(Array.from(e.target.files))}
+                        className="hidden"
+                        ref={fileInputRef}
+                    />
+                    <button
+                        onClick={() => fileInputRef.current?.click()}
+                        className="mt-2 bg-universitas-red-dark dark:bg-1e1e1e text-white px-4 py-2 rounded-universitas hover:bg-universitas-red-light dark:hover:bg-universitas-red-light transition-colors duration-300"
+                    >
+                        {translations.en.selectFiles}
+                    </button>
+                </div>
+            );
+        };
+
+        const ExportOptions = ({ onExport }) => {
+            const exportFormats = ['PDF', 'DOCX', 'TXT', 'JSON'];
+
+            return (
+                <div className="mb-4 glass-morphism p-4 rounded-universitas shadow-lg">
+                    <h3 className="text-lg font-semibold mb-2">{translations.en.exportOptions}</h3>
+                    <div className="flex space-x-2">
+                        {exportFormats.map(format => (
+                            <Tooltip key={format} text={`${translations.en.exportOptions} ${format}`}>
+                                <button
+                                    onClick={() => onExport(format)}
+                                    className="px-4 py-2 bg-1e1e1e dark:bg-1e1e1e text-white border border-gray-300 dark:border-gray-600 rounded-full transition-colors duration-300 hover:bg-universitas-red-dark dark:hover:bg-universitas-red-light hover:text-white"
+                                >
+                                    {format}
+                                </button>
+                            </Tooltip>
+                        ))}
+                    </div>
+                </div>
+            );
+        };
+
+        const DocumentChatApp = () => {
+            const [darkMode, setDarkMode] = useState(false);
+
+            useEffect(() => {
+                if (darkMode) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            }, [darkMode]);
+
+            return (
+                <div className="container mx-auto p-4 max-w-4xl">
+                    <header className="flex items-center justify-between mb-6 glass-morphism p-4 rounded-universitas shadow-lg">
+                        <div className="flex items-center">
+                            <img src="favicon5.svg" alt="Logo" className="w-10 h-10 mr-2" />
+                        </div>
+                        <div className="flex items-center space-x-4">
+                            <Tooltip text={darkMode ? "Switch to light mode" : "Switch to dark mode"}>
+                                <button
+                                    onClick={() => setDarkMode(!darkMode)}
+                                    className="p-2 rounded-universitas bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-300"
+                                    aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+                                >
+                                    {darkMode ? (
+                                        <svg className="w-6 h-6 text-universitas-red-light" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                                        </svg>
+                                    ) : (
+                                        <svg className="w-6 h-6 text-universitas-red-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                                        </svg>
+                                    )}
+                                </button>
+                            </Tooltip>
+                        </div>
+                    </header>
+
+                    <div className="docu-title text-center text-3xl mb-6">DocuChat</div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <DocumentUpload onFileUpload={() => {}} />
+                        <ExportOptions onExport={() => {}} />
+                    </div>
+
+                    <footer className="mt-8 text-center text-gray-500 text-sm font-mono">
+                        © {new Date().getFullYear()} UNIVERSITAS AI
+                    </footer>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<DocumentChatApp />, document.getElementById('root'));
+    </script>
+</body>
+</html>
