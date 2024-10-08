@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ... (head content remains the same) ... -->
+</head>
+<body class="bg-background-light dark:bg-background-dark text-gray-900 dark:text-gray-100 transition-colors duration-300">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        const translations = {
+            en: {
+                appTitle: "DocuChat App",
+                send: "Send",
+                voiceInput: "Voice input",
+                dragDropFiles: "Drag and drop files here or",
+                selectFiles: "Select Files",
+                searchPlaceholder: "Enter your search query...",
+                search: "Search",
+                generateCitation: "Generate Citation",
+                autoReader: "Auto-Reader",
+                analyzeDocument: "Analyze Document",
+                analyzing: "Analyzing...",
+                analysisResult: "Analysis Result:",
+                summary: "Summary:",
+                keyEntities: "Key Entities:",
+                suggestedTasks: "Suggested Tasks:",
+                keyInsights: "Key Insights:",
+                exportOptions: "Export Options",
+                uploadedDocuments: "Uploaded Documents",
+                previewDocument: "Preview document",
+                processing: "Processing your request...",
+                error: "Error",
+                lightMode: "Switch to light mode",
+                darkMode: "Switch to dark mode",
+                close: "Close",
+            }
+        };
+
+        const Tooltip = ({ text, children }) => (
+            <div className="tooltip-container relative">
+                {children}
+                <span className="tooltip">{text}</span>
+            </div>
+        );
+
+        const DarkModeToggle = ({ darkMode, onToggle }) => {
+            return (
+                <Tooltip text={darkMode ? translations.en.lightMode : translations.en.darkMode}>
+                    <button
+                        onClick={onToggle}
+                        className="p-2 rounded-universitas bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-300"
+                        aria-label={darkMode ? translations.en.lightMode : translations.en.darkMode}
+                    >
+                        {darkMode ? (
+                            <svg className="w-6 h-6 text-universitas-red-light" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                            </svg>
+                        ) : (
+                            <svg className="w-6 h-6 text-universitas-red-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                            </svg>
+                        )}
+                    </button>
+                </Tooltip>
+            );
+        };
+
+        const VoiceInput = ({ onVoiceInput }) => {
+            const [isRecording, setIsRecording] = useState(false);
+
+            const handleVoiceInput = () => {
+                if (isRecording) {
+                    setIsRecording(false);
+                    onVoiceInput("Voice input text would go here");
+                } else {
+                    setIsRecording(true);
+                }
+            };
+
+            return (
+                <button
+                    onClick={handleVoiceInput}
+                    className={`p-2 rounded-full ml-2 ${isRecording ? 'bg-universitas-red-light dark:bg-universitas-red-dark animate-pulse' : 'bg-gray-200 dark:bg-gray-700'} transition-colors duration-300`}
+                    aria-label={isRecording ? "Stop recording" : "Start recording"}
+                >
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                    </svg>
+                </button>
+            );
+        };
+
+        // ... (other components remain the same, with language adjustments if needed) ...
+
+        const SemanticSearch = ({ onSearch }) => {
+            const [query, setQuery] = useState('');
+
+            const handleSearch = () => {
+                if (query.trim()) {
+                    onSearch(query);
+                }
+            };
+
+            return (
+                <div className="mb-4 glass-morphism p-4 rounded-universitas shadow-lg">
+                    <input
+                        type="text"
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                        placeholder={translations.en.searchPlaceholder}
+                        className="w-full p-2 border rounded-universitas dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-universitas-red-light dark:focus:ring-universitas-red-dark"
+                    />
+                    <Tooltip text={translations.en.search}>
+                        <button onClick={handleSearch} className="mt-2 bg-universitas-red-light dark:bg-universitas-red-dark text-white px-4 py-2 rounded-universitas hover:bg-universitas-red-dark dark:hover:bg-universitas-red-light transition-colors duration-300">
+                            {translations.en.search}
+                        </button>
+                    </Tooltip>
+                </div>
+            );
+        };
+
+        // ... (apply glass-morphism class to other module components similarly) ...
+
+        const DocumentChatApp = () => {
+            const [documents, setDocuments] = useState([]);
+            const [chatMessages, setChatMessages] = useState([]);
+            const [darkMode, setDarkMode] = useState(false);
+            const [previewDocument, setPreviewDocument] = useState(null);
+            const [isLoading, setIsLoading] = useState(false);
+            const [error, setError] = useState(null);
+            const language = 'en';
+
+            useEffect(() => {
+                document.documentElement.lang = 'en';
+                if (darkMode) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            }, [darkMode]);
+
+            // ... (event handlers remain the same, adjust language references if needed) ...
+
+            return (
+                <div className="container mx-auto p-4 max-w-4xl">
+                    {/* New top header with logo and dark mode toggle */}
+                    <header className="flex items-center justify-between mb-4 glass-morphism p-4 rounded-universitas shadow-lg">
+                        <img src="favicon5.svg" alt="Logo" className="w-10 h-10" />
+                        <DarkModeToggle darkMode={darkMode} onToggle={() => setDarkMode(!darkMode)} />
+                    </header>
+
+                    {/* Main header with app title */}
+                    <header className="mb-6">
+                        <h1 className="text-2xl font-bold font-sans">{translations.en.appTitle}</h1>
+                    </header>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <DocumentUpload onFileUpload={handleFileUpload} />
+                        <SemanticSearch onSearch={handleSemanticSearch} />
+                    </div>
+
+                    <AutoCitation onGenerateCitation={handleGenerateCitation} />
+                    <AutoReader document={documents[0]} onAnalysis={handleDocumentAnalysis} />
+                    <ExportOptions onExport={handleExport} />
+                    <ChatInterface messages={chatMessages} onSendMessage={handleSendMessage} />
+
+                    {/* ... (rest of the code remains the same, adjust language references if needed) ... */}
+                </div>
+            );
+        };
+
+        ReactDOM.render(<DocumentChatApp />, document.getElementById('root'));
+    </script>
+</body>
+</html>
