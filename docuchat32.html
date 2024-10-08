@@ -9,9 +9,6 @@
     <link rel="icon" href="favicon5.svg" type="image/svg+xml">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- React and ReactDOM -->
-    <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;700&family=Courier+New&family=Noto+Sans+Arabic&display=swap" rel="stylesheet">
     <!-- Tailwind Config -->
@@ -96,325 +93,338 @@
 <body class="bg-background-light dark:bg-background-dark text-gray-900 dark:text-gray-100 transition-colors duration-300">
     <div id="root"></div>
 
-    <!-- Transpiled JavaScript Code -->
+    <!-- Main JavaScript Code -->
     <script>
-        // Transpiled code from JSX to JavaScript
-        (function () {
-            const { useState, useEffect, useRef } = React;
+        // Your application logic here
+        // Since we're not using React, we'll use plain JavaScript
 
-            // Translations
-            const translations = {
-                en: {
-                    appTitle: "DocuChat App",
-                    send: "Send",
-                    voiceInput: "Voice input",
-                    dragDropFiles: "Drag and drop files here or",
-                    selectFiles: "Select Files",
-                    searchPlaceholder: "Enter your search query...",
-                    search: "Search",
-                    generateCitation: "Generate Citation",
-                    autoReader: "Auto-Reader",
-                    analyzeDocument: "Analyze Document",
-                    analyzing: "Analyzing...",
-                    analysisResult: "Analysis Result:",
-                    summary: "Summary:",
-                    keyEntities: "Key Entities:",
-                    suggestedTasks: "Suggested Tasks:",
-                    keyInsights: "Key Insights:",
-                    exportOptions: "Export Options",
-                    uploadedDocuments: "Uploaded Documents",
-                    previewDocument: "Preview document",
-                    processing: "Processing your request...",
-                    error: "Error",
-                    changeLanguage: "Change language",
-                    lightMode: "Switch to light mode",
-                    darkMode: "Switch to dark mode",
-                    close: "Close",
-                    discover: "// Discover the Universe",
-                    typemsg: "Type your message...",
-                    toggleVoice: "Toggle Voice Output",
-                    toggleDark: "Toggle Dark Mode",
-                    toggleInput: "Toggle Voice Input",
-                    copyright: "© 2024 UNIVERSITAS AI",
-                    greeting: "Hello! How can I assist you today?",
-                    summarize: "Summarize",
-                    explain: "Explain",
-                    analyze: "Analyze",
-                    actions: "Actions",
-                    translate: "Translate",
-                    more: "More",
-                    toggleVoiceOutput: "Toggle Voice Output",
-                },
-                es: {
-                    appTitle: "Aplicación DocuChat",
-                    send: "Enviar",
-                    voiceInput: "Entrada de voz",
-                    dragDropFiles: "Arrastra y suelta archivos aquí o",
-                    selectFiles: "Seleccionar Archivos",
-                    searchPlaceholder: "Ingresa tu consulta de búsqueda...",
-                    search: "Buscar",
-                    generateCitation: "Generar Cita",
-                    autoReader: "Lector Automático",
-                    analyzeDocument: "Analizar Documento",
-                    analyzing: "Analizando...",
-                    analysisResult: "Resultado del Análisis:",
-                    summary: "Resumen:",
-                    keyEntities: "Entidades Clave:",
-                    suggestedTasks: "Tareas Sugeridas:",
-                    keyInsights: "Hallazgos Clave:",
-                    exportOptions: "Opciones de Exportación",
-                    uploadedDocuments: "Documentos Subidos",
-                    previewDocument: "Vista previa del documento",
-                    processing: "Procesando tu solicitud...",
-                    error: "Error",
-                    changeLanguage: "Cambiar idioma",
-                    lightMode: "Cambiar a modo claro",
-                    darkMode: "Cambiar a modo oscuro",
-                    close: "Cerrar",
-                    discover: "// Descubre el Universo",
-                    typemsg: "Escribe tu mensaje...",
-                    toggleVoice: "Activar/Desactivar Voz",
-                    toggleDark: "Activar/Desactivar Modo Oscuro",
-                    toggleInput: "Activar/Desactivar Entrada de Voz",
-                    copyright: "© 2024 UNIVERSITAS AI",
-                    greeting: "¡Hola! ¿Cómo puedo ayudarte hoy?",
-                    summarize: "Resumir",
-                    explain: "Explicar",
-                    analyze: "Analizar",
-                    actions: "Acciones",
-                    translate: "Traducir",
-                    more: "Más",
-                    toggleVoiceOutput: "Activar/Desactivar Voz",
-                },
-                // Add other languages as needed...
-            };
+        // Translations
+        const translations = {
+            en: {
+                appTitle: "DocuChat App",
+                send: "Send",
+                voiceInput: "Voice input",
+                dragDropFiles: "Drag and drop files here or",
+                selectFiles: "Select Files",
+                searchPlaceholder: "Enter your search query...",
+                search: "Search",
+                generateCitation: "Generate Citation",
+                autoReader: "Auto-Reader",
+                analyzeDocument: "Analyze Document",
+                analyzing: "Analyzing...",
+                analysisResult: "Analysis Result:",
+                summary: "Summary:",
+                keyEntities: "Key Entities:",
+                suggestedTasks: "Suggested Tasks:",
+                keyInsights: "Key Insights:",
+                exportOptions: "Export Options",
+                uploadedDocuments: "Uploaded Documents",
+                previewDocument: "Preview document",
+                processing: "Processing your request...",
+                error: "Error",
+                changeLanguage: "Change language",
+                lightMode: "Switch to light mode",
+                darkMode: "Switch to dark mode",
+                close: "Close",
+                discover: "// Discover the Universe",
+                typemsg: "Type your message...",
+                toggleVoice: "Toggle Voice Output",
+                toggleDark: "Toggle Dark Mode",
+                toggleInput: "Toggle Voice Input",
+                copyright: "© 2024 UNIVERSITAS AI",
+                greeting: "Hello! How can I assist you today?",
+                summarize: "Summarize",
+                explain: "Explain",
+                analyze: "Analyze",
+                actions: "Actions",
+                translate: "Translate",
+                more: "More",
+                toggleVoiceOutput: "Toggle Voice Output",
+            },
+            es: {
+                // Spanish translations...
+            },
+            // Add other languages as needed...
+        };
 
-            // Tooltip Component
-            function Tooltip(props) {
-                var text = props.text, children = props.children;
-                return React.createElement(
-                    "div",
-                    { className: "tooltip-container relative" },
-                    children,
-                    React.createElement(
-                        "span",
-                        { className: "tooltip" },
-                        text
-                    )
-                );
+        // Set initial language and theme
+        let currentLanguage = 'en';
+        let darkMode = false;
+
+        // Function to initialize the app
+        function initApp() {
+            const root = document.getElementById('root');
+            root.innerHTML = ''; // Clear root
+
+            // Create Header
+            const header = createHeader();
+            root.appendChild(header);
+
+            // Create Main Content
+            const mainContent = document.createElement('div');
+            mainContent.className = 'container mx-auto p-4 max-w-4xl';
+
+            // Create components and append them
+            mainContent.appendChild(createDocumentUpload());
+            mainContent.appendChild(createSemanticSearch());
+            mainContent.appendChild(createAutoCitation());
+            mainContent.appendChild(createAutoReader());
+            mainContent.appendChild(createExportOptions());
+            mainContent.appendChild(createChatInterface());
+
+            root.appendChild(mainContent);
+
+            // Create Footer
+            const footer = document.createElement('footer');
+            footer.className = 'mt-8 text-center text-gray-500 text-sm';
+            footer.textContent = translations[currentLanguage].copyright;
+            root.appendChild(footer);
+        }
+
+        // Function to create Header
+        function createHeader() {
+            const header = document.createElement('header');
+            header.className = 'flex justify-between items-center p-4 bg-white bg-opacity-70 dark:bg-gray-900 dark:bg-opacity-70 backdrop-filter backdrop-blur-md sticky top-0 z-50 border-b border-gray-200 dark:border-gray-700';
+
+            const leftDiv = document.createElement('div');
+            leftDiv.className = 'flex items-center';
+
+            const logoLink = document.createElement('a');
+            logoLink.href = 'index.html';
+            logoLink.className = 'mr-4';
+
+            const logoImg = document.createElement('img');
+            logoImg.src = 'favicon5.svg';
+            logoImg.alt = 'Universitas AI Logo';
+            logoImg.className = 'h-12 w-12 object-contain transform transition-transform duration-300 hover:scale-110';
+
+            logoLink.appendChild(logoImg);
+            leftDiv.appendChild(logoLink);
+
+            const title = document.createElement('h1');
+            title.className = 'font-mono text-xl';
+            title.textContent = translations[currentLanguage].discover;
+            leftDiv.appendChild(title);
+
+            header.appendChild(leftDiv);
+
+            // Right side of header (language selector, dark mode toggle, etc.)
+            const rightDiv = document.createElement('div');
+            rightDiv.className = 'flex items-center';
+
+            // Language selector
+            const languageSelectDiv = document.createElement('div');
+            languageSelectDiv.className = 'mr-4';
+
+            const languageSelect = document.createElement('select');
+            languageSelect.value = currentLanguage;
+            languageSelect.className = 'bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 p-1 rounded';
+            languageSelect.addEventListener('change', (e) => {
+                currentLanguage = e.target.value;
+                initApp(); // Re-initialize the app to update translations
+            });
+
+            const languages = [
+                { code: 'en', label: 'English' },
+                { code: 'es', label: 'Español' },
+                { code: 'fr', label: 'Français' },
+                { code: 'de', label: 'Deutsch' },
+                { code: 'it', label: 'Italiano' },
+                { code: 'pt', label: 'Português' },
+                { code: 'ar', label: 'العربية' },
+            ];
+
+            languages.forEach(lang => {
+                const option = document.createElement('option');
+                option.value = lang.code;
+                option.textContent = lang.label;
+                languageSelect.appendChild(option);
+            });
+
+            languageSelectDiv.appendChild(languageSelect);
+            rightDiv.appendChild(languageSelectDiv);
+
+            // Dark Mode Toggle
+            const darkModeButton = document.createElement('button');
+            darkModeButton.className = 'p-2 rounded-full bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-300';
+            darkModeButton.setAttribute('aria-label', darkMode ? translations[currentLanguage].lightMode : translations[currentLanguage].darkMode);
+
+            const darkModeIcon = document.createElement('svg');
+            darkModeIcon.className = 'w-6 h-6 text-universitas-red-dark';
+            darkModeIcon.setAttribute('fill', 'none');
+            darkModeIcon.setAttribute('stroke', '#ffffff');
+            darkModeIcon.setAttribute('viewBox', '0 0 24 24');
+
+            const darkModePath = document.createElement('path');
+            darkModePath.setAttribute('stroke-linecap', 'round');
+            darkModePath.setAttribute('stroke-linejoin', 'round');
+            darkModePath.setAttribute('stroke-width', '2');
+            darkModePath.setAttribute('d', darkMode
+                ? 'M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z'
+                : 'M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z');
+
+            darkModeIcon.appendChild(darkModePath);
+            darkModeButton.appendChild(darkModeIcon);
+
+            darkModeButton.addEventListener('click', () => {
+                darkMode = !darkMode;
+                if (darkMode) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+                initApp(); // Re-initialize the app to update the theme
+            });
+
+            rightDiv.appendChild(darkModeButton);
+
+            header.appendChild(rightDiv);
+
+            return header;
+        }
+
+        // Function to create Document Upload component
+        function createDocumentUpload() {
+            const container = document.createElement('div');
+            container.className = 'glass-morphism border-2 border-dashed p-4 rounded-universitas text-center transition-colors duration-300';
+
+            const icon = document.createElement('svg');
+            icon.className = 'w-12 h-12 mx-auto mb-4 text-gray-400';
+            icon.setAttribute('fill', 'none');
+            icon.setAttribute('stroke', 'currentColor');
+            icon.setAttribute('viewBox', '0 0 24 24');
+
+            const iconPath = document.createElement('path');
+            iconPath.setAttribute('stroke-linecap', 'round');
+            iconPath.setAttribute('stroke-linejoin', 'round');
+            iconPath.setAttribute('stroke-width', '2');
+            iconPath.setAttribute('d', 'M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12');
+
+            icon.appendChild(iconPath);
+            container.appendChild(icon);
+
+            const instruction = document.createElement('p');
+            instruction.textContent = translations[currentLanguage].dragDropFiles;
+            container.appendChild(instruction);
+
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.multiple = true;
+            fileInput.className = 'hidden';
+
+            const selectButton = document.createElement('button');
+            selectButton.className = 'bg-universitas-red-dark hover:bg-universitas-red-light dark:bg-universitas-red-light dark:hover:bg-universitas-red-dark text-white px-4 py-2 rounded-universitas transition-colors duration-300 mt-2';
+            selectButton.textContent = translations[currentLanguage].selectFiles;
+            selectButton.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                const files = Array.from(e.target.files);
+                // Handle file upload logic here
+                alert(`Uploaded ${files.length} file(s)`);
+            });
+
+            container.appendChild(fileInput);
+            container.appendChild(selectButton);
+
+            // Drag and drop functionality
+            container.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                container.classList.add('border-universitas-red-dark');
+            });
+
+            container.addEventListener('dragleave', () => {
+                container.classList.remove('border-universitas-red-dark');
+            });
+
+            container.addEventListener('drop', (e) => {
+                e.preventDefault();
+                container.classList.remove('border-universitas-red-dark');
+                const files = Array.from(e.dataTransfer.files);
+                // Handle file upload logic here
+                alert(`Dropped ${files.length} file(s)`);
+            });
+
+            return container;
+        }
+
+        // Similarly, create other components like SemanticSearch, AutoCitation, AutoReader, ExportOptions, ChatInterface
+
+        function createSemanticSearch() {
+            // Implement the component similarly
+            const container = document.createElement('div');
+            container.className = 'mb-4 glass-morphism p-4 rounded-universitas shadow-lg';
+
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.placeholder = translations[currentLanguage].searchPlaceholder;
+            input.className = 'w-full p-2 border rounded-universitas dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-universitas-red-dark dark:focus:ring-universitas-red-light';
+
+            const searchButton = document.createElement('button');
+            searchButton.textContent = translations[currentLanguage].search;
+            searchButton.className = 'bg-universitas-red-dark hover:bg-universitas-red-light dark:bg-universitas-red-light dark:hover:bg-universitas-red-dark text-white px-4 py-2 rounded-universitas transition-colors duration-300 mt-2';
+            searchButton.addEventListener('click', () => {
+                const query = input.value.trim();
+                if (query) {
+                    // Handle search logic here
+                    alert(`Searching for: ${query}`);
+                }
+            });
+
+            container.appendChild(input);
+            container.appendChild(searchButton);
+
+            return container;
+        }
+
+        // Implement other components...
+
+        function createChatInterface() {
+            const container = document.createElement('div');
+            container.className = 'glass-morphism p-4 rounded-universitas shadow-lg';
+
+            // Chat messages container
+            const messagesContainer = document.createElement('div');
+            messagesContainer.className = 'h-80 overflow-y-auto mb-4';
+            container.appendChild(messagesContainer);
+
+            // Input area
+            const inputArea = document.createElement('div');
+            inputArea.className = 'flex items-center';
+
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.placeholder = translations[currentLanguage].searchPlaceholder;
+            input.className = 'flex-grow mr-2 p-2 border rounded-universitas dark:bg-gray-700 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-universitas-red-dark dark:focus:ring-universitas-red-light';
+
+            const sendButton = document.createElement('button');
+            sendButton.textContent = translations[currentLanguage].send;
+            sendButton.className = 'bg-universitas-red-dark hover:bg-universitas-red-light dark:bg-universitas-red-light dark:hover:bg-universitas-red-dark text-white px-4 py-2 rounded-universitas transition-colors duration-300';
+            sendButton.addEventListener('click', () => {
+                const message = input.value.trim();
+                if (message) {
+                    // Handle sending message logic here
+                    alert(`Sending message: ${message}`);
+                    input.value = '';
+                }
+            });
+
+            inputArea.appendChild(input);
+            inputArea.appendChild(sendButton);
+
+            container.appendChild(inputArea);
+
+            return container;
+        }
+
+        // Initialize the app on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            if (darkMode) {
+                document.documentElement.classList.add('dark');
             }
-
-            // Header Component
-            function Header(props) {
-                var currentLanguage = props.currentLanguage,
-                    onLanguageChange = props.onLanguageChange,
-                    darkMode = props.darkMode,
-                    onDarkModeToggle = props.onDarkModeToggle,
-                    isVoiceOutputEnabled = props.isVoiceOutputEnabled,
-                    onVoiceOutputToggle = props.onVoiceOutputToggle,
-                    volume = props.volume,
-                    onVolumeChange = props.onVolumeChange;
-
-                var _useState = useState(new Date()),
-                    dateTime = _useState[0],
-                    setDateTime = _useState[1];
-
-                useEffect(function () {
-                    var timer = setInterval(function () {
-                        setDateTime(new Date());
-                    }, 60000); // Update every minute
-
-                    return function () {
-                        return clearInterval(timer);
-                    };
-                }, []);
-
-                var handleLanguageChange = function handleLanguageChange(e) {
-                    var newLanguage = e.target.value;
-                    onLanguageChange(newLanguage);
-                };
-
-                return React.createElement(
-                    "header",
-                    { className: "flex justify-between items-center p-4 bg-white bg-opacity-70 dark:bg-gray-900 dark:bg-opacity-70 backdrop-filter backdrop-blur-md sticky top-0 z-50 border-b border-gray-200 dark:border-gray-700" },
-                    React.createElement(
-                        "div",
-                        { className: "flex items-center" },
-                        React.createElement(
-                            "a",
-                            { href: "index.html", className: "mr-4" },
-                            React.createElement("img", { src: "favicon5.svg", alt: "Universitas AI Logo", className: "h-12 w-12 object-contain transform transition-transform duration-300 hover:scale-110" })
-                        ),
-                        React.createElement(
-                            "h1",
-                            { className: "font-mono text-xl" },
-                            translations[currentLanguage].discover
-                        )
-                    ),
-                    React.createElement(
-                        "div",
-                        { className: "flex items-center" },
-                        React.createElement(
-                            "div",
-                            { className: "mr-4" },
-                            React.createElement(
-                                "select",
-                                {
-                                    value: currentLanguage,
-                                    onChange: handleLanguageChange,
-                                    className: "bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 p-1 rounded"
-                                },
-                                React.createElement(
-                                    "option",
-                                    { value: "en" },
-                                    "English"
-                                ),
-                                React.createElement(
-                                    "option",
-                                    { value: "es" },
-                                    "Espa\xF1ol"
-                                ),
-                                React.createElement(
-                                    "option",
-                                    { value: "fr" },
-                                    "Fran\xE7ais"
-                                ),
-                                React.createElement(
-                                    "option",
-                                    { value: "de" },
-                                    "Deutsch"
-                                ),
-                                React.createElement(
-                                    "option",
-                                    { value: "it" },
-                                    "Italiano"
-                                ),
-                                React.createElement(
-                                    "option",
-                                    { value: "pt" },
-                                    "Portugu\xEAs"
-                                ),
-                                React.createElement(
-                                    "option",
-                                    { value: "ar" },
-                                    "\u0627\u0644\u0639\u0631\u0628\u064A\u0629"
-                                )
-                            )
-                        ),
-                        React.createElement(
-                            "div",
-                            { className: "mr-4 flex items-center" },
-                            React.createElement(
-                                Tooltip,
-                                { text: translations[currentLanguage].toggleVoiceOutput },
-                                React.createElement(
-                                    "button",
-                                    {
-                                        onClick: onVoiceOutputToggle,
-                                        className: "icon-button p-2 rounded-full " + (isVoiceOutputEnabled ? 'bg-universitas-red-dark' : 'bg-gray-200 dark:bg-gray-700') + " hover:bg-universitas-red-light dark:hover:bg-universitas-red-dark transition-colors duration-300",
-                                        "aria-label": "Toggle Voice Output"
-                                    },
-                                    isVoiceOutputEnabled ? React.createElement(
-                                        "svg",
-                                        { className: "w-6 h-6 text-white", viewBox: "0 0 24 24", width: "24", height: "24" },
-                                        React.createElement("path", { d: "M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" })
-                                    ) : React.createElement(
-                                        "svg",
-                                        { className: "w-6 h-6 text-gray-600 dark:text-gray-300", viewBox: "0 0 24 24", width: "24", height: "24" },
-                                        React.createElement("path", { d: "M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" })
-                                    )
-                                )
-                            ),
-                            isVoiceOutputEnabled && React.createElement(
-                                "div",
-                                { className: "flex items-center ml-2" },
-                                React.createElement("input", {
-                                    type: "range",
-                                    min: "0",
-                                    max: "100",
-                                    value: volume,
-                                    onChange: function onChange(e) {
-                                        return onVolumeChange(e.target.value);
-                                    },
-                                    className: "w-24"
-                                }),
-                                React.createElement(
-                                    "span",
-                                    { className: "ml-2 text-sm" },
-                                    volume,
-                                    "%"
-                                )
-                            )
-                        ),
-                        React.createElement(
-                            Tooltip,
-                            { text: darkMode ? translations[currentLanguage].lightMode : translations[currentLanguage].darkMode },
-                            React.createElement(
-                                "button",
-                                {
-                                    onClick: onDarkModeToggle,
-                                    className: "p-2 rounded-full bg-gray-200 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-300",
-                                    "aria-label": darkMode ? translations[currentLanguage].lightMode : translations[currentLanguage].darkMode
-                                },
-                                darkMode ? React.createElement(
-                                    "svg",
-                                    { className: "w-6 h-6 text-universitas-red-dark", fill: "none", stroke: "#ffffff", viewBox: "0 0 24 24" },
-                                    React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: "2", d: "M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" })
-                                ) : React.createElement(
-                                    "svg",
-                                    { className: "w-6 h-6 text-universitas-red-light", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24" },
-                                    React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: "2", d: "M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" })
-                                )
-                            )
-                        ),
-                        React.createElement(
-                            "div",
-                            { className: "ml-4 font-mono text-sm hidden md:block" },
-                            dateTime.toLocaleString(currentLanguage, {
-                                weekday: 'short',
-                                month: 'short',
-                                day: 'numeric',
-                                hour: 'numeric',
-                                minute: 'numeric',
-                                hour12: true
-                            }).replace(/,/g, '')
-                        )
-                    )
-                );
-            }
-
-            // (Additional components would be similarly transpiled)
-
-            // For brevity, I've only included the Header component here. You would need to transpile all other components (Tooltip, VoiceInput, ChatInterface, etc.) similarly.
-
-            // Main App Component
-            function DocumentChatApp() {
-                // Component logic
-                // ...
-
-                // Return statement with React.createElement
-                return React.createElement(
-                    "div",
-                    { className: "container mx-auto p-4 max-w-4xl" },
-                    React.createElement(Header, {
-                        currentLanguage: language,
-                        onLanguageChange: setLanguage,
-                        darkMode: darkMode,
-                        onDarkModeToggle: function onDarkModeToggle() {
-                            return setDarkMode(!darkMode);
-                        },
-                        isVoiceOutputEnabled: isVoiceOutputEnabled,
-                        onVoiceOutputToggle: handleVoiceOutputToggle,
-                        volume: volume,
-                        onVolumeChange: handleVolumeChange
-                    }),
-                    // Additional components...
-                );
-            }
-
-            // Render the App
-            ReactDOM.render(React.createElement(DocumentChatApp, null), document.getElementById('root'));
-        })();
+            initApp();
+        });
     </script>
 </body>
 </html>
