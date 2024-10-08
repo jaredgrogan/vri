@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Head Section -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocuChat App - Universitas AI</title>
+    <meta name="description" content="A bilingual document chat application supporting multiple languages">
+    <link rel="icon" href="favicon5.svg" type="image/svg+xml">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React and ReactDOM -->
+    <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <!-- Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Courier+New&family=Noto+Sans+Arabic&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: rgba(255, 255, 255, 0.7);
+            --secondary-bg: rgba(244, 244, 249, 0.7);
+            --text-color: #333333;
+            --accent-color: #A51C30;
+            --hover-bg-color: #ED1B34;
+            --hover-text-color: #ffffff;
+            --button-text-color: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --input-stroke: #A51C30;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --user-bubble-bg: rgba(255, 255, 255, 0.3);
+            --hero-bg: #ffffff;
+        }
+
+        [data-theme="dark"] {
+            --primary-bg: rgba(30, 30, 30, 0.7);
+            --secondary-bg: rgba(42, 42, 42, 0.7);
+            --text-color: #ffffff;
+            --accent-color: #ED1B34;
+            --hover-bg-color: #A51C30;
+            --hover-text-color: #ffffff;
+            --button-text-color: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --input-stroke: #ED1B34;
+            --glass-bg: rgba(30, 30, 30, 0.8);
+            --glass-border: rgba(30, 30, 30, 0.5);
+            --user-bubble-bg: rgba(30, 30, 30, 0.5);
+            --hero-bg: #4a4a4a;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background-color: var(--hero-bg);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-link {
+            margin-right: 1rem;
+        }
+
+        .logo {
+            height: 50px;
+            width: 50px;
+        }
+
+        .header-title {
+            font-family: 'Courier New', monospace;
+            font-size: 1.5rem;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .language-select select {
+            background-color: var(--secondary-bg);
+            color: var(--text-color);
+            border: 1px solid var(--text-color);
+            padding: 0.3rem;
+            border-radius: 5px;
+            margin-right: 1rem;
+        }
+
+        .icon-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .icon-button .icon {
+            fill: var(--text-color);
+            transition: fill 0.3s ease;
+            width: 24px;
+            height: 24px;
+        }
+
+        .icon-button.active {
+            background-color: var(--accent-color);
+        }
+
+        .icon-button.active .icon {
+            fill: var(--button-text-color);
+        }
+    </style>
+</head>
+<body data-theme="light">
+    <header>
+        <div class="header-left">
+            <a href="index.html" class="logo-link">
+                <img src="favicon5.svg" alt="Universitas AI Logo" class="logo">
+            </a>
+            <h1 class="header-title">// Discover the Universe</h1>
+        </div>
+        <div class="header-right">
+            <div class="language-select">
+                <select id="languageSelect">
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                    <option value="it">Italiano</option>
+                    <option value="pt">Português</option>
+                    <option value="ar">العربية</option>
+                </select>
+            </div>
+            <button id="darkModeToggle" class="icon-button">
+                <svg class="icon sun-icon" viewBox="0 0 24 24" style="display: none;">
+                    <circle cx="12" cy="12" r="5" fill="none" stroke="#ffffff" stroke-width="2"/>
+                    <line x1="12" y1="1" x2="12" y2="3" stroke="#ffffff" stroke-width="2"/>
+                    <line x1="12" y1="21" x2="12" y2="23" stroke="#ffffff" stroke-width="2"/>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke="#ffffff" stroke-width="2"/>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke="#ffffff" stroke-width="2"/>
+                    <line x1="1" y1="12" x2="3" y2="12" stroke="#ffffff" stroke-width="2"/>
+                    <line x1="21" y1="12" x2="23" y2="12" stroke="#ffffff" stroke-width="2"/>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="#ffffff" stroke-width="2"/>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="#ffffff" stroke-width="2"/>
+                </svg>
+                <svg class="icon moon-icon" viewBox="0 0 24 24">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" fill="none" stroke="currentColor" stroke-width="2"/>
+                </svg>
+            </button>
+        </div>
+    </header>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        const DocumentChatApp = () => {
+            const [darkMode, setDarkMode] = useState(false);
+            const [language, setLanguage] = useState('en');
+
+            useEffect(() => {
+                document.body.setAttribute('data-theme', darkMode ? 'dark' : 'light');
+                const sunIcon = document.querySelector('.sun-icon');
+                const moonIcon = document.querySelector('.moon-icon');
+                sunIcon.style.display = darkMode ? 'inline' : 'none';
+                moonIcon.style.display = darkMode ? 'none' : 'inline';
+            }, [darkMode]);
+
+            const handleLanguageChange = (event) => {
+                setLanguage(event.target.value);
+                // Update language-related text (e.g., placeholders, messages)
+                // This should be applied where necessary in the app
+            };
+
+            return (
+                <div className="container mx-auto p-4 max-w-4xl">
+                    {/* Main Content */}
+                    <div className="grid grid-cols-1 gap-4 mb-4">
+                        {/* Components go here */}
+                    </div>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<DocumentChatApp />, document.getElementById('root'));
+    </script>
+</body>
+</html>
