@@ -620,18 +620,24 @@
             <h1 class="header-title">// Discover the Universe</h1>
         </div>
         <div class="header-right">
-            <div class="datetime" id="datetime"></div>
+            <button id="toggleHistory" class="icon-button tooltip" aria-label="Toggle History">
+                <svg class="icon" viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/>
+                </svg>
+                <span class="tooltiptext">Toggle History</span>
+            </button>
             <div class="header-spacer"></div>
-            <div class="language-select">
-                <select id="languageSelect">
-                    <option value="en">English</option>
-                    <option value="es">Español</option>
-                    <option value="fr">Français</option>
-                    <option value="de">Deutsch</option>
-                    <option value="it">Italiano</option>
-                    <option value="pt">Português</option>
-                    <option value="ar">العربية</option>
-                </select>
+            <div class="audio-controls">
+                <button id="speakerToggle" class="icon-button tooltip" aria-label="Toggle Voice Output">
+                    <svg class="icon" viewBox="0 0 24 24" width="24" height="24">
+                        <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                    </svg>
+                    <span class="tooltiptext">Toggle Voice Output</span>
+                </button>
+                <div class="volume-control">
+                    <input type="range" min="0" max="100" value="50" class="volume-slider" id="volumeSlider">
+                    <span class="volume-percentage">50%</span>
+                </div>
             </div>
             <div class="header-spacer"></div>
             <button id="darkModeToggle" class="icon-button tooltip" aria-label="Toggle Dark Mode">
@@ -652,25 +658,19 @@
                 <span class="tooltiptext">Toggle Dark Mode</span>
             </button>
             <div class="header-spacer"></div>
-            <div class="audio-controls">
-                <button id="speakerToggle" class="icon-button tooltip" aria-label="Toggle Voice Output">
-                    <svg class="icon" viewBox="0 0 24 24" width="24" height="24">
-                        <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
-                    </svg>
-                    <span class="tooltiptext">Toggle Voice Output</span>
-                </button>
-                <div class="volume-control">
-                    <input type="range" min="0" max="100" value="50" class="volume-slider" id="volumeSlider">
-                    <span class="volume-percentage">50%</span>
-                </div>
+            <div class="language-select">
+                <select id="languageSelect">
+                    <option value="en">English</option>
+                    <option value="es">Español</option>
+                    <option value="fr">Français</option>
+                    <option value="de">Deutsch</option>
+                    <option value="it">Italiano</option>
+                    <option value="pt">Português</option>
+                    <option value="ar">العربية</option>
+                </select>
             </div>
             <div class="header-spacer"></div>
-            <button id="toggleHistory" class="icon-button tooltip" aria-label="Toggle History">
-                <svg class="icon" viewBox="0 0 24 24" width="24" height="24">
-                    <path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/>
-                </svg>
-                <span class="tooltiptext">Toggle History</span>
-            </button>
+            <div class="datetime" id="datetime"></div>
         </div>
     </header>
     <main>
