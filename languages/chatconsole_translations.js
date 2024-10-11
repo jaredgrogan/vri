@@ -1,4 +1,3 @@
-
 const translations = {
   en: {
     discover: "Discover the Universe",
