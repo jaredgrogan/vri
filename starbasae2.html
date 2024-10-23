@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STARBASE University & Consortium</title>
+    <!-- Adding professional font -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/inter/3.19.3/inter.css">
+    <style>
+        :root {
+            /* Color System */
+            --primary: #2563eb;
+            --secondary: #1e40af;
+            --background: #0f172a;
+            --surface: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --accent: #3b82f6;
+            
+            /* Spacing System */
+            --space-xs: 0.5rem;
+            --space-sm: 1rem;
+            --space-md: 1.5rem;
+            --space-lg: 2rem;
+            --space-xl: 3rem;
+            
+            /* Typography Scale */
+            --font-xs: 0.75rem;
+            --font-sm: 0.875rem;
+            --font-md: 1rem;
+            --font-lg: 1.25rem;
+            --font-xl: 1.5rem;
+            --font-2xl: 2rem;
+            --font-3xl: 2.5rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-size: var(--font-md);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-md);
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+        }
+
+        .nav-container {
+            height: 4rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: var(--font-xl);
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: var(--space-md);
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: var(--font-sm);
+            font-weight: 500;
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+            background-color: var(--surface);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: calc(var(--space-xl) * 2) 0;
+            margin-top: 4rem;
+            background: linear-gradient(to bottom, var(--background), var(--surface));
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        .hero-title {
+            font-size: var(--font-3xl);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            margin-bottom: var(--space-md);
+            background: linear-gradient(to right, var(--text-primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-subtitle {
+            font-size: var(--font-lg);
+            color: var(--text-secondary);
+            margin-bottom: var(--space-xl);
+            max-width: 600px;
+        }
+
+        /* Card Design */
+        .card {
+            background-color: var(--surface);
+            border-radius: 12px;
+            padding: var(--space-lg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-title {
+            font-size: var(--font-xl);
+            font-weight: 600;
+            margin-bottom: var(--space-md);
+            color: var(--text-primary);
+        }
+
+        /* Grid Layout */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-lg);
+            margin: var(--space-xl) 0;
+        }
+
+        /* Stats Section */
+        .stats {
+            background-color: var(--surface);
+            padding: var(--space-xl) 0;
+            margin: var(--space-xl) 0;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: var(--font-2xl);
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: var(--space-xs);
+        }
+
+        .stat-label {
+            font-size: var(--font-sm);
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Button Styles */
+        .button {
+            display: inline-block;
+            padding: var(--space-sm) var(--space-md);
+            background-color: var(--primary);
+            color: var(--text-primary);
+            border-radius: 6px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .button:hover {
+            background-color: var(--secondary);
+            transform: translateY(-1px);
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--surface);
+            padding: var(--space-xl) 0;
+            margin-top: var(--space-xl);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-lg);
+        }
+
+        .footer-title {
+            font-size: var(--font-md);
+            font-weight: 600;
+            margin-bottom: var(--space-md);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: var(--font-2xl);
+            }
+
+            .hero-subtitle {
+                font-size: var(--font-md);
+            }
+
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="container nav-container">
+            <div class="logo">STARBASE</div>
+            <div class="nav-links">
+                <a href="#about" class="nav-link">About</a>
+                <a href="#research" class="nav-link">Research</a>
+                <a href="#programs" class="nav-link">Programs</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Advancing Humanity Through Space Technology & AI</h1>
+                <p class="hero-subtitle">Join STARBASE in pioneering the next frontier of human achievement through cutting-edge research in artificial intelligence and space exploration.</p>
+                <a href="#programs" class="button">Explore Programs</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="container">
+            <div class="grid">
+                <div class="stat-item">
+                    <div class="stat-number">2,500+</div>
+                    <div class="stat-label">Students</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">150+</div>
+                    <div class="stat-label">Research Projects</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Global Partners</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Research Areas -->
+    <section class="container">
+        <div class="grid">
+            <div class="card">
+                <h3 class="card-title">AI & Neural Networks</h3>
+                <p>Advancing artificial intelligence systems for space exploration and settlement.</p>
+            </div>
+            <div class="card">
+                <h3 class="card-title">Space Technology</h3>
+                <p>Developing next-generation technologies for sustainable space exploration.</p>
+            </div>
+            <div class="card">
+                <h3 class="card-title">Human Adaptation</h3>
+                <p>Researching solutions for long-term human presence in space.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <h4 class="footer-title">About</h4>
+                    <p>Pioneering the future of space exploration and artificial intelligence.</p>
+                </div>
+                <div>
+                    <h4 class="footer-title">Programs</h4>
+                    <a href="#" class="nav-link">Undergraduate</a>
+                    <a href="#" class="nav-link">Graduate</a>
+                    <a href="#" class="nav-link">Research</a>
+                </div>
+                <div>
+                    <h4 class="footer-title">Contact</h4>
+                    <p>contact@starbase.edu</p>
+                    <p>+1 (555) 123-4567</p>
+                </div>
+                <div>
+                    <h4 class="footer-title">Follow Us</h4>
+                    <!-- Social links would go here -->
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
