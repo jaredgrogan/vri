@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Starbase at Sandhill</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a365d 0%, #2d3748 100%);
+            color: #fff;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-link {
+            position: relative;
+            padding-bottom: 2px;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: #60A5FA;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .feature-card {
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .bg-gradient {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(37, 99, 235, 0.05) 100%);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="#" class="text-2xl font-bold text-blue-100">STARBASE</a>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#mission" class="nav-link text-blue-100">Mission</a>
+                    <a href="#research" class="nav-link text-blue-100">Research</a>
+                    <a href="#partners" class="nav-link text-blue-100">Partners</a>
+                    <a href="#donate" class="nav-link text-blue-100">Donate</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h1 class="text-5xl font-bold mb-6 leading-tight">Banking Resources for Tomorrow's Heartland</h1>
+                    <p class="text-xl mb-8 text-blue-100">Pioneering blockchain-powered conservation and technological advancement across the American Heartland.</p>
+                    <div class="flex space-x-4">
+                        <a href="#donate" class="glass px-8 py-3 rounded-lg hover:bg-blue-600 transition-colors">
+                            Contribute Now
+                        </a>
+                        <a href="#mission" class="bg-blue-600 px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                            Learn More
+                        </a>
+                    </div>
+                </div>
+                <div class="glass rounded-2xl p-8">
+                    <img src="/api/placeholder/600/400" alt="Innovation Hub" class="rounded-lg w-full">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section id="mission" class="py-20">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4">Our Mission</h2>
+                <p class="text-xl text-blue-100 max-w-3xl mx-auto">
+                    Revolutionizing resource management through blockchain technology and sustainable practices
+                </p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="glass feature-card rounded-xl p-8">
+                    <div class="w-12 h-12 mb-6 bg-blue-600 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Blockchain Integration</h3>
+                    <p class="text-blue-100">Securing and tracking resources through transparent, decentralized systems</p>
+                </div>
+                
+                <div class="glass feature-card rounded-xl p-8">
+                    <div class="w-12 h-12 mb-6 bg-blue-600 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Water Conservation</h3>
+                    <p class="text-blue-100">Protecting the Ogallala Aquifer through innovative management techniques</p>
+                </div>
+
+                <div class="glass feature-card rounded-xl p-8">
+                    <div class="w-12 h-12 mb-6 bg-blue-600 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Resource Banking</h3>
+                    <p class="text-blue-100">Building sustainable systems for energy and resource management</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Research Section -->
+    <section id="research" class="py-20 bg-gradient">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="glass rounded-2xl p-12">
+                <div class="grid md:grid-cols-2 gap-12">
+                    <div>
+                        <h2 class="text-3xl font-bold mb-8">Research Priorities</h2>
+                        <ul class="space-y-6">
+                            <li class="flex items-start">
+                                <span class="w-1.5 h-1.5 bg-blue-400 rounded-full mt-2.5 mr-4"></span>
+                                <div>
+                                    <h4 class="font-semibold mb-2">Blockchain Resource Tracking</h4>
+                                    <p class="text-blue-100">Developing transparent systems for resource management and verification</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="w-1.5 h-1.5 bg-blue-400 rounded-full mt-2.5 mr-4"></span>
+                                <div>
+                                    <h4 class="font-semibold mb-2">Water Management</h4>
+                                    <p class="text-blue-100">Advanced conservation techniques for the Ogallala Aquifer</p>
+                                </div>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="w-1.5 h-1.5 bg-blue-400 rounded-full mt-2.5 mr-4"></span>
+                                <div>
+                                    <h4 class="font-semibold mb-2">Sustainable Agriculture</h4>
+                                    <p class="text-blue-100">Integrating technology with traditional farming practices</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <img src="/api/placeholder/600/400" alt="Research Facility" class="rounded-lg w-full mb-6">
+                        <p class="text-blue-100">Our state-of-the-art facilities enable breakthrough research in resource management and conservation</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Partners Section -->
+    <section id="partners" class="py-20">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-3xl font-bold mb-12 text-center">Partner States</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="glass rounded-xl p-6 text-center">Colorado</div>
+                <div class="glass rounded-xl p-6 text-center">Wyoming</div>
+                <div class="glass rounded-xl p-6 text-center">Kansas</div>
+                <div class="glass rounded-xl p-6 text-center">Missouri</div>
+                <div class="glass rounded-xl p-6 text-center">Nebraska</div>
+                <div class="glass rounded-xl p-6 text-center">South Dakota</div>
+                <div class="glass rounded-xl p-6 text-center">North Dakota</div>
+                <div class="glass rounded-xl p-6 text-center">Montana</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Founder Section -->
+    <section class="py-20 bg-gradient">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="glass rounded-2xl p-12">
+                <div class="flex items-center mb-8">
+                    <div class="w-20 h-20 bg-blue-600 rounded-full mr-6"></div>
+                    <div>
+                        <h3 class="text-2xl font-bold">Jared James Grogan</h3>
+                        <p class="text-blue-300">Founder, Starbase Consortium</p>
+                    </div>
+                </div>
+                <blockquote class="text-xl text-blue-100">
+                    "We're pioneering a new model for resource conservation and technological advancement. Through blockchain technology and innovative research, we're securing a sustainable future for the American Heartland."
+                </blockquote>
+            </div>
+        </div>
+    </section>
+
+    <!-- Donate Section -->
+    <section id="donate" class="py-20">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold mb-6">Contribute to the Future</h2>
+            <p class="text-xl text-blue-100 mb-12 max-w-2xl mx-auto">
+                Your charitable contribution supports groundbreaking research and conservation efforts across Your charitable contribution supports groundbreaking research and conservation efforts across the American Heartland, ensuring a sustainable future for generations to come.
+            </p>
+            <div class="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto mb-12">
+                <div class="glass rounded-xl p-8">
+                    <h3 class="text-xl font-bold mb-4">Monthly Support</h3>
+                    <p class="text-blue-100 mb-6">Join our sustaining members program with monthly contributions</p>
+                    <a href="#" class="block bg-blue-600 px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                        Become a Member
+                    </a>
+                </div>
+                <div class="glass rounded-xl p-8">
+                    <h3 class="text-xl font-bold mb-4">One-Time Gift</h3>
+                    <p class="text-blue-100 mb-6">Make a one-time contribution to support our mission</p>
+                    <a href="#" class="block bg-blue-600 px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                        Donate Now
+                    </a>
+                </div>
+                <div class="glass rounded-xl p-8">
+                    <h3 class="text-xl font-bold mb-4">Legacy Giving</h3>
+                    <p class="text-blue-100 mb-6">Include Starbase in your estate planning</p>
+                    <a href="#" class="block bg-blue-600 px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                        Learn More
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 glass mt-20">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="font-bold mb-4">Contact</h3>
+                    <ul class="space-y-2 text-blue-100">
+                        <li>Starbase at Sandhill</li>
+                        <li>info@starbasesandhill.org</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#mission" class="text-blue-100 hover:text-blue-300">Mission</a></li>
+                        <li><a href="#research" class="text-blue-100 hover:text-blue-300">Research</a></li>
+                        <li><a href="#partners" class="text-blue-100 hover:text-blue-300">Partners</a></li>
+                        <li><a href="#donate" class="text-blue-100 hover:text-blue-300">Donate</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold mb-4">Resources</h3>
+                    <ul class="space-y-2 text-blue-100">
+                        <li>Annual Report</li>
+                        <li>Research Papers</li>
+                        <li>Newsletter</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold mb-4">Legal</h3>
+                    <ul class="space-y-2 text-blue-100">
+                        <li>Privacy Policy</li>
+                        <li>Terms of Service</li>
+                        <li>Tax Information</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-12 pt-8 border-t border-white border-opacity-20 text-center text-blue-100">
+                <p>&copy; 2024 Starbase Consortium. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
