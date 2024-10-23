@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sandhill Research Hub</title>
+    <!-- Import Chart.js for data visualization -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <style>
+        :root {
+            --primary-blue: #1e40af;
+            --primary-green: #15803d;
+            --primary-yellow: #ca8a04;
+            --text-dark: #1f2937;
+            --text-light: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            line-height: 1.5;
+            color: var(--text-dark);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(to bottom, var(--primary-blue), var(--primary-green));
+            color: var(--text-light);
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .hero-content {
+            padding: 4rem 0;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            max-width: 600px;
+            margin-bottom: 2rem;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary-blue);
+            color: var(--text-light);
+        }
+
+        .btn-secondary {
+            background: var(--primary-green);
+            color: var(--text-light);
+        }
+
+        .btn-tertiary {
+            background: var(--primary-yellow);
+            color: var(--text-dark);
+        }
+
+        /* Interactive Map */
+        .map-overlay {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 50%;
+            height: 75%;
+            background: rgba(30, 41, 59, 0.8);
+            border-top-left-radius: 2rem;
+            padding: 2rem;
+        }
+
+        .location-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .location-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .location-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Data Visualization Section */
+        .data-section {
+            padding: 5rem 0;
+            background: white;
+        }
+
+        .chart-container {
+            height: 400px;
+            margin-top: 2rem;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .tab {
+            padding: 0.5rem 1rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab.active {
+            border-bottom-color: var(--primary-blue);
+            color: var(--primary-blue);
+        }
+
+        /* Research Highlights */
+        .research-section {
+            padding: 5rem 0;
+            background: #f8fafc;
+        }
+
+        .research-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .research-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .research-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Donation Section */
+        .donation-section {
+            padding: 5rem 0;
+            background: white;
+        }
+
+        .donation-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            background: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .amount-buttons {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .amount-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--primary-blue);
+            border-radius: 0.375rem;
+            background: none;
+            cursor: pointer;
+        }
+
+        .amount-btn.active {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .progress-bar {
+            height: 0.5rem;
+            background: #e2e8f0;
+            border-radius: 1rem;
+            margin: 0.5rem 0 1rem;
+        }
+
+        .progress {
+            height: 100%;
+            background: var(--primary-blue);
+            border-radius: 1rem;
+            transition: width 0.3s ease;
+        }
+
+        /* Footer */
+        footer {
+            background: #0f172a;
+            color: white;
+            padding: 3rem 0;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .map-overlay {
+                position: relative;
+                width: 100%;
+                height: auto;
+                border-radius: 0;
+            }
+
+            .donation-container {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Sandhill Research Hub</h1>
+                <p>Securing our future through innovative research in water, energy, and food resources</p>
+                <div class="cta-buttons">
+                    <button class="btn btn-primary">Explore the Hub →</button>
+                    <button class="btn btn-secondary">Join Us</button>
+                    <button class="btn btn-tertiary">Donate Now</button>
+                </div>
+            </div>
+        </div>
+        <div class="map-overlay">
+            <h3 style="color: white; font-size: 1.5rem; margin-bottom: 1rem;">Research Locations</h3>
+            <div class="location-grid">
+                <div class="location-card">
+                    <h4>Ogallala Aquifer</h4>
+                </div>
+                <div class="location-card">
+                    <h4>Dune Research Park</h4>
+                </div>
+                <div class="location-card">
+                    <h4>Energy Storage</h4>
+                </div>
+                <div class="location-card">
+                    <h4>Agricultural Test Fields</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Data Visualization Section -->
+    <section class="data-section">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 3rem;">Real-Time Research Data</h2>
+            <div class="tabs">
+                <button class="tab active">Water Resources</button>
+                <button class="tab">Energy Storage</button>
+                <button class="tab">Agricultural Yields</button>
+            </div>
+            <div class="chart-container">
+                <canvas id="waterChart"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- Research Highlights -->
+    <section class="research-section">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 3rem;">Current Research</h2>
+            <div class="research-grid">
+                <div class="research-card">
+                    <h3>AI-Driven Water Management</h3>
+                    <p>Using artificial intelligence to optimize water usage and conservation.</p>
+                </div>
+                <div class="research-card">
+                    <h3>Sustainable Agriculture</h3>
+                    <p>Developing drought-resistant crops and efficient farming techniques.</p>
+                </div>
+                <div class="research-card">
+                    <h3>Energy Innovation</h3>
+                    <p>Creating next-generation energy storage and distribution systems.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Donation Section -->
+    <section class="donation-section">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 3rem;">Support Our Research</h2>
+            <div class="donation-container">
+                <div>
+                    <h3>Make a Difference</h3>
+                    <p style="margin: 1rem 0;">Your contribution helps secure a sustainable future for generations to come.</p>
+                    <div class="amount-buttons">
+                        <button class="amount-btn">$100</button>
+                        <button class="amount-btn">$250</button>
+                        <button class="amount-btn">$500</button>
+                        <button class="amount-btn">$1000</button>
+                    </div>
+                    <button class="btn btn-secondary" style="width: 100%;">Donate Now</button>
+                </div>
+                <div style="border-left: 1px solid #e2e8f0; padding-left: 2rem;">
+                    <h3>Impact Tracker</h3>
+                    <div style="margin-top: 1rem;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Water Conservation</span>
+                            <span>75%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 75%;"></div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-top: 1rem;">
+                            <span>Energy Research</span>
+                            <span>60%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 60%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <h4 style="margin-bottom: 1rem;">Contact Us</h4>
+                    <button class="btn" style="color: white;">📧 Get in Touch</button>
+                </div>
+                <div>
+                    <h4 style="margin-bottom: 1rem;">Share</h4>
+                    <button class="btn" style="color: white;">📤 Share Our Mission</button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize water levels chart
+        const ctx = document.getElementById('waterChart').getContext('2d');
+        const waterChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Aquifer Water Levels',
+                    data: [65, 68, 70, 72, 71, 69],
+                    borderColor: '#1e40af',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false
+                    }
+                }
+            }
+        });
+
+        // Tab switching functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+            });
+        });
+
+        // Donation amount selection
+        document.querySelectorAll('.amount-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+
+        // Location card hover effects
+        document.querySelectorAll('.location-card').forEach(card => {
+            card.addEventListener('click', () => {
+                // Add your location card click handling here
+                console.log('Location selected:', card.querySelector('h4').textContent);
+            });
+        });
+    </script>
+</body>
+</html>
