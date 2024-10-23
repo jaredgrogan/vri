@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Silicon Lakes - Building the Future of Technology</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hover-card {
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+        }
+
+        .hover-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .bounce {
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-20px);
+            }
+            60% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .bg-gradient {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+
+        .map-container {
+            position: relative;
+            height: 400px;
+            background-color: #f8f9fa;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        .city-marker {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: #2563eb;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            transition: transform 0.3s ease-out;
+        }
+
+        .city-marker:hover {
+            transform: translate(-50%, -50%) scale(1.2);
+        }
+
+        .city-info {
+            position: absolute;
+            background-color: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .city-marker:hover + .city-info {
+            display: block;
+        }
+
+        /* City positions */
+        .buffalo { top: 30%; right: 30%; }
+        .cleveland { top: 45%; left: 45%; }
+        .pittsburgh { top: 60%; left: 35%; }
+    </style>
+</head>
+<body class="bg-gradient">
+    <!-- Hero Section -->
+    <div class="relative h-screen flex items-center justify-center text-center px-4">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-5xl font-bold mb-6 text-gray-800">
+                Welcome to Silicon Lakes
+            </h1>
+            <p class="text-2xl text-gray-600 mb-8">
+                Building the Future of Technology in the Great Lakes Region
+            </p>
+            <div class="flex gap-4 justify-center">
+                <button class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                    Get Involved
+                </button>
+                <button class="bg-white text-blue-600 px-6 py-3 rounded-lg border border-blue-600 hover:bg-blue-50 transition-colors">
+                    Learn More
+                </button>
+            </div>
+        </div>
+        <div class="absolute bottom-8 bounce">
+            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+        </div>
+    </div>
+
+    <!-- Mission Section -->
+    <div class="py-16 px-4 fade-in" id="mission">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl font-bold mb-8 text-gray-800">Our Mission</h2>
+            <p class="text-xl text-gray-600">
+                Transforming the Great Lakes region into a world-leading technology hub through innovation,
+                collaboration, and sustainable development.
+            </p>
+        </div>
+    </div>
+
+    <!-- Research Areas -->
+    <div class="py-16 px-4 bg-white fade-in" id="research">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl font-bold mb-12 text-center text-gray-800">Research Focus Areas</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="p-6 bg-gray-50 rounded-xl hover-card">
+                    <svg class="w-12 h-12 mb-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    <h3 class="text-xl font-bold mb-2">Artificial Intelligence</h3>
+                    <p class="text-gray-600">Advanced AI systems for manufacturing, robotics, and industrial optimization</p>
+                </div>
+                
+                <div class="p-6 bg-gray-50 rounded-xl hover-card">
+                    <svg class="w-12 h-12 mb-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                    <h3 class="text-xl font-bold mb-2">Robotics</h3>
+                    <p class="text-gray-600">Next-generation autonomous systems and collaborative robots</p>
+                </div>
+
+                <div class="p-6 bg-gray-50 rounded-xl hover-card">
+                    <svg class="w-12 h-12 mb-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+                    </svg>
+                    <h3 class="text-xl font-bold mb-2">Semiconductor Design</h3>
+                    <p class="text-gray-600">CMOS technology and advanced chip architecture</p>
+                </div>
+
+                <div class="p-6 bg-gray-50 rounded-xl hover-card">
+                    <svg class="w-12 h-12 mb-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                    </svg>
+                    <h3 class="text-xl font-bold mb-2">Bio-Computing</h3>
+                    <p class="text-gray-600">Biological computing systems and healthcare applications</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Regional Map -->
+    <div class="py-16 px-4 fade-in" id="map">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-4xl font-bold mb-12 text-center text-gray-800">Our Technology Hub</h2>
+            <div class="map-container">
+                <div class="city-marker buffalo"></div>
+                <div class="city-info" style="top: 25%; right: 25%;">
+                    <h3 class="font-bold">Buffalo</h3>
+                    <p>Advanced Manufacturing & Semiconductor Research</p>
+                </div>
+
+                <div class="city-marker cleveland"></div>
+                <div class="city-info" style="top: 40%; left: 50%;">
+                    <h3 class="font-bold">Cleveland</h3>
+                    <p>Healthcare Technology & Robotics</p>
+                </div>
+
+                <div class="city-marker pittsburgh"></div>
+                <div class="city-info" style="top: 55%; left: 40%;">
+                    <h3 class="font-bold">Pittsburgh</h3>
+                    <p>Artificial Intelligence & Automation</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Form -->
+    <div class="py-16 px-4 bg-white fade-in" id="contact">
+        <div class="max-w-xl mx-auto">
+            <h2 class="text-4xl font-bold mb-8 text-center text-gray-800">Get in Touch</h2>
+            <form class="space-y-6">
+                <div>
+                    <input type="text" placeholder="Name" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent">
+                </div>
+                <div>
+                    <input type="email" placeholder="Email" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent">
+                </div>
+                <div>
+                    <textarea placeholder="Message" rows="4" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent"></textarea>
+                </div>
+                <button class="w-full bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                    Send Message
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12 px-4">
+        <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
+            <div>
+                <h3 class="text-xl font-bold mb-4">Silicon Lakes</h3>
+                <p class="text-gray-400">
+                    Building the future of technology in the Great Lakes region
+                </p>
+            </div>
+            <div>
+                <h3 class="text-xl font-bold mb-4">Contact</h3>
+                <div class="flex items-center text-gray-400">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    info@siliconlakes.org
+                </div>
+            </div>
+            <div>
+                <h3 class="text-xl font-bold mb-4">Newsletter</h3>
+                <div class="flex">
+                    <input type="email" placeholder="Your email" class="flex-1 p-2 rounded-l-lg text-gray-800">
+                    <button class="bg-blue-600 px-4 py-2 rounded-r-lg hover:bg-blue-700 transition-colors">
+                        Subscribe
+                    </button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Intersection Observer for fade-in animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        // Observe all fade-in elements
+        document.querySelectorAll('.fade-in').forEach((element) => {
+            observer.observe(element);
+        });
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Form submission handling
+        const form = document.querySelector('form');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            // Add form submission logic here
+        });
+    </script>
+</body>
+</html>
