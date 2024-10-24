@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Starbase Alliance</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #818cf8;
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-stronger: rgba(255, 255, 255, 0.2);
+            --border: rgba(255, 255, 255, 0.15);
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .noise {
+            position: fixed;
+            inset: 0;
+            background: url('data:image/svg+xml,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.5"/></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.05"/></svg>');
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .glass {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+        }
+
+        .glass-strong {
+            background: var(--glass-stronger);
+            backdrop-filter: blur(16px);
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1rem;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(8px);
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            position: relative;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--primary-light);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            text-align: center;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            background: linear-gradient(to right, #fff, var(--primary-light));
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(79, 70, 229, 0.4);
+        }
+
+        .cards-section {
+            padding: 8rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .card {
+            padding: 2rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1));
+            transition: all 0.3s ease;
+        }
+
+        .card:hover::before {
+            transform: translateX(100%);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: linear-gradient(to right, #fff, var(--primary-light));
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .floating-elements {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .floating-element {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--primary);
+            filter: blur(40px);
+            opacity: 0.15;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(20px, -20px); }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--primary);
+            z-index: 1001;
+        }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+    <div class="scroll-indicator"></div>
+
+    <nav>
+        <div class="nav-content">
+            <h2>Starbase Alliance</h2>
+            <div class="nav-links">
+                <a href="#mission">Mission</a>
+                <a href="#focus">Focus</a>
+                <a href="#projects">Projects</a>
+                <a href="#contact" class="btn">Join Us</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero" id="hero">
+        <div class="floating-elements">
+            <div class="floating-element" style="width: 300px; height: 300px; top: 20%; left: 10%;"></div>
+            <div class="floating-element" style="width: 200px; height: 200px; top: 60%; right: 15%;"></div>
+        </div>
+        <div class="hero-content glass">
+            <h1>Pioneering the Future,<br>Protecting Life</h1>
+            <p>Supporting lunar and Mars missions, while making life better on Earth.<br>
+            <em>"Rara avis — All intelligent life is rare and precious"</em></p>
+            <a href="#contact" class="btn">Join Us in Shaping the Future</a>
+        </div>
+    </section>
+
+    <section class="cards-section" id="mission">
+        <h2 class="section-title">Our Mission</h2>
+        <div class="cards-grid">
+            <div class="card glass">
+                <h3>Life Support Systems</h3>
+                <p>Developing sustainable ecosystems for Earth and space exploration.</p>
+            </div>
+            <div class="card glass">
+                <h3>Energy Innovation</h3>
+                <p>Pioneering renewable energy solutions for our planet and beyond.</p>
+            </div>
+            <div class="card glass">
+                <h3>Sustainable Future</h3>
+                <p>Creating technologies that benefit both Earth and space missions.</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Initialize GSAP
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Scroll Progress Indicator
+        gsap.to(".scroll-indicator", {
+            scaleX: 1,
+            transformOrigin: "left center",
+            ease: "none",
+            scrollTrigger: {
+                trigger: document.body,
+                scrub: 0.3,
+                start: "top top",
+                end: "bottom bottom",
+                onUpdate: (self) => {
+                    document.querySelector(".scroll-indicator").style.width = 
+                        (self.progress * 100) + "%";
+                }
+            }
+        });
+
+        // Animate cards on scroll
+        gsap.utils.toArray('.card').forEach((card, i) => {
+            gsap.from(card, {
+                scrollTrigger: {
+                    trigger: card,
+                    start: "top bottom",
+                    toggleActions: "play none none reverse"
+                },
+                y: 100,
+                opacity: 0,
+                duration: 1,
+                delay: i * 0.2
+            });
+        });
+
+        // Animate floating elements
+        const elements = document.querySelectorAll('.floating-element');
+        elements.forEach((el, i) => {
+            gsap.to(el, {
+                y: "random(-20, 20)",
+                x: "random(-20, 20)",
+                duration: "random(3, 5)",
+                repeat: -1,
+                yoyo: true,
+                ease: "sine.inOut",
+                delay: i * 0.5
+            });
+        });
+
+        // Parallax effect for hero section
+        gsap.to('.hero-content', {
+            scrollTrigger: {
+                trigger: '.hero',
+                start: 'top top',
+                end: 'bottom top',
+                scrub: true
+            },
+            y: 100,
+            opacity: 0.5
+        });
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Interactive hover effects for cards
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                gsap.to(card, {
+                    duration: 0.5,
+                    backgroundImage: `radial-gradient(circle at ${x}px ${y}px, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 50%)`
+                });
+            });
+
+            card.addEventListener('mouseleave', () => {
+                gsap.to(card, {
+                    duration: 0.5,
+                    backgroundImage: 'none'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
