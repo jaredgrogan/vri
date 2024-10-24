@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Starbase Alliance - Pioneering the Future, Protecting Life</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --secondary: #818cf8;
+            --accent: #f59e0b;
+            --earth: #4B9CD3;
+            --mars: #E65F5C;
+            --moon: #E2E8F0;
+            --glass: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: #fff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .cosmic-background {
+            position: fixed;
+            inset: 0;
+            background: 
+                radial-gradient(1px 1px at 20px 30px, #fff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 40px 70px, #fff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 50px 160px, #fff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 80px 120px, #fff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 110px 130px, #fff, rgba(0,0,0,0));
+            background-repeat: repeat;
+            opacity: 0.4;
+            z-index: -1;
+        }
+
+        .glass {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 2rem;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            text-align: center;
+            z-index: 2;
+            padding: 3rem;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(to right, #fff, var(--secondary));
+            -webkit-background-clip: text;
+            color: transparent;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .hero em {
+            display: block;
+            font-size: 1.25rem;
+            color: var(--secondary);
+            margin-top: 1rem;
+        }
+
+        .symbolic-image {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.15;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1.125rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 2rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(79, 70, 229, 0.4);
+        }
+
+        .mission-section {
+            padding: 8rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: linear-gradient(to right, #fff, var(--secondary));
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .mission-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .mission-card {
+            padding: 2rem;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .mission-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+
+        .orbit-animation {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .planet {
+            position: absolute;
+            border-radius: 50%;
+            transform-origin: center center;
+        }
+
+        .earth {
+            width: 100px;
+            height: 100px;
+            background: var(--earth);
+            box-shadow: 0 0 50px rgba(75, 156, 211, 0.3);
+        }
+
+        .moon {
+            width: 30px;
+            height: 30px;
+            background: var(--moon);
+            box-shadow: 0 0 30px rgba(226, 232, 240, 0.3);
+        }
+
+        .mars {
+            width: 60px;
+            height: 60px;
+            background: var(--mars);
+            box-shadow: 0 0 40px rgba(230, 95, 92, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.125rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cosmic-background"></div>
+
+    <section class="hero">
+        <div class="orbit-animation">
+            <div class="planet earth"></div>
+            <div class="planet moon"></div>
+            <div class="planet mars"></div>
+        </div>
+
+        <svg class="symbolic-image" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice">
+            <!-- Orbit paths -->
+            <ellipse cx="500" cy="500" rx="200" ry="100" fill="none" stroke="rgba(255,255,255,0.1)" />
+            <ellipse cx="500" cy="500" rx="300" ry="150" fill="none" stroke="rgba(255,255,255,0.1)" />
+            
+            <!-- Crane silhouette -->
+            <path d="M400,500 Q500,400 600,500" stroke="white" fill="none" stroke-width="2" class="crane-path"/>
+            
+            <!-- Starship silhouette -->
+            <path d="M480,600 L500,400 L520,600 Z" fill="rgba(255,255,255,0.2)" class="starship"/>
+        </svg>
+
+        <div class="hero-content glass">
+            <h1>Starbase Alliance</h1>
+            <p>Pioneering the Future, Protecting Life</p>
+            <p class="subtitle">We support lunar and Mars missions, but our priority is making life better on Earth.</p>
+            <em>"Rara avis — All intelligent life is rare and precious"</em>
+            <a href="#join" class="btn">Join Us in Shaping the Future</a>
+        </div>
+    </section>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Orbit animations
+        gsap.to(".earth", {
+            duration: 20,
+            rotation: 360,
+            repeat: -1,
+            ease: "none"
+        });
+
+        gsap.to(".moon", {
+            duration: 10,
+            motionPath: {
+                path: "ellipse(200px 100px)",
+                autoRotate: true,
+                alignOrigin: [0.5, 0.5],
+                align: "#orbit-path"
+            },
+            repeat: -1,
+            ease: "none"
+        });
+
+        gsap.to(".mars", {
+            duration: 30,
+            motionPath: {
+                path: "ellipse(300px 150px)",
+                autoRotate: true,
+                alignOrigin: [0.5, 0.5],
+                align: "#orbit-path"
+            },
+            repeat: -1,
+            ease: "none"
+        });
+
+        // Crane animation
+        gsap.to(".crane-path", {
+            strokeDashoffset: 0,
+            strokeDasharray: "1000",
+            duration: 3,
+            repeat: -1,
+            yoyo: true,
+            ease: "power1.inOut"
+        });
+
+        // Parallax effect
+        gsap.to(".symbolic-image", {
+            scrollTrigger: {
+                trigger: ".hero",
+                start: "top top",
+                end: "bottom top",
+                scrub: true
+            },
+            y: 100,
+            opacity: 0.05
+        });
+
+        // Content fade in
+        gsap.from(".hero-content", {
+            opacity: 0,
+            y: 50,
+            duration: 1.5,
+            delay: 0.5
+        });
+    </script>
+</body>
+</html>
