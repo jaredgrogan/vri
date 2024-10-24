@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venture Research Institute</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --red-primary: #A51C30;
+            --red-secondary: #ed1b34;
+            --dark-bg: #1e1e1e;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background-color: var(--dark-bg);
+            color: #fff;
+        }
+
+        body:not(.dark-mode) {
+            background-color: #ffffff;
+            color: #1e1e1e;
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, var(--red-primary), var(--red-secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .logo-container {
+            width: 48px;
+            height: 48px;
+            position: relative;
+            background: linear-gradient(to right, var(--red-primary), var(--red-secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(237, 27, 52, 0.2);
+        }
+
+        .logo-text {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Navigation Links */
+        .nav-link {
+            position: relative;
+            padding: 0.5rem 1rem;
+            transition: color 0.3s ease;
+        }
+
+        body.dark-mode .nav-link {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        body:not(.dark-mode) .nav-link {
+            color: rgba(30, 30, 30, 0.9);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(to right, var(--red-primary), var(--red-secondary));
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Glassmorphism */
+        .glass-nav {
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        body.dark-mode .glass-nav {
+            background: rgba(30, 30, 30, 0.8);
+        }
+
+        body:not(.dark-mode) .glass-nav {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .glass-card {
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        body.dark-mode .glass-card {
+            background: rgba(30, 30, 30, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        body:not(.dark-mode) .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(165, 28, 48, 0.15);
+        }
+
+        .gradient-button {
+            background: linear-gradient(to right, var(--red-primary), var(--red-secondary));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 32px;
+            cursor: pointer;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            box-shadow: 0 4px 15px rgba(237, 27, 52, 0.2);
+        }
+
+        .gradient-button:hover {
+            opacity: 0.95;
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(237, 27, 52, 0.3);
+        }
+
+        .typing-animation {
+            overflow: hidden;
+            white-space: nowrap;
+            animation: typing 3.5s steps(40, end);
+            margin: 0 auto;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        .gradient-orb {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: linear-gradient(to right, var(--red-primary), var(--red-secondary));
+            filter: blur(80px);
+            opacity: 0.1;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Stats Cards */
+        .stat-card {
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body class="dark-mode">
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass-nav">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="logo-container">
+                        <span class="logo-text">V</span>
+                    </div>
+                    <span class="text-2xl font-bold gradient-text">Venture Research Institute</span>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#" class="nav-link">Research</a>
+                    <a href="#" class="nav-link">Programs</a>
+                    <a href="#" class="nav-link">Fund</a>
+                    <a href="#" class="nav-link">About</a>
+                    <button id="darkModeToggle" class="p-2 rounded-full hover:bg-red-800 transition-colors duration-300">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <main class="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <!-- Gradient Orbs -->
+        <div class="gradient-orb" style="top: 10%; left: -5%;"></div>
+        <div class="gradient-orb" style="top: 20%; right: -5%;"></div>
+        <div class="gradient-orb" style="bottom: 10%; left: 30%;"></div>
+
+        <div class="relative px-4 max-w-7xl w-full">
+            <div class="glass-card text-center mb-12">
+                <div class="flex justify-center mb-8">
+                    <div class="logo-container" style="width: 80px; height: 80px;">
+                        <span class="logo-text" style="font-size: 36px;">V</span>
+                    </div>
+                </div>
+                
+                <h1 class="text-5xl font-bold gradient-text mb-6">
+                    Venture Research Institute
+                </h1>
+                
+                <p class="text-xl mb-8 typing-animation" id="typingText">
+                    Shaping the Future of Technology Through Research and Innovation
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button class="gradient-button flex items-center justify-center gap-2">
+                        Explore Research
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                    </button>
+                    <button class="gradient-button" style="background: rgba(165, 28, 48, 0.1);">
+                        Join Our Network
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Section -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass-card stat-card text-center">
+                    <div class="text-3xl font-bold gradient-text mb-2">50+</div>
+                    <div>Research Projects</div>
+                </div>
+                <div class="glass-card stat-card text-center">
+                    <div class="text-3xl font-bold gradient-text mb-2">25+</div>
+                    <div>Partner Institutions</div>
+                </div>
+                <div class="glass-card stat-card text-center">
+                    <div class="text-3xl font-bold gradient-text mb-2">10</div>
+                    <div>Innovation Labs</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="absolute bottom-0 w-full py-4 text-center opacity-80">
+        © 2024 Venture Research Institute. All rights reserved.
+    </footer>
+
+    <script>
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+        
+        darkModeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+        });
+
+        // Scroll Effect for Navigation
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('bg-opacity-80');
+            } else {
+                nav.classList.remove('bg-opacity-80');
+            }
+        });
+    </script>
+</body>
+</html>
