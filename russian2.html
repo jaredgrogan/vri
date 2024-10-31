@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petra - Russian Learning Platform</title>
+    <meta name="description" content="AI-powered Russian language learning platform">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lucide-icons/0.263.1/lucide-icons.min.js">
+    <style>
+        :root {
+            --brand-primary: #A51C30;
+            --brand-secondary: #ed1b34;
+        }
+
+        .brand-gradient {
+            background: linear-gradient(to right, var(--brand-primary), var(--brand-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .typing-animation {
+            display: inline-block;
+            position: relative;
+        }
+
+        .typing-animation::after {
+            content: '|';
+            position: absolute;
+            right: -4px;
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .message-container {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: messageAppear 0.3s forwards;
+        }
+
+        @keyframes messageAppear {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .recording-indicator {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            height: 8px;
+            width: 8px;
+        }
+
+        .recording-indicator::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #ef4444;
+            border-radius: 50%;
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: .5; transform: scale(1.5); }
+        }
+
+        /* Custom scrollbar */
+        .messages-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .messages-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        .messages-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        .messages-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* Typing dots animation */
+        .typing-dots span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: #888;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: bounce 1.4s infinite ease-in-out;
+        }
+
+        .typing-dots span:nth-child(1) { animation-delay: 0s; }
+        .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-8px); }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <h1 class="text-2xl font-bold brand-gradient">Petra</h1>
+                    <select class="border rounded-full px-3 py-1.5 text-sm text-gray-700 hover:border-[#A51C30] transition-colors">
+                        <option>Beginner</option>
+                        <option>Intermediate</option>
+                        <option>Advanced</option>
+                    </select>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="p-2 rounded-full hover:bg-gray-100 transition-colors">
+                        <i data-lucide="settings" class="h-5 w-5 text-gray-600"></i>
+                    </button>
+                    <div class="h-8 w-8 rounded-full bg-[#A51C30] flex items-center justify-center text-white">
+                        JS
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div class="grid grid-cols-12 gap-6">
+            <!-- Left Sidebar -->
+            <div class="col-span-12 lg:col-span-3">
+                <div class="bg-white rounded-lg shadow">
+                    <nav class="p-4 space-y-2" id="navigation">
+                        <!-- Navigation items will be inserted here by JavaScript -->
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Main Chat Area -->
+            <div class="col-span-12 lg:col-span-6">
+                <div class="bg-white rounded-lg shadow">
+                    <div class="p-4">
+                        <!-- Quick Actions -->
+                        <div class="mb-4 flex flex-wrap gap-2" id="quickActions">
+                            <!-- Quick actions will be inserted here by JavaScript -->
+                        </div>
+
+                        <!-- Messages Container -->
+                        <div class="h-[50vh] overflow-y-auto mb-6 space-y-6 px-2 messages-container" id="messagesContainer">
+                            <!-- Messages will be inserted here by JavaScript -->
+                        </div>
+
+                        <!-- Auto Suggestions -->
+                        <div class="mb-4 pt-4 border-t border-gray-100">
+                            <div class="flex flex-wrap gap-2" id="suggestions">
+                                <!-- Suggestions will be inserted here by JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Input Area -->
+                        <div class="flex items-center space-x-2 bg-white border border-gray-200 rounded-lg p-2">
+                            <input type="file" id="fileInput" class="hidden" accept="image/*,.pdf,.doc,.docx">
+                            <button id="uploadButton" class="p-2 rounded-full hover:bg-gray-100 transition-colors">
+                                <i data-lucide="upload" class="h-5 w-5 text-gray-400"></i>
+                            </button>
+                            <button id="recordButton" class="p-2 rounded-full transition-colors relative">
+                                <i data-lucide="mic" class="h-5 w-5 text-gray-400"></i>
+                                <div class="recording-indicator hidden"></div>
+                            </button>
+                            <input
+                                type="text"
+                                id="messageInput"
+                                placeholder="Type in English or Russian..."
+                                class="flex-1 px-3 py-1.5 text-sm focus:outline-none"
+                            >
+                            <button id="sendButton" class="p-2 rounded-full bg-[#A51C30] text-white hover:opacity-90 transition-opacity disabled:opacity-50">
+                                <i data-lucide="send" class="h-5 w-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Sidebar -->
+            <div class="col-span-12 lg:col-span-3">
+                <div class="bg-white rounded-lg shadow">
+                    <div class="p-4">
+                        <h2 class="text-lg font-semibold mb-4">Progress</h2>
+                        <div class="space-y-4" id="progressContainer">
+                            <!-- Progress items will be inserted here by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-200 mt-8 py-4">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p class="text-center text-sm text-gray-500">
+                © 2024 COGNITIVE CLOUD
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Configuration
+        const CONFIG = {
+            navigationItems: [
+                { icon: 'message-square', label: 'Chat', id: 'chat' },
+                { icon: 'book', label: 'Lessons', id: 'lessons' },
+                { icon: 'brain', label: 'Practice', id: 'practice' },
+                { icon: 'users', label: 'Groups', id: 'groups' },
+                { icon: 'bar-chart-2', label: 'Progress', id: 'progress' }
+            ],
+            quickActions: [
+                { icon: 'book-open', label: 'Translate' },
+                { icon: 'star', label: 'Correct' },
+                { icon: 'book', label: 'Parse' },
+                { icon: 'brain', label: 'Vocabulary' }
+            ],
+            suggestions: [
+                "Translate this to Russian",
+                "Check my grammar",
+                "Explain this phrase",
+                "Start a conversation",
+                "Quiz me on this topic"
+            ],
+            progressItems: [
+                { name: 'Vocabulary', progress: 65 },
+                { name: 'Grammar', progress: 45 },
+                { name: 'Conversation', progress: 78 }
+            ]
+        };
+
+        // State Management
+        const state = {
+            messages: [{
+                sender: 'Petra',
+                content: "Привет! I'm Petra, your Russian language guide. Let's start our learning journey! Would you like to practice conversation or focus on a specific topic?",
+                timestamp: new Date(),
+                id: 'initial-message'
+            }],
+            isRecording: false,
+            isLoading: false,
+            activeModule: 'chat',
+            uploadedFile: null
+        };
+
+        // Initialize UI
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeNavigation();
+            initializeQuickActions();
+            initializeSuggestions();
+            initializeProgress();
+            renderMessages();
+            initializeEventListeners();
+            initializeLucideIcons();
+        });
+
+        // UI Initialization Functions
+        function initializeNavigation() {
+            const nav = document.getElementById('navigation');
+            nav.innerHTML = CONFIG.navigationItems.map(item => `
+                <button
+                    data-id="${item.id}"
+                    class="w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg transition-colors
+                    ${state.activeModule === item.id ? 'bg-[#A51C30] text-white' : 'text-gray-600 hover:bg-gray-100'}"
+                >
+                    <i data-lucide="${item.icon}" class="h-5 w-5"></i>
+                    <span class="font-medium">${item.label}</span>
+                </button>
+            `).join('');
+        }
+
+        function initializeQuickActions() {
+            const container = document.getElementById('quickActions');
+            container.innerHTML = CONFIG.quickActions.map(action => `
+                <button class="px-3 py-1.5 text-sm rounded-full border border-gray-200 
+                    hover:border-[#A51C30] hover:bg-gray-50 text-gray-700 transition-colors
+                    flex items-center space-x-2">
+                    <i data-lucide="${action.icon}" class="h-4 w-4"></i>
+                    <span>${action.label}</span>
+                </button>
+            `).join('');
+        }
+
+        function initializeSuggestions() {
+            const container = document.getElementById('suggestions');
+            container.innerHTML = CONFIG.suggestions.map(suggestion => `
+                <button class="text-xs px-3 py-1.5 rounded-full bg-gray-100 
+                    text-gray-600 hover:bg-gray-200 transition-colors">
+                    ${suggestion}
+                </button>
+            `).join('');
+        }
+
+        function initializeProgress() {
+            const container = document.getElementById('progressContainer');
+            container.innerHTML = CONFIG.progressItems.map(item => `
+                <div class="space-y-2">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-600">${item.name}</span>
+                        <span class="font-medium text-gray-900">${item.progress}%</span>
+                    </div>
+                    <div class="h-2 bg-gray-100 rounded-full">
+                        <div class="h-full rounded-full bg-[#A51C30] transition-all hover:opacity-90"
+                            style="width: ${item.progress}%">
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+      // Message Rendering
+function renderMessages() {
+    const container = document.getElementById('messagesContainer');
+    container.innerHTML = state.messages.map(msg => `
+        <div class="message-container flex ${msg.sender === 'Petra' ? 'justify-start' : 'justify-end'}">
+            <div class="max-w-[80%] rounded-lg p-3 ${
+                msg.sender === 'Petra' 
+                    ? 'bg-white border border-gray-200' 
+                    : 'bg-[#A51C30] text-white'
+            }">
+                ${msg.sender === 'Petra' ? `
+                    <div class="flex items-center space-x-2 mb-2">
+                        <i data-lucide="star" class="h-4 w-4 text-[#ed1b34]"></i>
+                        <span class="text-sm font-medium text-[#A51C30]">Petra</span>
+                    </div>
+                ` : ''}
+                <div class="text-sm typing-animation">${msg.content}</div>
+                ${msg.audio ? `
+                    <div class="flex items-center space-x-2 bg-gray-50 rounded-lg p-2 mt-2">
+                        <button class="p-1.5 rounded-full hover:bg-gray-200 transition-colors">
+                            <i data-lucide="volume-2" class="h-4 w-4 text-gray-600"></i>
+                        </button>
+                        <div class="flex-1 h-1 bg-gray-200 rounded-full">
+                            <div class="h-full w-1/2 bg-[#A51C30] rounded-full"></div>
+                        </div>
+                        <span class="text-xs text-gray-500">0:23</span>
+                    </div>
+                ` : ''}
+                <time class="text-xs ${msg.sender === 'Petra' ? 'text-gray-400' : 'text-gray-200'} mt-1 block">
+                    ${new Intl.DateTimeFormat('en-US', {
+                        hour: 'numeric',
+                        minute: 'numeric',
+                        hour12: true
+                    }).format(new Date(msg.timestamp))}
+                </time>
+            </div>
+        </div>
+    `).join('');
+    
+    // Scroll to bottom
+    container.scrollTop = container.scrollHeight;
+    
+    // Initialize Lucide icons for new messages
+    initializeLucideIcons();
+}
+
+// Message Handling
+function sendMessage() {
+    const input = document.getElementById('messageInput');
+    const message = input.value.trim();
+    
+    if (!message && !state.uploadedFile && !state.isRecording) return;
+
+    const newMessage = {
+        sender: 'user',
+        content: message,
+        timestamp: new Date(),
+        id: `user-${Date.now()}`
+    };
+
+    state.messages.push(newMessage);
+    input.value = '';
+    state.isLoading = true;
+    renderMessages();
+    showTypingIndicator();
+
+    // Simulate API delay
+    setTimeout(() => {
+        const petraResponse = {
+            sender: 'Petra',
+            content: "Let me help you with that! First, let's break down what you've said...",
+            timestamp: new Date(),
+            id: `petra-${Date.now()}`
+        };
+        
+        state.messages.push(petraResponse);
+        state.isLoading = false;
+        renderMessages();
+    }, 1500);
+}
+
+// Typing Indicator
+function showTypingIndicator() {
+    const container = document.getElementById('messagesContainer');
+    const typingIndicator = document.createElement('div');
+    typingIndicator.className = 'flex justify-start';
+    typingIndicator.innerHTML = `
+        <div class="bg-white border border-gray-200 rounded-lg p-2">
+            <div class="typing-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    `;
+    container.appendChild(typingIndicator);
+    container.scrollTop = container.scrollHeight;
+}
+
+// File Handling
+function handleFileUpload(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 5000000) {
+        showError('File size must be less than 5MB');
+        return;
+    }
+
+    state.uploadedFile = file;
+    showFilePreview(file);
+}
+
+function showFilePreview(file) {
+    const container = document.createElement('div');
+    container.className = 'mb-4 flex items-center justify-between bg-gray-50 rounded-lg p-2';
+    container.innerHTML = `
+        <span class="text-sm text-gray-600 truncate">${file.name}</span>
+        <button onclick="removeFile()" class="p-1 hover:bg-gray-200 rounded-full transition-colors">
+            <i data-lucide="x" class="h-4 w-4 text-gray-500"></i>
+        </button>
+    `;
+    
+    const inputArea = document.querySelector('.input-area');
+    inputArea.insertBefore(container, inputArea.firstChild);
+    initializeLucideIcons();
+}
+
+function removeFile() {
+    state.uploadedFile = null;
+    const preview = document.querySelector('.file-preview');
+    if (preview) preview.remove();
+}
+
+// Recording Handling
+function toggleRecording() {
+    state.isRecording = !state.isRecording;
+    const recordButton = document.getElementById('recordButton');
+    const indicator = recordButton.querySelector('.recording-indicator');
+    
+    if (state.isRecording) {
+        indicator.classList.remove('hidden');
+        // Start recording logic would go here
+    } else {
+        indicator.classList.add('hidden');
+        // Stop recording logic would go here
+    }
+}
+
+// Error Handling
+function showError(message) {
+    const container = document.createElement('div');
+    container.className = 'mb-4 p-2 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600';
+    container.textContent = message;
+    
+    const inputArea = document.querySelector('.input-area');
+    inputArea.insertBefore(container, inputArea.firstChild);
+    
+    setTimeout(() => container.remove(), 3000);
+}
+
+// Event Listeners
+function initializeEventListeners() {
+    // Send button
+    document.getElementById('sendButton').addEventListener('click', sendMessage);
+    
+    // Message input
+    document.getElementById('messageInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+    
+    // File upload
+    document.getElementById('fileInput').addEventListener('change', handleFileUpload);
+    document.getElementById('uploadButton').addEventListener('click', () => {
+        document.getElementById('fileInput').click();
+    });
+    
+    // Recording
+    document.getElementById('recordButton').addEventListener('click', toggleRecording);
+    
+    // Navigation
+    document.querySelectorAll('[data-id]').forEach(button => {
+        button.addEventListener('click', () => {
+            state.activeModule = button.dataset.id;
+            initializeNavigation();
+        });
+    });
+    
+    // Suggestions
+    document.querySelectorAll('#suggestions button').forEach(button => {
+        button.addEventListener('click', () => {
+            document.getElementById('messageInput').value = button.textContent.trim();
+        });
+    });
+}
+
+// Initialize Lucide Icons
+function initializeLucideIcons() {
+    lucide.createIcons();
+}
+
+// Initialize the application
+document.addEventListener('DOMContentLoaded', () => {
+    initializeNavigation();
+    initializeQuickActions();
+    initializeSuggestions();
+    initializeProgress();
+    renderMessages();
+    initializeEventListeners();
+    initializeLucideIcons();
+});
+
+</script>
+</body>
+</html>
