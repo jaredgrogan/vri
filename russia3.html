@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#A51C30">
+    <title>Petra - Russian Language Learning Platform</title>
+    
+    <!-- Essential Meta Tags -->
+    <meta name="description" content="AI-powered Russian language learning platform with real-time translation and conversation practice">
+    <meta name="keywords" content="Russian learning, AI language tutor, language learning, Russian conversation">
+    <meta name="author" content="COGNITIVE CLOUD">
+    
+    <!-- Open Graph / Social Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Petra - Russian Language Learning">
+    <meta property="og:description" content="AI-powered Russian language learning platform">
+    <meta property="og:image" content="/path-to-your-og-image.jpg">
+    <meta property="og:url" content="https://petra.chat">
+    
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Petra - Russian Language Learning">
+    <meta name="twitter:description" content="AI-powered Russian language learning platform">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    
+    <!-- External Resources -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Preload Critical Resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+    <style>
+        /* Root Variables */
+        :root {
+            --brand-primary: #A51C30;
+            --brand-secondary: #ed1b34;
+            --brand-accent: crimson;
+            --transition-standard: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow-elevation-1: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --shadow-elevation-2: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --radius-standard: 0.5rem;
+            --radius-large: 1rem;
+            --spacing-standard: 1rem;
+        }
+
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            color: #1a1a1a;
+            line-height: 1.5;
+        }
+
+        /* Brand Styles */
+        .brand-gradient {
+            background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .brand-gradient-bg {
+            background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+        }
+
+        /* Animation Keyframes */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Layout Components */
+        .app-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: var(--spacing-standard);
+            position: relative;
+        }
+
+        /* Header Styles */
+        .app-header {
+            background: white;
+            box-shadow: var(--shadow-elevation-1);
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            padding: 1rem;
+        }
+
+        /* Message Styles */
+        .message {
+            max-width: 80%;
+            padding: 1rem;
+            border-radius: var(--radius-standard);
+            animation: slideIn 0.3s ease-out;
+            margin: 0.5rem 0;
+        }
+
+        .message-user {
+            background: var(--brand-primary);
+            color: white;
+            margin-left: auto;
+        }
+
+        .message-petra {
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            margin-right: auto;
+        }
+
+        /* Input Area Styles */
+        .input-area {
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: var(--radius-standard);
+            padding: 0.75rem;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Button Styles */
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-standard);
+            transition: var(--transition-standard);
+            cursor: pointer;
+            border: none;
+            outline: none;
+        }
+
+        .btn-primary {
+            background: var(--brand-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        /* Input Styles */
+        .input-standard {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: var(--radius-standard);
+            transition: var(--transition-standard);
+        }
+
+        .input-standard:focus {
+            border-color: var(--brand-primary);
+            box-shadow: 0 0 0 2px rgba(165, 28, 48, 0.1);
+        }
+
+        /* Suggestion Pills */
+        .suggestion-pill {
+            padding: 0.25rem 0.75rem;
+            background: #f3f4f6;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            color: #4b5563;
+            transition: var(--transition-standard);
+            cursor: pointer;
+            margin: 0.25rem;
+            border: 1px solid transparent;
+        }
+
+        .suggestion-pill:hover {
+            background: #e5e7eb;
+            border-color: var(--brand-primary);
+            transform: translateY(-1px);
+        }
+
+[/* Loading States */
+        .loading-wave {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+            padding: 8px;
+        }
+
+        .loading-wave div {
+            width: 8px;
+            height: 8px;
+            background: var(--brand-primary);
+            border-radius: 50%;
+            animation: wave 1.2s linear infinite;
+        }
+
+        .loading-wave div:nth-child(2) { animation-delay: -1.1s; }
+        .loading-wave div:nth-child(3) { animation-delay: -0.9s; }
+
+        @keyframes wave {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+
+        /* Audio Player Styles */
+        .audio-player {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: var(--radius-standard);
+            margin-top: 8px;
+        }
+
+        .audio-progress {
+            flex: 1;
+            height: 4px;
+            background: #e9ecef;
+            border-radius: 2px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .audio-progress-bar {
+            position: absolute;
+            height: 100%;
+            background: var(--brand-primary);
+            border-radius: 2px;
+            transition: width 0.1s linear;
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .toast {
+            background: white;
+            border-radius: var(--radius-standard);
+            padding: 1rem;
+            box-shadow: var(--shadow-elevation-2);
+            animation: slideIn 0.3s ease-out;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-width: 300px;
+            max-width: 500px;
+        }
+
+        .toast-success { border-left: 4px solid #10B981; }
+        .toast-error { border-left: 4px solid #EF4444; }
+        .toast-info { border-left: 4px solid #3B82F6; }
+
+        /* Chat Container Styles */
+        .chat-container {
+            height: calc(100vh - 200px);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            scroll-behavior: smooth;
+        }
+
+        .messages-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .messages-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        .messages-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        .messages-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        /* File Upload Styles */
+        .file-preview {
+            background: #f8f9fa;
+            border-radius: var(--radius-standard);
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .file-preview-name {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Recording Indicator */
+        .recording-indicator {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            height: 8px;
+            width: 8px;
+        }
+
+        .recording-indicator::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: #ef4444;
+            border-radius: 50%;
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .quick-action-btn {
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-standard);
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition-standard);
+        }
+
+        .quick-action-btn:hover {
+            border-color: var(--brand-primary);
+            transform: translateY(-1px);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: #f1f1f1;
+            border-radius: 9999px;
+            height: 8px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--brand-primary);
+            transition: width 0.3s ease;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .chat-container {
+                height: calc(100vh - 160px);
+            }
+
+            .suggestion-pill {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.75rem;
+            }
+
+            .quick-action-btn {
+                padding: 0.25rem 0.75rem;
+            }
+
+            .message {
+                max-width: 90%;
+            }
+        }
+
+        /* Accessibility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Focus States */
+        :focus-visible {
+            outline: 2px solid var(--brand-primary);
+            outline-offset: 2px;
+        }
+
+        /* Animation States */
+        .fade-enter {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .fade-enter-active {
+            opacity: 1;
+            transform: translateY(0);
+            transition: var(--transition-standard);
+        }
+
+        /* Print Styles */
+        @media print {
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container" role="alert" aria-live="polite"></div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="loading-wave">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="app-header">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <h1 class="text-2xl font-bold brand-gradient">Petra</h1>
+                <select 
+                    id="difficultySelect"
+                    class="border rounded-full px-3 py-1.5 text-sm text-gray-700 hover:border-[#A51C30] transition-colors"
+                    aria-label="Select difficulty level"
+                >
+                    <option value="beginner">Beginner</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                </select>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button 
+                    id="settingsButton"
+                    class="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                    aria-label="Settings"
+                >
+                    <i data-lucide="settings" class="h-5 w-5 text-gray-600"></i>
+                </button>
+                <div class="h-8 w-8 rounded-full bg-[#A51C30] flex items-center justify-center text-white">
+                    JS
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="max-w-7xl mx-auto grid grid-cols-12 gap-6">
+            <!-- Left Sidebar -->
+            <div class="col-span-12 lg:col-span-3">
+                <nav class="bg-white rounded-lg shadow p-4 space-y-2" id="navigation" aria-label="Main navigation">
+                    <div id="navigationItems"></div>
+                </nav>
+            </div>
+
+            <!-- Main Chat Area -->
+            <div class="col-span-12 lg:col-span-6">
+                <div class="bg-white rounded-lg shadow">
+                    <div class="p-4">
+                        <!-- Quick Actions -->
+                        <div id="quickActions" class="quick-actions" role="toolbar" aria-label="Quick actions"></div>
+
+                        <!-- Messages Area -->
+                        <div class="chat-container">
+                            <div 
+                                id="messagesContainer" 
+                                class="messages-container"
+                                role="log"
+                                aria-live="polite"
+                            ></div>
+
+                            <!-- Suggestions Area -->
+                            <div class="border-t border-gray-100 pt-4">
+                                <div id="suggestions" class="flex flex-wrap gap-2"></div>
+                            </div>
+
+                            <!-- Input Area -->
+                            <div class="input-area">
+                                <input 
+                                    type="file" 
+                                    id="fileInput" 
+                                    class="hidden" 
+                                    accept="image/*,.pdf,.doc,.docx"
+                                >
+                                <button 
+                                    id="uploadButton"
+                                    class="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                                    aria-label="Upload file"
+                                >
+                                    <i data-lucide="upload" class="h-5 w-5 text-gray-400"></i>
+                                </button>
+                                <button 
+                                    id="recordButton"
+                                    class="p-2 rounded-full transition-colors relative"
+                                    aria-label="Record audio"
+                                >
+                                    <i data-lucide="mic" class="h-5 w-5 text-gray-400"></i>
+                                    <div class="recording-indicator hidden"></div>
+                                </button>
+                                <input
+                                    type="text"
+                                    id="messageInput"
+                                    class="flex-1 px-3 py-1.5 text-sm focus:outline-none"
+                                    placeholder="Type in English or Russian..."
+                                    aria-label="Message input"
+                                >
+                                <button
+                                    id="sendButton"
+                                    class="p-2 rounded-full bg-[#A51C30] text-white hover:opacity-90 transition-opacity disabled:opacity-50"
+                                    aria-label="Send message"
+                                >
+                                    <i data-lucide="send" class="h-5 w-5"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Sidebar -->
+            <div class="col-span-12 lg:col-span-3">
+                <div class="bg-white rounded-lg shadow p-4">
+                    <h2 class="text-lg font-semibold mb-4">Progress</h2>
+                    <div id="progressContainer" class="space-y-4"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-200 mt-8 py-4">
+        <div class="max-w-7xl mx-auto px-4 text-center text-sm text-gray-500">
+            © 2024 COGNITIVE CLOUD
+        </div>
+    </footer>
+
+    <script>
+        // Application State
+        const state = {
+            messages: [{
+                sender: 'Petra',
+                content: "Привет! I'm Petra, your Russian language guide. Let's start our learning journey! Would you like to practice conversation or focus on a specific topic?",
+                timestamp: new Date(),
+                id: 'initial-message'
+            }],
+            isRecording: false,
+            isLoading: false,
+            activeModule: 'chat',
+            uploadedFile: null,
+            difficulty: 'beginner'
+        };
+
+        // Configuration
+        const CONFIG = {
+            navigationItems: [
+                { icon: 'message-square', label: 'Chat', id: 'chat' },
+                { icon: 'book', label: 'Lessons', id: 'lessons' },
+                { icon: 'brain', label: 'Practice', id: 'practice' },
+                { icon: 'users', label: 'Groups', id: 'groups' },
+                { icon: 'bar-chart-2', label: 'Progress', id: 'progress' }
+            ],
+            quickActions: [
+                { icon: 'book-open', label: 'Translate', action: 'translate' },
+                { icon: 'check-circle', label: 'Correct', action: 'correct' },
+                { icon: 'book', label: 'Parse', action: 'parse' },
+                { icon: 'brain', label: 'Vocabulary', action: 'vocabulary' }
+            ],
+            suggestions: [
+                "Translate this to Russian",
+                "Check my grammar",
+                "Explain this phrase",
+                "Start a conversation",
+                "Quiz me on this topic"
+            ],
+            maxFileSize: 5000000, // 5MB
+            audioConfig: {
+                sampleRate: 44100,
+                channels: 1
+            }
+        };
+
+        // UI Initialization
+        function initializeNavigation() {
+            const nav = document.getElementById('navigationItems');
+            nav.innerHTML = CONFIG.navigationItems.map(item => `
+                <button
+                    data-id="${item.id}"
+                    class="w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg transition-colors
+                    ${state.activeModule === item.id ? 'bg-[#A51C30] text-white' : 'text-gray-600 hover:bg-gray-100'}"
+                >
+                    <i data-lucide="${item.icon}" class="h-5 w-5"></i>
+                    <span class="font-medium">${item.label}</span>
+                </button>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function initializeQuickActions() {
+            const container = document.getElementById('quickActions');
+            container.innerHTML = CONFIG.quickActions.map(action => `
+                <button 
+                    class="quick-action-btn"
+                    data-action="${action.action}"
+                >
+                    <i data-lucide="${action.icon}" class="h-4 w-4"></i>
+                    <span>${action.label}</span>
+                </button>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function initializeSuggestions() {
+            const container = document.getElementById('suggestions');
+            container.innerHTML = CONFIG.suggestions.map(suggestion => `
+                <button class="suggestion-pill">
+                    ${suggestion}
+                </button>
+            `).join('');
+        }
+
+        function updateProgress() {
+            const container = document.getElementById('progressContainer');
+            const progressItems = [
+                { name: 'Vocabulary', progress: 65 },
+                { name: 'Grammar', progress: 45 },
+                { name: 'Conversation', progress: 78 }
+            ];
+
+            container.innerHTML = progressItems.map(item => `
+                <div class="space-y-2">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-600">${item.name}</span>
+                        <span class="font-medium text-gray-900">${item.progress}%</span>
+                    </div>
+                    <div class="progress-container">
+                        <div 
+                            class="progress-bar"
+                            style="width: ${item.progress}%"
+                        ></div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Message Handling
+        function renderMessages() {
+            const container = document.getElementById('messagesContainer');
+            container.innerHTML = state.messages.map(msg => `
+                <div class="message ${msg.sender === 'Petra' ? 'message-petra' : 'message-user'}">
+                    ${msg.sender === 'Petra' ? `
+                        <div class="flex items-center space-x-2 mb-2">
+                            <i data-lucide="star" class="h-4 w-4 text-[#ed1b34]"></i>
+                            <span class="text-sm font-medium text-[#A51C30]">Petra</span>
+                        </div>
+                    ` : ''}
+                    <div class="text-sm typing-animation">${msg.content}</div>
+                    ${msg.audio ? `
+                        <div class="audio-player">
+                            <button class="play-pause-btn">
+                                <i data-lucide="play" class="h-5 w-5"></i>
+                            </button>
+                            <div class="audio-progress">
+                                <div class="audio-progress-bar"></div>
+                            </div>
+                            <span class="time-display">0:00</span>
+                        </div>
+                    ` : ''}
+                    <time class="text-xs text-gray-400 mt-1 block">
+                        ${new Intl.DateTimeFormat('en-US', {
+                            hour: 'numeric',
+                            minute: 'numeric',
+                            hour12: true
+                        }).format(new Date(msg.timestamp))}
+                    </time>
+                </div>
+            `).join('');
+            
+            lucide.createIcons();
+            container.scrollTop = container.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (!message && !state.uploadedFile && !state.isRecording) return;
+
+            const newMessage = {
+                sender: 'user',
+                content: message,
+                timestamp: new Date(),
+                id: `user-${Date.now()}`
+            };
+
+            state.messages.push(newMessage);
+            input.value = '';
+            state.isLoading = true;
+            renderMessages();
+            showTypingIndicator();
+
+            try {
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                const petraResponse = {
+                    sender: 'Petra',
+                    content: generateResponse(message),
+                    timestamp: new Date(),
+                    id: `petra-${Date.now()}`
+                };
+                
+                state.messages.push(petraResponse);
+            } catch (error) {
+                showToast('Failed to send message', 'error');
+            } finally {
+                state.isLoading = false;
+                renderMessages();
+            }
+        }
+
+        // Response Generation
+        function generateResponse(message) {
+            // Simple response generation logic
+            const responses = [
+                "Let me help you with that! First, let's break down what you've said...",
+                "That's interesting! Here's what I think...",
+                "Great question! Let me explain...",
+                "I understand what you're asking. Here's my response..."
+            ];
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+
+        // UI Feedback
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.innerHTML = `
+                <i data-lucide="${type === 'error' ? 'alert-circle' : 'info'}" class="h-5 w-5"></i>
+                <span>${message}</span>
+            `;
+            
+            document.getElementById('toastContainer').appendChild(toast);
+            lucide.createIcons();
+            
+            setTimeout(() => {
+                toast.classList.add('fade-enter');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function showTypingIndicator() {
+            const container = document.createElement('div');
+            container.className = 'message message-petra';
+            container.innerHTML = `
+                <div class="loading-wave">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            `;
+            
+            document.getElementById('messagesContainer').appendChild(container);
+        }
+
+        // File Handling
+        function handleFileUpload(event) {
+            const file = event.target.files?.[0];
+            if (!file) return;
+
+            if (file.size > CONFIG.maxFileSize) {
+                showToast('File size must be less than 5MB', 'error');
+                return;
+            }
+
+            state.uploadedFile = file;
+            showFilePreview(file);
+            showToast('File uploaded successfully', 'success');
+        }
+
+        function showFilePreview(file) {
+            const preview = document.createElement('div');
+            preview.className = 'file-preview';
+            preview.innerHTML = `
+                <i data-lucide="file" class="h-5 w-5 text-gray-400"></i>
+                <span class="file-preview-name">${file.name}</span>
+                <button onclick="removeFile()" class="p-1 hover:bg-gray-200 rounded-full">
+                    <i data-lucide="x" class="h-4 w-4 text-gray-500"></i>
+                </button>
+            `;
+            
+            const container = document.getElementById('messagesContainer');
+            container.appendChild(preview);
+            lucide.createIcons();
+        }
+
+       function removeFile() {
+           state.uploadedFile = null;
+           const preview = document.querySelector('.file-preview');
+           if (preview) preview.remove();
+           showToast('File removed', 'info');
+       }
+
+       // Audio Recording
+       let mediaRecorder = null;
+       let audioChunks = [];
+
+       async function toggleRecording() {
+           const recordButton = document.getElementById('recordButton');
+           const indicator = recordButton.querySelector('.recording-indicator');
+
+           if (!state.isRecording) {
+               try {
+                   const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                   mediaRecorder = new MediaRecorder(stream, {
+                       mimeType: 'audio/webm'
+                   });
+
+                   mediaRecorder.ondataavailable = event => {
+                       audioChunks.push(event.data);
+                   };
+
+                   mediaRecorder.onstop = () => {
+                       const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                       const audioUrl = URL.createObjectURL(audioBlob);
+                       sendAudioMessage(audioUrl);
+                       audioChunks = [];
+                   };
+
+                   mediaRecorder.start();
+                   state.isRecording = true;
+                   indicator.classList.remove('hidden');
+                   showToast('Recording started', 'info');
+               } catch (error) {
+                   showToast('Could not access microphone', 'error');
+                   console.error('Recording error:', error);
+               }
+           } else {
+               mediaRecorder.stop();
+               state.isRecording = false;
+               indicator.classList.add('hidden');
+               showToast('Recording completed', 'success');
+           }
+       }
+
+       function sendAudioMessage(audioUrl) {
+           const newMessage = {
+               sender: 'user',
+               content: '',
+               audio: audioUrl,
+               timestamp: new Date(),
+               id: `audio-${Date.now()}`
+           };
+
+           state.messages.push(newMessage);
+           renderMessages();
+       }
+
+       // Event Listeners
+       function initializeEventListeners() {
+           // Send button
+           document.getElementById('sendButton').addEventListener('click', sendMessage);
+           
+           // Message input
+           document.getElementById('messageInput').addEventListener('keypress', (e) => {
+               if (e.key === 'Enter' && !e.shiftKey) {
+                   e.preventDefault();
+                   sendMessage();
+               }
+           });
+           
+           // File upload
+           document.getElementById('fileInput').addEventListener('change', handleFileUpload);
+           document.getElementById('uploadButton').addEventListener('click', () => {
+               document.getElementById('fileInput').click();
+           });
+           
+           // Recording
+           document.getElementById('recordButton').addEventListener('click', toggleRecording);
+           
+           // Navigation
+           document.querySelectorAll('[data-id]').forEach(button => {
+               button.addEventListener('click', () => {
+                   state.activeModule = button.dataset.id;
+                   initializeNavigation();
+               });
+           });
+           
+           // Quick Actions
+           document.querySelectorAll('[data-action]').forEach(button => {
+               button.addEventListener('click', (e) => {
+                   handleQuickAction(e.currentTarget.dataset.action);
+               });
+           });
+           
+           // Suggestions
+           document.querySelectorAll('.suggestion-pill').forEach(button => {
+               button.addEventListener('click', () => {
+                   document.getElementById('messageInput').value = button.textContent.trim();
+                   document.getElementById('messageInput').focus();
+               });
+           });
+
+           // Difficulty Select
+           document.getElementById('difficultySelect').addEventListener('change', (e) => {
+               state.difficulty = e.target.value;
+               updateProgress();
+           });
+       }
+
+       // Quick Action Handlers
+       function handleQuickAction(action) {
+           const messageInput = document.getElementById('messageInput');
+           
+           switch(action) {
+               case 'translate':
+                   messageInput.value = 'Please translate: ';
+                   break;
+               case 'correct':
+                   messageInput.value = 'Please correct: ';
+                   break;
+               case 'parse':
+                   messageInput.value = 'Please explain the grammar in: ';
+                   break;
+               case 'vocabulary':
+                   messageInput.value = 'What are the key vocabulary words in: ';
+                   break;
+           }
+           
+           messageInput.focus();
+       }
+
+       // Error Handling
+       window.onerror = function(msg, url, lineNo, columnNo, error) {
+           showToast('An error occurred. Please try again.', 'error');
+           console.error('Error: ', msg, url, lineNo, columnNo, error);
+           return false;
+       };
+
+       // Initialize Application
+       document.addEventListener('DOMContentLoaded', () => {
+           try {
+               initializeNavigation();
+               initializeQuickActions();
+               initializeSuggestions();
+               updateProgress();
+               renderMessages();
+               initializeEventListeners();
+               lucide.createIcons();
+               
+               showToast('Welcome to Petra!', 'info');
+           } catch (error) {
+               console.error('Initialization error:', error);
+               showToast('Failed to initialize application', 'error');
+           }
+       });
+   </script>
+</body>
+</html>
