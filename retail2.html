@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: #f8f9fa;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      padding: 2rem;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding: 2rem;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .header h1 {
+      font-size: 2.25rem;
+      color: #1a365d;
+      margin-bottom: 0.5rem;
+    }
+
+    .header p {
+      color: #4a5568;
+      font-size: 1.1rem;
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .tab {
+      padding: 1rem;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .tab:hover {
+      background: #ebf8ff;
+    }
+
+    .tab.active {
+      background: #2b6cb0;
+      color: white;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .card {
+      background: white;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      color: #2d3748;
+      margin-bottom: 1rem;
+    }
+
+    .stat {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin: 1rem 0;
+    }
+
+    .stat.green { color: #48bb78; }
+    .stat.blue { color: #4299e1; }
+    .stat.purple { color: #9f7aea; }
+
+    .chart-container {
+      height: 300px;
+      position: relative;
+      margin: 1rem 0;
+    }
+
+    .phase-card {
+      margin-bottom: 1rem;
+      padding: 1.5rem;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .phase-card h3 {
+      color: #2d3748;
+      margin-bottom: 1rem;
+    }
+
+    .phase-card ul {
+      list-style: none;
+    }
+
+    .phase-card li {
+      margin: 0.5rem 0;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+
+    .phase-card li:before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      color: #4299e1;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Revolutionizing Retail Inventory Management</h1>
+      <p>AI-Powered Solutions for the Future of Grocery</p>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active">Market Overview</div>
+      <div class="tab">Our Solution</div>
+      <div class="tab">Impact</div>
+      <div class="tab">Roadmap</div>
+    </div>
+
+    <div class="content">
+      <!-- Market Section -->
+      <div class="section" id="market">
+        <div class="grid-2">
+          <div class="card">
+            <h2 class="card-title">Market Size (in Billions USD)</h2>
+            <div class="chart-container">
+              <img src="/api/placeholder/500/300" alt="Market Size Pie Chart" />
+            </div>
+          </div>
+          <div class="card">
+            <h2 class="card-title">Perishables Breakdown (in Billions USD)</h2>
+            <div class="chart-container">
+              <img src="/api/placeholder/500/300" alt="Perishables Breakdown Chart" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Impact Section -->
+      <div class="grid-3">
+        <div class="card">
+          <h2 class="card-title">Environmental Impact</h2>
+          <div class="stat green">11%</div>
+          <p>Reduction in greenhouse gas emissions from food waste</p>
+        </div>
+        
+        <div class="card">
+          <h2 class="card-title">Financial Impact</h2>
+          <div class="stat blue">$80B</div>
+          <p>Annual savings potential in retail value</p>
+        </div>
+        
+        <div class="card">
+          <h2 class="card-title">Operational Impact</h2>
+          <div class="stat purple">30%</div>
+          <p>Reduction in perishable inventory waste</p>
+        </div>
+      </div>
+
+      <!-- Roadmap Section -->
+      <div class="phases">
+        <div class="phase-card">
+          <h3>Phase 1: Foundation</h3>
+          <ul>
+            <li>AI-powered demand forecasting system</li>
+            <li>Initial alpha client implementation</li>
+          </ul>
+        </div>
+
+        <div class="phase-card">
+          <h3>Phase 2: Expansion</h3>
+          <ul>
+            <li>Comprehensive grocery management system</li>
+            <li>Digital storefront integration</li>
+          </ul>
+        </div>
+
+        <div class="phase-card">
+          <h3>Phase 3: Scale</h3>
+          <ul>
+            <li>Global market expansion</li>
+            <li>Broader retail industry integration</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Basic tab functionality
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
