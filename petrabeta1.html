@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petra | Your AI Language Tutor</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #A51C30;
+            --primary-accent: #ED1B34;
+            --secondary-accent: gold;
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Glassmorphic Effects */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        .bg-primary { background-color: var(--primary); }
+        .text-primary { color: var(--primary); }
+        .border-primary { border-color: var(--primary); }
+        
+        .chat-container {
+            height: calc(100vh - 180px);
+            scroll-behavior: smooth;
+        }
+        
+        .message {
+            max-width: 80%;
+            margin: 8px;
+            padding: 12px;
+            border-radius: 12px;
+            animation: messageSlide 0.3s ease-out;
+        }
+        
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .user-message {
+            background-color: var(--primary);
+            color: white;
+            margin-left: auto;
+        }
+        
+        .petra-message {
+            background-color: rgba(240, 240, 240, 0.9);
+            margin-right: auto;
+        }
+
+        /* Typing Animation */
+        .typing-indicator {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            margin: 0 2px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            animation: typingBounce 1s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typingBounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-4px); }
+        }
+
+        .language-toggle {
+            transition: all 0.3s ease;
+        }
+
+        .language-toggle:hover {
+            transform: translateY(-2px);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: linear-gradient(to right, #ED1B34 var(--progress), #e0e0e0 var(--progress));
+            transition: all 0.3s ease;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .layout-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                margin-bottom: 1rem;
+            }
+            
+            .chat-section {
+                width: 100%;
+            }
+
+            .language-toggle {
+                padding: 6px 12px;
+                font-size: 14px;
+            }
+        }
+
+        /* Audio Visualization */
+        .audio-visualizer {
+            height: 40px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .visualizer-bar {
+            width: 3px;
+            background-color: var(--primary-accent);
+            transition: height 0.1s ease;
+        }
+
+        /* Translate Button */
+        .translate-suggestion {
+            position: absolute;
+            right: 12px;
+            top: -30px;
+            background-color: var(--secondary-accent);
+            color: black;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .translate-suggestion.visible {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="glass sticky top-0 z-50">
+        <nav class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <img src="/api/placeholder/40/40" alt="Petra Logo" class="h-10">
+                <span class="text-2xl font-bold text-primary">Petra</span>
+            </div>
+            
+            <!-- Language Selector -->
+            <div class="flex flex-wrap gap-2">
+                <button class="language-toggle px-4 py-2 rounded-full border-2 border-primary text-primary hover:bg-primary hover:text-white active">
+                    English
+                </button>
+                <button class="language-toggle px-4 py-2 rounded-full border-2 border-gray-300 hover:border-primary hover:text-primary">
+                    العربية
+                </button>
+                <button class="language-toggle px-4 py-2 rounded-full border-2 border-gray-300 hover:border-primary hover:text-primary">
+                    Português
+                </button>
+                <button class="language-toggle px-4 py-2 rounded-full border-2 border-gray-300 hover:border-primary hover:text-primary">
+                    Русский
+                </button>
+                <button class="language-toggle px-4 py-2 rounded-full border-2 border-gray-300 hover:border-primary hover:text-primary">
+                    中文
+                </button>
+                <button class="language-toggle px-4 py-2 rounded-full border-2 border-gray-300 hover:border-primary hover:text-primary">
+                    日本語
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-6 flex gap-6 layout-container">
+        <!-- Left Sidebar -->
+        <aside class="w-64 glass rounded-lg p-4 h-fit sidebar">
+            <h2 class="text-lg font-semibold mb-4">Learning Progress</h2>
+            <div class="space-y-4">
+                <div>
+                    <div class="flex justify-between text-sm mb-1">
+                        <span>Vocabulary</span>
+                        <span>65%</span>
+                    </div>
+                    <div class="progress-bar rounded-full" style="--progress: 65%"></div>
+                </div>
+                <div>
+                    <div class="flex justify-between text-sm mb-1">
+                        <span>Grammar</span>
+                        <span>48%</span>
+                    </div>
+                    <div class="progress-bar rounded-full" style="--progress: 48%"></div>
+                </div>
+                <div>
+                    <div class="flex justify-between text-sm mb-1">
+                        <span>Pronunciation</span>
+                        <span>72%</span>
+                    </div>
+                    <div class="progress-bar rounded-full" style="--progress: 72%"></div>
+                </div>
+            </div>
+
+            <!-- Audio Visualizer -->
+            <div class="audio-visualizer mt-4"></div>
+        </aside>
+
+        <!-- Chat Interface -->
+        <div class="flex-1 glass rounded-lg p-4 chat-section">
+            <div class="chat-container flex flex-col space-y-4 overflow-y-auto">
+                <div class="petra-message message">
+                    <p>Welcome to Petra! I'm your AI language tutor. What would you like to learn today?</p>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="border-t mt-4 pt-4 relative">
+                <div class="translate-suggestion">Translate to selected language?</div>
+                <div class="flex space-x-2">
+                    <button class="p-2 rounded-full hover:bg-gray-100" title="Start Recording" id="micButton">
+                        <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path>
+                        </svg>
+                    </button>
+                    <input type="text" placeholder="Type your message..." class="flex-1 border rounded-full px-4 py-2 focus:outline-none focus:border-primary">
+                    <button class="p-2 rounded-full hover:bg-gray-100" title="Toggle Text-to-Speech" id="ttsButton">
+                        <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
+                        </svg>
+                    </button>
+                    <button class="p-2 rounded-full hover:bg-gray-100" title="Upload File">
+                        <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                        </svg>
+                    </button>
+                    <button class="bg-primary text-white px-6 py-2 rounded-full hover:bg-primary-accent">
+                        Send
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar -->
+        <aside class="w-64 glass rounded-lg p-4 h-fit sidebar">
+            <h2 class="text-lg font-semibold mb-4">Current Lesson</h2>
+            <div class="space-y-4">
+                <div class="p-3 bg-opacity-50 bg-gray-50 rounded-lg">
+                    <h3 class="font-medium">Portuguese Basics</h3>
+                    <p class="text-sm text-gray-600">Common Greetings</p>
+                </div>
+                <div class="space-y-2">
+                    <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-50">
+                        Vocabulary List
+                    </button>
+                    <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-50">
+                        Practice Exercises
+                    </button>
+                    <button class="w-full text-left px-3 py-2 rounded hover:bg-gray-50">
+                        Cultural Notes
+                    </button>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Footer -->
+    <footer class="glass mt-8 py-4">
+        <div class="container mx-auto px-4 text-center text-sm text-gray-600">
+            © 2024 Cognitive Cloud. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Web Speech API
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = true;
+
+        // Voice synthesis setup
+        const synth = window.speechSynthesis;
+        let voices = [];
+        let selectedVoice = null;
+
+        // DOM Elements
+        const micButton = document.getElementById('micButton');
+        const ttsButton = document.getElementById('ttsButton');
+        const chatInput = document.querySelector('input[type="text"]');
+        const sendButton = document.querySelector('button:contains("Send")');
+        const chatContainer = document.querySelector('.chat-container');
+        const translateSuggestion = document.querySelector('.translate-suggestion');
+
+        // Recording state
+        let isRecording = false;
+        let isListening = false;
+
+        // Audio Context for visualizer
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const analyser = audioContext.createAnalyser();
+        analyser.fftSize = 256;
+        const bufferLength = analyser.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+
+        // Create visualizer bars
+        const visualizer = document.querySelector('.audio-visualizer');
+        for (let i = 0; i < 20; i++) {
+            const bar = document.createElement('div');
+            bar.className = 'visualizer-bar';
+            visualizer.appendChild(bar);
+        }
+
+        // Update visualizer
+        function updateVisualizer() {
+            if (isRecording) {
+                analyser.getByteFrequencyData(dataArray);
+                const bars = visualizer.children;
+                for (let i = 0; i < bars.length; i++) {
+                    const height = (dataArray[i] / 255) * 40;
+                    bars[i].style.height = `${height}px`;
+                }
+                requestAnimationFrame(updateVisualizer);
+            }
+        }
+
+        // Initialize voices
+        function loadVoices() {
+            voices = synth.getVoices();
+            selectedVoice = voices.find(voice => voice.lang === 'en-US') || voices[0];
+        }
+
+        if (synth.onvoiceschanged !== undefined) {
+            synth.onvoiceschanged = loadVoices;
+        }
+
+        loadVoices();
+
+      // Speaking functionality
+        function speak(text, lang = 'en-US') {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.voice = voices.find(voice => voice.lang === lang) || selectedVoice;
+            utterance.rate = 1;
+            utterance.pitch = 1;
+            utterance.volume = 1;
+            synth.speak(utterance);
+        }
+
+        // Typing animation
+        function createTypingIndicator() {
+            const typing = document.createElement('div');
+            typing.className = 'petra-message message typing-indicator';
+            typing.innerHTML = `
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            `;
+            return typing;
+        }
+
+        // Add message to chat with typing animation
+        async function addMessage(message, isUser = false, shouldSpeak = true) {
+            if (!isUser) {
+                const typing = createTypingIndicator();
+                chatContainer.appendChild(typing);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+                
+                // Simulate typing delay
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                typing.remove();
+            }
+
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'petra-message'}`;
+            messageDiv.innerHTML = `<p>${message}</p>`;
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+
+            if (!isUser && shouldSpeak) {
+                speak(message);
+            }
+        }
+
+        // Handle microphone button click
+        micButton.addEventListener('click', async () => {
+            if (!isRecording) {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    const source = audioContext.createMediaStreamSource(stream);
+                    source.connect(analyser);
+                    recognition.start();
+                    micButton.classList.add('text-primary-accent');
+                    updateVisualizer();
+                } catch (err) {
+                    console.error('Error accessing microphone:', err);
+                    alert('Unable to access microphone. Please check your permissions.');
+                }
+            } else {
+                recognition.stop();
+                micButton.classList.remove('text-primary-accent');
+            }
+            isRecording = !isRecording;
+        });
+
+        // Handle Text-to-Speech toggle
+        let isTTSEnabled = true;
+        ttsButton.addEventListener('click', () => {
+            isTTSEnabled = !isTTSEnabled;
+            ttsButton.classList.toggle('text-primary-accent');
+            if (!isTTSEnabled && synth.speaking) {
+                synth.cancel();
+            }
+        });
+
+        // Handle speech recognition results
+        recognition.onresult = (event) => {
+            const transcript = Array.from(event.results)
+                .map(result => result[0])
+                .map(result => result.transcript)
+                .join('');
+            
+            chatInput.value = transcript;
+            
+            // Show translate suggestion if text is entered
+            if (transcript.trim()) {
+                translateSuggestion.classList.add('visible');
+            }
+        };
+
+        recognition.onend = () => {
+            if (isRecording) {
+                recognition.start();
+            }
+        };
+
+        // Language selection
+        const languageButtons = document.querySelectorAll('.language-toggle');
+        let currentLanguage = 'en-US';
+
+        languageButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons
+                languageButtons.forEach(btn => {
+                    btn.classList.remove('border-primary', 'text-primary');
+                    btn.classList.add('border-gray-300');
+                });
+                
+                // Add active class to clicked button
+                button.classList.add('border-primary', 'text-primary');
+                button.classList.remove('border-gray-300');
+                
+                // Update current language
+                const langMap = {
+                    'English': 'en-US',
+                    'العربية': 'ar-SA',
+                    'Português': 'pt-BR',
+                    'Русский': 'ru-RU',
+                    '中文': 'zh-CN',
+                    '日本語': 'ja-JP'
+                };
+                
+                currentLanguage = langMap[button.textContent.trim()];
+                recognition.lang = currentLanguage;
+            });
+        });
+
+        // Handle input changes for translate suggestion
+        chatInput.addEventListener('input', () => {
+            if (chatInput.value.trim()) {
+                translateSuggestion.classList.add('visible');
+            } else {
+                translateSuggestion.classList.remove('visible');
+            }
+        });
+
+        // Handle send button click
+        sendButton.addEventListener('click', async () => {
+            const message = chatInput.value.trim();
+            if (message) {
+                addMessage(message, true, false);
+                chatInput.value = '';
+                translateSuggestion.classList.remove('visible');
+                
+                // Simulate Petra's response (in production, this would call the LLM API)
+                const responses = {
+                    'en-US': 'I understood your message. Let me help you with that!',
+                    'ar-SA': 'فهمت رسالتك. دعني أساعدك في ذلك!',
+                    'pt-BR': 'Entendi sua mensagem. Deixa eu te ajudar com isso!',
+                    'ru-RU': 'Я понял ваше сообщение. Позвольте мне помочь вам с этим!',
+                    'zh-CN': '我明白你的信息。让我帮助你！',
+                    'ja-JP': 'メッセージを理解しました。お手伝いさせていただきます！'
+                };
+                
+                await addMessage(responses[currentLanguage] || responses['en-US'], false, isTTSEnabled);
+            }
+        });
+
+        // Handle enter key in input
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendButton.click();
+            }
+        });
+
+        // Handle file upload
+        const fileButton = document.querySelector('button[title="Upload File"]');
+        fileButton.addEventListener('click', () => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'audio/*,image/*,.pdf,.doc,.docx';
+            input.onchange = async (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    // In production, implement file upload logic here
+                    addMessage(`Uploaded file: ${file.name}`, true, false);
+                }
+            };
+            input.click();
+        });
+
+        // Initialize audio visualizer
+        function initVisualizer() {
+            const bars = document.querySelectorAll('.visualizer-bar');
+            bars.forEach(bar => {
+                bar.style.height = '2px';
+            });
+        }
+
+        initVisualizer();
+    </script>
+</body>
+</html>
