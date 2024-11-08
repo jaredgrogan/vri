@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petra Arabic Tutor - by Cognitive Cloud</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #A51C30;
+            --accent: #ed1b34;
+            --secondary: #FFD700;
+            --white: #FFFFFF;
+            --black: #000000;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: var(--gray-100);
+            color: var(--gray-900);
+        }
+
+        /* Navigation Styles */
+        .nav {
+            background-color: var(--primary);
+            color: var(--white);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            border-bottom: 1px solid var(--gray-700);
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            height: 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-brand-logo {
+            width: 2rem;
+            height: 2rem;
+        }
+
+        .nav-brand-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .nav-brand-subtext {
+            font-size: 0.875rem;
+            color: var(--gray-300);
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            gap: 0.5rem;
+        }
+
+        .btn-icon {
+            padding: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--white);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid currentColor;
+        }
+
+        .btn-ghost {
+            background-color: transparent;
+            border: none;
+        }
+
+        /* Card Styles */
+        .card {
+            background-color: var(--white);
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+        }
+
+        .card-header {
+            padding: 1.5rem 1.5rem 0.75rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .card-description {
+            color: var(--gray-500);
+            font-size: 0.875rem;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        /* Grid Layout */
+        .grid-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1.5rem 1rem;
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 1.5rem;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            height: 0.5rem;
+            background-color: var(--gray-200);
+            border-radius: 9999px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        /* Chat Styles */
+        .chat-container {
+            height: 400px;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .chat-message {
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+        }
+
+        .chat-message.user {
+            background-color: var(--accent);
+            color: var(--white);
+            margin-left: 2rem;
+        }
+
+        .chat-message.petra {
+            background-color: var(--gray-100);
+            margin-right: 2rem;
+        }
+
+        /* Vocabulary Card Styles */
+        .vocab-card {
+            border: 1px solid var(--gray-200);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .vocab-card:hover {
+            border-color: var(--accent);
+        }
+
+        .vocab-arabic {
+            font-family: 'Noto Sans Arabic', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .vocab-pronunciation {
+            color: var(--gray-600);
+            font-size: 0.875rem;
+        }
+
+        /* Badge Styles */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .badge-success {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-brand-subtext {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i data-lucide="brain" class="nav-brand-logo"></i>
+                <span class="nav-brand-text">Petra</span>
+                <span class="nav-brand-subtext">by Cognitive Cloud</span>
+            </div>
+            <div class="nav-actions">
+                <button class="btn btn-ghost" id="languageToggle">
+                    <i data-lucide="globe"></i>
+                    <span>English → العربية</span>
+                </button>
+                <button class="btn btn-ghost btn-icon" id="audioToggle">
+                    <i data-lucide="volume-2"></i>
+                </button>
+                <button class="btn btn-outline">
+                    <i data-lucide="user"></i>
+                    <span>Profile</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="grid-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- Learning Journey Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Learning Journey</h2>
+                    <p class="card-description">Your path to Arabic mastery</p>
+                </div>
+                <div class="card-content">
+                    <div class="learning-modules">
+                        <!-- Module buttons will be inserted here by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Your Progress</h2>
+                </div>
+                <div class="card-content">
+                    <div class="progress-stats">
+                        <!-- Progress stats will be inserted here by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <!-- Welcome Alert -->
+            <div class="alert">
+                <i data-lucide="brain"></i>
+                <p>Welcome back! Ready to continue your Arabic learning journey with Petra?</p>
+            </div>
+
+            <!-- Chat Interface -->
+            <div class="card" id="chatInterface">
+                <!-- Chat content will be inserted here by JavaScript -->
+            </div>
+
+            <!-- Vocabulary Content -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Essential Arabic Vocabulary</h2>
+                    <p class="card-description">Master the most important words first</p>
+                </div>
+                <div class="card-content" id="vocabularyContainer">
+                    <!-- Vocabulary cards will be inserted here by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>© <span id="currentYear"></span> Cognitive Cloud. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/lucide.min.js"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Application State
+        const state = {
+            audioEnabled: true,
+            isRecording: false,
+            activeModule: 'vocabulary',
+            chatMessages: [],
+            vocabularyItems: [
+                {
+                    id: 1,
+                    arabic: 'مرحباً',
+                    english: 'Hello',
+                    pronunciation: 'Marhaban',
+                    example: 'مرحباً، كيف حالك؟',
+                    exampleTranslation: 'Hello, how are you?',
+                    category: 'Greetings',
+                    difficulty: 'Beginner',
+                    mastered: true
+                },
+                {
+                    id: 2,
+                    arabic: 'شكراً',
+                    english: 'Thank you',
+                    pronunciation: 'Shukran',
+                    example: 'شكراً جزيلاً',
+                    exampleTranslation: 'Thank you very much',
+                    category: 'Common Phrases',
+                    difficulty: 'Beginner',
+                    mastered: false
+                }
+            ],
+            progress: {
+                dailyStreak: 7,
+                totalPoints: 1250,
+                vocabularyMastered: 85,
+                conversationScore: 72,
+                grammarAccuracy: 68,
+                weeklyGoalProgress: 75
+            }
+        };
+
+        // Audio Controller
+        class AudioController {
+            constructor() {
+                this.synthesis = window.speechSynthesis;
+                this.recognition = null;
+                this.mediaRecorder = null;
+                this.audioChunks = [];
+
+                if ('webkitSpeechRecognition' in window) {
+                    this.recognition = new webkitSpeechRecognition();
+                    this.recognition.continuous = false;
+                    this.recognition.interimResults = false;
+                    this.recognition.lang = 'ar-SA';
+                }
+
+                this.initializeMediaRecorder();
+            }
+
+            async initializeMediaRecorder() {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    this.mediaRecorder = new MediaRecorder(stream);
+                    
+                    this.mediaRecorder.ondataavailable = (event) => {
+                        this.audioChunks.push(event.data);
+                    };
+
+                    this.mediaRecorder.onstop = () => {
+                        const audioBlob = new Blob(this.audioChunks, { type: 'audio/wav' });
+                        this.audioChunks = [];
+                        this.handleAudioInput(audioBlob);
+                    };
+                } catch (err) {
+                    console.error('Error accessing microphone:', err);
+                }
+            }
+
+            speak(text, lang = 'ar-SA') {
+                if (!state.audioEnabled) return;
+
+                this.synthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = lang;
+                this.synthesis.speak(utterance);
+            }
+
+            startRecording() {
+                if (this.mediaRecorder && this.mediaRecorder.state === 'inactive') {
+                    this.audioChunks = [];
+                    this.mediaRecorder.start();
+                    state.isRecording = true;
+                    updateUI();
+                }
+            }
+
+            stopRecording() {
+                if (this.mediaRecorder && this.mediaRecorder.state === 'recording') {
+                    this.mediaRecorder.stop();
+                    state.isRecording = false;
+                    updateUI();
+                }
+            }
+
+            handleAudioInput(audioBlob) {
+                // In production, send to speech-to-text service
+                console.log('Audio recorded:', audioBlob);
+                // Simulate processing
+                setTimeout(() => {
+                    addChatMessage('Audio processed successfully', 'user');
+                    addChatMessage('I understood your message. How can I help?', 'petra');
+                }, 1000);
+            }
+        }
+
+        // UI Controller
+        class UIController {
+            constructor() {
+                this.initializeEventListeners();
+                this.updateProgressBars();
+                this.renderVocabulary();
+                this.renderModules();
+                document.getElementById('currentYear').textContent = new Date().getFullYear();
+            }
+
+            initializeEventListeners() {
+                // Audio toggle
+                document.getElementById('audioToggle').addEventListener('click', () => {
+                    state.audioEnabled = !state.audioEnabled;
+                    updateUI();
+                });
+
+                // Chat input
+                const chatInput = document.querySelector('.chat-input');
+                if (chatInput) {
+                    chatInput.addEventListener('keypress', (e) => {
+                        if (e.key === 'Enter') {
+                            this.handleChatSubmit(e.target.value);
+                            e.target.value = '';
+                        }
+                    });
+                }
+            }
+
+            updateProgressBars() {
+                Object.entries(state.progress).forEach(([key, value]) => {
+                    const progressBar = document.querySelector(`[data-progress="${key}"]`);
+                    if (progressBar) {
+                        progressBar.style.width = `${value}%`;
+                    }
+                });
+            }
+
+                  renderVocabulary() {
+                const container = document.getElementById('vocabularyContainer');
+                container.innerHTML = state.vocabularyItems.map(item => `
+                    <div class="vocab-card" data-id="${item.id}">
+                        <div class="vocab-content">
+                            <div class="vocab-header">
+                                <span class="vocab-arabic">${item.arabic}</span>
+                                ${item.mastered ? 
+                                    '<span class="badge badge-success">Mastered</span>' : 
+                                    ''}
+                            </div>
+                            <p class="vocab-pronunciation">${item.pronunciation}</p>
+                            <p class="vocab-english">${item.english}</p>
+                            <div class="vocab-example">
+                                <p class="vocab-example-arabic">${item.example}</p>
+                                <p class="vocab-example-translation">${item.exampleTranslation}</p>
+                            </div>
+                            <div class="vocab-meta">
+                                <span class="badge">${item.category}</span>
+                                <span class="badge">${item.difficulty}</span>
+                            </div>
+                        </div>
+                        <div class="vocab-actions">
+                            <button class="btn btn-ghost btn-icon" onclick="audioController.speak('${item.arabic}')">
+                                <i data-lucide="volume-2"></i>
+                            </button>
+                            <button class="btn btn-ghost btn-icon" onclick="audioController.startRecording()">
+                                <i data-lucide="mic"></i>
+                            </button>
+                            <button class="btn btn-ghost btn-icon" onclick="handleFavorite(${item.id})">
+                                <i data-lucide="bookmark"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+                lucide.createIcons();
+            }
+
+            renderModules() {
+                const container = document.querySelector('.learning-modules');
+                const modules = [
+                    { id: 'vocabulary', icon: 'book', label: 'Essential Vocabulary' },
+                    { id: 'conversation', icon: 'message-square', label: 'Conversation Practice' },
+                    { id: 'grammar', icon: 'check', label: 'Grammar' },
+                    { id: 'culture', icon: 'globe', label: 'Culture' }
+                ];
+
+                container.innerHTML = modules.map(module => `
+                    <button class="btn ${state.activeModule === module.id ? 'btn-primary' : 'btn-ghost'} w-full text-left"
+                            onclick="setActiveModule('${module.id}')">
+                        <i data-lucide="${module.icon}"></i>
+                        <span>${module.label}</span>
+                    </button>
+                `).join('');
+                lucide.createIcons();
+            }
+
+            handleChatSubmit(message) {
+                if (!message.trim()) return;
+                
+                addChatMessage(message, 'user');
+                // Simulate PETRA response
+                setTimeout(() => {
+                    addChatMessage('I am PETRA, your Arabic learning assistant. How can I help you today?', 'petra');
+                }, 1000);
+            }
+
+            updateUI() {
+                // Update audio toggle button
+                const audioToggle = document.getElementById('audioToggle');
+                audioToggle.innerHTML = `<i data-lucide="${state.audioEnabled ? 'volume-2' : 'volume-x'}"></i>`;
+                
+                // Update recording button state
+                const recordButton = document.querySelector('[data-action="record"]');
+                if (recordButton) {
+                    recordButton.classList.toggle('recording', state.isRecording);
+                }
+
+                // Refresh icons
+                lucide.createIcons();
+            }
+        }
+
+        // Chat Controller
+        class ChatController {
+            constructor() {
+                this.container = document.getElementById('chatInterface');
+                this.initializeChat();
+            }
+
+            initializeChat() {
+                this.container.innerHTML = `
+                    <div class="card-header" style="background-color: var(--primary); color: var(--white);">
+                        <div class="flex-between">
+                            <h2 class="card-title">
+                                <i data-lucide="brain"></i>
+                                PETRA Chat Assistant
+                            </h2>
+                            <button class="btn btn-ghost btn-icon" id="toggleChat">
+                                <i data-lucide="chevron-up"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="chat-content">
+                        <div class="chat-messages" id="chatMessages"></div>
+                        <div class="chat-input-area">
+                            <button class="btn btn-ghost btn-icon" onclick="audioController.startRecording()">
+                                <i data-lucide="mic"></i>
+                            </button>
+                            <input type="text" class="chat-input" placeholder="Type your message...">
+                            <button class="btn btn-primary btn-icon" onclick="handleChatSubmit()">
+                                <i data-lucide="send"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                this.messagesContainer = document.getElementById('chatMessages');
+                this.addSystemMessage('Welcome! How can I help you learn Arabic today?');
+                
+                // Initialize chat toggle
+                document.getElementById('toggleChat').addEventListener('click', () => {
+                    document.querySelector('.chat-content').classList.toggle('hidden');
+                });
+
+                lucide.createIcons();
+            }
+
+            addMessage(content, type) {
+                const message = document.createElement('div');
+                message.className = `chat-message ${type}`;
+                message.innerHTML = `
+                    ${type === 'petra' ? '<i data-lucide="brain"></i>' : ''}
+                    <div class="message-content">${content}</div>
+                    <div class="message-timestamp">${new Date().toLocaleTimeString()}</div>
+                `;
+                this.messagesContainer.appendChild(message);
+                message.scrollIntoView({ behavior: 'smooth' });
+                lucide.createIcons();
+
+                if (type === 'petra' && state.audioEnabled) {
+                    audioController.speak(content, 'en-US');
+                }
+            }
+
+            addSystemMessage(content) {
+                this.addMessage(content, 'petra');
+            }
+        }
+
+        // Utility Functions
+        function addChatMessage(content, type) {
+            chatController.addMessage(content, type);
+        }
+
+        function setActiveModule(moduleId) {
+            state.activeModule = moduleId;
+            uiController.renderModules();
+        }
+
+        function handleFavorite(itemId) {
+            // Implement favorite functionality
+            console.log('Favorite item:', itemId);
+        }
+
+        // Initialize Application
+        const audioController = new AudioController();
+        const uiController = new UIController();
+        const chatController = new ChatController();
+
+        // Error Handler
+        window.onerror = function(msg, url, lineNo, columnNo, error) {
+            console.error('Error: ', msg, '\nURL: ', url, '\nLine: ', lineNo, '\nColumn: ', columnNo, '\nError object: ', error);
+            return false;
+        };
+
+        // Service Worker Registration (for PWA support)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').catch(err => {
+                    console.error('ServiceWorker registration failed:', err);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
