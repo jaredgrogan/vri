@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cognitive Cloud & Starbase Media</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+        :root {
+            --harvard-crimson: #A51C30;
+            --harvard-dark: #1E1E1E;
+            --harvard-gold: #C4B17A;
+            --harvard-gray: #8C8C8C;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Georgia', serif;
+        }
+
+        body {
+            background-color: #FAFAFA;
+        }
+
+        .header {
+            background-color: var(--harvard-crimson);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(165, 28, 48, 0.9), rgba(165, 28, 48, 0.7));
+            z-index: 1;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .navbar {
+            background-color: var(--harvard-dark);
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--harvard-gold);
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .section {
+            background: white;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s, transform 0.5s;
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section h2 {
+            color: var(--harvard-crimson);
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--harvard-gold);
+            padding-bottom: 0.5rem;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: var(--harvard-crimson);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--harvard-gold);
+        }
+
+        .highlight {
+            color: var(--harvard-crimson);
+            font-weight: bold;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .footer {
+            background-color: var(--harvard-dark);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .cta-button {
+            background-color: var(--harvard-crimson);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .cta-button:hover {
+            background-color: #8A1829;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1>Cognitive Cloud & Starbase Media</h1>
+            <p>Redefining the Future of Media at the Intersection of Technology, Space, and Culture</p>
+        </div>
+    </header>
+
+    <nav class="navbar">
+        <ul class="nav-links">
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#highlights">Highlights</a></li>
+            <li><a href="#financials">Financials</a></li>
+            <li><a href="#team">Team</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        <section id="overview" class="section">
+            <h2>Executive Summary</h2>
+            <p>Cognitive Cloud and Starbase Media are forming a groundbreaking alliance to revolutionize content creation and distribution. By co-producing the highly successful Shawn Ryan Show (SRS), leveraging advanced AI technologies, and utilizing strategic locations like Starbase, Texas, we aim to create a multifaceted platform that generates robust revenue streams while reshaping the media landscape.</p>
+        </section>
+
+        <section id="highlights" class="section">
+            <h2>Investment Highlights</h2>
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-number">3M+</div>
+                    <p>YouTube Subscribers</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">#2</div>
+                    <p>Ranking on Spotify</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">1.72</div>
+                    <p>Acres in Starbase</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="financials" class="section">
+            <h2>Financial Projections</h2>
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-number">$5.0M</div>
+                    <p>Year 1 Revenue</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">60%</div>
+                    <p>Annual Growth</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">$12.8M</div>
+                    <p>Year 3 Projection</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="team" class="section">
+            <h2>Management Team</h2>
+            <p>Our leadership comprises seasoned professionals with extensive experience in AI technology, media integration, and content creation. Led by industry veterans and supported by an advisory board of experts from technology, media, defense, and academia.</p>
+        </section>
+
+        <section id="contact" class="section">
+            <h2>Contact Us</h2>
+            <button class="cta-button" onclick="alert('Thank you for your interest! Our team will contact you shortly.')">Request More Information</button>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2024 Cognitive Cloud & Starbase Media. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Intersection Observer for scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        document.querySelectorAll('.section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
