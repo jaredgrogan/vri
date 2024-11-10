@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Honors College Prospectus</title>
+    <style>
+        :root {
+            --color-white: #FFFFFF;
+            --color-dark: #1e1e1e;
+            --color-crimson: #DC143C;
+            --color-navy: #000080;
+            --color-gold: #FFD700;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--color-navy), var(--color-crimson));
+            color: var(--color-white);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Glass Container Styles */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 2rem;
+            margin: 1rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1rem;
+            background: rgba(30, 30, 30, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: var(--color-white);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--color-gold);
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1200px;
+            margin: 80px auto 0;
+            padding: 2rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--color-gold), var(--color-crimson));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: titleFade 1s ease-in;
+        }
+
+        /* Sections */
+        section {
+            margin: 4rem 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Chat Console */
+        .chat-console {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 350px;
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            padding: 1rem;
+            background: var(--color-navy);
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 0 0 20px 20px;
+        }
+
+        .chat-input input {
+            flex-grow: 1;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--color-white);
+        }
+
+        .chat-input button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 10px;
+            background: var(--color-crimson);
+            color: var(--color-white);
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .chat-input button:hover {
+            background: var(--color-navy);
+        }
+
+        /* Animations */
+        @keyframes titleFade {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .chat-console {
+                width: 100%;
+                right: 0;
+                bottom: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-content">
+            <div class="logo">AI Honors College</div>
+            <div class="nav-links">
+                <a href="#program">Program</a>
+                <a href="#partnerships">Partnerships</a>
+                <a href="#funding">Funding</a>
+                <a href="#vision">Vision</a>
+                <a href="#contact">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content glass">
+                <h1>AI Honors College</h1>
+                <p>Shaping the Future of Artificial Intelligence Education</p>
+            </div>
+        </section>
+
+        <section id="program" class="glass">
+            <h2>Program Structure</h2>
+            <p>Our innovative curriculum combines theoretical foundations with practical applications in AI...</p>
+        </section>
+
+        <section id="partnerships" class="glass">
+            <h2>Partnership Opportunities</h2>
+            <p>Join us in shaping the future of AI education through strategic partnerships...</p>
+        </section>
+
+        <section id="funding" class="glass">
+            <h2>Funding and Resources</h2>
+            <p>Learn about our funding model and resource allocation strategy...</p>
+        </section>
+
+        <section id="vision" class="glass">
+            <h2>Vision for Impact</h2>
+            <p>Discover how we're working to transform the landscape of AI education...</p>
+        </section>
+
+        <section id="contact" class="glass">
+            <h2>Contact Us</h2>
+            <form id="contact-form">
+                <input type="email" placeholder="Your Email" required>
+                <textarea placeholder="Your Message" required></textarea>
+                <button type="submit">Send Message</button>
+            </form>
+        </section>
+    </main>
+
+    <div class="chat-console glass">
+        <div class="chat-header">
+            <span>AI Assistant</span>
+            <button id="toggle-audio">🎤</button>
+        </div>
+        <div class="chat-messages"></div>
+        <div class="chat-input">
+            <input type="text" placeholder="Ask a question...">
+            <button>Send</button>
+        </div>
+    </div>
+
+    <script>
+        // Intersection Observer for scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Chat functionality
+        class ChatConsole {
+            constructor() {
+                this.messages = document.querySelector('.chat-messages');
+                this.input = document.querySelector('.chat-input input');
+                this.sendButton = document.querySelector('.chat-input button');
+                this.audioButton = document.querySelector('#toggle-audio');
+                this.recognition = null;
+                this.synthesis = window.speechSynthesis;
+
+                this.setupEventListeners();
+                this.setupSpeechRecognition();
+            }
+
+            setupEventListeners() {
+                this.sendButton.addEventListener('click', () => this.sendMessage());
+                this.input.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.sendMessage();
+                });
+                this.audioButton.addEventListener('click', () => this.toggleAudio());
+            }
+
+            setupSpeechRecognition() {
+                if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+                    this.recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+                    this.recognition.continuous = false;
+                    this.recognition.interimResults = false;
+
+                    this.recognition.onresult = (event) => {
+                        const transcript = event.results[0][0].transcript;
+                        this.input.value = transcript;
+                        this.sendMessage();
+                    };
+                }
+            }
+
+            sendMessage() {
+                const message = this.input.value.trim();
+                if (!message) return;
+
+                this.addMessage(message, 'user');
+                this.input.value = '';
+
+                // Simulate AI response (replace with actual API call)
+                setTimeout(() => {
+                    this.addMessage('Thank you for your message. I'm here to help you learn more about the AI Honors College.', 'ai');
+                }, 1000);
+            }
+
+            addMessage(text, sender) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message', sender);
+                messageDiv.textContent = text;
+                this.messages.appendChild(messageDiv);
+                this.messages.scrollTop = this.messages.scrollHeight;
+
+                if (sender === 'ai') {
+                    this.speak(text);
+                }
+            }
+
+            toggleAudio() {
+                if (this.recognition) {
+                    this.recognition.start();
+                    this.audioButton.textContent = '🔴';
+                    setTimeout(() => {
+                        this.recognition.stop();
+                        this.audioButton.textContent = '🎤';
+                    }, 5000);
+                }
+            }
+
+            speak(text) {
+                if (this.synthesis) {
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    this.synthesis.speak(utterance);
+                }
+            }
+        }
+
+        // Initialize chat console
+        const chat = new ChatConsole();
+
+        // Form submission
+        document.getElementById('contact-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            // Add form submission logic here
+        });
+    </script>
+</body>
+</html>
