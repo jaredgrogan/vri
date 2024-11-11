@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI Honors College Prospectus - Shaping the future of artificial intelligence education through innovative programs and partnerships">
+    <meta name="keywords" content="AI education, honors college, artificial intelligence, higher education">
+    <meta name="author" content="AI Honors College">
+    <meta property="og:title" content="AI Honors College Prospectus">
+    <meta property="og:description" content="Shaping the future of artificial intelligence education through innovative programs and partnerships">
+    <meta property="og:type" content="website">
+    <title>AI Honors College Prospectus</title>
+    <style>
+        /* CSS Reset and Base Styles */
+        :root {
+            --color-white: #FFFFFF;
+            --color-dark: #1e1e1e;
+            --color-crimson: #DC143C;
+            --color-navy: #000080;
+            --color-gold: #FFD700;
+            --color-error: #FF3B30;
+            --color-success: #34C759;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --transition-standard: all 0.3s ease;
+            --z-header: 1000;
+            --z-modal: 2000;
+            --z-tooltip: 3000;
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: var(--color-white);
+            background: linear-gradient(135deg, var(--color-navy), var(--color-crimson));
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        h1 { font-size: 3.5rem; }
+        h2 { font-size: 2.5rem; }
+        h3 { font-size: 2rem; }
+        h4 { font-size: 1.5rem; }
+        h5 { font-size: 1.25rem; }
+        h6 { font-size: 1rem; }
+
+        p, ul, ol {
+            margin-bottom: 1rem;
+        }
+
+        a {
+            color: var(--color-white);
+            text-decoration: none;
+            transition: var(--transition-standard);
+        }
+
+        a:hover {
+            color: var(--color-gold);
+        }
+
+        /* Layout Components */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Header and Navigation */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: var(--z-header);
+            background: rgba(30, 30, 30, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-white);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--color-gold);
+            transition: var(--transition-standard);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu-button {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--color-white);
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 80px 2rem 0;
+            background: radial-gradient(circle at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0.3) 100%);
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, var(--color-gold), var(--color-crimson));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: titleFade 1s ease-in;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: subtitleFade 1s ease-in 0.5s forwards;
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 6rem 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: var(--transition-standard);
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        /* Cards */
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: var(--transition-standard);
+            height: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 1rem;
+            color: var(--color-gold);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Statistics */
+        .statistics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+            margin: 4rem 0;
+        }
+
+        .statistic {
+            padding: 2rem;
+        }
+
+        .statistic-value {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--color-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .statistic-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Forms */
+        .form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-label {
+            font-weight: 500;
+        }
+
+        .form-input,
+        .form-textarea {
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--color-white);
+            transition: var(--transition-standard);
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--color-gold);
+            box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2);
+        }
+
+        .form-textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            border: none;
+            background: var(--color-crimson);
+            color: var(--color-white);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition-standard);
+        }
+
+        .button:hover {
+            background: var(--color-navy);
+            transform: translateY(-2px);
+        }
+
+        .button:active {
+            transform: translateY(0);
+        }
+
+        .button-icon {
+            margin-left: 0.5rem;
+        }
+
+        /* Chat Console */
+        .chat-console {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 350px;
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+            z-index: var(--z-modal);
+        }
+
+        .chat-header {
+            padding: 1rem;
+            background: var(--color-navy);
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-title {
+            font-weight: 500;
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .chat-message {
+            max-width: 80%;
+            padding: 1rem;
+            border-radius: 10px;
+            animation: messageFade 0.3s ease-in;
+        }
+
+        .chat-message.user {
+            background: var(--color-navy);
+            margin-left: auto;
+        }
+
+        .chat-message.ai {
+            background: var(--color-crimson);
+            margin-right: auto;
+        }
+
+        .chat-input-container {
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 0 0 20px 20px;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chat-input {
+            flex-grow: 1;
+            padding: 0.75rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--color-white);
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(30, 30, 30, 0.95);
+            padding: 4rem 0;
+            margin-top: 4rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-link {
+            margin-bottom: 0.75rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-standard);
+        }
+
+        .social-link:hover {
+            background: var(--color-gold);
+            transform: translateY(-2px);
+        }
+
+        /* Animations */
+        @keyframes titleFade {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes subtitleFade {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes messageFade {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Utility Classes */
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+
+       /* Responsive Design */
+        @media (max-width: 768px) {
+            html {
+                font-size: 14px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-button {
+                display: block;
+            }
+
+            .nav-links.active {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 80px;
+                left: 0;
+                right: 0;
+                background: var(--color-dark);
+                padding: 1rem;
+                gap: 1rem;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+
+            .hero {
+                height: auto;
+                min-height: 100vh;
+                padding-top: 120px;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+
+            .section {
+                padding: 3rem 0;
+            }
+
+            .section-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .statistics {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .chat-console {
+                width: 100%;
+                height: 60vh;
+                bottom: 0;
+                right: 0;
+                border-radius: 20px 20px 0 0;
+            }
+
+            .form {
+                padding: 0 1rem;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .social-links {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            html {
+                font-size: 12px;
+            }
+
+            .container {
+                padding: 0 1rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            .statistic-value {
+                font-size: 2.5rem;
+            }
+
+            .button {
+                width: 100%;
+            }
+        }
+
+        /* Accessibility Enhancements */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--color-navy);
+            color: var(--color-white);
+            padding: 8px;
+            z-index: var(--z-modal);
+            transition: top 0.3s ease;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: none;
+                color: #000;
+            }
+
+            .header,
+            .chat-console,
+            .mobile-menu-button,
+            .social-links,
+            .button {
+                display: none;
+            }
+
+            .glass {
+                background: none;
+                border: none;
+                box-shadow: none;
+                padding: 0;
+                margin: 2rem 0;
+            }
+
+            .section {
+                page-break-inside: avoid;
+                opacity: 1;
+                transform: none;
+            }
+
+            a {
+                color: #000;
+            }
+
+            a[href]::after {
+                content: " (" attr(href) ")";
+            }
+        }
+
+        /* Loading States */
+        .loading {
+            position: relative;
+            pointer-events: none;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .loading::before {
+            content: '';
+            width: 30px;
+            height: 30px;
+            border: 2px solid var(--color-white);
+            border-top-color: transparent;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        /* Focus Styles */
+        :focus-visible {
+            outline: 2px solid var(--color-gold);
+            outline-offset: 2px;
+        }
+
+        /* Scrollbar Styles */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Skip Link for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Header -->
+    <header class="header" role="banner">
+        <div class="nav-container">
+            <div class="logo">AI Honors College</div>
+            <button class="mobile-menu-button" aria-label="Toggle menu" aria-expanded="false">
+                <svg class="icon" viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" fill="currentColor"/>
+                </svg>
+            </button>
+            <nav class="nav-links" role="navigation">
+                <a href="#executive-summary" class="nav-link">Overview</a>
+                <a href="#program" class="nav-link">Program</a>
+                <a href="#partnerships" class="nav-link">Partnerships</a>
+                <a href="#funding" class="nav-link">Funding</a>
+                <a href="#vision" class="nav-link">Vision</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" role="main">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content glass">
+                <h1 class="hero-title">AI Honors College</h1>
+                <p class="hero-subtitle">Shaping the Future of Artificial Intelligence Education</p>
+                <div class="statistic-value" data-count="2024">2024</div>
+                <p>Inaugural Academic Year</p>
+            </div>
+        </section>
+
+        <!-- Executive Summary -->
+        <section id="executive-summary" class="section">
+            <div class="container">
+                <div class="glass">
+                    <div class="section-header">
+                        <h2>Executive Summary</h2>
+                    </div>
+                    <div class="section-grid">
+                        <div class="card">
+                            <svg class="card-icon" viewBox="0 0 24 24">
+                                <path d="M12 2L1 21h22L12 2zm0 3.5L19.5 19h-15L12 5.5z" fill="currentColor"/>
+                            </svg>
+                            <h3 class="card-title">Our Mission</h3>
+                            <p>To cultivate the next generation of AI leaders through an innovative, interdisciplinary approach to education that combines rigorous academic training with practical industry experience.</p>
+                        </div>
+                        <div class="card">
+                            <svg class="card-icon" viewBox="0 0 24 24">
+                                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z" fill="currentColor"/>
+                            </svg>
+                            <h3 class="card-title">Key Objectives</h3>
+                            <ul>
+                                <li>Develop world-class AI researchers and practitioners</li>
+                                <li>Foster ethical AI development and implementation</li>
+                                <li>Bridge the gap between academic research and industry applications</li>
+                                <li>Create a diverse and inclusive AI community</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Program Structure -->
+        <section id="program" class="section">
+            <div class="container">
+                <div class="glass">
+                    <div class="section-header">
+                        <h2>Program Structure</h2>
+                    </div>
+                    <div class="section-grid">
+                        <div class="card">
+                            <h3 class="card-title">Core Curriculum</h3>
+                            <ul>
+                                <li>Advanced Machine Learning</li>
+                                <li>Neural Network Architectures</li>
+                                <li>AI Ethics and Governance</li>
+                                <li>Research Methodology</li>
+                            </ul>
+                        </div>
+                        <div class="card">
+                            <h3 class="card-title">Industry Rotations</h3>
+                            <ul>
+                                <li>Quarterly industry placements</li>
+                                <li>Research lab collaborations</li>
+                                <li>Startup incubation opportunities</li>
+                                <li>Corporate partnership programs</li>
+                            </ul>
+                        </div>
+                        <div class="card">
+                            <h3 class="card-title">Research Focus</h3>
+                            <ul>
+                                <li>Natural Language Processing</li>
+                                <li>Computer Vision</li>
+                                <li>Reinforcement Learning</li>
+                                <li>AI Safety and Robustness</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Partnerships -->
+        <section id="partnerships" class="section">
+            <div class="container">
+                <div class="glass">
+                    <div class="section-header">
+                        <h2>Partnership Opportunities</h2>
+                    </div>
+                    <div class="section-grid">
+                        <div class="card">
+                            <h3 class="card-title">Industry Collaboration</h3>
+                            <p>Partner with us to shape the future of AI education and gain access to top talent.</p>
+                        </div>
+                        <div class="card">
+                            <h3 class="card-title">Research Partnerships</h3>
+                            <p>Collaborate on cutting-edge AI research projects and access state-of-the-art facilities.</p>
+                        </div>
+                        <div class="card">
+                            <h3 class="card-title">Academic Exchange</h3>
+                            <p>Participate in faculty exchange programs and joint research initiatives.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Form -->
+        <section id="contact" class="section">
+            <div class="container">
+                <div class="glass">
+                    <div class="section-header">
+                        <h2>Contact Us</h2>
+                    </div>
+                    <form class="form" id="contact-form" novalidate>
+                        <div class="form-group">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" id="name" name="name" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" id="email" name="email" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea id="message" name="message" class="form-textarea" required></textarea>
+                        </div>
+                        <button type="submit" class="button">
+                            Send Message
+                            <svg class="button-icon" viewBox="0 0 24 24" width="24" height="24">
+                                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" fill="currentColor"/>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Chat Console -->
+    <div class="chat-console glass" id="chat-console">
+        <div class="chat-header">
+            <span class="chat-title">AI Assistant</span>
+            <button class="button" id="toggle-audio" aria-label="Toggle voice input">
+                <svg class="icon" viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z" fill="currentColor"/>
+                </svg>
+            </button>
+        </div>
+        <div class="chat-messages" role="log" aria-live="polite"></div>
+        <div class="chat-input-container">
+            <input type="text" class="chat-input" placeholder="Ask a question..." aria-label="Chat message">
+            <button class="button" aria-label="Send message">
+                <svg class="icon" viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" fill="currentColor"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>AI Honors College</h3>
+                    <p>Shaping the future of AI education</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="Twitter">
+                            <svg class="icon" viewBox="0 0 24 24" width="24" height="24">
+                                <path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z" fill="currentColor"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="LinkedIn">
+                            <svg class="icon" viewBox="0 0 24 24" width="24" height="24">
+                                <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z" fill="currentColor"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="#program">Program</a></li>
+                        <li class="footer-link"><a href="#partnerships">Partnerships</a></li>
+                        <li class="footer-link"><a href="#funding">Funding</a></li>
+                        <li class="footer-link"><a href="#vision">Vision</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="/privacy">Privacy Policy</a></li>
+                        <li class="footer-link"><a href="/terms">Terms of Service</a></li>
+                        <li class="footer-link"><a href="/accessibility">Accessibility</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Utility Functions
+        const $ = selector => document.querySelector(selector);
+        const $$ = selector => document.querySelectorAll(selector);
+
+        // Config
+        const CONFIG = {
+            ANIMATION_DURATION: 300,
+            SCROLL_OFFSET: 100,
+            MOBILE_BREAKPOINT: 768,
+            API_ENDPOINTS: {
+                CONTACT: '/api/contact',
+                CHAT: '/api/chat'
+            }
+        };
+
+        // Mobile Menu
+        class MobileMenu {
+            constructor() {
+                this.button = $('.mobile-menu-button');
+                this.nav = $('.nav-links');
+                this.isOpen = false;
+                this.init();
+            }
+
+            init() {
+                this.button.addEventListener('click', () => this.toggle());
+                window.addEventListener('resize', () => {
+                    if (window.innerWidth > CONFIG.MOBILE_BREAKPOINT && this.isOpen) {
+                        this.close();
+                    }
+                });
+            }
+
+            toggle() {
+                this.isOpen ? this.close() : this.open();
+            }
+
+            open() {
+                this.nav.classList.add('active');
+                this.button.setAttribute('aria-expanded', 'true');
+                this.isOpen = true;
+            }
+
+            close() {
+                this.nav.classList.remove('active');
+                this.button.setAttribute('aria-expanded', 'false');
+                this.isOpen = false;
+            }
+        }
+
+        // Smooth Scroll
+        class SmoothScroll {
+            constructor() {
+                this.links = $$('a[href^="#"]');
+                this.init();
+            }
+
+            init() {
+                this.links.forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const target = $(link.getAttribute('href'));
+                        if (target) {
+                            const offset = target.offsetTop - CONFIG.SCROLL_OFFSET;
+                            window.scrollTo({
+                                top: offset,
+                                behavior: 'smooth'
+                            });
+                        }
+                    });
+                });
+            }
+        }
+
+        // Section Animation
+        class SectionAnimator {
+            constructor() {
+                this.sections = $$('.section');
+                this.init();
+            }
+
+            init() {
+                const observer = new IntersectionObserver(
+                    (entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                entry.target.classList.add('visible');
+                                observer.unobserve(entry.target);
+                            }
+                        });
+                    },
+                    {
+                        threshold: 0.2,
+                        rootMargin: '0px'
+                    }
+                );
+
+                this.sections.forEach(section => observer.observe(section));
+            }
+        }
+
+        // Form Handler
+        class FormHandler {
+            constructor(formId) {
+                this.form = $(`#${formId}`);
+                this.submitButton = this.form.querySelector('button[type="submit"]');
+                this.init();
+            }
+
+            init() {
+                this.form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    if (this.validateForm()) {
+                        await this.handleSubmit();
+                    }
+                });
+
+                this.form.querySelectorAll('input, textarea').forEach(input => {
+                    input.addEventListener('input', () => {
+                        this.clearError(input);
+                    });
+                });
+            }
+
+            validateForm() {
+                let isValid = true;
+                const inputs = this.form.querySelectorAll('input, textarea');
+
+                inputs.forEach(input => {
+                    if (input.hasAttribute('required') && !input.value.trim()) {
+                        this.showError(input, 'This field is required');
+                        isValid = false;
+                    }
+
+                    if (input.type === 'email' && input.value.trim()) {
+                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        if (!emailRegex.test(input.value)) {
+                            this.showError(input, 'Please enter a valid email address');
+                            isValid = false;
+                        }
+                    }
+                });
+
+                return isValid;
+            }
+
+            showError(input, message) {
+                this.clearError(input);
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'error-message';
+                errorDiv.style.color = 'var(--color-error)';
+                errorDiv.style.fontSize = '0.875rem';
+                errorDiv.style.marginTop = '0.25rem';
+                errorDiv.textContent = message;
+                input.parentNode.appendChild(errorDiv);
+                input.setAttribute('aria-invalid', 'true');
+            }
+
+            clearError(input) {
+                const errorDiv = input.parentNode.querySelector('.error-message');
+                if (errorDiv) {
+                    errorDiv.remove();
+                }
+                input.setAttribute('aria-invalid', 'false');
+            }
+
+            async handleSubmit() {
+                this.submitButton.disabled = true;
+                this.form.classList.add('loading');
+
+                const formData = new FormData(this.form);
+                const data = Object.fromEntries(formData.entries());
+
+                try {
+                    const response = await fetch(CONFIG.API_ENDPOINTS.CONTACT, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+
+                    this.showSuccess();
+                    this.form.reset();
+                } catch (error) {
+                    this.showError(this.submitButton, 'Failed to send message. Please try again.');
+                    console.error('Error:', error);
+                } finally {
+                    this.submitButton.disabled = false;
+                    this.form.classList.remove('loading');
+                }
+            }
+
+            showSuccess() {
+                const successDiv = document.createElement('div');
+                successDiv.className = 'success-message';
+                successDiv.style.color = 'var(--color-success)';
+                successDiv.style.marginTop = '1rem';
+                successDiv.textContent = 'Message sent successfully!';
+                this.form.appendChild(successDiv);
+
+                setTimeout(() => {
+                    successDiv.remove();
+                }, 5000);
+            }
+        }
+
+        // Chat Console
+        class ChatConsole {
+            constructor() {
+                this.console = $('#chat-console');
+                this.messages = this.console.querySelector('.chat-messages');
+                this.input = this.console.querySelector('.chat-input');
+                this.sendButton = this.console.querySelector('button');
+                this.audioButton = $('#toggle-audio');
+                this.recognition = null;
+                this.synthesis = window.speechSynthesis;
+                this.init();
+            }
+
+            init() {
+                this.setupSpeechRecognition();
+                this.setupEventListeners();
+                this.addWelcomeMessage();
+            }
+
+            setupSpeechRecognition() {
+                if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+                    this.recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+                    this.recognition.continuous = false;
+                    this.recognition.interimResults = false;
+
+                    this.recognition.onresult = (event) => {
+                        const transcript = event.results[0][0].transcript;
+                        this.input.value = transcript;
+                        this.sendMessage();
+                    };
+
+                    this.recognition.onerror = (event) => {
+                        console.error('Speech recognition error:', event.error);
+                        this.stopRecording();
+                    };
+                } else {
+                    this.audioButton.style.display = 'none';
+                }
+            }
+
+            setupEventListeners() {
+                this.sendButton.addEventListener('click', () => this.sendMessage());
+                this.input.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        this.sendMessage();
+                    }
+                });
+                this.audioButton.addEventListener('click', () => this.toggleRecording());
+            }
+
+            addWelcomeMessage() {
+                this.addMessage('Hello! How can I help you learn more about the AI Honors College?', 'ai');
+            }
+
+            async sendMessage() {
+                const message = this.input.value.trim();
+                if (!message) return;
+
+                this.addMessage(message, 'user');
+                this.input.value = '';
+                this.input.focus();
+
+                try {
+                    const response = await this.fetchAIResponse(message);
+                    this.addMessage(response, 'ai');
+                    if (this.synthesis) {
+                        this.speak(response);
+                    }
+                } catch (error) {
+                    console.error('Error fetching AI response:', error);
+                    this.addMessage('Sorry, I encountered an error. Please try again.', 'ai');
+                }
+            }
+
+            async fetchAIResponse(message) {
+                const response = await fetch(CONFIG.API_ENDPOINTS.CHAT, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                return data.response;
+            }
+
+            addMessage(text, sender) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `chat-message ${sender}`;
+                messageDiv.textContent = text;
+                this.messages.appendChild(messageDiv);
+                this.messages.scrollTop = this.messages.scrollHeight;
+            }
+
+            toggleRecording() {
+                if (!this.recognition) return;
+
+                if (this.audioButton.classList.contains('recording')) {
+                    this.stopRecording();
+                } else {
+                    this.startRecording();
+                }
+            }
+
+            startRecording() {
+                this.audioButton.classList.add('recording');
+                this.audioButton.style.backgroundColor = 'var(--color-error)';
+                this.recognition.start();
+            }
+
+            stopRecording() {
+                this.audioButton.classList.remove('recording');
+                this.audioButton.style.backgroundColor = '';
+                if (this.recognition) {
+                    this.recognition.stop();
+                }
+            }
+
+            speak(text) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.rate = 1;
+                utterance.pitch = 1;
+                this.synthesis.speak(utterance);
+            }
+        }
+
+        // Statistics Animation
+        class StatisticsAnimator {
+            constructor() {
+                this.stats = $$('.statistic-value[data-count]');
+                this.init();
+            }
+
+            init() {
+                const observer = new IntersectionObserver(
+                    (entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                this.animateValue(entry.target);
+                                observer.unobserve(entry.target);
+                            }
+                        });
+                    },
+                    {
+                        threshold: 0.5
+                    }
+                );
+
+                this.stats.forEach(stat => observer.observe(stat));
+            }
+
+            animateValue(element) {
+                const target = parseInt(element.dataset.count);
+                const duration = 2000;
+                const step = target / (duration / 16);
+                let current = 0;
+
+                const animate = () => {
+                    current += step;
+                    if (current >= target) {
+                        element.textContent = target;
+                        return;
+                    }
+                    element.textContent = Math.floor(current);
+                    requestAnimationFrame(animate);
+                };
+
+                animate();
+            }
+        }
+
+        // Initialize everything when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileMenu = new MobileMenu();
+            const smoothScroll = new SmoothScroll();
+            const sectionAnimator = new SectionAnimator();
+            const formHandler = new FormHandler('contact-form');
+            const chatConsole = new ChatConsole();
+            const statisticsAnimator = new StatisticsAnimator();
+
+            // Handle visibility changes
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    // Pause any animations or background processes
+                    if (chatConsole.synthesis) {
+                        chatConsole.synthesis.cancel();
+                    }
+                }
+            });
+
+            // Handle scroll performance
+            let ticking = false;
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    requestAnimationFrame(() => {
+                        // Handle scroll-based updates
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
