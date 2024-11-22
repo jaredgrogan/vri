@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jared James Grogan - AI Ecosystem Architect</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            /* Harvard Colors */
+            --color-crimson: #A51C30;
+            --color-crimson-light: #ed1b34;
+            --color-gold: #C4B27D;
+            --color-black: #1a1a1a;
+            --color-white: #ffffff;
+            --color-grey-light: #f5f5f5;
+            --color-grey: #8a8a8a;
+            
+            /* Gradients */
+            --gradient-crimson: linear-gradient(135deg, #A51C30 0%, #ed1b34 100%);
+            --gradient-gold: linear-gradient(135deg, #C4B27D 0%, #D4C28D 100%);
+            
+            /* Fonts */
+            --font-primary: 'Inter', sans-serif;
+            --font-secondary: 'Crimson Pro', serif;
+            
+            /* Transitions */
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--color-white);
+            color: var(--color-black);
+            font-family: var(--font-primary);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1rem 10%;
+            background: var(--color-white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        .nav-links a {
+            color: var(--color-black);
+            text-decoration: none;
+            margin: 0 1.5rem;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background: var(--color-crimson);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            padding: 0 10%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: var(--gradient-crimson);
+            color: var(--color-white);
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .hero h1 {
+            font-family: var(--font-secondary);
+            font-size: 5.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s forwards;
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            color: var(--color-gold);
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s forwards 0.2s;
+        }
+
+        /* Experience Cards */
+        .experience-card {
+            background: var(--color-white);
+            border-left: 4px solid var(--color-crimson);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: var(--transition);
+        }
+
+        .experience-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 6px 15px rgba(165,28,48,0.1);
+        }
+
+        /* Skills Section */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-category {
+            background: var(--color-grey-light);
+            padding: 2rem;
+            border-radius: 8px;
+            border-top: 4px solid var(--color-crimson);
+        }
+
+        /* Chat Widget - Harvard Themed */
+        .chat-widget {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+        }
+
+        .chat-toggle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--color-crimson);
+            border: none;
+            cursor: pointer;
+            color: var(--color-white);
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(165,28,48,0.3);
+            transition: var(--transition);
+        }
+
+        .chat-window {
+            background: var(--color-white);
+            border: 2px solid var(--color-crimson);
+            border-radius: 12px;
+        }
+
+        .chat-header {
+            background: var(--gradient-crimson);
+            color: var(--color-white);
+        }
+
+        .message.user {
+            background: var(--color-crimson);
+            color: var(--color-white);
+        }
+
+        .message.assistant {
+            background: var(--color-grey-light);
+            color: var(--color-black);
+            border-left: 3px solid var(--color-gold);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 100px 10%;
+        }
+
+        .section-title {
+            font-family: var(--font-secondary);
+            font-size: 3rem;
+            color: var(--color-crimson);
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 3px;
+            bottom: -10px;
+            left: 0;
+            background: var(--gradient-crimson);
+        }
+
+        /* Contact Section */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            background: var(--color-grey-light);
+            padding: 3rem;
+            border-radius: 8px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .contact-item i {
+            color: var(--color-crimson);
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="logo">
+            <img src="/api/placeholder/40/40" alt="JJG" class="harvard-shield">
+        </div>
+        <div class="nav-links">
+            <a href="#about" class="nav-link">About</a>
+            <a href="#experience" class="nav-link">Experience</a>
+            <a href="#education" class="nav-link">Education</a>
+            <a href="#skills" class="nav-link">Skills</a>
+            <a href="#publications" class="nav-link">Publications</a>
+            <a href="#contact" class="nav-link">Contact</a>
+        </div>
+    </nav>
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="animate-title">Jared James Grogan</h1>
+                <h2 class="animate-subtitle">AI Ecosystem Architect</h2>
+                <p class="animate-text">Pioneering cognitive computing solutions and building transformative AI ecosystems. Managing $300M+ R&D initiatives and driving innovation across multiple sectors.</p>
+                <div class="hero-cta">
+                    <a href="#contact" class="btn btn-primary">Get in Touch</a>
+                    <a href="#about" class="btn btn-secondary">Learn More</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <!-- Dynamic SVG or Canvas animation representing AI/Neural Networks -->
+                <div class="neural-network-animation"></div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="mouse"></div>
+            <span>Scroll to explore</span>
+        </div>
+    </section>
+
+    <section id="about" class="section">
+        <div class="section-grid">
+            <div class="section-content">
+                <h2 class="section-title">About Me</h2>
+                <p class="section-text">I build cognitive computing solutions that enhance productivity and fuel innovation. My work focuses on efficient AI, information theory, and model architecture. With extensive experience managing $300M+ R&D budgets in the UAE and developing transformative AI ecosystems, I've built successful public-private partnerships across academia, industry, and government.</p>
+                <div class="expertise-grid">
+                    <div class="expertise-item">
+                        <i class="fas fa-brain"></i>
+                        <h3>AI & Automation</h3>
+                        <p>Developing cutting-edge AI solutions and automated systems</p>
+                    </div>
+                    <div class="expertise-item">
+                        <i class="fas fa-code-branch"></i>
+                        <h3>Full-Stack Development</h3>
+                        <p>React, Node.js, DevOps, CI/CD</p>
+                    </div>
+                    <div class="expertise-item">
+                        <i class="fas fa-robot"></i>
+                        <h3>Machine Learning</h3>
+                        <p>LLMs, Computer Vision, GenAI, Multimodal AI</p>
+                    </div>
+                    <div class="expertise-item">
+                        <i class="fas fa-globe"></i>
+                        <h3>Multilingual AI</h3>
+                        <p>English, Spanish, French, Arabic (عربي)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="experience" class="section">
+        <h2 class="section-title">Professional Journey</h2>
+        <div class="timeline">
+            <div class="timeline-item current">
+                <div class="timeline-content">
+                    <h3>Universitas AI</h3>
+                    <h4>CEO & Founder</h4>
+                    <span class="period">2019 - Present</span>
+                    <ul class="achievements">
+                        <li>Architected and launched Herakles cognitive computing platform</li>
+                        <li>Lead R&D in neural network architectures and AI systems optimization</li>
+                        <li>Direct distributed engineering teams across multiple technology stacks</li>
+                        <li>Collaborate with industry leaders including NVIDIA on AI infrastructure initiatives</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>New York University Abu Dhabi</h3>
+                    <h4>Executive Advisor to Vice Chancellor</h4>
+                    <span class="period">2017 - 2019</span>
+                    <ul class="achievements">
+                        <li>Managed $300M+ R&D portfolio across 30+ research programs</li>
+                        <li>Led development of UAE's AI and Deep Tech ecosystem initiatives</li>
+                        <li>Established international research partnerships and technology transfer programs</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Additional experience items -->
+        </div>
+    </section>
+
+    <section id="education" class="section">
+        <h2 class="section-title">Education</h2>
+        <div class="education-grid">
+            <div class="education-card harvard">
+                <div class="school-logo">
+                    <img src="/api/placeholder/60/60" alt="Harvard University">
+                </div>
+                <div class="education-content">
+                    <h3>Harvard University</h3>
+                    <h4>Master of Theological Studies (M.T.S.), Philosophy</h4>
+                    <p>Focus: Mind, Brain & Behavior; Visual Environmental Studies</p>
+                </div>
+            </div>
+            
+            <!-- Additional education cards -->
+        </div>
+    </section>
+
+    <section id="skills" class="section">
+        <h2 class="section-title">Technical Expertise</h2>
+        <div class="skills-grid">
+            <div class="skill-category">
+                <h3>AI/ML Technologies</h3>
+                <div class="skill-bars">
+                    <div class="skill-bar">
+                        <span class="skill-name">PyTorch</span>
+                        <div class="skill-progress" data-progress="95"></div>
+                    </div>
+                    <div class="skill-bar">
+                        <span class="skill-name">TensorFlow</span>
+                        <div class="skill-progress" data-progress="90"></div>
+                    </div>
+                    <!-- Additional skills -->
+                </div>
+            </div>
+            
+            <!-- Additional skill categories -->
+        </div>
+    </section>
+
+    <section id="publications" class="section">
+        <h2 class="section-title">Research & Publications</h2>
+        <div class="publications-grid">
+            <div class="publication-card">
+                <h3>"The Control Problem: AI and the Deep Copernican Crisis" (2018)</h3>
+                <p class="publication-abstract">Exploration of AI control mechanisms and their philosophical implications.</p>
+            </div>
+            <!-- Additional publications -->
+        </div>
+    </section>
+
+    <section id="contact" class="section">
+        <h2 class="section-title">Get in Touch</h2>
+        <div class="contact-grid">
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <p>[Contact Info]</p>
+                </div>
+                <div class="contact-item">
+                    <i class="fab fa-github"></i>
+                    <p>github.com/jaredgrogan</p>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <p>Palo Alto, California</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="chat-widget">
+        <button class="chat-toggle">
+            <i class="fas fa-comment"></i>
+        </button>
+        <div class="chat-window">
+            <div class="chat-header">
+                <div class="chat-title">
+                    <i class="fas fa-robot"></i>
+                    <h3>Chat with Jared's AI Assistant</h3>
+                </div>
+                <button class="minimize-chat">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+            <div class="chat-messages"></div>
+            <div class="chat-input">
+                <input type="text" placeholder="Ask me anything about Jared's work...">
+                <button class="send-message">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+<script>
+// Main JavaScript implementation
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize all components
+    initializeNavigation();
+    initializeAnimations();
+    initializeSkillBars();
+    initializeChat();
+    createNeuralAnimation();
+});
+
+// Smooth scrolling navigation
+function initializeNavigation() {
+    const navLinks = document.querySelectorAll('.nav-link');
+    
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = link.getAttribute('href');
+            const targetSection = document.querySelector(targetId);
+            
+            targetSection.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        });
+    });
+
+    // Navigation highlight on scroll
+    const sections = document.querySelectorAll('.section');
+    const navHeight = document.querySelector('.nav').offsetHeight;
+
+    window.addEventListener('scroll', () => {
+        let current = '';
+        
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop - navHeight - 100;
+            if (window.pageYOffset >= sectionTop) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${current}`) {
+                link.classList.add('active');
+            }
+        });
+    });
+}
+
+// Skill bars animation
+function initializeSkillBars() {
+    const skillBars = document.querySelectorAll('.skill-progress');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const progress = entry.target.getAttribute('data-progress');
+                entry.target.style.width = `${progress}%`;
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.5 });
+
+    skillBars.forEach(bar => observer.observe(bar));
+}
+
+// Neural network animation
+function createNeuralAnimation() {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const container = document.querySelector('.neural-network-animation');
+    
+    canvas.width = container.offsetWidth;
+    canvas.height = container.offsetHeight;
+    container.appendChild(canvas);
+
+    class Node {
+        constructor(x, y) {
+            this.x = x;
+            this.y = y;
+            this.connections = [];
+            this.size = 4;
+            this.speed = Math.random() * 0.5 + 0.2;
+        }
+
+        update() {
+            this.y += Math.sin(Date.now() * 0.001 * this.speed) * 0.5;
+        }
+
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fillStyle = '#A51C30';
+            ctx.fill();
+        }
+    }
+
+    // Create neural network visualization
+    const nodes = [];
+    const numNodes = 20;
+
+    for (let i = 0; i < numNodes; i++) {
+        nodes.push(new Node(
+            Math.random() * canvas.width,
+            Math.random() * canvas.height
+        ));
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Update and draw nodes
+        nodes.forEach(node => {
+            node.update();
+            node.draw();
+        });
+
+        // Draw connections
+        ctx.beginPath();
+        nodes.forEach(node => {
+            nodes.forEach(otherNode => {
+                const distance = Math.hypot(node.x - otherNode.x, node.y - otherNode.y);
+                if (distance < 100) {
+                    ctx.moveTo(node.x, node.y);
+                    ctx.lineTo(otherNode.x, otherNode.y);
+                }
+            });
+        });
+        ctx.strokeStyle = 'rgba(165, 28, 48, 0.1)';
+        ctx.stroke();
+
+        requestAnimationFrame(animate);
+    }
+
+    animate();
+}
+
+// Chat functionality
+function initializeChat() {
+    const chatToggle = document.querySelector('.chat-toggle');
+    const chatWindow = document.querySelector('.chat-window');
+    const chatInput = document.querySelector('.chat-input input');
+    const sendButton = document.querySelector('.send-message');
+    const minimizeButton = document.querySelector('.minimize-chat');
+    const messagesContainer = document.querySelector('.chat-messages');
+
+    // Chat context
+    const chatContext = {
+        name: "Jared James Grogan",
+        role: "AI Ecosystem Architect",
+        expertise: ["AI/ML", "Cognitive Computing", "Full-Stack Development"],
+        current_position: "CEO & Founder at Universitas AI",
+        background: "Harvard MTS, extensive experience in AI research and development"
+    };
+
+    // Toggle chat window
+    chatToggle.addEventListener('click', () => {
+        chatWindow.classList.add('active');
+        chatInput.focus();
+        // Add welcome message if first time
+        if (messagesContainer.children.length === 0) {
+            addMessage("Hello! I'm Jared's AI assistant. How can I help you learn more about his work in AI and cognitive computing?", 'assistant');
+        }
+    });
+
+    minimizeButton.addEventListener('click', () => {
+        chatWindow.classList.remove('active');
+    });
+
+   // Handle messages
+    function addMessage(content, type) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${type}`;
+        messageDiv.textContent = content;
+        
+        // Add typing animation for assistant messages
+        if (type === 'assistant') {
+            messageDiv.style.opacity = '0';
+            messagesContainer.appendChild(messageDiv);
+            
+            // Typing animation
+            setTimeout(() => {
+                messageDiv.style.opacity = '1';
+                messageDiv.classList.add('typing');
+                simulateTyping(messageDiv, content);
+            }, 100);
+        } else {
+            messagesContainer.appendChild(messageDiv);
+        }
+        
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    function simulateTyping(element, text, index = 0) {
+        if (index < text.length) {
+            element.textContent = text.substring(0, index + 1);
+            setTimeout(() => simulateTyping(element, text, index + 1), 20);
+        } else {
+            element.classList.remove('typing');
+        }
+    }
+
+    function handleUserMessage() {
+        const message = chatInput.value.trim();
+        if (!message) return;
+
+        addMessage(message, 'user');
+        chatInput.value = '';
+        chatInput.setAttribute('disabled', 'true');
+
+        // Simulate AI thinking with loading indicator
+        const loadingDiv = document.createElement('div');
+        loadingDiv.className = 'message assistant loading';
+        loadingDiv.innerHTML = '<div class="loading-dots"><span></span><span></span><span></span></div>';
+        messagesContainer.appendChild(loadingDiv);
+
+        // Generate and display response
+        setTimeout(() => {
+            messagesContainer.removeChild(loadingDiv);
+            const response = generateResponse(message.toLowerCase(), chatContext);
+            addMessage(response, 'assistant');
+            chatInput.removeAttribute('disabled');
+            chatInput.focus();
+        }, 1000);
+    }
+
+    // Response generation based on context
+    function generateResponse(message, context) {
+        const responses = {
+            experience: {
+                keywords: ['experience', 'work', 'career', 'job', 'position'],
+                response: `${context.name} is currently the ${context.current_position}, where he leads development of cognitive computing solutions and AI systems. He has extensive experience managing $300M+ R&D initiatives and building AI ecosystems.`
+            },
+            education: {
+                keywords: ['education', 'study', 'degree', 'harvard', 'university'],
+                response: `${context.name} holds a Master of Theological Studies (MTS) from Harvard University, where he focused on Mind, Brain & Behavior studies. He has additional research experience from Tongji University in Digital Futures and AI.`
+            },
+            skills: {
+                keywords: ['skills', 'expertise', 'knowledge', 'capable', 'abilities'],
+                response: `${context.name}'s core expertise includes ${context.expertise.join(', ')}. He specializes in building cognitive computing solutions, implementing AI systems, and managing large-scale technology initiatives.`
+            },
+            projects: {
+                keywords: ['projects', 'achievements', 'accomplishments', 'built', 'developed'],
+                response: `Notable projects include the Herakles cognitive computing platform, transformative AI ecosystems, and numerous public-private partnerships in technology and research.`
+            },
+            contact: {
+                keywords: ['contact', 'reach', 'email', 'connect', 'touch'],
+                response: `You can connect with ${context.name} through his professional channels or request a 1:1 AI Strategy Call through www.aicosystem.co/apply`
+            }
+        };
+
+        // Check for specific questions or default to general response
+        for (const category in responses) {
+            if (responses[category].keywords.some(keyword => message.includes(keyword))) {
+                return responses[category].response;
+            }
+        }
+
+        // Default response for unmatched queries
+        return `I'd be happy to tell you more about ${context.name}'s work in AI and cognitive computing. You can ask about his experience, education, skills, projects, or how to get in touch.`;
+    }
+
+    // Event listeners for chat interactions
+    sendButton.addEventListener('click', handleUserMessage);
+    
+    chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            handleUserMessage();
+        }
+    });
+
+    // Add typing indicator when user is typing
+    let typingTimer;
+    chatInput.addEventListener('input', () => {
+        clearTimeout(typingTimer);
+        const typingIndicator = document.querySelector('.typing-indicator');
+        
+        if (!typingIndicator && chatInput.value) {
+            const indicator = document.createElement('div');
+            indicator.className = 'typing-indicator';
+            indicator.textContent = 'You are typing...';
+            messagesContainer.appendChild(indicator);
+        }
+
+        typingTimer = setTimeout(() => {
+            const indicator = document.querySelector('.typing-indicator');
+            if (indicator) {
+                messagesContainer.removeChild(indicator);
+            }
+        }, 1000);
+    });
+
+    // Handle chat window drag functionality
+    let isDragging = false;
+    let currentX;
+    let currentY;
+    let initialX;
+    let initialY;
+    let xOffset = 0;
+    let yOffset = 0;
+
+    const chatHeader = document.querySelector('.chat-header');
+    
+    chatHeader.addEventListener('mousedown', dragStart);
+    document.addEventListener('mousemove', drag);
+    document.addEventListener('mouseup', dragEnd);
+
+    function dragStart(e) {
+        initialX = e.clientX - xOffset;
+        initialY = e.clientY - yOffset;
+
+        if (e.target === chatHeader) {
+            isDragging = true;
+        }
+    }
+
+    function drag(e) {
+        if (isDragging) {
+            e.preventDefault();
+            
+            currentX = e.clientX - initialX;
+            currentY = e.clientY - initialY;
+
+            xOffset = currentX;
+            yOffset = currentY;
+
+            setTranslate(currentX, currentY, chatWindow);
+        }
+    }
+
+    function setTranslate(xPos, yPos, el) {
+        el.style.transform = `translate3d(${xPos}px, ${yPos}px, 0)`;
+    }
+
+    function dragEnd() {
+        initialX = currentX;
+        initialY = currentY;
+        isDragging = false;
+    }
+
+    // Initialize with welcome message
+    setTimeout(() => {
+        addMessage("👋 Hello! I'm Jared's AI assistant. I can tell you about his work in AI, cognitive computing, and technology leadership. What would you like to know?", 'assistant');
+    }, 500);
+});
+</script>
+</body>
+</html>
