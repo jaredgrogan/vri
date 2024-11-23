@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Jared James Grogan - AI Ecosystem Architect and Cognitive Computing Pioneer">
+    <title>Jared James Grogan - AI Ecosystem Architect</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/api/placeholder/32/32">
+    
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Analytics Script -->
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.min.js"></script>
+
+    <style>
+        :root {
+            /* Harvard Colors */
+            --color-crimson: #A51C30;
+            --color-crimson-light: #ed1b34;
+            --color-gold: #C4B27D;
+            --color-black: #1a1a1a;
+            --color-white: #ffffff;
+            --color-grey-light: #f5f5f5;
+            --color-grey: #8a8a8a;
+            
+            /* Gradients */
+            --gradient-crimson: linear-gradient(135deg, #A51C30 0%, #ed1b34 100%);
+            --gradient-gold: linear-gradient(135deg, #C4B27D 0%, #D4C28D 100%);
+            --gradient-dark: linear-gradient(135deg, #1e1e1e 0%, #2d2d2d 100%);
+            
+            /* Fonts */
+            --font-primary: 'Inter', sans-serif;
+            --font-secondary: 'Crimson Pro', serif;
+            
+            /* Transitions */
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            /* Blur Effects */
+            --glass-blur: blur(10px);
+        }
+
+        /* Rest of CSS */
+        /* New CSS implementations will follow */
+
+        /* Glassmorphic Header */
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1rem 10%;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: var(--transition);
+        }
+
+        .nav.scrolled {
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        /* Updated Heading Gradients */
+        .section-title {
+            font-family: var(--font-secondary);
+            font-size: 3rem;
+            background: var(--gradient-crimson);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 3rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Enhanced Chat Module */
+        .chat-module {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 400px;
+            background: var(--color-white);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            z-index: 1000;
+            transition: var(--transition);
+            overflow: hidden;
+        }
+
+        .chat-module.collapsed {
+            height: 60px;
+        }
+
+        .chat-header {
+            background: var(--gradient-crimson);
+            padding: 1rem;
+            color: var(--color-white);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .chat-content {
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .chat-input-container {
+            padding: 1.5rem;
+            border-top: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .chat-input {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            background: var(--color-grey-light);
+            font-family: var(--font-primary);
+            font-size: 1rem;
+            resize: none;
+            height: 60px;
+        }
+
+        .chat-controls {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .chat-control-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            color: var(--color-crimson);
+            transition: var(--transition);
+        }
+
+        .chat-control-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Copyright */
+        .copyright {
+            text-align: center;
+            padding: 2rem;
+            background: var(--color-black);
+            color: var(--color-white);
+        }
+
+        /* Typing Animation */
+        .typing {
+            display: inline-block;
+            overflow: hidden;
+            white-space: nowrap;
+            margin: 0 auto;
+            border-right: 2px solid var(--color-crimson);
+            animation: 
+                typing 3.5s steps(40, end),
+                blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--color-crimson) }
+        }
+
+        /* Message Bubbles */
+        .message {
+            max-width: 80%;
+            margin: 0.5rem;
+            padding: 1rem;
+            border-radius: 12px;
+            animation: messageSlide 0.3s ease-out;
+        }
+
+        .message.user {
+            background: var(--gradient-crimson);
+            color: var(--color-white);
+            align-self: flex-end;
+        }
+
+        .message.assistant {
+            background: var(--color-grey-light);
+            color: var(--color-black);
+            align-self: flex-start;
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .chat-module {
+                width: 100%;
+                right: 0;
+                bottom: 0;
+                border-radius: 20px 20px 0 0;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .nav {
+                padding: 1rem 5%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Content structure will follow -->
+    <!-- This will be continued in the next part with full HTML structure -->
+</body>
+</html>
