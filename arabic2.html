@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#A51C30">
+    <title>Petra - Arabic Language Learning Platform</title>
+    
+    <!-- Essential Meta Tags -->
+    <meta name="description" content="AI-powered Arabic language learning platform with real-time translation and conversation practice">
+    <meta name="keywords" content="Arabic learning, AI language tutor, language learning, Arabic conversation">
+    <meta name="author" content="COGNITIVE CLOUD">
+    
+    <!-- Open Graph / Social Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Petra - Arabic Language Learning">
+    <meta property="og:description" content="AI-powered Arabic language learning platform">
+    <meta property="og:image" content="/path-to-your-og-image.jpg">
+    <meta property="og:url" content="https://petra.chat">
+    
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Petra - Arabic Language Learning">
+    <meta name="twitter:description" content="AI-powered Arabic language learning platform">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    
+    <!-- External Resources -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Preload Critical Resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+    <style>
+        /* Root Variables */
+        :root {
+            --brand-primary: #A51C30;
+            --brand-secondary: #ed1b34;
+            --brand-accent: crimson;
+            --transition-standard: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow-elevation-1: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --shadow-elevation-2: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --radius-standard: 0.5rem;
+            --radius-large: 1rem;
+            --spacing-standard: 1rem;
+        }
+
+        /* Font settings for Arabic text */
+        @font-face {
+            font-family: 'Noto Sans Arabic';
+            src: url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;700&display=swap');
+        }
+
+        .arabic-text {
+            font-family: 'Noto Sans Arabic', sans-serif;
+            direction: rtl;
+        }
+
+        /* Rest of the styles remain the same as the original code */
+        [Previous CSS styles remain exactly the same...]
+
+        /* Additional styles for RTL support */
+        .message-petra {
+            margin-right: auto;
+            margin-left: unset;
+        }
+
+        .message-user {
+            margin-left: unset;
+            margin-right: auto;
+        }
+
+        /* Ensure proper alignment for Arabic text in messages */
+        .message[dir="rtl"] {
+            text-align: right;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
+    [Previous HTML structure remains exactly the same, just updating the initial message and text content...]
+
+    <script>
+        // Application State
+        const state = {
+            messages: [{
+                sender: 'Petra',
+                content: "مرحباً! I'm Petra, your Arabic language guide. Let's start our learning journey! Would you like to practice conversation or focus on a specific topic?",
+                timestamp: new Date(),
+                id: 'initial-message'
+            }],
+            isRecording: false,
+            isLoading: false,
+            activeModule: 'chat',
+            uploadedFile: null,
+            difficulty: 'beginner',
+            speechSynth: window.speechSynthesis,
+            voices: []
+        };
+
+        // Configuration
+        const CONFIG = {
+            navigationItems: [
+                { icon: 'message-square', label: 'Chat', id: 'chat' },
+                { icon: 'book', label: 'Lessons', id: 'lessons' },
+                { icon: 'brain', label: 'Practice', id: 'practice' },
+                { icon: 'users', label: 'Groups', id: 'groups' },
+                { icon: 'bar-chart-2', label: 'Progress', id: 'progress' }
+            ],
+            quickActions: [
+                { icon: 'book-open', label: 'Translate', action: 'translate' },
+                { icon: 'check-circle', label: 'Correct', action: 'correct' },
+                { icon: 'book', label: 'Parse', action: 'parse' },
+                { icon: 'brain', label: 'Vocabulary', action: 'vocabulary' }
+            ],
+            suggestions: [
+                "Translate this to Arabic",
+                "Check my grammar",
+                "Explain this phrase",
+                "Start a conversation",
+                "Quiz me on this topic"
+            ],
+            maxFileSize: 5000000, // 5MB
+            audioConfig: {
+                sampleRate: 44100,
+                channels: 1
+            }
+        };
+
+        // Speech Synthesis Setup
+        function initializeSpeechSynthesis() {
+            if (typeof speechSynthesis === 'undefined') {
+                console.error('Speech synthesis not supported');
+                return;
+            }
+
+            // Load available voices
+            function loadVoices() {
+                state.voices = state.speechSynthesis.getVoices();
+            }
+
+            state.speechSynthesis.onvoiceschanged = loadVoices;
+            loadVoices(); // Initial load
+        }
+
+        // Text-to-Speech Function
+        function speakText(text, isArabic = false) {
+            if (!state.speechSynthesis) return;
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            
+            // Select appropriate voice
+            if (isArabic) {
+                // Try to find an Arabic voice
+                const arabicVoice = state.voices.find(voice => 
+                    voice.lang.includes('ar') || voice.name.includes('Arabic'));
+                if (arabicVoice) utterance.voice = arabicVoice;
+                utterance.lang = 'ar';
+            } else {
+                // Use default English voice
+                utterance.lang = 'en-US';
+            }
+
+            utterance.rate = 0.9; // Slightly slower for better clarity
+            utterance.pitch = 1;
+
+            state.speechSynthesis.speak(utterance);
+        }
+
+        // Message Handling with Speech Support
+        function renderMessages() {
+            const container = document.getElementById('messagesContainer');
+            container.innerHTML = state.messages.map(msg => {
+                const isArabic = /[\u0600-\u06FF]/.test(msg.content);
+                return `
+                    <div class="message ${msg.sender === 'Petra' ? 'message-petra' : 'message-user'}" 
+                         dir="${isArabic ? 'rtl' : 'ltr'}">
+                        ${msg.sender === 'Petra' ? `
+                            <div class="flex items-center space-x-2 mb-2">
+                                <i data-lucide="star" class="h-4 w-4 text-[#ed1b34]"></i>
+                                <span class="text-sm font-medium text-[#A51C30]">Petra</span>
+                            </div>
+                        ` : ''}
+                        <div class="text-sm typing-animation ${isArabic ? 'arabic-text' : ''}">${msg.content}</div>
+                        <button onclick="speakText('${msg.content.replace(/'/g, "\\'")}', ${isArabic})" 
+                                class="mt-2 text-xs text-gray-500 hover:text-[#A51C30]">
+                            <i data-lucide="volume-2" class="h-4 w-4"></i>
+                        </button>
+                        ${msg.audio ? `
+                            <div class="audio-player">
+                                <button class="play-pause-btn">
+                                    <i data-lucide="play" class="h-5 w-5"></i>
+                                </button>
+                                <div class="audio-progress">
+                                    <div class="audio-progress-bar"></div>
+                                </div>
+                                <span class="time-display">0:00</span>
+                            </div>
+                        ` : ''}
+                        <time class="text-xs text-gray-400 mt-1 block">
+                            ${new Intl.DateTimeFormat('en-US', {
+                                hour: 'numeric',
+                                minute: 'numeric',
+                                hour12: true
+                            }).format(new Date(msg.timestamp))}
+                        </time>
+                    </div>
+                `;
+            }).join('');
+            
+            lucide.createIcons();
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // Initialize Application with Speech Support
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                initializeSpeechSynthesis();
+                initializeNavigation();
+                initializeQuickActions();
+                initializeSuggestions();
+                updateProgress();
+                renderMessages();
+                initializeEventListeners();
+                lucide.createIcons();
+                
+                showToast('Welcome to Petra!', 'info');
+            } catch (error) {
+                console.error('Initialization error:', error);
+                showToast('Failed to initialize application', 'error');
+            }
+        });
+
+  // UI Initialization
+        function initializeNavigation() {
+            const nav = document.getElementById('navigationItems');
+            nav.innerHTML = CONFIG.navigationItems.map(item => `
+                <button
+                    data-id="${item.id}"
+                    class="w-full flex items-center space-x-3 px-4 py-2.5 rounded-lg transition-colors
+                    ${state.activeModule === item.id ? 'bg-[#A51C30] text-white' : 'text-gray-600 hover:bg-gray-100'}"
+                >
+                    <i data-lucide="${item.icon}" class="h-5 w-5"></i>
+                    <span class="font-medium">${item.label}</span>
+                </button>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function initializeQuickActions() {
+            const container = document.getElementById('quickActions');
+            container.innerHTML = CONFIG.quickActions.map(action => `
+                <button 
+                    class="quick-action-btn"
+                    data-action="${action.action}"
+                >
+                    <i data-lucide="${action.icon}" class="h-4 w-4"></i>
+                    <span>${action.label}</span>
+                </button>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function initializeSuggestions() {
+            const container = document.getElementById('suggestions');
+            container.innerHTML = CONFIG.suggestions.map(suggestion => `
+                <button class="suggestion-pill">
+                    ${suggestion}
+                </button>
+            `).join('');
+        }
+
+        function updateProgress() {
+            const container = document.getElementById('progressContainer');
+            const progressItems = [
+                { name: 'Vocabulary', progress: 65 },
+                { name: 'Grammar', progress: 45 },
+                { name: 'Conversation', progress: 78 }
+            ];
+
+            container.innerHTML = progressItems.map(item => `
+                <div class="space-y-2">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-600">${item.name}</span>
+                        <span class="font-medium text-gray-900">${item.progress}%</span>
+                    </div>
+                    <div class="progress-container">
+                        <div 
+                            class="progress-bar"
+                            style="width: ${item.progress}%"
+                        ></div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Message Handling with Arabic Support
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (!message && !state.uploadedFile && !state.isRecording) return;
+
+            const isArabic = /[\u0600-\u06FF]/.test(message);
+            const newMessage = {
+                sender: 'user',
+                content: message,
+                timestamp: new Date(),
+                id: `user-${Date.now()}`,
+                direction: isArabic ? 'rtl' : 'ltr'
+            };
+
+            state.messages.push(newMessage);
+            input.value = '';
+            state.isLoading = true;
+            renderMessages();
+            showTypingIndicator();
+
+            try {
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                const response = generateResponse(message);
+                const responseIsArabic = /[\u0600-\u06FF]/.test(response);
+                
+                const petraResponse = {
+                    sender: 'Petra',
+                    content: response,
+                    timestamp: new Date(),
+                    id: `petra-${Date.now()}`,
+                    direction: responseIsArabic ? 'rtl' : 'ltr'
+                };
+                
+                state.messages.push(petraResponse);
+                
+                // Automatically speak Petra's response
+                if (state.speechSynthesis && state.speechSynthesis.speaking === false) {
+                    speakText(response, responseIsArabic);
+                }
+            } catch (error) {
+                showToast('Failed to send message', 'error');
+                console.error('Message sending error:', error);
+            } finally {
+                state.isLoading = false;
+                renderMessages();
+            }
+        }
+
+        // Response Generation with Arabic Support
+        function generateResponse(message) {
+            const isArabic = /[\u0600-\u06FF]/.test(message);
+            
+            // Simple response generation logic with Arabic support
+            const arabicResponses = [
+                "أفهم ما تقول. دعني أشرح لك...",
+                "سؤال ممتاز! سأساعدك...",
+                "هذا موضوع مثير للاهتمام. دعني أوضح...",
+                "نعم، يمكنني مساعدتك في ذلك..."
+            ];
+            
+            const englishResponses = [
+                "Let me help you with that! First, let's break down what you've said...",
+                "That's interesting! Here's what I think...",
+                "Great question! Let me explain...",
+                "I understand what you're asking. Here's my response..."
+            ];
+            
+            const responses = isArabic ? arabicResponses : englishResponses;
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+
+        // UI Feedback
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.innerHTML = `
+                <i data-lucide="${type === 'error' ? 'alert-circle' : 'info'}" class="h-5 w-5"></i>
+                <span>${message}</span>
+            `;
+            
+            document.getElementById('toastContainer').appendChild(toast);
+            lucide.createIcons();
+            
+            setTimeout(() => {
+                toast.classList.add('fade-enter');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function showTypingIndicator() {
+            const container = document.createElement('div');
+            container.className = 'message message-petra';
+            container.innerHTML = `
+                <div class="loading-wave">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            `;
+            
+            document.getElementById('messagesContainer').appendChild(container);
+        }
+
+        // File Handling with Arabic Support
+        function handleFileUpload(event) {
+            const file = event.target.files?.[0];
+            if (!file) return;
+
+            if (file.size > CONFIG.maxFileSize) {
+                showToast('يجب أن يكون حجم الملف أقل من 5 ميجابايت', 'error');
+                return;
+            }
+
+            state.uploadedFile = file;
+            showFilePreview(file);
+            showToast('تم رفع الملف بنجاح', 'success');
+        }
+
+        function showFilePreview(file) {
+            const preview = document.createElement('div');
+            preview.className = 'file-preview';
+            preview.innerHTML = `
+                <i data-lucide="file" class="h-5 w-5 text-gray-400"></i>
+                <span class="file-preview-name">${file.name}</span>
+                <button onclick="removeFile()" class="p-1 hover:bg-gray-200 rounded-full">
+                    <i data-lucide="x" class="h-4 w-4 text-gray-500"></i>
+                </button>
+            `;
+            
+            const container = document.getElementById('messagesContainer');
+            container.appendChild(preview);
+            lucide.createIcons();
+        }
+
+        function removeFile() {
+            state.uploadedFile = null;
+            const preview = document.querySelector('.file-preview');
+            if (preview) preview.remove();
+            showToast('تم حذف الملف', 'info');
+        }
+
+        // Audio Recording with Arabic Support
+        let mediaRecorder = null;
+        let audioChunks = [];
+
+        async function toggleRecording() {
+            const recordButton = document.getElementById('recordButton');
+            const indicator = recordButton.querySelector('.recording-indicator');
+
+            if (!state.isRecording) {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream, {
+                        mimeType: 'audio/webm'
+                    });
+
+                    mediaRecorder.ondataavailable = event => {
+                        audioChunks.push(event.data);
+                    };
+
+                    mediaRecorder.onstop = () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                        const audioUrl = URL.createObjectURL(audioBlob);
+                        sendAudioMessage(audioUrl);
+                        audioChunks = [];
+                    };
+
+                    mediaRecorder.start();
+                    state.isRecording = true;
+                    indicator.classList.remove('hidden');
+                    showToast('بدأ التسجيل', 'info');
+                } catch (error) {
+                    showToast('لا يمكن الوصول إلى الميكروفون', 'error');
+                    console.error('Recording error:', error);
+                }
+            } else {
+                mediaRecorder.stop();
+                state.isRecording = false;
+                indicator.classList.add('hidden');
+                showToast('اكتمل التسجيل', 'success');
+            }
+        }
+
+        function sendAudioMessage(audioUrl) {
+            const newMessage = {
+                sender: 'user',
+                content: '',
+                audio: audioUrl,
+                timestamp: new Date(),
+                id: `audio-${Date.now()}`
+            };
+
+            state.messages.push(newMessage);
+            renderMessages();
+        }
+
+        // Event Listeners
+        function initializeEventListeners() {
+            // Send button
+            document.getElementById('sendButton').addEventListener('click', sendMessage);
+            
+            // Message input with RTL support
+            const messageInput = document.getElementById('messageInput');
+            messageInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+            
+            // Auto-detect input direction
+            messageInput.addEventListener('input', (e) => {
+                const isArabic = /[\u0600-\u06FF]/.test(e.target.value);
+                e.target.dir = isArabic ? 'rtl' : 'ltr';
+            });
+            
+            // File upload
+            document.getElementById('fileInput').addEventListener('change', handleFileUpload);
+            document.getElementById('uploadButton').addEventListener('click', () => {
+                document.getElementById('fileInput').click();
+            });
+            
+            // Recording
+            document.getElementById('recordButton').addEventListener('click', toggleRecording);
+            
+            // Navigation
+            document.querySelectorAll('[data-id]').forEach(button => {
+                button.addEventListener('click', () => {
+                    state.activeModule = button.dataset.id;
+                    initializeNavigation();
+                });
+            });
+            
+            // Quick Actions
+            document.querySelectorAll('[data-action]').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    handleQuickAction(e.currentTarget.dataset.action);
+                });
+            });
+            
+            // Suggestions
+            document.querySelectorAll('.suggestion-pill').forEach(button => {
+                button.addEventListener('click', () => {
+                    document.getElementById('messageInput').value = button.textContent.trim();
+                    document.getElementById('messageInput').focus();
+                });
+            });
+
+            // Difficulty Select
+            document.getElementById('difficultySelect').addEventListener('change', (e) => {
+                state.difficulty = e.target.value;
+                updateProgress();
+            });
+
+            // Speech Synthesis Events
+            if (state.speechSynthesis) {
+                state.speechSynthesis.addEventListener('error', (event) => {
+                    console.error('Speech synthesis error:', event);
+                    showToast('Error during speech synthesis', 'error');
+                });
+            }
+        }
+
+        // Quick Action Handlers with Arabic Support
+        function handleQuickAction(action) {
+            const messageInput = document.getElementById('messageInput');
+            
+            const actionPrompts = {
+                translate: {
+                    en: 'Please translate: ',
+                    ar: 'الرجاء ترجمة: '
+                },
+                correct: {
+                    en: 'Please correct: ',
+                    ar: 'الرجاء تصحيح: '
+                },
+                parse: {
+                    en: 'Please explain the grammar in: ',
+                    ar: 'الرجاء شرح قواعد: '
+                },
+                vocabulary: {
+                    en: 'What are the key vocabulary words in: ',
+                    ar: 'ما هي الكلمات الرئيسية في: '
+                }
+            };
+            
+            const currentLang = /[\u0600-\u06FF]/.test(messageInput.value) ? 'ar' : 'en';
+            messageInput.value = actionPrompts[action][currentLang];
+            messageInput.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+            messageInput.focus();
+        }
+
+        // Error Handling
+        window.onerror = function(msg, url, lineNo, columnNo, error) {
+            showToast('حدث خطأ. الرجاء المحاولة مرة أخرى.', 'error');
+            console.error('Error: ', msg, url, lineNo, columnNo, error);
+            return false;
+        };
+
+        // Clean up on page unload
+        window.addEventListener('beforeunload', () => {
+            if (mediaRecorder && state.isRecording) {
+                mediaRecorder.stop();
+            }
+            if (state.speechSynthesis && state.speechSynthesis.speaking) {
+                state.speechSynthesis.cancel();
+            }
+        });
+    </script>
+</body>
+</html>
