@@ -645,6 +645,21 @@
                 scroll-behavior: auto !important;
             }
         }
+        
+        // Add this CSS for the speaking animation
+const style = document.createElement('style');
+style.textContent = `
+    .chat-control-btn.speaking {
+        animation: pulse 1.5s ease infinite;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+`;
+document.head.appendChild(style);
       
     </style>
 
@@ -1215,52 +1230,132 @@
 
         // Voice Features
         function initializeVoiceFeatures() {
-            if ('speechSynthesis' in window) {
-                const synth = window.speechSynthesis;
-                const speakerButton = document.querySelector('.speaker-btn');
-                let isSpeaking = false;
+    const synth = window.speechSynthesis;
+    const speakerButton = document.querySelector('.speaker-btn');
+    let isSpeaking = false;
 
-                speakerButton.addEventListener('click', () => {
-                    isSpeaking = !isSpeaking;
-                    speakerButton.classList.toggle('active');
-                    if (!isSpeaking) {
-                        synth.cancel();
-                    }
-                });
-            } else {
-                document.querySelector('.speaker-btn').style.display = 'none';
-            }
+    // Configure voice synthesis
+    function speak(text) {
+        if (!isSpeaking) return;
 
-            if ('webkitSpeechRecognition' in window) {
-                const recognition = new webkitSpeechRecognition();
-                const micButton = document.querySelector('.mic-btn');
-                let isListening = false;
+        // Cancel any ongoing speech
+        synth.cancel();
 
-                recognition.continuous = false;
-                recognition.interimResults = false;
+        // Create new utterance
+        const utterance = new SpeechSynthesisUtterance(text);
+        
+        // Configure voice settings
+        utterance.rate = 1; // Speed of speech
+        utterance.pitch = 1; // Pitch of voice
+        utterance.volume = 1; // Volume level
 
-                micButton.addEventListener('click', () => {
-                    if (isListening) {
-                        recognition.stop();
-                        micButton.classList.remove('active');
-                    } else {
-                        recognition.start();
-                        micButton.classList.add('active');
-                    }
-                    isListening = !isListening;
-                });
+        // Get available voices and set to a natural sounding English voice
+        let voices = synth.getVoices();
+        // Try to find a good English voice
+        const preferredVoice = voices.find(voice => 
+            voice.name.includes('Google') && voice.name.includes('US English')) ||
+            voices.find(voice => voice.lang === 'en-US') ||
+            voices[0];
+        
+        if (preferredVoice) {
+            utterance.voice = preferredVoice;
+        }
 
-                recognition.onresult = (event) => {
-                    const transcript = event.results[0][0].transcript;
-                    document.querySelector('.chat-input').value = transcript;
-                    document.querySelector('.send-btn').click();
-                    isListening = false;
-                    micButton.classList.remove('active');
-                };
-            } else {
-                document.querySelector('.mic-btn').style.display = 'none';
+        // Handle speech events
+        utterance.onstart = () => {
+            speakerButton.classList.add('speaking');
+        };
+
+        utterance.onend = () => {
+            speakerButton.classList.remove('speaking');
+        };
+
+        utterance.onerror = (event) => {
+            console.error('Speech synthesis error:', event);
+            speakerButton.classList.remove('speaking');
+        };
+
+        // Speak the text
+        synth.speak(utterance);
+    }
+
+    // Toggle speech functionality
+    speakerButton.addEventListener('click', () => {
+        isSpeaking = !isSpeaking;
+        speakerButton.classList.toggle('active');
+        
+        if (!isSpeaking) {
+            synth.cancel();
+            speakerButton.classList.remove('speaking');
+        } else {
+            // When activated, speak the last assistant message
+            const lastAssistantMessage = document.querySelector('.message.assistant:last-child');
+            if (lastAssistantMessage) {
+                speak(lastAssistantMessage.textContent);
             }
         }
+    });
+
+    // Modify the addMessage function in initializeChat to include speech
+    const originalAddMessage = addMessage;
+    function addMessage(content, type) {
+        originalAddMessage(content, type);
+        if (type === 'assistant' && isSpeaking) {
+            speak(content);
+        }
+    }
+
+    // Wait for voices to load (necessary in some browsers)
+    if (synth.onvoiceschanged !== undefined) {
+        synth.onvoiceschanged = () => {
+            // Voices loaded, ready to use
+            console.log('Voices loaded:', synth.getVoices().length);
+        };
+    }
+
+    // Initialize microphone functionality
+    if ('webkitSpeechRecognition' in window) {
+        const recognition = new webkitSpeechRecognition();
+        const micButton = document.querySelector('.mic-btn');
+        let isListening = false;
+
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'en-US';
+
+        micButton.addEventListener('click', () => {
+            if (isListening) {
+                recognition.stop();
+                micButton.classList.remove('active');
+            } else {
+                recognition.start();
+                micButton.classList.add('active');
+            }
+            isListening = !isListening;
+        });
+
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            document.querySelector('.chat-input').value = transcript;
+            document.querySelector('.send-btn').click();
+            isListening = false;
+            micButton.classList.remove('active');
+        };
+
+        recognition.onerror = (event) => {
+            console.error('Speech recognition error:', event.error);
+            isListening = false;
+            micButton.classList.remove('active');
+        };
+
+        recognition.onend = () => {
+            isListening = false;
+            micButton.classList.remove('active');
+        };
+    } else {
+        document.querySelector('.mic-btn').style.display = 'none';
+    }
+}
     </script>
 </body>
 </html>
