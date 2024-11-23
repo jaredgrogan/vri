@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Jared James Grogan - AI Ecosystem Architect and Cognitive Computing Pioneer">
+    <title>Jared James Grogan - AI Ecosystem Architect</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/api/placeholder/32/32">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"></script>
+
+    <style>
+        /* Core Variables */
+        :root {
+            /* Harvard Colors */
+            --color-crimson: #A51C30;
+            --color-crimson-light: #ed1b34;
+            --color-gold: #C4B27D;
+            --color-black: #1e1e1e;
+            --color-white: #ffffff;
+            --color-grey-light: #f5f5f5;
+            --color-grey: #8a8a8a;
+            
+            /* Gradients */
+            --gradient-crimson: linear-gradient(135deg, #A51C30 0%, #ed1b34 100%);
+            --gradient-gold: linear-gradient(135deg, #C4B27D 0%, #D4C28D 100%);
+            --gradient-dark: linear-gradient(135deg, #1e1e1e 0%, #2d2d2d 100%);
+            
+            /* Fonts */
+            --font-primary: 'Inter', sans-serif;
+            --font-secondary: 'Crimson Pro', serif;
+            
+            /* Transitions */
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            /* Blur Effects */
+            --glass-blur: blur(10px);
+
+            /* Spacing */
+            --nav-height: 80px;
+            --section-padding: clamp(3rem, 5vw, 6rem);
+            --container-padding: clamp(1rem, 5vw, 10%);
+        }
+
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            line-height: 1.6;
+            color: var(--color-black);
+            background: var(--color-white);
+            overflow-x: hidden;
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-secondary);
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 5vw, 5.5rem);
+            font-weight: 700;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+        }
+
+        h3 {
+            font-size: clamp(1.5rem, 3vw, 2.5rem);
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        /* Links & Buttons */
+        a {
+            color: inherit;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            border: 2px solid var(--color-white);
+            border-radius: 4px;
+            font-weight: 500;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--color-white);
+            color: var(--color-black);
+        }
+
+        .btn-primary:hover {
+            background: transparent;
+            color: var(--color-white);
+        }
+
+        .btn-secondary {
+            color: var(--color-white);
+        }
+
+        .btn-secondary:hover {
+            background: var(--color-white);
+            color: var(--color-black);
+        }
+
+        /* Layout & Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 var(--container-padding);
+        }
+
+        .section {
+            padding: var(--section-padding) 0;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: var(--nav-height);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100%;
+        }
+
+        .nav-logo {
+            font-family: var(--font-secondary);
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            position: relative;
+            font-weight: 500;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-crimson);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Mobile Navigation */
+        .mobile-menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .mobile-menu-toggle span {
+            display: block;
+            width: 25px;
+            height: 2px;
+            background: var(--color-black);
+            transition: var(--transition);
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: flex;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: var(--nav-height);
+                left: 0;
+                width: 100%;
+                flex-direction: column;
+                background: var(--color-white);
+                padding: 2rem;
+                transform: translateY(-100%);
+                transition: var(--transition);
+            }
+
+            .nav-links.active {
+                transform: translateY(0);
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            padding-top: var(--nav-height);
+            background: var(--gradient-dark);
+            color: var(--color-white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            min-height: calc(100vh - var(--nav-height));
+        }
+
+        @media (max-width: 768px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+
+.hero-text {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-visual {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: 400px;
+        }
+
+        .neural-network-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.2;
+        }
+
+        /* About Section */
+        .about {
+            background: var(--color-white);
+            position: relative;
+        }
+
+        .expertise-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .expertise-item {
+            padding: 2rem;
+            background: var(--color-grey-light);
+            border-radius: 8px;
+            transition: var(--transition);
+            border-top: 4px solid var(--color-crimson);
+        }
+
+        .expertise-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        /* Experience Timeline */
+        .timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 4rem auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 2px;
+            height: 100%;
+            background: var(--gradient-crimson);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            position: relative;
+            width: 50%;
+            padding: 2rem;
+            background: var(--color-white);
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .timeline-item:nth-child(odd) {
+            left: 0;
+            padding-right: 3rem;
+        }
+
+        .timeline-item:nth-child(even) {
+            left: 50%;
+            padding-left: 3rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 20px;
+            height: 20px;
+            background: var(--color-crimson);
+            border-radius: 50%;
+            transform: translateY(-50%);
+        }
+
+        .timeline-item:nth-child(odd)::before {
+            right: -10px;
+        }
+
+        .timeline-item:nth-child(even)::before {
+            left: -10px;
+        }
+
+        /* Publications Grid */
+        .publications-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .publication-card {
+            padding: 2rem;
+            background: var(--color-grey-light);
+            border-radius: 8px;
+            transition: var(--transition);
+            border-left: 4px solid var(--color-crimson);
+        }
+
+        .publication-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 6px 15px rgba(165,28,48,0.1);
+        }
+
+        .publication-card h3 {
+            color: var(--color-crimson);
+            margin-bottom: 1rem;
+            background: var(--gradient-crimson);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* Contact Section */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: var(--color-grey-light);
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .contact-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+
+        .contact-item svg {
+            width: 24px;
+            height: 24px;
+            color: var(--color-crimson);
+        }
+
+        /* Chat Module */
+        .chat-module {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 400px;
+            height: 600px;
+            background: var(--color-white);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .chat-module.collapsed {
+            height: 60px;
+        }
+
+        .chat-header {
+            padding: 1rem;
+            background: var(--gradient-crimson);
+            color: var(--color-white);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .minimize-btn {
+            background: none;
+            border: none;
+            color: var(--color-white);
+            cursor: pointer;
+            padding: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .minimize-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .chat-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 1rem;
+            border-radius: 12px;
+            animation: messageSlide 0.3s ease-out;
+        }
+
+        .message.user {
+            background: var(--gradient-crimson);
+            color: var(--color-white);
+            align-self: flex-end;
+        }
+
+        .message.assistant {
+            background: var(--color-grey-light);
+            color: var(--color-black);
+            align-self: flex-start;
+            border-left: 3px solid var(--color-crimson);
+        }
+
+        .chat-input-container {
+            padding: 1rem;
+            border-top: 1px solid rgba(0,0,0,0.1);
+            background: var(--color-white);
+        }
+
+        .chat-input {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            background: var(--color-grey-light);
+            font-family: var(--font-primary);
+            font-size: 1rem;
+            resize: none;
+            height: 60px;
+            margin-bottom: 0.5rem;
+        }
+
+        .chat-controls {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+        }
+
+        .chat-control-btn {
+            background: none;
+            border: none;
+            padding: 0.5rem;
+            color: var(--color-crimson);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .chat-control-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .chat-control-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Animations */
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--color-crimson) }
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 0.5rem;
+            align-self: flex-start;
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: var(--color-crimson);
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out;
+        }
+
+        .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+        .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        /* Footer */
+        .copyright {
+            text-align: center;
+            padding: 2rem;
+            background: var(--color-black);
+            color: var(--color-white);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 30px;
+            }
+
+            .timeline-item {
+                width: 100%;
+                padding-left: 80px;
+            }
+
+            .timeline-item:nth-child(even) {
+                left: 0;
+            }
+
+            .timeline-item::before {
+                left: 20px;
+            }
+
+            .chat-module {
+                width: 100%;
+                right: 0;
+                bottom: 0;
+                border-radius: 20px 20px 0 0;
+            }
+
+            .expertise-grid,
+            .publications-grid,
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+      
+       @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+      
+    </style>
+
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-container container">
+            <div class="nav-logo">JJG</div>
+            <div class="nav-links">
+                <a href="#about" class="nav-link">About</a>
+                <a href="#experience" class="nav-link">Experience</a>
+                <a href="#education" class="nav-link">Education</a>
+                <a href="#skills" class="nav-link">Skills</a>
+                <a href="#publications" class="nav-link">Publications</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </div>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 class="typing">Jared James Grogan</h1>
+                    <h2 class="animate-subtitle">AI Ecosystem Architect</h2>
+                    <p class="animate-text">Pioneering cognitive computing solutions and building transformative AI ecosystems. Managing $300M+ R&D initiatives and driving innovation across multiple sectors.</p>
+                    <div class="hero-cta">
+                        <a href="#contact" class="btn btn-primary">Get in Touch</a>
+                        <a href="#about" class="btn btn-secondary">Learn More</a>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="neural-network-animation"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="section about">
+        <div class="container">
+            <h2 class="section-title">About Me</h2>
+            <p class="section-text">I build cognitive computing solutions that enhance productivity and fuel innovation. My work focuses on efficient AI, information theory, and model architecture. With extensive experience managing $300M+ R&D budgets in the UAE and developing transformative AI ecosystems, I've built successful public-private partnerships across academia, industry, and government.</p>
+            <div class="expertise-grid">
+                <div class="expertise-item">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+                        <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+                    </svg>
+                    <h3>AI & Automation</h3>
+                    <p>Developing cutting-edge AI solutions and automated systems</p>
+                </div>
+                <div class="expertise-item">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M8 3v18h8V3H8zm2 16h4v-2h-4v2zm0-4h4v-2h-4v2zm0-4h4V9h-4v2zm0-4h4V5h-4v2z"/>
+                    </svg>
+                    <h3>Full-Stack Development</h3>
+                    <p>React, Node.js, DevOps, CI/CD</p>
+                </div>
+                <div class="expertise-item">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M21 11c0 5.55-3.84 10.74-9 12-5.16-1.26-9-6.45-9-12V5l9-4 9 4v6zm-9 10c4.52-1.11 8-5.73 8-10.69V6.31l-8-3.55L4 6.31v4C4 15.27 7.48 19.89 12 21z"/>
+                    </svg>
+                    <h3>Machine Learning</h3>
+                    <p>LLMs, Computer Vision, GenAI, Multimodal AI</p>
+                </div>
+                <div class="expertise-item">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                    </svg>
+                    <h3>Multilingual AI</h3>
+                    <p>English, Spanish, French, Arabic (عربي)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="experience" class="section experience">
+        <div class="container">
+            <h2 class="section-title">Professional Journey</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Universitas AI</h3>
+                        <h4>CEO & Founder</h4>
+                        <span class="period">2019 - Present</span>
+                        <ul class="achievements">
+                            <li>Architected and launched Herakles cognitive computing platform</li>
+                            <li>Lead R&D in neural network architectures and AI systems optimization</li>
+                            <li>Direct distributed engineering teams across multiple technology stacks</li>
+                            <li>Collaborate with industry leaders including NVIDIA on AI infrastructure initiatives</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>New York University Abu Dhabi</h3>
+                        <h4>Executive Advisor to Vice Chancellor</h4>
+                        <span class="period">2017 - 2019</span>
+                        <ul class="achievements">
+                            <li>Managed $300M+ R&D portfolio across 30+ research programs</li>
+                            <li>Led development of UAE's AI and Deep Tech ecosystem initiatives</li>
+                            <li>Established international research partnerships and technology transfer programs</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="publications" class="section publications">
+        <div class="container">
+            <h2 class="section-title">Research & Publications</h2>
+            <div class="publications-grid">
+                <div class="publication-card">
+                    <h3>"Large Language Models as Speech Act Processors" (2024)</h3>
+                    <p class="publication-abstract">Analysis of LLMs through the lens of speech act theory, exploring their potential as cognitive agents and their role in human-AI interaction.</p>
+                </div>
+                <div class="publication-card">
+                    <h3>"The Control Problem: AI and the Deep Copernican Crisis" (2018)</h3>
+                    <p class="publication-abstract">Exploration of AI control mechanisms and their philosophical implications.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="section contact">
+        <div class="container">
+            <h2 class="section-title">Get in Touch</h2>
+            <div class="contact-grid">
+                <div class="contact-item">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                    </svg>
+                    <p>jared.grogan@post.harvard.edu</p>
+                </div>
+                <div class="contact-item">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                    <p>github.com/jaredgrogan</p>
+                </div>
+                <div class="contact-item">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                    </svg>
+                    <p>Palo Alto, California</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="chat-module" id="chatModule">
+        <div class="chat-header">
+            <div class="chat-title">
+                <svg class="icon-ai" viewBox="0 0 24 24">
+                    <path d="M21 11c0 5.55-3.84 10.74-9 12-5.16-1.26-9-6.45-9-12V5l9-4 9 4v6zm-9 10c4.52-1.11 8-5.73 8-10.69V6.31l-8-3.55L4 6.31v4C4 15.27 7.48 19.89 12 21z"/>
+                </svg>
+                <h3>Chat with Jared's AI Assistant</h3>
+            </div>
+            <button class="minimize-btn">
+                <svg class="icon-minimize" viewBox="0 0 24 24">
+                    <path d="M19 13H5v-2h14v2z"/>
+                </svg>
+            </button>
+        </div>
+        <div class="chat-content">
+            <div class="chat-messages"></div>
+            <div class="chat-input-container">
+                <textarea class="chat-input" placeholder="Ask me anything about Jared's work..." rows="3"></textarea>
+                <div class="chat-controls">
+                    <button class="chat-control-btn mic-btn">
+                        <svg class="icon-mic" viewBox="0 0 24 24">
+                            <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+                            <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+                        </svg>
+                    </button>
+                    <button class="chat-control-btn speaker-btn">
+                        <svg class="icon-speaker" viewBox="0 0 24 24">
+                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
+                        </svg>
+                    </button>
+                    <button class="chat-control-btn send-btn">
+                        <svg class="icon-send" viewBox="0 0 24 24">
+                            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="copyright">
+        <p>© 2024 Cognitive Cloud. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Main initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeAnalytics();
+            initializeMobileMenu();
+            initializeNavigation();
+            initializeAnimations();
+            initializeChat();
+            createNeuralAnimation();
+            initializeVoiceFeatures();
+        });
+
+        // Analytics Implementation
+        function initializeAnalytics() {
+            let visitorId = Cookies.get('visitor_id');
+            if (!visitorId) {
+                visitorId = generateVisitorId();
+                Cookies.set('visitor_id', visitorId, { expires: 365 });
+            }
+
+            fetch('https://ipapi.co/json/')
+                .then(response => response.json())
+                .then(data => {
+                    const analytics = {
+                        visitorId: visitorId,
+                        timestamp: new Date().toISOString(),
+                        location: {
+                            country: data.country_name,
+                            city: data.city,
+                            region: data.region
+                        },
+                        userAgent: navigator.userAgent
+                    };
+                    logVisit(analytics);
+                })
+                .catch(error => console.error('Analytics error:', error));
+        }
+
+        function generateVisitorId() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.random() * 16 | 0;
+                const v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        function logVisit(data) {
+            console.log('Visit logged:', data);
+        }
+
+        // Mobile Menu
+        function initializeMobileMenu() {
+            const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+            const navLinks = document.querySelector('.nav-links');
+
+            mobileMenuToggle.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                document.body.classList.toggle('menu-open');
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.nav') && navLinks.classList.contains('active')) {
+                    navLinks.classList.remove('active');
+                    document.body.classList.remove('menu-open');
+                }
+            });
+        }
+
+        // Smooth Scrolling Navigation
+        function initializeNavigation() {
+            const nav = document.querySelector('.nav');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 100) {
+                    nav.classList.add('scrolled');
+                } else {
+                    nav.classList.remove('scrolled');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href');
+                    const targetSection = document.querySelector(targetId);
+                    
+                    smoothScroll(targetSection, 1000);
+                });
+            });
+        }
+
+        function smoothScroll(target, duration) {
+            const targetPosition = target.getBoundingClientRect().top + window.pageYOffset;
+            const startPosition = window.pageYOffset;
+            const distance = targetPosition - startPosition;
+            let startTime = null;
+
+            function animation(currentTime) {
+                if (startTime === null) startTime = currentTime;
+                const timeElapsed = currentTime - startTime;
+                const run = ease(timeElapsed, startPosition, distance, duration);
+                window.scrollTo(0, run);
+                if (timeElapsed < duration) requestAnimationFrame(animation);
+            }
+
+            function ease(t, b, c, d) {
+                t /= d / 2;
+                if (t < 1) return c / 2 * t * t + b;
+                t--;
+                return -c / 2 * (t * (t - 2) - 1) + b;
+            }
+
+            requestAnimationFrame(animation);
+        }
+
+        // Animations
+        function initializeAnimations() {
+            const nameElement = document.querySelector('.typing');
+            const nameText = nameElement.textContent;
+            nameElement.textContent = '';
+            typeText(nameElement, nameText);
+
+            const animatedElements = document.querySelectorAll('.animate-on-scroll');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            animatedElements.forEach(el => observer.observe(el));
+        }
+
+        function typeText(element, text, index = 0) {
+            if (index < text.length) {
+                element.textContent += text.charAt(index);
+                setTimeout(() => typeText(element, text, index + 1), 100);
+            }
+        }
+
+        // Neural Network Animation
+        function createNeuralAnimation() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const container = document.querySelector('.neural-network-animation');
+            
+            if (!container) return;
+
+            canvas.width = container.offsetWidth;
+            canvas.height = container.offsetHeight;
+            container.appendChild(canvas);
+
+            class Neuron {
+                constructor(x, y) {
+                    this.x = x;
+                    this.y = y;
+                    this.connections = [];
+                    this.size = 4;
+                    this.speed = Math.random() * 0.5 + 0.2;
+                    this.offset = Math.random() * Math.PI * 2;
+                }
+
+                update() {
+                    this.y += Math.sin(Date.now() * 0.001 * this.speed + this.offset) * 0.5;
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = '#A51C30';
+                    ctx.fill();
+                }
+            }
+
+            const neurons = Array.from({ length: 30 }, () => 
+                new Neuron(
+                    Math.random() * canvas.width,
+                    Math.random() * canvas.height
+                )
+            );
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw connections
+                ctx.beginPath();
+                neurons.forEach(neuron => {
+                    neurons.forEach(other => {
+                        const distance = Math.hypot(neuron.x - other.x, neuron.y - other.y);
+                        if (distance < 100) {
+                            ctx.moveTo(neuron.x, neuron.y);
+                            ctx.lineTo(other.x, other.y);
+                            const alpha = 1 - (distance / 100);
+                            ctx.strokeStyle = `rgba(165, 28, 48, ${alpha * 0.2})`;
+                            ctx.stroke();
+                        }
+                    });
+                });
+
+                neurons.forEach(neuron => {
+                    neuron.update();
+                    neuron.draw();
+                });
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+
+            // Handle resize
+            window.addEventListener('resize', () => {
+                canvas.width = container.offsetWidth;
+                canvas.height = container.offsetHeight;
+            });
+        }
+
+        // Chat Functionality
+        function initializeChat() {
+            const chatModule = document.getElementById('chatModule');
+            const chatMessages = document.querySelector('.chat-messages');
+            const chatInput = document.querySelector('.chat-input');
+            const sendButton = document.querySelector('.send-btn');
+            const micButton = document.querySelector('.mic-btn');
+            const speakerButton = document.querySelector('.speaker-btn');
+            const minimizeButton = document.querySelector('.minimize-btn');
+
+            let isSpeaking = false;
+            let isListening = false;
+
+            // Chat context
+            const chatContext = {
+                name: "Jared James Grogan",
+                title: "AI Ecosystem Architect",
+                experience: {
+                    current: "CEO & Founder at Universitas AI",
+                    previous: ["Executive Advisor at NYU Abu Dhabi", "Director of Research"],
+                    expertise: [
+                        "Cognitive Computing",
+                        "AI Systems Architecture",
+                        "Neural Networks",
+                        "Full-Stack Development"
+                    ]
+                },
+                education: {
+                    harvard: "Master of Theological Studies (MTS), Philosophy",
+                    focus: "Mind, Brain & Behavior"
+                },
+                publications: [
+                    {
+                        title: "Large Language Models as Speech Act Processors",
+                        year: 2024
+                    },
+                    {
+                        title: "The Control Problem: AI and the Deep Copernican Crisis",
+                        year: 2018
+                    }
+                ],
+                contact: "jared.grogan@post.harvard.edu"
+            };
+
+            // Initialize chat with welcome message
+            setTimeout(() => {
+                addMessage("Hello! I'm Jared's AI assistant. How can I help you learn more about his work in cognitive computing and AI?", 'assistant');
+            }, 500);
+
+            minimizeButton.addEventListener('click', () => {
+                chatModule.classList.toggle('collapsed');
+            });
+
+            sendButton.addEventListener('click', handleUserInput);
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleUserInput();
+                }
+            });
+
+            function handleUserInput() {
+                const message = chatInput.value.trim();
+                if (!message) return;
+
+                addMessage(message, 'user');
+                chatInput.value = '';
+                chatInput.setAttribute('disabled', 'true');
+
+                showTypingIndicator();
+                
+                setTimeout(() => {
+                    removeTypingIndicator();
+                    const response = generateResponse(message.toLowerCase(), chatContext);
+                    addMessage(response, 'assistant');
+                    chatInput.removeAttribute('disabled');
+                    chatInput.focus();
+                }, 1000 + Math.random() * 1000);
+            }
+
+            function addMessage(content, type) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${type}`;
+                
+                if (type === 'assistant') {
+                    messageDiv.innerHTML = '';
+                    typeMessageContent(messageDiv, content);
+                } else {
+                    messageDiv.textContent = content;
+                }
+                
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            function typeMessageContent(element, content, index = 0) {
+                if (index < content.length) {
+                    element.textContent += content.charAt(index);
+                    setTimeout(() => typeMessageContent(element, content, index + 1), 20);
+                }
+            }
+
+            function showTypingIndicator() {
+                const indicator = document.createElement('div');
+                indicator.className = 'typing-indicator';
+                indicator.innerHTML = '<span></span><span></span><span></span>';
+                chatMessages.appendChild(indicator);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            function removeTypingIndicator() {
+                const indicator = document.querySelector('.typing-indicator');
+                if (indicator) {
+                    indicator.remove();
+                }
+            }
+
+            function generateResponse(input, context) {
+                const responses = {
+                    experience: {
+                        match: /(experience|work|career|job|position)/i,
+                        response: `${context.name} is currently ${context.experience.current}, where he leads development of cognitive computing solutions and AI systems. His expertise includes ${context.experience.expertise.join(', ')}.`
+                    },
+                    education: {
+                        match: /(education|study|degree|harvard)/i,
+                        response: `${context.name} holds a ${context.education.harvard} from Harvard University, where he focused on ${context.education.focus}.`
+                    },
+                    publications: {
+                        match: /(publications|research|papers|writing)/i,
+                        response: `${context.name}'s recent publications include "${context.publications[0].title}" (${context.publications[0].year}) and "${context.publications[1].title}" (${context.publications[1].year}).`
+                    },
+                    contact: {
+                        match: /(contact|email|reach|touch)/i,
+                        response: `You can reach ${context.name} at ${context.contact}`
+                    }
+                };
+
+                for (const category in responses) {
+                    if (responses[category].match.test(input)) {
+                        return responses[category].response;
+                    }
+                }
+
+                return `I'd be happy to tell you about ${context.name}'s work in AI and cognitive computing. You can ask about his experience, education, publications, or how to get in touch.`;
+            }
+        }
+
+        // Voice Features
+        function initializeVoiceFeatures() {
+            if ('speechSynthesis' in window) {
+                const synth = window.speechSynthesis;
+                const speakerButton = document.querySelector('.speaker-btn');
+                let isSpeaking = false;
+
+                speakerButton.addEventListener('click', () => {
+                    isSpeaking = !isSpeaking;
+                    speakerButton.classList.toggle('active');
+                    if (!isSpeaking) {
+                        synth.cancel();
+                    }
+                });
+            } else {
+                document.querySelector('.speaker-btn').style.display = 'none';
+            }
+
+            if ('webkitSpeechRecognition' in window) {
+                const recognition = new webkitSpeechRecognition();
+                const micButton = document.querySelector('.mic-btn');
+                let isListening = false;
+
+                recognition.continuous = false;
+                recognition.interimResults = false;
+
+                micButton.addEventListener('click', () => {
+                    if (isListening) {
+                        recognition.stop();
+                        micButton.classList.remove('active');
+                    } else {
+                        recognition.start();
+                        micButton.classList.add('active');
+                    }
+                    isListening = !isListening;
+                });
+
+                recognition.onresult = (event) => {
+                    const transcript = event.results[0][0].transcript;
+                    document.querySelector('.chat-input').value = transcript;
+                    document.querySelector('.send-btn').click();
+                    isListening = false;
+                    micButton.classList.remove('active');
+                };
+            } else {
+                document.querySelector('.mic-btn').style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
