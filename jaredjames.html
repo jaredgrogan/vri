@@ -235,8 +235,568 @@
             }
         }
     </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"></script>
 </head>
 <body>
+    <nav class="nav">
+        <div class="logo">
+            <img src="/api/placeholder/40/40" alt="JJG" class="harvard-shield">
+        </div>
+        <div class="nav-links">
+            <a href="#about" class="nav-link">About</a>
+            <a href="#experience" class="nav-link">Experience</a>
+            <a href="#education" class="nav-link">Education</a>
+            <a href="#skills" class="nav-link">Skills</a>
+            <a href="#publications" class="nav-link">Publications</a>
+            <a href="#contact" class="nav-link">Contact</a>
+        </div>
+    </nav>
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="typing">Jared James Grogan</h1>
+                <h2 class="animate-subtitle">AI Ecosystem Architect</h2>
+                <p class="animate-text">Pioneering cognitive computing solutions and building transformative AI ecosystems. Managing $300M+ R&D initiatives and driving innovation across multiple sectors.</p>
+                <div class="hero-cta">
+                    <a href="#contact" class="btn btn-primary">Get in Touch</a>
+                    <a href="#about" class="btn btn-secondary">Learn More</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="neural-network-animation"></div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="mouse"></div>
+            <span>Scroll to explore</span>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+        <div class="section-grid">
+            <div class="section-content">
+                <h2 class="section-title">About Me</h2>
+                <p class="section-text">I build cognitive computing solutions that enhance productivity and fuel innovation. My work focuses on efficient AI, information theory, and model architecture. With extensive experience managing $300M+ R&D budgets in the UAE and developing transformative AI ecosystems, I've built successful public-private partnerships across academia, industry, and government.</p>
+                <div class="expertise-grid">
+                    <div class="expertise-item">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <!-- Brain icon path -->
+                        </svg>
+                        <h3>AI & Automation</h3>
+                        <p>Developing cutting-edge AI solutions and automated systems</p>
+                    </div>
+                    <!-- Additional expertise items -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="section">
+        <h2 class="section-title">Professional Journey</h2>
+        <div class="timeline">
+            <div class="timeline-item current">
+                <div class="timeline-content">
+                    <h3>Universitas AI</h3>
+                    <h4>CEO & Founder</h4>
+                    <span class="period">2019 - Present</span>
+                    <ul class="achievements">
+                        <li>Architected and launched Herakles cognitive computing platform</li>
+                        <li>Lead R&D in neural network architectures and AI systems optimization</li>
+                        <li>Direct distributed engineering teams across multiple technology stacks</li>
+                        <li>Collaborate with industry leaders including NVIDIA on AI infrastructure initiatives</li>
+                    </ul>
+                </div>
+            </div>
+            <!-- Additional experience items -->
+        </div>
+    </section>
+
+    <!-- Publications Section -->
+    <section id="publications" class="section">
+        <h2 class="section-title">Research & Publications</h2>
+        <div class="publications-grid">
+            <div class="publication-card">
+                <h3>"Large Language Models as Speech Act Processors" (2024)</h3>
+                <p class="publication-abstract">Analysis of LLMs through the lens of speech act theory, exploring their potential as cognitive agents and their role in human-AI interaction.</p>
+            </div>
+            <div class="publication-card">
+                <h3>"The Control Problem: AI and the Deep Copernican Crisis" (2018)</h3>
+                <p class="publication-abstract">Exploration of AI control mechanisms and their philosophical implications.</p>
+            </div>
+            <!-- Additional publications -->
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section">
+        <h2 class="section-title">Get in Touch</h2>
+        <div class="contact-grid">
+            <div class="contact-info">
+                <div class="contact-item">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <!-- Email icon path -->
+                    </svg>
+                    <p>jared.grogan@post.harvard.edu</p>
+                </div>
+                <div class="contact-item">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <!-- GitHub icon path -->
+                    </svg>
+                    <p>github.com/jaredgrogan</p>
+                </div>
+                <div class="contact-item">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <!-- Location icon path -->
+                    </svg>
+                    <p>Palo Alto, California</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Chat Module -->
+    <div class="chat-module" id="chatModule">
+        <div class="chat-header">
+            <div class="chat-title">
+                <svg class="icon-ai" viewBox="0 0 24 24">
+                    <!-- AI icon path -->
+                </svg>
+                <h3>Chat with Jared's AI Assistant</h3>
+            </div>
+            <button class="minimize-btn">
+                <svg class="icon-minimize" viewBox="0 0 24 24">
+                    <!-- Minimize icon path -->
+                </svg>
+            </button>
+        </div>
+        <div class="chat-content">
+            <div class="chat-messages"></div>
+            <div class="chat-input-container">
+                <textarea class="chat-input" placeholder="Ask me anything about Jared's work..." rows="3"></textarea>
+                <div class="chat-controls">
+                    <button class="chat-control-btn mic-btn">
+                        <svg class="icon-mic" viewBox="0 0 24 24">
+                            <!-- Mic icon path -->
+                        </svg>
+                    </button>
+                    <button class="chat-control-btn speaker-btn">
+                        <svg class="icon-speaker" viewBox="0 0 24 24">
+                            <!-- Speaker icon path -->
+                        </svg>
+                    </button>
+                    <button class="chat-control-btn send-btn">
+                        <svg class="icon-send" viewBox="0 0 24 24">
+                            <!-- Send icon path -->
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="copyright">
+        <p>© 2024 Cognitive Cloud. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript Implementation Follows -->
+    <script>
+// Main JavaScript implementation
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize all components
+    initializeAnalytics();
+    initializeNavigation();
+    initializeAnimations();
+    initializeChat();
+    createNeuralAnimation();
+    initializeVoiceFeatures();
+});
+
+// Analytics Implementation
+function initializeAnalytics() {
+    // Get or create visitor ID
+    let visitorId = Cookies.get('visitor_id');
+    if (!visitorId) {
+        visitorId = generateVisitorId();
+        Cookies.set('visitor_id', visitorId, { expires: 365 });
+    }
+
+    // Get location data
+    fetch('https://ipapi.co/json/')
+        .then(response => response.json())
+        .then(data => {
+            const analytics = {
+                visitorId: visitorId,
+                timestamp: new Date().toISOString(),
+                location: {
+                    country: data.country_name,
+                    city: data.city,
+                    region: data.region
+                },
+                userAgent: navigator.userAgent
+            };
+            logVisit(analytics);
+        })
+        .catch(error => console.error('Analytics error:', error));
+}
+
+function generateVisitorId() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0;
+        const v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
+function logVisit(data) {
+    // Send analytics to your server
+    console.log('Visit logged:', data);
+    // Implement server logging here
+}
+
+// Smooth scrolling and navigation
+function initializeNavigation() {
+    const nav = document.querySelector('.nav');
+    const navLinks = document.querySelectorAll('.nav-link');
+    
+    // Scroll handling
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 100) {
+            nav.classList.add('scrolled');
+        } else {
+            nav.classList.remove('scrolled');
+        }
+    });
+
+    // Smooth scroll to sections
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = link.getAttribute('href');
+            const targetSection = document.querySelector(targetId);
+            
+            targetSection.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        });
+    });
+}
+
+// Animation initialization
+function initializeAnimations() {
+    // Name typing animation
+    const nameElement = document.querySelector('.typing');
+    const nameText = nameElement.textContent;
+    nameElement.textContent = '';
+    typeText(nameElement, nameText);
+
+    // Scroll animations
+    const animatedElements = document.querySelectorAll('.animate-on-scroll');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    animatedElements.forEach(el => observer.observe(el));
+}
+
+function typeText(element, text, index = 0) {
+    if (index < text.length) {
+        element.textContent += text.charAt(index);
+        setTimeout(() => typeText(element, text, index + 1), 100);
+    }
+}
+
+// Neural network animation
+function createNeuralAnimation() {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const container = document.querySelector('.neural-network-animation');
+    
+    canvas.width = container.offsetWidth;
+    canvas.height = container.offsetHeight;
+    container.appendChild(canvas);
+
+    class Neuron {
+        constructor(x, y) {
+            this.x = x;
+            this.y = y;
+            this.connections = [];
+            this.size = 4;
+            this.speed = Math.random() * 0.5 + 0.2;
+            this.offset = Math.random() * Math.PI * 2;
+        }
+
+        update() {
+            this.y += Math.sin(Date.now() * 0.001 * this.speed + this.offset) * 0.5;
+        }
+
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fillStyle = '#A51C30';
+            ctx.fill();
+        }
+    }
+
+    const neurons = Array.from({ length: 30 }, () => 
+        new Neuron(
+            Math.random() * canvas.width,
+            Math.random() * canvas.height
+        )
+    );
+
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw connections
+        ctx.beginPath();
+        neurons.forEach(neuron => {
+            neurons.forEach(other => {
+                const distance = Math.hypot(neuron.x - other.x, neuron.y - other.y);
+                if (distance < 100) {
+                    ctx.moveTo(neuron.x, neuron.y);
+                    ctx.lineTo(other.x, other.y);
+                    const alpha = 1 - (distance / 100);
+                    ctx.strokeStyle = `rgba(165, 28, 48, ${alpha * 0.2})`;
+                    ctx.stroke();
+                }
+            });
+        });
+
+        // Update and draw neurons
+        neurons.forEach(neuron => {
+            neuron.update();
+            neuron.draw();
+        });
+
+        requestAnimationFrame(animate);
+    }
+
+    animate();
+}
+
+// Chat functionality
+function initializeChat() {
+    const chatModule = document.getElementById('chatModule');
+    const chatMessages = document.querySelector('.chat-messages');
+    const chatInput = document.querySelector('.chat-input');
+    const sendButton = document.querySelector('.send-btn');
+    const micButton = document.querySelector('.mic-btn');
+    const speakerButton = document.querySelector('.speaker-btn');
+    const minimizeButton = document.querySelector('.minimize-btn');
+
+    let isSpeaking = false;
+    let isListening = false;
+    const synth = window.speechSynthesis;
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+
+    // Chat context
+    const chatContext = {
+        name: "Jared James Grogan",
+        title: "AI Ecosystem Architect",
+        experience: {
+            current: "CEO & Founder at Universitas AI",
+            previous: ["Executive Advisor at NYU Abu Dhabi", "Director of Research"],
+            expertise: [
+                "Cognitive Computing",
+                "AI Systems Architecture",
+                "Neural Networks",
+                "Full-Stack Development"
+            ]
+        },
+        education: {
+            harvard: "Master of Theological Studies (MTS), Philosophy",
+            focus: "Mind, Brain & Behavior"
+        },
+        publications: [
+            {
+                title: "Large Language Models as Speech Act Processors",
+                year: 2024
+            },
+            {
+                title: "The Control Problem: AI and the Deep Copernican Crisis",
+                year: 2018
+            }
+        ]
+    };
+
+    // Initialize chat
+    addMessage("Hello! I'm Jared's AI assistant. How can I help you learn more about his work in cognitive computing and AI?", 'assistant');
+
+    // Event listeners
+    minimizeButton.addEventListener('click', () => {
+        chatModule.classList.toggle('collapsed');
+    });
+
+    sendButton.addEventListener('click', handleUserInput);
+    chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleUserInput();
+        }
+    });
+
+    micButton.addEventListener('click', toggleVoiceInput);
+    speakerButton.addEventListener('click', toggleSpeechOutput);
+
+    // Voice recognition setup
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.addEventListener('result', handleVoiceInput);
+
+    function handleUserInput() {
+        const message = chatInput.value.trim();
+        if (!message) return;
+
+        addMessage(message, 'user');
+        chatInput.value = '';
+        processUserInput(message);
+    }
+
+    function processUserInput(message) {
+        // Simulate AI thinking
+        showTypingIndicator();
+        
+        setTimeout(() => {
+            removeTypingIndicator();
+            const response = generateResponse(message.toLowerCase(), chatContext);
+            addMessage(response, 'assistant');
+            
+            if (isSpeaking) {
+                speakText(response);
+            }
+        }, 1000 + Math.random() * 1000);
+    }
+
+    function addMessage(content, type) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${type}`;
+        
+        if (type === 'assistant') {
+            messageDiv.innerHTML = '';
+            typeMessageContent(messageDiv, content);
+        } else {
+            messageDiv.textContent = content;
+        }
+        
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function typeMessageContent(element, content, index = 0) {
+        if (index < content.length) {
+            element.textContent += content.charAt(index);
+            setTimeout(() => typeMessageContent(element, content, index + 1), 20);
+        }
+    }
+
+    function showTypingIndicator() {
+        const indicator = document.createElement('div');
+        indicator.className = 'typing-indicator';
+        indicator.innerHTML = '<span></span><span></span><span></span>';
+        chatMessages.appendChild(indicator);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function removeTypingIndicator() {
+        const indicator = document.querySelector('.typing-indicator');
+        if (indicator) {
+            indicator.remove();
+        }
+    }
+
+    function toggleVoiceInput() {
+        if (isListening) {
+            recognition.stop();
+            micButton.classList.remove('active');
+        } else {
+            recognition.start();
+            micButton.classList.add('active');
+        }
+        isListening = !isListening;
+    }
+
+    function handleVoiceInput(event) {
+        const transcript = event.results[0][0].transcript;
+        chatInput.value = transcript;
+        handleUserInput();
+        isListening = false;
+        micButton.classList.remove('active');
+    }
+
+    function toggleSpeechOutput() {
+        isSpeaking = !isSpeaking;
+        speakerButton.classList.toggle('active');
+        if (!isSpeaking) {
+            synth.cancel();
+        }
+    }
+
+    function speakText(text) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 1;
+        utterance.pitch = 1;
+        synth.speak(utterance);
+    }
+
+    // Response generation
+    function generateResponse(input, context) {
+        // Implement sophisticated response generation based on context
+        // This is a simplified version - expand based on needs
+        const responses = {
+            experience: {
+                match: /(experience|work|career|job|position)/i,
+                response: `${context.name} is currently ${context.experience.current}, where he leads development of cognitive computing solutions and AI systems. His expertise includes ${context.experience.expertise.join(', ')}.`
+            },
+            education: {
+                match: /(education|study|degree|harvard)/i,
+                response: `${context.name} holds a ${context.education.harvard} from Harvard University, where he focused on ${context.education.focus}.`
+            },
+            publications: {
+                match: /(publications|research|papers|writing)/i,
+                response: `${context.name}'s recent publications include "${context.publications[0].title}" (${context.publications[0].year}) and "${context.publications[1].title}" (${context.publications[1].year}).`
+            }
+            // Add more response patterns
+        };
+
+        for (const category in responses) {
+            if (responses[category].match.test(input)) {
+                return responses[category].response;
+            }
+        }
+
+        return `I'd be happy to tell you about ${context.name}'s work in AI and cognitive computing. You can ask about his experience, education, or publications.`;
+    }
+}
+
+// Additional utility functions
+function initializeVoiceFeatures() {
+    if (!('speechSynthesis' in window)) {
+        document.querySelector('.speaker-btn').style.display = 'none';
+    }
+    if (!('SpeechRecognition' in window) && !('webkitSpeechRecognition' in window)) {
+        document.querySelector('.mic-btn').style.display = 'none';
+    }
+}
+
+// Initialize everything when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    initializeAnalytics();
+    initializeNavigation();
+    initializeAnimations();
+    initializeChat();
+    createNeuralAnimation();
+    initializeVoiceFeatures();
+});
+    </script>
     <!-- Content structure will follow -->
     <!-- This will be continued in the next part with full HTML structure -->
 </body>
