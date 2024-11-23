@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pax Americana Institute</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --crimson: #DC143C;
+            --crimson-dark: #B01030;
+            --gold: #D4AF37;
+            --gold-dark: #C5A028;
+        }
+        
+        body.dark {
+            background-color: #1a1a1a;
+            color: #ffffff;
+        }
+        
+        .text-crimson { color: var(--crimson); }
+        .bg-crimson { background-color: var(--crimson); }
+        .border-crimson { border-color: var(--crimson); }
+        
+        .golden-title {
+            background: linear-gradient(to right bottom, var(--gold), var(--gold-dark), var(--gold));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 2px 2px 10px rgba(212, 175, 55, 0.3);
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, rgba(0,0,139,0.1) 0%, rgba(220,20,60,0.1) 100%);
+        }
+
+        .timeline-card {
+            transition: transform 0.3s ease;
+        }
+
+        .timeline-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .sticky-nav {
+            backdrop-filter: blur(8px);
+        }
+
+        .theme-toggle {
+            transition: transform 0.3s ease;
+        }
+
+        .dark .timeline-card {
+            background: #2a2a2a;
+            color: #ffffff;
+        }
+
+        .dark .bg-gray-50 {
+            background-color: #1a1a1a;
+        }
+
+        .dark .bg-white {
+            background-color: #2a2a2a;
+        }
+
+        .dark .text-gray-900 {
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-white text-gray-900 transition-colors duration-300">
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 sticky-nav bg-white/90 dark:bg-gray-900/90">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-4">
+                    <svg class="h-8 w-8 text-crimson" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M2 12h20"/>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10"/>
+                    </svg>
+                    <span class="font-bold text-xl">PAI</span>
+                </div>
+                
+                <div class="flex items-center space-x-8">
+                    <div class="hidden md:flex space-x-8">
+                        <a href="#about" class="hover:text-crimson transition-colors">About</a>
+                        <a href="#vision" class="hover:text-crimson transition-colors">Vision</a>
+                        <a href="#plan" class="hover:text-crimson transition-colors">Plan</a>
+                        <a href="#impact" class="hover:text-crimson transition-colors">Impact</a>
+                        <a href="#join" class="hover:text-crimson transition-colors">Join</a>
+                    </div>
+                    
+                    <button id="themeToggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                  d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="min-h-screen flex items-center justify-center relative overflow-hidden hero-gradient">
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                Pax Americana:<br>
+                <span class="golden-title">Leading Earth's Golden Age</span>
+            </h1>
+            
+            <div class="max-w-2xl mx-auto mb-12">
+                <h3 class="text-2xl font-bold mb-4">Our Objective</h3>
+                <p class="text-xl">Double the economy in 12 years.<br>We choose growth.</p>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-4 justify-center">
+                <button class="bg-crimson text-white px-8 py-3 rounded-lg hover:bg-crimson-dark transition-colors">
+                    Learn More
+                </button>
+                <button class="border-2 border-crimson px-8 py-3 rounded-lg hover:bg-crimson hover:text-white transition-colors">
+                    Join the Movement
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- [Previous sections remain the same until footer] -->
+
+    <!-- Footer -->
+    <footer class="py-12 bg-gray-900 text-white">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="font-bold mb-4 text-crimson">About PAI</h3>
+                    <p>Leading Earth's transition to a unified, prosperous future.</p>
+                </div>
+                <div>
+                    <h3 class="font-bold mb-4 text-crimson">Resources</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-crimson">White Paper</a></li>
+                        <li><a href="#" class="hover:text-crimson">Media Kit</a></li>
+                        <li><a href="#" class="hover:text-crimson">FAQs</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold mb-4 text-crimson">Connect</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-crimson">Twitter</a></li>
+                        <li><a href="#" class="hover:text-crimson">LinkedIn</a></li>
+                        <li><a href="#" class="hover:text-crimson">YouTube</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold mb-4 text-crimson">Contact</h3>
+                    <p>info@paxamericana.org</p>
+                </div>
+            </div>
+            <div class="text-center mt-8 pt-8 border-t border-gray-800">
+                <div class="text-lg mb-2">paxamericana.org</div>
+                <div class="text-sm text-gray-400">© 2024 Pax Americana Institute</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark');
+            const isDark = body.classList.contains('dark');
+            themeToggle.innerHTML = isDark ? 
+                `<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                          d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707"/>
+                </svg>` :
+                `<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                          d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                </svg>`;
+        });
+    </script>
+</body>
+</html>
