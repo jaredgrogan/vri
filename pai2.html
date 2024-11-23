@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pax Americana Institute</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --crimson: #DC143C;
+            --crimson-dark: #B01030;
+            --gold: #D4AF37;
+            --gold-dark: #C5A028;
+        }
+        
+        body.dark {
+            background-color: #1a1a1a;
+            color: #ffffff;
+        }
+        
+        .text-crimson { color: var(--crimson); }
+        .bg-crimson { background-color: var(--crimson); }
+        .border-crimson { border-color: var(--crimson); }
+        
+        .golden-title {
+            background: linear-gradient(to right bottom, var(--gold), var(--gold-dark), var(--gold));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 2px 2px 10px rgba(212, 175, 55, 0.3);
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, rgba(0,0,139,0.1) 0%, rgba(220,20,60,0.1) 100%);
+        }
+
+        .carousel {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .carousel-content {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .carousel-item {
+            flex: 0 0 calc(33.333% - 2rem);
+            margin: 1rem;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-item.active {
+            opacity: 1;
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(220,20,60,0.2);
+        }
+
+        .carousel-controls {
+            position: absolute;
+            width: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .carousel-arrow {
+            background: rgba(220,20,60,0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            pointer-events: auto;
+            transition: all 0.3s ease;
+            margin: 0 1rem;
+        }
+
+        .carousel-arrow:hover {
+            background: rgba(220,20,60,1);
+            transform: scale(1.1);
+        }
+
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .carousel-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(220,20,60,0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .carousel-dot.active {
+            background: rgba(220,20,60,1);
+            transform: scale(1.2);
+        }
+
+        .btn-hover {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-hover:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn-hover:hover:after {
+            left: 100%;
+        }
+
+        .btn-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220,20,60,0.3);
+        }
+
+        .dark .carousel-item {
+            background: #2a2a2a;
+            color: #ffffff;
+        }
+
+        .dark .bg-white {
+            background-color: #2a2a2a;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-white text-gray-900 transition-colors duration-300">
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 sticky-nav bg-white/90 dark:bg-gray-900/90">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-4">
+                    <svg class="h-8 w-8 text-crimson" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M2 12h20"/>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10"/>
+                    </svg>
+                    <span class="font-bold text-xl">PAI</span>
+                </div>
+                
+                <div class="flex items-center space-x-8">
+                    <div class="hidden md:flex space-x-8">
+                        <a href="#about" class="hover:text-crimson transition-colors">About</a>
+                        <a href="#vision" class="hover:text-crimson transition-colors">Vision</a>
+                        <a href="#plan" class="hover:text-crimson transition-colors">Plan</a>
+                        <a href="#impact" class="hover:text-crimson transition-colors">Impact</a>
+                        <a href="#join" class="hover:text-crimson transition-colors">Join</a>
+                    </div>
+                    
+                    <button id="themeToggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                  d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="min-h-screen flex items-center justify-center relative overflow-hidden hero-gradient">
+        <div class="container mx-auto px-4 text-center relative z-10">
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                Pax Americana:<br>
+                <span class="golden-title">Leading Earth's Golden Age</span>
+            </h1>
+            
+            <div class="max-w-2xl mx-auto mb-12">
+                <h3 class="text-2xl font-bold mb-4">The 12-Year Plan</h3>
+                <p class="text-xl">Double the global economy in 12 years.<br>We choose growth.</p>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-4 justify-center">
+                <button class="btn-hover bg-crimson text-white px-8 py-3 rounded-lg">
+                    Learn More
+                </button>
+                <button class="btn-hover border-2 border-crimson px-8 py-3 rounded-lg hover:bg-crimson hover:text-white">
+                    Join the Movement
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Frontier Technologies Section -->
+    <section class="py-20 bg-gray-50 dark:bg-gray-900">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-12 text-center">Frontier Technologies</h2>
+            <div class="carousel" id="techCarousel">
+                <div class="carousel-content">
+                    <div class="carousel-item">
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg">
+                            <h3 class="text-xl font-bold mb-4 text-crimson">AI & Advanced Computing</h3>
+                            <p>Leading the development of transformative AI systems</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg">
+                            <h3 class="text-xl font-bold mb-4 text-crimson">Blockchain & Decentralized Systems</h3>
+                            <p>Building the infrastructure for next-generation financial systems</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg">
+                            <h3 class="text-xl font-bold mb-4 text-crimson">Materials & Manufacturing</h3>
+                            <p>Advancing breakthrough materials and production technologies</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg">
+                            <h3 class="text-xl font-bold mb-4 text-crimson">Aerospace & Robotics</h3>
+                            <p>Pioneering next-generation mobility and automation solutions</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg">
+                            <h3 class="text-xl font-bold mb-4 text-crimson">Longevity</h3>
+                            <p>Developing technologies to enhance human health and lifespan</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-controls">
+                    <button class="carousel-arrow" data-direction="prev">←</button>
+                    <button class="carousel-arrow" data-direction="next">→</button>
+                </div>
+                <div class="carousel-dots"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- White Papers Section -->
+    <section class="py-20">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold mb-12 text-center">Research & White Papers</h2>
+            <div class="carousel" id="paperCarousel">
+                <div class="carousel-content">
+                    <div class="carousel-item">
+                        <div class="p-6 bg-white dark:bg-gray-800 rounded-lg">
+                            <h3 class="text-lg font-bold mb-4">Pax Americana White Paper</h3>
+                            <button class="text-crimson hover:text-crimson-dark flex items-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                          d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                                </svg>
+                                Download
+                            </button>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="p-6 bg-white dark:bg-gray-800 rounded-lg">
+                            <h3 class="text-lg font-bold mb-4">PanAmerican White Paper</h3>
+                            <button class="text-crimson hover:text-crimson-dark flex items-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                          d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                                </svg>
+                                Download
+                            </button>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="p-6 bg-white dark:bg-gray-800 rounded-lg">
+                            <h3 class="text-lg font-bold mb-4">Kiev Economic Zone (KEZ)</h3>
+                            <button class="text-crimson hover:text-crimson-dark flex items-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                          d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                                </svg>
+                                Download
+                            </button>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="p-6 bg-white dark:bg-gray-800 rounded-lg">
+                            <h3 class="text-lg font-bold mb-4">CHIPS & Science White Paper</h3>
+                            <button class="text-crimson hover:text-crimson-dark flex items-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                          d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                                </svg>
+                                Download
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-controls">
+                    <button class="carousel-arrow" data-direction="prev">←</button>
+                    <button class="carousel-arrow" data-direction="next">→</button>
+               Copy                </div>
+                <div class="carousel-controls">
+                    <button class="carousel-arrow" data-direction="prev">←</button>
+                    <button class="carousel-arrow" data-direction="next">→</button>
+                </div>
+                <div class="carousel-dots"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 bg-gray-900 text-white">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="font-bold mb-4 text-crimson">About PAI</h3>
+                    <p>Leading Earth's transition to a unified, prosperous future.</p>
+                </div>
+                <div>
+                    <h3 class="font-bold mb-4 text-crimson">Resources</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-crimson">White Papers</a></li>
+                        <li><a href="#" class="hover:text-crimson">Media Kit</a></li>
+                        <li><a href="#" class="hover:text-crimson">FAQs</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold mb-4 text-crimson">Connect</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="hover:text-crimson">
+                            <svg class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="hover:text-crimson">
+                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                            </svg>
+                        </a>
+                        <a href="#" class="hover:text-crimson">
+                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="font-bold mb-4 text-crimson">Contact</h3>
+                    <p>info@paxamericana.org</p>
+                </div>
+            </div>
+            <div class="text-center mt-8 pt-8 border-t border-gray-800">
+                <div class="text-lg mb-2">paxamericana.org</div>
+                <div class="text-sm text-gray-400">© 2024 Pax Americana Institute</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark');
+            const isDark = body.classList.contains('dark');
+            themeToggle.innerHTML = isDark ? 
+                `<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                          d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707"/>
+                </svg>` :
+                `<svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                          d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                </svg>`;
+        });
+
+        // Carousel functionality
+        class Carousel {
+            constructor(element) {
+                this.carousel = element;
+                this.content = element.querySelector('.carousel-content');
+                this.items = Array.from(element.querySelectorAll('.carousel-item'));
+                this.dots = element.querySelector('.carousel-dots');
+                this.currentIndex = 0;
+                this.autoPlayInterval = null;
+                
+                this.setupDots();
+                this.setupControls();
+                this.startAutoPlay();
+                
+                this.carousel.addEventListener('mouseenter', () => this.stopAutoPlay());
+                this.carousel.addEventListener('mouseleave', () => this.startAutoPlay());
+            }
+
+            setupDots() {
+                this.items.forEach((_, index) => {
+                    const dot = document.createElement('div');
+                    dot.className = `carousel-dot ${index === 0 ? 'active' : ''}`;
+                    dot.addEventListener('click', () => this.goToSlide(index));
+                    this.dots.appendChild(dot);
+                });
+            }
+
+            setupControls() {
+                this.carousel.querySelectorAll('.carousel-arrow').forEach(arrow => {
+                    arrow.addEventListener('click', (e) => {
+                        const direction = e.target.dataset.direction;
+                        if (direction === 'prev') this.prev();
+                        if (direction === 'next') this.next();
+                    });
+                });
+            }
+
+            goToSlide(index) {
+                this.currentIndex = index;
+                this.updateCarousel();
+            }
+
+            next() {
+                this.currentIndex = (this.currentIndex + 1) % this.items.length;
+                this.updateCarousel();
+            }
+
+            prev() {
+                this.currentIndex = (this.currentIndex - 1 + this.items.length) % this.items.length;
+                this.updateCarousel();
+            }
+
+            updateCarousel() {
+                const offset = -this.currentIndex * (100 / 3);
+                this.content.style.transform = `translateX(${offset}%)`;
+                
+                this.items.forEach((item, index) => {
+                    item.classList.toggle('active', index === this.currentIndex);
+                });
+                
+                Array.from(this.dots.children).forEach((dot, index) => {
+                    dot.classList.toggle('active', index === this.currentIndex);
+                });
+            }
+
+            startAutoPlay() {
+                if (this.autoPlayInterval) return;
+                this.autoPlayInterval = setInterval(() => this.next(), 3000);
+            }
+
+            stopAutoPlay() {
+                if (this.autoPlayInterval) {
+                    clearInterval(this.autoPlayInterval);
+                    this.autoPlayInterval = null;
+                }
+            }
+        }
+
+        // Initialize carousels
+        document.addEventListener('DOMContentLoaded', () => {
+            new Carousel(document.getElementById('techCarousel'));
+            new Carousel(document.getElementById('paperCarousel'));
+        });
+    </script>
+</body>
+</html>
