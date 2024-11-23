@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petra.chat - Understanding Without Borders</title>
+    <style>
+        :root {
+            --brand-primary: #A51C30;
+            --brand-secondary: #ED1B34;
+            --brand-deep: #2A0A0F;
+            --accent-gold: #D4AF37;
+            --dark: #1e1e1e;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--brand-deep), var(--brand-primary));
+            min-height: 100vh;
+            color: var(--white);
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            gap: 0.25rem;
+        }
+
+        .logo span {
+            font-size: 1.5rem;
+            font-weight: bold;
+            animation: fadeIn 0.5s forwards;
+            background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .language-select {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 0.5rem;
+            color: var(--white);
+            margin-left: 2rem;
+            cursor: pointer;
+        }
+
+        .language-select:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr 280px;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            margin-top: 4rem;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+            height: calc(100vh - 5rem);
+        }
+
+        .glass-panel {
+            background: rgba(30, 30, 30, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            margin-top: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent-gold);
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .module-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .module-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 1rem;
+            border-radius: 12px;
+            line-height: 1.4;
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        .message.petra {
+            background: rgba(255, 255, 255, 0.1);
+            align-self: flex-start;
+        }
+
+        .message.user {
+            background: var(--brand-primary);
+            align-self: flex-end;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            margin-top: auto;
+        }
+
+        .input-field {
+            flex-grow: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem;
+            color: var(--white);
+            font-size: 1rem;
+        }
+
+        .input-field:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .icon-button {
+            background: none;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .icon-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .icon-button svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--white);
+        }
+
+        .vocab-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .vocab-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .translation {
+            font-size: 0.9em;
+            opacity: 0.7;
+            margin-top: 0.5rem;
+        }
+
+        .date-time {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .copyright {
+            position: fixed;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.8rem;
+            text-align: center;
+            z-index: 1000;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .main-grid {
+                grid-template-columns: 280px 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- SVG Icon System -->
+    <svg style="display: none;">
+        <symbol id="icon-mic" viewBox="0 0 24 24">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+            <line x1="12" y1="19" x2="12" y2="23"/>
+            <line x1="8" y1="23" x2="16" y2="23"/>
+        </symbol>
+        
+        <symbol id="icon-speaker" viewBox="0 0 24 24">
+            <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+        </symbol>
+
+        <symbol id="icon-send" viewBox="0 0 24 24">
+            <line x1="22" y1="2" x2="11" y2="13"/>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </symbol>
+    </svg>
+
+    <header class="header">
+        <div class="header-content">
+            <div class="left-section" style="display: flex; align-items: center;">
+                <div class="logo">
+                    <span>p</span><span>e</span><span>t</span><span>r</span><span>a</span>
+                    <span>.</span><span>c</span><span>h</span><span>a</span><span>t</span>
+                </div>
+                <select class="language-select" onchange="switchLanguage(this.value)">
+                    <option value="ar">Arabic</option>
+                    <option value="zh">Chinese</option>
+                    <option value="fr">French</option>
+                    <option value="es">Spanish</option>
+                    <option value="ru">Russian</option>
+                </select>
+            </div>
+            <div class="date-time">
+                <!-- Date will be inserted by JS -->
+            </div>
+        </div>
+    </header>
+
+    <main class="main-grid">
+        <!-- Left Sidebar -->
+        <aside class="glass-panel">
+            <h2 class="text-xl font-bold mb-6">Learning Progress</h2>
+            <div class="module-card">
+                <h3>Vocabulary</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 65%"></div>
+                </div>
+                <p>325/500 words</p>
+            </div>
+            <!-- Other modules... -->
+        </aside>
+
+        <!-- Chat Area -->
+        <section class="glass-panel chat-container">
+            <div class="chat-messages" id="chatMessages">
+                <!-- Messages will be dynamically inserted -->
+            </div>
+
+            <div class="chat-input">
+                <button class="icon-button" onclick="toggleMic()">
+                    <svg><use href="#icon-mic"/></svg>
+                </button>
+                <input type="text" class="input-field" placeholder="Type your message..." id="messageInput">
+                <button class="icon-button" onclick="toggleSpeaker()">
+                    <svg><use href="#icon-speaker"/></svg>
+                </button>
+                <button class="icon-button" onclick="sendMessage()">
+                    <svg><use href="#icon-send"/></svg>
+                </button>
+            </div>
+        </section>
+
+        <!-- Right Sidebar -->
+        <aside class="glass-panel">
+            <h2 class="text-xl font-bold mb-6">Recent Vocabulary</h2>
+            <div class="vocab-cards">
+                <!-- Vocabulary cards will be dynamically inserted -->
+            </div>
+        </aside>
+    </main>
+
+    <footer class="copyright">
+        © 2024 COGNITIVE CLOUD
+    </footer>
+
+    <script>
+        // Date/Time Updates
+        function updateDateTime() {
+            const now = new Date();
+            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            
+            let hours = now.getHours();
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+            
+            const dateString = `${days[now.getDay()]} ${months[now.getMonth()]} ${now.getDate()} ${hours}:${minutes} ${ampm}`;
+            document.querySelector('.date-time').textContent = dateString;
+        }
+
+        // Initialize and update time
+        updateDateTime();
+        setInterval(updateDateTime, 60000);
+
+        // Voice synthesis setup
+        let synth = window.speechSynthesis;
+        let voices = [];
+
+        function loadVoices() {
+            voices = synth.getVoices();
+        }
+
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = loadVoices;
+        }
+
+        function speak(text, lang) {
+            if (synth.speaking) {
+                synth.cancel();
+            }
+            
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = lang;
+            utterance.rate = 1;
+            utterance.pitch = 1;
+            
+            const voice = voices.find(v => v.lang.startsWith(lang)) || voices[0];
+            if (voice) {
+                utterance.voice = voice;
+            }
+            
+            synth.speak(utterance);
+        }
+
+        // Language examples
+        const languageExamples = {
+            ar: [
+                { text: "مرحباً! كيف حالك اليوم؟", translation: "Hello! How are you today?" },
+                { text: "شكراً جزيلاً", translation: "Thank you very much" }
+            ],
+            zh: [
+                { text: "你好！今天好吗？", translation: "Hello! How are you today?" },
+                { text: "谢谢", translation: "Thank you" }
+            ],
+            fr: [
+                { text: "Bonjour ! Comment allez-vous aujourd'hui ?", translation: "Hello! How are you today?" },
+                { text: "Merci beaucoup", translation: "Thank you very much" }
+            ],
+            es: [
+                { text: "¡Hola! ¿Cómo estás hoy?", translation: "Hello! How are you today?" },
+                { text: "Muchas gracias", translation: "Thank you very much" }
+            ],
+            ru: [
+                { text: "Здравствуйте! Как вы сегодня?", translation: "Hello! How are you today?" },
+                { text: "Спасибо большое", translation: "Thank you very much" }
+            ]
+        };
+function switchLanguage(lang) {
+   // Update UI for selected language
+   const chatMessages = document.getElementById('chatMessages');
+   chatMessages.innerHTML = ''; // Clear existing messages
+   
+   // Add welcome message in selected language
+   const examples = languageExamples[lang];
+   examples.forEach((example, index) => {
+       setTimeout(() => {
+           const messageEl = document.createElement('div');
+           messageEl.className = 'message petra';
+           messageEl.innerHTML = `
+               <div class="message-content">
+                   <p>${example.text}</p>
+                   <p class="translation">${example.translation}</p>
+                   <button class="icon-button" onclick="speak('${example.text}', '${lang}')">
+                       <svg><use href="#icon-speaker"/></svg>
+                   </button>
+               </div>
+           `;
+           chatMessages.appendChild(messageEl);
+       }, index * 500); // Stagger message appearance
+   });
+
+   // Update vocabulary cards for selected language
+   updateVocabulary(lang);
+}
+
+function updateVocabulary(lang) {
+   const vocabularyData = {
+       ar: [
+           { word: "مرحباً", pronunciation: "marhaban", meaning: "Hello" },
+           { word: "شكراً", pronunciation: "shukran", meaning: "Thank you" },
+           { word: "من فضلك", pronunciation: "min fadlik", meaning: "Please" }
+       ],
+       zh: [
+           { word: "你好", pronunciation: "nǐ hǎo", meaning: "Hello" },
+           { word: "谢谢", pronunciation: "xièxie", meaning: "Thank you" },
+           { word: "请", pronunciation: "qǐng", meaning: "Please" }
+       ],
+       fr: [
+           { word: "Bonjour", pronunciation: "bonjour", meaning: "Hello" },
+           { word: "Merci", pronunciation: "merci", meaning: "Thank you" },
+           { word: "S'il vous plaît", pronunciation: "sil voo play", meaning: "Please" }
+       ],
+       es: [
+           { word: "Hola", pronunciation: "ola", meaning: "Hello" },
+           { word: "Gracias", pronunciation: "grasias", meaning: "Thank you" },
+           { word: "Por favor", pronunciation: "por favor", meaning: "Please" }
+       ],
+       ru: [
+           { word: "Здравствуйте", pronunciation: "zdravstvuyte", meaning: "Hello" },
+           { word: "Спасибо", pronunciation: "spasibo", meaning: "Thank you" },
+           { word: "Пожалуйста", pronunciation: "pozhaluysta", meaning: "Please" }
+       ]
+   };
+
+   const vocabContainer = document.querySelector('.vocab-cards');
+   vocabContainer.innerHTML = '';
+
+   vocabularyData[lang].forEach(item => {
+       const card = document.createElement('div');
+       card.className = 'vocab-card';
+       card.innerHTML = `
+           <div class="vocab-text">
+               <p class="text-lg font-bold">${item.word}</p>
+               <p class="text-sm opacity-70">${item.pronunciation}</p>
+               <p class="translation">${item.meaning}</p>
+           </div>
+           <button class="icon-button" onclick="speak('${item.word}', '${lang}')">
+               <svg><use href="#icon-speaker"/></svg>
+           </button>
+       `;
+       vocabContainer.appendChild(card);
+   });
+}
+
+let isRecording = false;
+function toggleMic() {
+   if (!isRecording) {
+       startRecording();
+   } else {
+       stopRecording();
+   }
+   isRecording = !isRecording;
+   
+   const micButton = document.querySelector('button svg use[href="#icon-mic"]')
+       .parentElement.parentElement;
+   micButton.style.background = isRecording ? 'var(--brand-primary)' : 'none';
+}
+
+function startRecording() {
+   if ('webkitSpeechRecognition' in window) {
+       const recognition = new webkitSpeechRecognition();
+       recognition.continuous = false;
+       recognition.interimResults = false;
+       
+       recognition.onresult = function(event) {
+           const transcript = event.results[0][0].transcript;
+           document.getElementById('messageInput').value = transcript;
+           sendMessage();
+       };
+       
+       recognition.start();
+   }
+}
+
+function stopRecording() {
+   if (recognition) {
+       recognition.stop();
+   }
+}
+
+function sendMessage() {
+   const input = document.getElementById('messageInput');
+   const message = input.value.trim();
+   
+   if (message) {
+       const messagesContainer = document.getElementById('chatMessages');
+       const messageEl = document.createElement('div');
+       messageEl.className = 'message user';
+       messageEl.innerHTML = `
+           <div class="message-content">
+               <p>${message}</p>
+           </div>
+       `;
+       
+       messagesContainer.appendChild(messageEl);
+       messagesContainer.scrollTop = messagesContainer.scrollHeight;
+       input.value = '';
+       
+       // Simulate Petra's response after a short delay
+       setTimeout(() => {
+           const responseEl = document.createElement('div');
+           responseEl.className = 'message petra';
+           responseEl.innerHTML = `
+               <div class="message-content">
+                   <p>I understand you're learning. Let me help you with that.</p>
+               </div>
+           `;
+           messagesContainer.appendChild(responseEl);
+           messagesContainer.scrollTop = messagesContainer.scrollHeight;
+       }, 1000);
+   }
+}
+
+// Initialize the application
+document.addEventListener('DOMContentLoaded', () => {
+   switchLanguage('ar'); // Default to Arabic
+   updateDateTime(); // Initialize time display
+});
+   </script>
+</body>
+</html>
