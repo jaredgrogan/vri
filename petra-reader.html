@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Petra Reader - Your Personal Polyglot">
+    <meta name="theme-color" content="#A51C30">
+    <title>Petra Reader</title>
+    
+    <!-- Error handling for Luxon -->
+    <script>
+        window.addEventListener('error', function(e) {
+            if (e.target.src && e.target.src.includes('luxon')) {
+                console.error('Failed to load Luxon library');
+                // Fallback time display
+                document.getElementById('timeDisplay').textContent = new Date().toLocaleString();
+            }
+        }, true);
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/luxon/3.4.4/luxon.min.js"></script>
+
+    <style>
+        /* All previous CSS remains exactly the same */
+        /* ... */
+    </style>
+</head>
+<body>
+    <!-- Initialize theme before any content to prevent flash -->
+    <script>
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.body.setAttribute('data-theme', savedTheme);
+    </script>
+
+    <div class="overlay" id="overlay"></div>
+    <canvas id="particleCanvas"></canvas>
+    
+    <!-- Rest of the HTML structure remains exactly the same -->
+    <!-- ... -->
+
+    <script>
+        // Core initialization
+        let isDarkMode = localStorage.getItem('theme') === 'dark';
+        let isAnimationEnabled = true;
+        let particleSystem = null;
+        let timerInterval;
+        let isPlaying = false;
+        let isDictating = false;
+        
+        // Browser compatibility checks
+        const hasSpeechRecognition = 'SpeechRecognition' in window || 'webkitSpeechRecognition' in window;
+        const hasSpeechSynthesis = 'speechSynthesis' in window;
+        const hasAudioContext = 'AudioContext' in window || 'webkitAudioContext' in window;
+
+        // Error handling wrapper
+        function handleError(error, message) {
+            console.error(message, error);
+            alert(message);
+        }
+
+        // Particle System Implementation with error handling
+        class ParticleNetwork {
+            constructor() {
+                try {
+                    this.canvas = document.getElementById('particleCanvas');
+                    this.ctx = this.canvas.getContext('2d');
+                    this.particles = [];
+                    this.particleCount = 150;
+                    this.connectionDistance = 100;
+                    this.isRunning = false;
+                    
+                    this.canvas.style.position = 'fixed';
+                    this.canvas.style.top = '0';
+                    this.canvas.style.left = '0';
+                    this.canvas.style.width = '100%';
+                    this.canvas.style.height = '100%';
+                    this.canvas.style.zIndex = '-1';
+                    this.canvas.style.pointerEvents = 'none';
+                    
+                    this.init();
+                    this.setupEventListeners();
+                } catch (error) {
+                    handleError(error, 'Error initializing particle system');
+                }
+            }
+
+            setupEventListeners() {
+                window.addEventListener('resize', () => this.resize(), { passive: true });
+                document.addEventListener('visibilitychange', () => {
+                    if (document.hidden) {
+                        this.pause();
+                    } else if (isAnimationEnabled) {
+                        this.resume();
+                    }
+                });
+            }
+
+            init() {
+                this.resize();
+                this.createParticles();
+                if (isAnimationEnabled) {
+                    this.start();
+                }
+            }
+
+            resize() {
+                try {
+                    this.canvas.width = window.innerWidth;
+                    this.canvas.height = window.innerHeight;
+                    this.createParticles(); // Recreate particles on resize
+                } catch (error) {
+                    handleError(error, 'Error resizing canvas');
+                }
+            }
+
+            createParticles() {
+                this.particles = [];
+                for (let i = 0; i < this.particleCount; i++) {
+                    this.particles.push({
+                        x: Math.random() * this.canvas.width,
+                        y: Math.random() * this.canvas.height,
+                        size: Math.random() * 2 + 1,
+                        vx: (Math.random() - 0.5) * 0.6,
+                        vy: (Math.random() - 0.5) * 0.6
+                    });
+                }
+            }
+
+            start() {
+                if (!this.isRunning) {
+                    this.isRunning = true;
+                    this.animate();
+                }
+            }
+
+            pause() {
+                this.isRunning = false;
+            }
+
+            resume() {
+                if (!this.isRunning) {
+                    this.start();
+                }
+            }
+
+            animate() {
+                if (!this.isRunning || !isAnimationEnabled) return;
+
+                try {
+                    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+                    // Update and draw particles
+                    this.particles.forEach(particle => {
+                        particle.x += particle.vx;
+                        particle.y += particle.vy;
+
+                        // Wrap around screen
+                        if (particle.x < 0) particle.x = this.canvas.width;
+                        if (particle.x > this.canvas.width) particle.x = 0;
+                        if (particle.y < 0) particle.y = this.canvas.height;
+                        if (particle.y > this.canvas.height) particle.y = 0;
+
+                        // Draw particle
+                        this.ctx.beginPath();
+                        this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                        this.ctx.fillStyle = isDarkMode ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)';
+                        this.ctx.fill();
+                    });
+
+                    // Draw connections
+                    for (let i = 0; i < this.particles.length; i++) {
+                        for (let j = i + 1; j < this.particles.length; j++) {
+                            const dx = this.particles[i].x - this.particles[j].x;
+                            const dy = this.particles[i].y - this.particles[j].y;
+                            const distance = Math.sqrt(dx * dx + dy * dy);
+
+                            if (distance < this.connectionDistance) {
+                                this.ctx.beginPath();
+                                this.ctx.moveTo(this.particles[i].x, this.particles[i].y);
+                                this.ctx.lineTo(this.particles[j].x, this.particles[j].y);
+                                this.ctx.strokeStyle = isDarkMode ?
+                                    `rgba(255, 255, 255, ${0.1 * (1 - distance / this.connectionDistance)})` :
+                                    `rgba(0, 0, 0, ${0.05 * (1 - distance / this.connectionDistance)})`;
+                                this.ctx.lineWidth = 0.5;
+                                this.ctx.stroke();
+                            }
+                        }
+                    }
+
+                    requestAnimationFrame(() => this.animate());
+                } catch (error) {
+                    this.isRunning = false;
+                    handleError(error, 'Error in particle animation');
+                }
+            }
+        }
+
+        // Speech Recognition Setup with fallback
+        class SpeechHandler {
+            constructor() {
+                this.recognition = null;
+                this.isSupported = hasSpeechRecognition;
+                
+                if (this.isSupported) {
+                    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                    this.recognition = new SpeechRecognition();
+                    this.setupRecognition();
+                }
+            }
+
+            setupRecognition() {
+                this.recognition.continuous = true;
+                this.recognition.interimResults = true;
+                this.recognition.lang = document.getElementById('languageSelect').value;
+
+                this.recognition.onstart = () => {
+                    isDictating = true;
+                    const dictateButton = document.getElementById('dictateButton');
+                    dictateButton.classList.add('recording');
+                    dictateButton.setAttribute('data-tooltip', 'Stop Dictation');
+                };
+
+                this.recognition.onend = () => {
+                    isDictating = false;
+                    const dictateButton = document.getElementById('dictateButton');
+                    dictateButton.classList.remove('recording');
+                    dictateButton.setAttribute('data-tooltip', 'Start Dictation');
+                };
+
+                this.recognition.onerror = (event) => {
+                    handleError(event, 'Error in speech recognition');
+                    this.stop();
+                };
+
+                this.setupResultsHandler();
+            }
+
+            setupResultsHandler() {
+                this.recognition.onresult = (event) => {
+                    const textInput = document.getElementById('textInput');
+                    let interimTranscript = '';
+                    let finalTranscript = '';
+
+                    for (let i = event.resultIndex; i < event.results.length; i++) {
+                        const transcript = event.results[i][0].transcript;
+                        if (event.results[i].isFinal) {
+                            finalTranscript += transcript + ' ';
+                        } else {
+                            interimTranscript += transcript;
+                        }
+                    }
+
+                    if (finalTranscript !== '') {
+                        const currentText = textInput.value;
+                        const cursorPosition = textInput.selectionStart;
+                        textInput.value = currentText.slice(0, cursorPosition) + 
+                                        finalTranscript + 
+                                        currentText.slice(cursorPosition);
+                        
+                        textInput.dispatchEvent(new Event('input'));
+                    }
+                };
+            }
+
+            start() {
+                if (!this.isSupported) {
+                    alert('Speech recognition is not supported in your browser');
+                    return;
+                }
+                try {
+                    this.recognition.start();
+                } catch (error) {
+                    handleError(error, 'Error starting speech recognition');
+                }
+            }
+
+            stop() {
+                if (this.isSupported && this.recognition) {
+                    try {
+                        this.recognition.stop();
+                    } catch (error) {
+                        handleError(error, 'Error stopping speech recognition');
+                    }
+                }
+            }
+        }
+
+        // Initialize handlers on DOM load
+        document.addEventListener('DOMContentLoaded', () => {
+
+  const speechHandler = new SpeechHandler();
+            const textInput = document.getElementById('textInput');
+            const languageSelect = document.getElementById('languageSelect');
+            const speedSelect = document.getElementById('speedSelect');
+            const voiceSelect = document.getElementById('voiceSelect');
+            const playButton = document.getElementById('playButton');
+            const pauseButton = document.getElementById('pauseButton');
+            const timerDisplay = document.getElementById('timerDisplay');
+
+            // Speech Synthesis Setup
+            const synth = window.speechSynthesis;
+            let voices = [];
+
+            function setupVoices() {
+                try {
+                    voices = synth.getVoices();
+                    voiceSelect.innerHTML = '';
+                    
+                    const currentLang = languageSelect.value;
+                    const langVoices = voices.filter(voice => voice.lang.startsWith(currentLang));
+                    
+                    if (langVoices.length === 0) {
+                        // Fallback to all voices if no matches for current language
+                        voices.forEach(addVoiceOption);
+                    } else {
+                        langVoices.forEach(addVoiceOption);
+                    }
+                } catch (error) {
+                    handleError(error, 'Error setting up voices');
+                }
+            }
+
+            function addVoiceOption(voice) {
+                const option = document.createElement('option');
+                option.textContent = `${voice.name} (${voice.lang})`;
+                option.setAttribute('data-lang', voice.lang);
+                option.setAttribute('data-name', voice.name);
+                if (voice.default) option.selected = true;
+                voiceSelect.appendChild(option);
+            }
+
+            if (speechSynthesis.onvoiceschanged !== undefined) {
+                speechSynthesis.onvoiceschanged = setupVoices;
+            }
+
+            // Timer Implementation
+            let startTime;
+
+            function updateTimer() {
+                const elapsed = Date.now() - startTime;
+                const seconds = Math.floor(elapsed / 1000);
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = seconds % 60;
+                timerDisplay.textContent = `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+            }
+
+            function startTimer() {
+                startTime = Date.now();
+                timerInterval = setInterval(updateTimer, 1000);
+            }
+
+            function stopTimer() {
+                clearInterval(timerInterval);
+                timerDisplay.textContent = '0:00';
+            }
+
+            // Playback Implementation
+            function setupPlayback(text) {
+                try {
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    const selectedVoice = voices[voiceSelect.selectedIndex];
+                    if (selectedVoice) utterance.voice = selectedVoice;
+                    
+                    utterance.lang = languageSelect.value;
+                    utterance.rate = parseFloat(speedSelect.value);
+
+                    utterance.onstart = () => {
+                        isPlaying = true;
+                        playButton.setAttribute('data-tooltip', 'Pause');
+                        startTimer();
+                    };
+
+                    utterance.onend = () => {
+                        isPlaying = false;
+                        playButton.setAttribute('data-tooltip', 'Play');
+                        stopTimer();
+                    };
+
+                    utterance.onpause = () => {
+                        clearInterval(timerInterval);
+                    };
+
+                    utterance.onresume = () => {
+                        startTimer();
+                    };
+
+                    utterance.onerror = (event) => {
+                        handleError(event, 'Error in speech synthesis');
+                        stopTimer();
+                        isPlaying = false;
+                    };
+
+                    return utterance;
+                } catch (error) {
+                    handleError(error, 'Error setting up playback');
+                    return null;
+                }
+            }
+
+            // Audio Export Implementation
+            async function exportAudio(text) {
+                if (!hasAudioContext) {
+                    alert('Audio export is not supported in your browser');
+                    return;
+                }
+
+                try {
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const mediaStreamDestination = audioContext.createMediaStreamDestination();
+                    const mediaRecorder = new MediaRecorder(mediaStreamDestination.stream, {
+                        mimeType: 'audio/wav'
+                    });
+                    
+                    const audioChunks = [];
+                    
+                    return new Promise((resolve, reject) => {
+                        mediaRecorder.ondataavailable = (event) => {
+                            audioChunks.push(event.data);
+                        };
+
+                        mediaRecorder.onstop = () => {
+                            const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                            resolve(audioBlob);
+                            audioContext.close();
+                        };
+
+                        mediaRecorder.onerror = reject;
+
+                        mediaRecorder.start();
+                        const utterance = setupPlayback(text);
+                        if (utterance) {
+                            utterance.onend = () => mediaRecorder.stop();
+                            synth.speak(utterance);
+                        } else {
+                            mediaRecorder.stop();
+                            reject(new Error('Failed to setup speech synthesis'));
+                        }
+                    });
+                } catch (error) {
+                    throw new Error('Failed to setup audio export: ' + error.message);
+                }
+            }
+
+            // Event Listeners
+            playButton.addEventListener('click', () => {
+                if (synth.speaking && isPlaying) {
+                    synth.pause();
+                    isPlaying = false;
+                    playButton.setAttribute('data-tooltip', 'Resume');
+                    clearInterval(timerInterval);
+                    return;
+                }
+
+                const text = textInput.value;
+                if (text && !isPlaying) {
+                    const utterance = setupPlayback(text);
+                    if (utterance) synth.speak(utterance);
+                }
+            });
+
+            pauseButton.addEventListener('click', () => {
+                if (synth.speaking) {
+                    if (isPlaying) {
+                        synth.pause();
+                        clearInterval(timerInterval);
+                    } else {
+                        synth.resume();
+                        startTimer();
+                    }
+                    isPlaying = !isPlaying;
+                    playButton.setAttribute('data-tooltip', isPlaying ? 'Pause' : 'Resume');
+                }
+            });
+
+            // Continue with more event listeners and initialization...
+
+ // Export Handlers
+            const exportButton = document.getElementById('exportButton');
+            const exportTxtButton = document.getElementById('exportTxtButton');
+
+            exportButton.addEventListener('click', async () => {
+                const text = textInput.value;
+                if (!text) {
+                    alert('Please enter some text to export.');
+                    return;
+                }
+
+                try {
+                    exportButton.disabled = true;
+                    exportButton.setAttribute('data-tooltip', 'Exporting...');
+                    
+                    const audioBlob = await exportAudio(text);
+                    const url = URL.createObjectURL(audioBlob);
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = url;
+                    a.download = `petra-audio-${Date.now()}.wav`;
+                    document.body.appendChild(a);
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                } catch (error) {
+                    handleError(error, 'Error exporting audio');
+                } finally {
+                    exportButton.disabled = false;
+                    exportButton.setAttribute('data-tooltip', 'Export WAV');
+                }
+            });
+
+            exportTxtButton.addEventListener('click', () => {
+                const text = textInput.value;
+                if (!text) {
+                    alert('Please enter some text to export.');
+                    return;
+                }
+
+                try {
+                    const blob = new Blob([text], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = url;
+                    a.download = `petra-text-${Date.now()}.txt`;
+                    document.body.appendChild(a);
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                } catch (error) {
+                    handleError(error, 'Error exporting text');
+                }
+            });
+
+            // Settings Panel Handlers
+            const settingsButton = document.getElementById('settingsButton');
+            const settingsPanel = document.getElementById('settingsPanel');
+            const overlay = document.getElementById('overlay');
+            const bgAnimation = document.getElementById('bgAnimation');
+
+            function toggleSettings(show) {
+                settingsPanel.classList.toggle('active', show);
+                overlay.classList.toggle('active', show);
+            }
+
+            settingsButton.addEventListener('click', () => toggleSettings(true));
+            overlay.addEventListener('click', () => toggleSettings(false));
+
+            // Handle Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && settingsPanel.classList.contains('active')) {
+                    toggleSettings(false);
+                }
+            });
+
+            bgAnimation.addEventListener('change', (e) => {
+                isAnimationEnabled = e.target.checked;
+                if (isAnimationEnabled) {
+                    particleSystem.start();
+                } else {
+                    particleSystem.pause();
+                    const ctx = particleSystem.canvas.getContext('2d');
+                    ctx.clearRect(0, 0, particleSystem.canvas.width, particleSystem.canvas.height);
+                }
+                localStorage.setItem('bgAnimation', isAnimationEnabled);
+            });
+
+            // Theme Switching
+            const themeToggle = document.getElementById('themeToggle');
+
+            function setTheme(isDark) {
+                document.body.setAttribute('data-theme', isDark ? 'dark' : 'light');
+                isDarkMode = isDark;
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                
+                // Update particle colors if animation is running
+                if (particleSystem && isAnimationEnabled) {
+                    particleSystem.createParticles();
+                }
+            }
+
+            themeToggle.addEventListener('click', () => {
+                const isDark = document.body.getAttribute('data-theme') !== 'dark';
+                setTheme(isDark);
+            });
+
+            // Word/Character Counter
+            function updateCounters() {
+                const text = textInput.value;
+                const chars = text.length;
+                const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+
+                document.getElementById('charCount').textContent = `${chars} / 25000 characters`;
+                document.getElementById('wordCount').textContent = `${words} / 4000 words`;
+
+                return { chars, words };
+            }
+
+            textInput.addEventListener('input', () => {
+                const { words } = updateCounters();
+                if (words > 4000) {
+                    const wordArray = textInput.value.trim().split(/\s+/);
+                    textInput.value = wordArray.slice(0, 4000).join(' ');
+                    updateCounters();
+                }
+            });
+
+            // Time Display
+            function updateTime() {
+                try {
+                    const DateTime = luxon.DateTime;
+                    const now = DateTime.local();
+                    const formatted = now.toFormat("ccc MMM dd h:mm a");
+                    document.getElementById('timeDisplay').textContent = formatted;
+                } catch (error) {
+                    // Fallback to basic JS Date
+                    const now = new Date();
+                    document.getElementById('timeDisplay').textContent = now.toLocaleString();
+                }
+            }
+
+            // Dictation Button Handler
+            const dictateButton = document.getElementById('dictateButton');
+            
+            dictateButton.addEventListener('click', () => {
+                if (!isDictating) {
+                    speechHandler.start();
+                } else {
+                    speechHandler.stop();
+                }
+            });
+
+            // Language Change Handler
+            languageSelect.addEventListener('change', () => {
+                if (speechHandler.recognition) {
+                    speechHandler.recognition.lang = languageSelect.value;
+                }
+                setupVoices();
+            });
+
+            // Initialize Components
+            function initializeApp() {
+                // Initialize particle system
+                particleSystem = new ParticleNetwork();
+                
+                // Restore background animation state
+                const savedAnimationState = localStorage.getItem('bgAnimation');
+                if (savedAnimationState !== null) {
+                    isAnimationEnabled = savedAnimationState === 'true';
+                    bgAnimation.checked = isAnimationEnabled;
+                    if (!isAnimationEnabled) {
+                        particleSystem.pause();
+                    }
+                }
+
+                // Start time updates
+                updateTime();
+                setInterval(updateTime, 1000);
+
+                // Initial counter update
+                updateCounters();
+
+                // Initial voice setup
+                setupVoices();
+            }
+
+            // Initialize the application
+            initializeApp();
+        });
+    </script>
+</body>
+</html>
