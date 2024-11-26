@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Jared James Grogan - AI Ecosystem Architect & Global Innovation Leader">
+  <meta name="keywords" content="AI, Artificial Intelligence, Ecosystem Architecture, Innovation, Leadership">
+  <meta name="author" content="Jared James Grogan">
+  <meta name="robots" content="index, follow">
+  <title>Jared James Grogan - Interactive CV</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  
+  <!-- Lucide Icons -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.259.0/lucide.min.js"></script>
+  
+  <!-- Custom Styles -->
+  <style>
+    /* CSS Reset */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Custom Properties */
+    :root {
+      --color-primary: #2563eb;
+      --color-primary-light: #60a5fa;
+      --color-primary-dark: #1e40af;
+      --color-primary-50: #eff6ff;
+      --color-primary-100: #dbeafe;
+      --color-gray-50: #f9fafb;
+      --color-gray-100: #f3f4f6;
+      --color-gray-200: #e5e7eb;
+      --color-gray-300: #d1d5db;
+      --color-gray-400: #9ca3af;
+      --color-gray-500: #6b7280;
+      --color-gray-600: #4b5563;
+      --color-gray-700: #374151;
+      --color-gray-800: #1f2937;
+      --color-gray-900: #111827;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+      --radius-sm: 0.25rem;
+      --radius: 0.5rem;
+      --radius-lg: 1rem;
+      --radius-full: 9999px;
+    }
+
+    /* Base Styles */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.5;
+      color: var(--color-gray-800);
+      background: linear-gradient(135deg, var(--color-gray-50), var(--color-gray-100));
+      min-height: 100vh;
+      padding: 1rem;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Typography */
+    h1, h2, h3, h4, h5, h6 {
+      line-height: 1.2;
+      margin-bottom: 0.5em;
+      font-weight: 700;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-align: center;
+      padding: 0.5rem 0;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      color: var(--color-gray-900);
+    }
+
+    h3 {
+      font-size: 1.25rem;
+      color: var(--color-gray-800);
+    }
+
+    p {
+      margin-bottom: 1rem;
+    }
+
+    /* Layout */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding: 1rem;
+    }
+
+    .subtitle {
+      font-size: 1.25rem;
+      color: var(--color-gray-600);
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+    }
+
+    /* Contact Links */
+    .contact-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--color-gray-600);
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius);
+      transition: all 0.2s ease;
+      background: white;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .contact-link:hover {
+      color: var(--color-primary);
+      background: var(--color-primary-50);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .contact-link i {
+      width: 1.25rem;
+      height: 1.25rem;
+    }
+
+    /* Navigation */
+    .nav-container {
+      margin-bottom: 2rem;
+      position: sticky;
+      top: 1rem;
+      z-index: 10;
+      padding: 0.5rem;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(8px);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+    }
+
+    .nav-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+      list-style: none;
+      padding: 0.5rem;
+    }
+
+    .nav-button {
+      background: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius-full);
+      color: var(--color-gray-600);
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow-sm);
+      font-size: 0.875rem;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .nav-button:hover {
+      background: var(--color-gray-100);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow);
+    }
+
+    .nav-button.active {
+      background: var(--color-primary);
+      color: white;
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* Main Content */
+    .main-content {
+      background: white;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      padding: 2rem;
+      margin: 0 auto;
+      max-width: 64rem;
+      min-height: 60vh;
+    }
+
+    /* Sections */
+    .section {
+      display: none;
+      animation: fadeIn 0.3s ease-out;
+      padding: 1rem;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--color-gray-100);
+    }
+
+    .section-header i {
+      color: var(--color-primary);
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    /* Cards & Grids */
+    .grid {
+      display: grid;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .grid-cols-2 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .grid-cols-3 {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .card {
+      background: var(--color-gray-50);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    /* List Items */
+    .list-item {
+      display: flex;
+      gap: 0.75rem;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+      padding: 0.5rem;
+      border-radius: var(--radius);
+      transition: background-color 0.2s ease;
+    }
+
+    .list-item:hover {
+      background: var(--color-gray-50);
+    }
+
+    .list-item i {
+      color: var(--color-primary);
+      flex-shrink: 0;
+      margin-top: 0.25rem;
+      width: 1rem;
+      height: 1rem;
+    }
+
+    /* Experience Items */
+    .experience-item {
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      background: var(--color-gray-50);
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+
+    .experience-item:hover {
+      box-shadow: var(--shadow-md);
+    }
+
+    /* Skills */
+    .skill-tag {
+      display: inline-block;
+      background: var(--color-primary-100);
+      color: var(--color-primary-dark);
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--radius-full);
+      font-size: 0.875rem;
+      margin: 0.25rem;
+      transition: all 0.2s ease;
+    }
+
+    .skill-tag:hover {
+      background: var(--color-primary);
+      color: white;
+      transform: translateY(-1px);
+    }
+
+    /* Utilities */
+    .text-gray {
+      color: var(--color-gray-600);
+    }
+
+    .text-primary {
+      color: var(--color-primary);
+    }
+
+    .mb-1 { margin-bottom: 0.25rem; }
+    .mb-2 { margin-bottom: 0.5rem; }
+    .mb-3 { margin-bottom: 0.75rem; }
+    .mb-4 { margin-bottom: 1rem; }
+    .mb-6 { margin-bottom: 1.5rem; }
+
+    .font-bold { font-weight: 700; }
+    .font-medium { font-weight: 500; }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(0.5rem);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Print Styles */
+    @media print {
+      body {
+        background: white;
+      }
+
+      .main-content {
+        box-shadow: none;
+      }
+
+      .nav-container {
+        display: none;
+      }
+
+      .section {
+        display: block !important;
+        break-inside: avoid;
+      }
+
+      .contact-link {
+        box-shadow: none;
+        padding: 0.25rem;
+      }
+
+      .experience-item,
+      .card {
+        box-shadow: none;
+        border: 1px solid var(--color-gray-200);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Jared James Grogan</h1>
+    <p class="subtitle">AI Ecosystem Architect & Global Innovation Leader</p>
+    
+    <div class="contact-links">
+      <a href="mailto:jared.grogan@post.harvard.edu" class="contact-link">
+        <i data-lucide="mail"></i>
+        <span>jared.grogan@post.harvard.edu</span>
+      </a>
+      <a href="tel:+13322572500" class="contact-link">
+        <i data-lucide="phone"></i>
+        <span>+1 332.257.2500</span>
+      </a>
+      <a href="https://universitas.ai" class="contact-link" target="_blank" rel="noopener noreferrer">
+        <i data-lucide="globe"></i>
+        <span>universitas.ai</span>
+      </a>
+      <a href="https://linkedin.com/in/jaredjgrogan" class="contact-link" target="_blank" rel="noopener noreferrer">
+        <i data-lucide="linkedin"></i>
+        <span>linkedin.com/in/jaredjgrogan</span>
+      </a>
+    </div>
+  </header>
+
+  <nav class="nav-container">
+    <ul class="nav-list">
+      <li><button class="nav-button active" onclick="showSection('summary')">Summary</button></li>
+      <li><button class="nav-button" onclick="showSection('experience')">Experience</button></li>
+      <li><button class="nav-button" onclick="showSection('education')">Education</button></li>
+      <li><button class="nav-button" onclick="showSection('skills')">Skills</button></li>
+      <li><button class="nav-button" onclick="showSection('achievements')">Achievements</button></li>
+      <li><button class="nav-button" onclick="showSection('publications')">Publications</button></li>
+      <li><button class="nav-button" onclick="showSection('languages')">Languages</button></li>
+    </ul>
+  </nav>
+
+  <main class="main-content">
+    <!-- Summary Section -->
+    <section id="summary" class="section active">
+      <div class="section-header">
+        <i data-lucide="message-square"></i>
+        <h2>Professional Summary</h2>
+      </div>
+      <p class="text-gray mb-6">
+        Visionary AI ecosystem architect, global education innovator, and interdisciplinary leader 
+        with over a decade of experience in artificial intelligence, cognitive computing, and 
+        public-private partnerships. Founder of Universitas.Ai, a global platform advancing AI 
+        research and education, and a proven executive in managing $300M+ R&D initiatives.
+      </p>
+      
+      <div class="mb-4">
+        <h3 class="mb-4">Core Competencies</h3>
+        <div class="grid grid-cols-2">
+          <div class="list-item">
+            <i data-lucide="chevron-right"></i>
+            <span class="text-gray">AI Leadership: Ecosystem development, neural networks, and GenAI applications</span>
+          </div>
+          <div class="list-item">
+            <i data-lucide="chevron-right"></i>
+            <span class="text-gray">Technical Expertise: Large Language Models, computer vision, cloud computing</span>
+          </div>
+          <div class="list-item">
+            <i data-lucide="chevron-right"></i>
+            <span class="text-gray">Global Partnerships: Cross-cultural collaboration</span>
+          </div>
+          <div class="list-item">
+            <i data-lucide="chevron-right"></i>
+            <span class="text-gray">Educational Innovation: R1 university strategy</span>
+          </div>
+          <div class="list-item">
+            <i data-lucide="chevron-right"></i>
+            <span class="text-gray">Communication: Public speaking, technical writing</span>
+          </div>
+          <div class="list-item">
+            <i data-lucide="chevron-right"></i>
+            <span class="text-gray">Entrepreneurship: Startup leadership, strategic planning</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="section">
+      <div class="section-header">
+        <i data-lucide="briefcase"></i>
+        <h2>Professional Experience</h2>
+      </div>
+      
+      <div class="experience-item">
+        <h3>Founder & CEO</h3>
+        <div class="text-primary mb-1">Universitas.AI</div>
+        <div class="text-gray mb-3">2019 – Present</div>
+        <ul class="space-y-2">
+          <li class="list-item">
+            <i data-lucide="chevron-right"></i>
+            <span class="text-gray">Established a global AI research network connecting academia, government, and industry</span>
+          </li>
+          <li class="list-item">
+            <i data-lucide="chevron-right"></i>
+            <span class="text-gray">Developed AI curricula with NVIDIA to train future AI leaders</span>
+          </li>
+          <li class="list-item">
+            <i data-lucide="chevron-right"></i>
+            <span class="text-gray">Consulted with organizations on AI strategy and cognitive computing applications</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="experience-item">
+        <h3>Executive Advisor to Vice Chancellor</h3>
+        <div class="text-primary mb-1">NYU Abu Dhabi</div>
+        <div class="text-gray mb-3">2017 – 2019</div>
+        <ul class="space-y-2">
+          <li class="list-item">
+            <i data-lucide="chevron-right"></i>
+            <span class="text-gray">Managed $300M+ budgets and drove stakeholder engagement</span>
+          </li>
+          <li class="list-item">
+            <i data-lucide="chevron-right"></i>
+            <span class="text-gray">Spearheaded academic initiatives aligned with UAE Vision 2030</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="experience-item">
+        <h3>Executive Producer</h3>
+        <div class="text-primary mb-1">New Alexandria Production</div>
+        <div class="text-gray mb-3">2023 – Present</div>
+        <ul class="space-y-2">
+          <li class="list-item">
+            <i data-lucide="chevron-right"></i>
+            <span class="text-gray">Leading documentation of AI evolution from Silicon Valley</span>
+          </li>
+          <li class="list-item">
+            <i data-lucide="chevron-right"></i>
+            <span class="text-gray">Building partnerships with leading tech innovators</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education" class="section">
+      <div class="section-header">
+        <i data-lucide="book-open"></i>
+        <h2>Education</h2>
+      </div>
+      
+      <div class="grid grid-cols-1 gap-4">
+        <div class="experience-item">
+          <h3>Ph.D. Digital Design</h3>
+          <div class="text-primary mb-1">The European Graduate School, Switzerland</div>
+          <div class="text-gray mb-2">2015 – 2023</div>
+          <p class="text-gray">Focus: Neural networks, generative AI, GPU-cloud computing</p>
+        </div>
+
+        <div class="experience-item">
+          <h3>M.T.S. History of Religion</h3>
+          <div class="text-primary mb-1">Harvard Divinity School, USA</div>
+          <div class="text-gray mb-2">2007 – 2009</div>
+          <p class="text-gray">Focus: Mediterranean urban history, civic architecture, and science history</p>
+        </div>
+
+        <div class="experience-item">
+          <h3>B.A. Double Major: French & Religious Studies</h3>
+          <div class="text-primary mb-1">Pomona College, USA</div>
+          <div class="text-gray mb-2">2003 – 2007</div>
+          <p class="text-gray">National Merit Scholar, SAT: 2370 (99th Percentile)</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="section">
+      <div class="section-header">
+        <i data-lucide="code"></i>
+        <h2>Technical Skills</h2>
+      </div>
+      
+      <div class="grid grid-cols-2 gap-4">
+        <div class="card">
+          <h3 class="mb-3">Programming</h3>
+          <div>
+            <span class="skill-tag">Python</span>
+            <span class="skill-tag">PyTorch</span>
+            <span class="skill-tag">TensorFlow</span>
+            <span class="skill-tag">Keras</span>
+            <span class="skill-tag">React.js</span>
+            <span class="skill-tag">Express.js</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 class="mb-3">Cloud Computing</h3>
+          <div>
+            <span class="skill-tag">AWS</span>
+            <span class="skill-tag">Azure</span>
+            <span class="skill-tag">GCP</span>
+            <span class="skill-tag">GPU Computing</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 class="mb-3">AI Tools</h3>
+          <div>
+            <span class="skill-tag">Neural Networks</span>
+            <span class="skill-tag">LLMs</span>
+            <span class="skill-tag">Generative AI</span>
+            <span class="skill-tag">Computer Vision</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 class="mb-3">Multimedia</h3>
+          <div>
+            <span class="skill-tag">Adobe Creative Suite</span>
+            <span class="skill-tag">Rhino 3D</span>
+            <span class="skill-tag">Maya 3D</span>
+            <span class="skill-tag">VR/XR Production</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Achievements Section -->
+    <section id="achievements" class="section">
+      <div class="section-header">
+        <i data-lucide="trophy"></i>
+        <h2>Achievements & Recognition</h2>
+      </div>
+      
+      <div class="grid grid-cols-1 gap-4">
+        <div class="list-item">
+          <i data-lucide="award"></i>
+          <span class="text-gray">Bunyan Knight Award (2018): For youth leadership and capacity building in the UAE</span>
+        </div>
+        <div class="list-item">
+          <i data-lucide="award"></i>
+          <span class="text-gray">National Merit Scholar (2003): Top 0.5% of US graduates</span>
+        </div>
+        <div class="list-item">
+          <i data-lucide="award"></i>
+          <span class="text-gray">Directed global AI programs and partnerships with NVIDIA and SpaceX</span>
+        </div>
+        <div class="list-item">
+          <i data-lucide="award"></i>
+          <span class="text-gray">Co-produced Becoming Multi-Planetary, a VR and film project with NASA</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Publications Section -->
+    <section id="publications" class="section">
+      <div class="section-header">
+        <i data-lucide="book-open"></i>
+        <h2>Publications & Speaking</h2>
+      </div>
+      
+      <div class="grid grid-cols-1 gap-4">
+        <div class="list-item">
+          <i data-lucide="chevron-right"></i>
+          <span class="text-gray">In Algorithms We Trust: Toward a Neural Theory of Artificial Intelligence (2023)</span>
+        </div>
+        <div class="list-item">
+          <i data-lucide="chevron-right"></i>
+          <span class="text-gray">Keynote speaker at Tongji University, University College London</span>
+        </div>
+        <div class="list-item">
+          <i data-lucide="chevron-right"></i>
+          <span class="text-gray">Panel moderator on AI ethics at Harvard Business Review Youth Symposium</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Languages Section -->
+    <section id="languages" class="section">
+      <div class="section-header">
+        <i data-lucide="globe"></i>
+        <h2>Languages</h2>
+      </div>
+      
+      <div class="grid grid-cols-3 gap-4">
+        <div class="card">
+          <h3 class="mb-3">Professional Proficiency</h3>
+          <div>
+            <span class="skill-tag">English</span>
+            <span class="skill-tag">French</span>
+            <span class="skill-tag">Arabic</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 class="mb-3">Working Proficiency</h3>
+          <div>
+            <span class="skill-tag">Spanish</span>
+            <span class="skill-tag">Greek</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 class="mb-3">Basic Conversational</h3>
+          <div>
+            <span class="skill-tag">Chinese</span>
+            <span class="skill-tag">Turkish</span>
+            <span class="skill-tag">Russian</span>
+            <span class="skill-tag">Persian</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+
+    // Navigation functionality
+    function showSection(sectionId) {
+      // Hide all sections
+      document.querySelectorAll('.section').forEach(section => {
+        section.classList.remove('active');
+      });
+      
+      // Show selected section
+      document.getElementById(sectionId).classList.add('active');
+      
+      // Update navigation buttons
+      document.querySelectorAll('.nav-button').forEach(button => {
+        button.classList.remove('active');
+      });
+      
+      // Highlight active button
+      event.target.classList.add('active');
+
+      // Update URL hash without scrolling
+      history.pushState(null, null, `#${sectionId}`);
+    }
+
+    // Handle back/forward navigation
+    window.addEventListener('popstate', () => {
+      const sectionId = window.location.hash.slice(1) || 'summary';
+      showSection(sectionId);
+    });
+
+    // Initialize based on URL hash or default to summary
+    document.addEventListener('DOMContentLoaded', () => {
+      const sectionId = window.location.hash.slice(1) || 'summary';
+      showSection(sectionId);
+      
+      // Re-initialize icons after dynamic content
+      lucide.createIcons();
+    });
+
+    // Add smooth scrolling for better UX
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click',
+
+</script>
+</body>
+</html>
