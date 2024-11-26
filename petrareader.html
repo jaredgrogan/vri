@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Petra Reader - Text-to-Speech and Voice-to-Voice Application">
+    <meta name="theme-color" content="#A51C30">
+    <title>Petra Reader</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/luxon/3.4.4/luxon.min.js"></script>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #A51C30, #ED1B34);
+            --button-color: #1e1e1e;
+            --gray-500: #6B7280;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+        }
+
+        .brand-name {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+            font-size: 1.5rem;
+            opacity: 0;
+            animation: typing 1.5s steps(9) forwards;
+            white-space: nowrap;
+            overflow: hidden;
+            width: 0;
+            border-right: 2px solid;
+            animation-delay: 0.5s;
+        }
+
+        @keyframes typing {
+            from {
+                width: 0;
+                opacity: 1;
+            }
+            to {
+                width: 120px;
+                opacity: 1;
+            }
+        }
+
+        .time-display {
+            font-size: 1rem;
+            color: var(--gray-500);
+        }
+
+        main {
+            padding: 2rem 0;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: calc(100vh - 160px);
+        }
+
+        .content-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-section {
+            margin-bottom: 2rem;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 1rem;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            resize: vertical;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #A51C30;
+            box-shadow: 0 0 0 2px rgba(165, 28, 48, 0.1);
+        }
+
+        .input-stats {
+            display: flex;
+            gap: 1rem;
+            color: var(--gray-500);
+            font-size: 0.875rem;
+        }
+
+        .controls {
+            margin-bottom: auto;
+            padding-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .control-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            border: none;
+            background: var(--button-color);
+            color: white;
+            cursor: pointer;
+            position: relative;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: var(--primary-gradient);
+        }
+
+        button::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-bottom: 8px;
+            padding: 4px 8px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            font-size: 12px;
+            border-radius: 4px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s;
+            pointer-events: none;
+        }
+
+        button:hover::after {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        select {
+            padding: 0.5rem 2rem 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            appearance: none;
+            background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 0.5rem center;
+            background-size: 1rem;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        select:hover {
+            border-color: #A51C30;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: var(--gray-500);
+            margin-top: auto;
+        }
+
+        @media (max-width: 640px) {
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+            }
+
+            .control-buttons {
+                justify-content: center;
+            }
+
+            select {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="brand">
+                <span class="brand-name">Petra.chat</span>
+            </div>
+            <div class="time-display" id="timeDisplay"></div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="content-wrapper">
+            <div class="input-section">
+                <textarea 
+                    placeholder="Enter your text here (max 25,000 characters, 4000 words)"
+                    maxlength="25000"
+                    aria-label="Text input"
+                    id="textInput"
+                ></textarea>
+                <div class="input-stats">
+                    <span id="charCount">0 / 25000 characters</span>
+                    <span id="wordCount">0 / 4000 words</span>
+                </div>
+            </div>
+
+            <div class="controls">
+                <select aria-label="Select language" id="languageSelect">
+                    <option value="en">English</option>
+                    <option value="ar">Arabic</option>
+                    <option value="zh">Chinese</option>
+                    <option value="da">Danish</option>
+                    <option value="nl">Dutch</option>
+                    <option value="fr">French</option>
+                    <option value="de">German</option>
+                    <option value="el">Greek</option>
+                    <option value="he">Hebrew</option>
+                    <option value="it">Italian</option>
+                    <option value="ja">Japanese</option>
+                    <option value="ko">Korean</option>
+                    <option value="pl">Polish</option>
+                    <option value="pt">Portuguese</option>
+                    <option value="ro">Romanian</option>
+                    <option value="ru">Russian</option>
+                    <option value="es">Spanish</option>
+                    <option value="sv">Swedish</option>
+                    <option value="tr">Turkish</option>
+                    <option value="vi">Vietnamese</option>
+                </select>
+
+                <div class="control-buttons">
+                    <button id="recordButton" aria-label="Start recording" data-tooltip="Record">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+                            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                            <line x1="12" x2="12" y1="19" y2="22"/>
+                        </svg>
+                    </button>
+
+                    <button id="playButton" aria-label="Play text" data-tooltip="Play">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                        </svg>
+                    </button>
+
+                    <button id="exportButton" aria-label="Export as WAV" data-tooltip="Export WAV">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" x2="12" y1="15" y2="3"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="container">
+        <p>© 2024 Cognitive Cloud</p>
+    </footer>
+
+    <script>
+        // Time Display
+        function updateTime() {
+            const DateTime = luxon.DateTime;
+            const now = DateTime.local();
+            const formatted = now.toFormat("ccc MMM dd h:mm a");
+            document.getElementById('timeDisplay').textContent = formatted;
+        }
+        updateTime();
+        setInterval(updateTime, 1000);
+
+        // Text Input Handling
+        const textInput = document.getElementById('textInput');
+        const charCount = document.getElementById('charCount');
+        const wordCount = document.getElementById('wordCount');
+
+        textInput.addEventListener('input', () => {
+            const text = textInput.value;
+            const chars = text.length;
+            const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+
+            charCount.textContent = `${chars} / 25000 characters`;
+            wordCount.textContent = `${words} / 4000 words`;
+
+            // Enforce word limit
+            if (words > 4000) {
+                const words = text.trim().split(/\s+/);
+                textInput.value = words.slice(0, 4000).join(' ');
+            }
+        });
+
+        // Recording functionality
+        const recordButton = document.getElementById('recordButton');
+        let isRecording = false;
+        let mediaRecorder = null;
+        let audioChunks = [];
+
+        function exportToWAV(audioBlob) {
+            const url = URL.createObjectURL(audioBlob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'petra-recording.wav';
+            document.body.appendChild(a);
+            a.click();
+            URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        }
+
+        async function setupRecording() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream, {
+                    mimeType: 'audio/wav'
+                });
+
+                mediaRecorder.ondataavailable = (event) => {
+                    audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    audioChunks = [];
+                    exportToWAV(audioBlob);
+                };
+            } catch (err) {
+                console.error('Error accessing microphone:', err);
+                alert('Unable to access microphone. Please check permissions.');
+            }
+        }
+
+        recordButton.addEventListener('click', async () => {
+            if (!mediaRecorder) {
+                await setupRecording();
+            }
+
+            isRecording = !isRecording;
+            recordButton.setAttribute('data-tooltip', isRecording ? 'Stop Recording' : 'Record');
+
+            if (isRecording) {
+                mediaRecorder.start();
+            } else {
+                mediaRecorder.stop();
+            }
+        });
+
+        // Speech Synthesis
+        const playButton = document.getElementById('playButton');
+        const synth = window.speechSynthesis;
+        let isPlaying = false;
+
+        playButton.addEventListener('click', () => {
+            if (synth.speaking) {
+                synth.cancel();
+                isPlaying = false;
+                playButton.setAttribute('data-tooltip', 'Play');
+                return;
+            }
+
+            const text = textInput.value;
+            if (text) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = document.getElementById('languageSelect').value;
+                
+                utterance.onend = () => {
+                    isPlaying = false;
+                    playButton.setAttribute('data-tooltip', 'Play');
+                };
+
+                synth.speak(utterance);
+                isPlaying = true;
+                playButton.setAttribute('data-tooltip', 'Pause');
+            }
+        });
+
+       // Export functionality
+const exportButton = document.getElementById('exportButton');
+
+exportButton.addEventListener('click', async () => {
+    const text = textInput.value;
+    if (!text) {
+        alert('Please enter some text to export.');
+        return;
+    }
+
+    try {
+        // Create Audio Context
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const mediaStreamDestination = audioContext.createMediaStreamDestination();
+        
+        // Create MediaRecorder
+        const recorder = new MediaRecorder(mediaStreamDestination.stream, {
+            mimeType: 'audio/wav'
+        });
+        
+        const audioChunks = [];
+        
+        recorder.ondataavailable = (event) => {
+            audioChunks.push(event.data);
+        };
+
+        recorder.onstop = () => {
+            const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+            const url = URL.createObjectURL(audioBlob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = `petra-audio-${Date.now()}.wav`;
+            document.body.appendChild(a);
+            a.click();
+            URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        };
+
+        // Start recording
+        recorder.start();
+
+        // Create utterance
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = document.getElementById('languageSelect').value;
+        
+        // Set up completion handling
+        utterance.onend = () => {
+            recorder.stop();
+            audioContext.close();
+        };
+
+        // Begin speech synthesis
+        speechSynthesis.speak(utterance);
+
+    } catch (error) {
+        console.error('Export error:', error);
+        alert('Error exporting audio. Please try again.');
+    }
+});
+</script>
+</body>
+</html>
