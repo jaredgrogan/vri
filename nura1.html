@@ -683,7 +683,609 @@
     </div>
 
     <script>
-        // JavaScript implementation will follow...
+        // Core System Implementation
+class NeuralCloudBrowser {
+    constructor() {
+        this.initializeComponents();
+        this.setupEventListeners();
+        this.setupSpeechSystems();
+        this.setupAudioSystem();
+    }
+
+    // Component Initialization
+    initializeComponents() {
+        // DOM Elements - URL and Commands
+        this.urlInput = document.getElementById('urlInput');
+        this.urlMicButton = document.getElementById('urlMicButton');
+        this.commandInput = document.getElementById('commandInput');
+        this.commandMicButton = document.getElementById('commandMicButton');
+        this.browserFrame = document.getElementById('browserFrame');
+        this.nuraStatus = document.getElementById('nuraStatus');
+
+        // Audio Controls
+        this.playPauseButton = document.getElementById('playPauseButton');
+        this.stopButton = document.getElementById('stopButton');
+        this.speedSelect = document.getElementById('speedSelect');
+        this.audioTimer = document.getElementById('audioTimer');
+        this.exportWavButton = document.getElementById('exportWavButton');
+        this.exportTextButton = document.getElementById('exportTextButton');
+
+        // Quick Actions
+        this.quickActionButtons = {
+            summarize: document.getElementById('summarizeButton'),
+            extract: document.getElementById('extractButton'),
+            qa: document.getElementById('qaButton'),
+            explain: document.getElementById('explainButton')
+        };
+
+        // Playlist Elements
+        this.playlistContainer = document.getElementById('playlistContainer');
+        this.playlistItems = document.getElementById('playlistItems');
+        this.processAllButton = document.getElementById('processAllButton');
+
+        // State Management
+        this.isProcessing = false;
+        this.currentAudioDuration = 0;
+        this.playlist = [];
+        this.history = {
+            browsing: [],
+            ai: []
+        };
+    }
+
+    // Speech and Audio Systems
+    setupSpeechSystems() {
+        // Speech Recognition
+        if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+            this.urlRecognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            this.commandRecognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            
+            this.setupSpeechRecognition(this.urlRecognition, 'url');
+            this.setupSpeechRecognition(this.commandRecognition, 'command');
+        }
+
+        // Speech Synthesis
+        if ('speechSynthesis' in window) {
+            this.synthesis = window.speechSynthesis;
+            this.loadVoices();
+            speechSynthesis.addEventListener('voiceschanged', () => this.loadVoices());
+        }
+    }
+
+    setupSpeechRecognition(recognition, type) {
+        recognition.continuous = false;
+        recognition.interimResults = true;
+
+        recognition.onstart = () => {
+            const button = type === 'url' ? this.urlMicButton : this.commandMicButton;
+            button.classList.add('recording');
+        };
+
+        recognition.onend = () => {
+            const button = type === 'url' ? this.urlMicButton : this.commandMicButton;
+            button.classList.remove('recording');
+        };
+
+        recognition.onresult = (event) => {
+            const transcript = Array.from(event.results)
+                .map(result => result[0].transcript)
+                .join('');
+
+            if (event.results[0].isFinal) {
+                if (type === 'url') {
+                    this.handleUrlVoiceInput(transcript);
+                } else {
+                    this.handleCommandVoiceInput(transcript);
+                }
+            }
+        };
+
+        recognition.onerror = (event) => {
+            console.error(`Speech recognition error: ${event.error}`);
+            this.showError(`Speech recognition error: ${event.error}`);
+        };
+    }
+
+    async handleUrlVoiceInput(transcript) {
+        this.setNuraStatus('thinking', 'Nura is processing...');
+        try {
+            const processedUrl = await this.processWithGPT4(transcript, 'url-processing');
+            this.urlInput.value = processedUrl;
+            this.loadUrl(processedUrl);
+        } catch (error) {
+            this.showError('Failed to process voice input for URL');
+            console.error('URL voice input error:', error);
+        } finally {
+            this.setNuraStatus('ready', 'Nura is ready');
+        }
+    }
+
+    async handleCommandVoiceInput(transcript) {
+        this.setNuraStatus('thinking', 'Nura is processing command...');
+        try {
+            const command = await this.processWithGPT4(transcript, 'command-processing');
+            this.commandInput.value = transcript;
+            this.executeCommand(command);
+        } catch (error) {
+            this.showError('Failed to process voice command');
+            console.error('Command voice input error:', error);
+        } finally {
+            this.setNuraStatus('ready', 'Nura is ready');
+        }
+    }
+
+    // Audio System Setup
+    setupAudioSystem() {
+        this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        this.audioTimer = null;
+        this.isPlaying = false;
+
+        // Setup audio nodes
+        this.gainNode = this.audioContext.createGain();
+        this.analyser = this.audioContext.createAnalyser();
+        this.gainNode.connect(this.analyser);
+        this.analyser.connect(this.audioContext.destination);
+    }
+
+    loadVoices() {
+        this.voices = this.synthesis.getVoices();
+        const voiceSelect = document.getElementById('voiceSelect');
+        if (voiceSelect) {
+            voiceSelect.innerHTML = this.voices
+                .map(voice => `<option value="${voice.voiceURI}">${voice.name}</option>`)
+                .join('');
+        }
+    }
+
+    // GPT-4 Integration
+    async processWithGPT4(content, action) {
+        this.setNuraStatus('processing', 'Processing with GPT-4...');
+        try {
+            const response = await fetch('/api/gpt4', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    content,
+                    action,
+                    options: {
+                        model: 'gpt-4-turbo',
+                        temperature: 0.7,
+                        maxTokens: 4000,
+                        stream: true
+                    }
+                })
+            });
+
+            // Handle streaming response
+            const reader = response.body.getReader();
+            let result = '';
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+
+                const text = new TextDecoder().decode(value);
+                result += text;
+                
+                // Update UI with streaming response
+                this.updateStreamingResponse(text);
+            }
+
+            return result;
+        } catch (error) {
+            throw new Error('GPT-4 processing failed: ' + error.message);
+        } finally {
+            this.setNuraStatus('ready', 'Nura is ready');
+        }
+    }
+
+    // Quick Actions
+    async executeQuickAction(action) {
+        const content = await this.getFrameContent();
+        if (!content) {
+            this.showError('No content to process');
+            return;
+        }
+
+        try {
+            const result = await this.processWithGPT4(content, action);
+            this.addToHistory('ai', { action, content: result });
+            await this.speakText(result);
+            return result;
+        } catch (error) {
+            this.showError(`Failed to execute ${action}`);
+            console.error(`Quick action error (${action}):`, error);
+        }
+    }
+
+    // Playlist Management
+    addToPlaylist(url, action) {
+        if (this.playlist.length >= 10) {
+            this.showError('Maximum playlist size (10) reached');
+            return;
+        }
+
+        const item = {
+            id: crypto.randomUUID(),
+            url,
+            action,
+            status: 'pending',
+            result: null,
+            timestamp: new Date(),
+            settings: {
+                speed: parseFloat(this.speedSelect.value),
+                autoPlay: document.getElementById('autoPlayPlaylist')?.checked || false
+            }
+        };
+
+        this.playlist.push(item);
+        this.renderPlaylistItem(item);
+        this.updatePlaylistCount();
+    }
+
+    renderPlaylistItem(item) {
+        const itemElement = document.createElement('div');
+        itemElement.className = 'playlist-item';
+        itemElement.dataset.id = item.id;
+
+        itemElement.innerHTML = `
+            <div class="item-content">
+                <div class="item-header">
+                    <span class="item-url">${item.url}</span>
+                    <span class="item-action">${item.action}</span>
+                </div>
+                ${item.result ? `
+                    <div class="item-result">${item.result.substring(0, 100)}...</div>
+                ` : ''}
+            </div>
+            <div class="item-controls">
+                <button class="item-play" ${!item.result ? 'disabled' : ''}>
+                    <svg>...</svg>
+                </button>
+                <button class="item-remove">
+                    <svg>...</svg>
+                </button>
+            </div>
+        `;
+
+        this.playlistItems.appendChild(itemElement);
+    }
+
+    async processPlaylist() {
+        if (this.isProcessing) return;
+
+        this.isProcessing = true;
+        this.setNuraStatus('processing', 'Processing playlist...');
+
+        for (const item of this.playlist) {
+            if (item.status === 'pending') {
+                try {
+                    // Update UI to show current item
+                    this.updatePlaylistItemStatus(item.id, 'processing');
+                    
+                    // Process the item
+                    const result = await this.executeQuickAction(item.action);
+                    
+                    // Update item with result
+                    item.result = result;
+                    item.status = 'completed';
+                    this.updatePlaylistItemStatus(item.id, 'completed');
+
+                    // Auto-play if enabled
+                    if (item.settings.autoPlay) {
+                        await this.speakText(result, item.settings.speed);
+                    }
+                } catch (error) {
+                    item.status = 'error';
+                    this.updatePlaylistItemStatus(item.id, 'error');
+                    console.error('Playlist item processing error:', error);
+                }
+            }
+        }
+
+        this.isProcessing = false;
+        this.setNuraStatus('ready', 'Nura is ready');
+    }
+        // Audio Processing and Controls
+    async speakText(text, speed = null) {
+        if (!this.synthesis) {
+            this.showError('Speech synthesis not available');
+            return;
+        }
+
+        // Cancel any ongoing speech
+        this.synthesis.cancel();
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = speed || parseFloat(this.speedSelect.value);
+        utterance.voice = this.voices.find(voice => 
+            voice.voiceURI === document.getElementById('voiceSelect').value
+        );
+
+        // Handle speech events
+        utterance.onstart = () => {
+            this.isPlaying = true;
+            this.updatePlayPauseButton();
+            this.startAudioTimer();
+        };
+
+        utterance.onend = () => {
+            this.isPlaying = false;
+            this.updatePlayPauseButton();
+            this.stopAudioTimer();
+        };
+
+        utterance.onerror = (event) => {
+            this.showError('Speech synthesis error: ' + event.error);
+            this.isPlaying = false;
+            this.updatePlayPauseButton();
+            this.stopAudioTimer();
+        };
+
+        this.currentUtterance = utterance;
+        this.synthesis.speak(utterance);
+    }
+
+    startAudioTimer() {
+        let startTime = Date.now() - (this.currentAudioDuration || 0);
+        this.audioTimer = setInterval(() => {
+            this.currentAudioDuration = Date.now() - startTime;
+            this.updateAudioTimer();
+        }, 100);
+    }
+
+    stopAudioTimer() {
+        if (this.audioTimer) {
+            clearInterval(this.audioTimer);
+            this.audioTimer = null;
+        }
+    }
+
+    updateAudioTimer() {
+        const seconds = Math.floor(this.currentAudioDuration / 1000);
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        this.audioTimer.textContent = 
+            `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+    }
+
+    pauseAudio() {
+        if (this.synthesis && this.isPlaying) {
+            this.synthesis.pause();
+            this.isPlaying = false;
+            this.stopAudioTimer();
+            this.updatePlayPauseButton();
+        }
+    }
+
+    resumeAudio() {
+        if (this.synthesis && !this.isPlaying) {
+            this.synthesis.resume();
+            this.isPlaying = true;
+            this.startAudioTimer();
+            this.updatePlayPauseButton();
+        }
+    }
+
+    // Export Functionality
+    async exportToWav() {
+        if (!this.currentUtterance) {
+            this.showError('No audio content to export');
+            return;
+        }
+
+        try {
+            const audioContext = new AudioContext();
+            const audioBuffer = await this.textToAudioBuffer(this.currentUtterance.text);
+            const wavBlob = await this.audioBufferToWav(audioBuffer);
+            
+            // Create download link
+            const url = URL.createObjectURL(wavBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `neuralcloud_${Date.now()}.wav`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        } catch (error) {
+            this.showError('Failed to export audio');
+            console.error('Audio export error:', error);
+        }
+    }
+
+    async exportToText(content) {
+        try {
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `neuralcloud_${Date.now()}.txt`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        } catch (error) {
+            this.showError('Failed to export text');
+            console.error('Text export error:', error);
+        }
+    }
+
+    // History Management
+    addToHistory(type, entry) {
+        const historyEntry = {
+            id: crypto.randomUUID(),
+            timestamp: new Date(),
+            ...entry
+        };
+
+        this.history[type].push(historyEntry);
+        this.renderHistoryEntry(type, historyEntry);
+        this.saveHistory();
+    }
+
+    renderHistoryEntry(type, entry) {
+        const historyContent = document.getElementById('historyContent');
+        const entryElement = document.createElement('div');
+        entryElement.className = 'history-entry';
+        entryElement.dataset.id = entry.id;
+
+        entryElement.innerHTML = `
+            <div class="entry-header">
+                <span class="entry-timestamp">
+                    ${new Date(entry.timestamp).toLocaleTimeString()}
+                </span>
+                ${type === 'ai' ? `
+                    <span class="entry-action">${entry.action}</span>
+                ` : ''}
+            </div>
+            <div class="entry-content">
+                ${type === 'browsing' ? 
+                    `<a href="${entry.url}" class="entry-url">${entry.url}</a>` :
+                    `<div class="entry-text">${entry.content.substring(0, 100)}...</div>`
+                }
+            </div>
+            <div class="entry-actions">
+                ${type === 'ai' ? `
+                    <button class="entry-play" title="Play">
+                        <svg>...</svg>
+                    </button>
+                    <button class="entry-export" title="Export">
+                        <svg>...</svg>
+                    </button>
+                ` : ''}
+            </div>
+        `;
+
+        historyContent.insertBefore(entryElement, historyContent.firstChild);
+    }
+
+    // Settings Management
+    loadSettings() {
+        try {
+            const settings = JSON.parse(localStorage.getItem('neuralcloud_settings')) || {};
+            this.applySettings(settings);
+        } catch (error) {
+            console.error('Failed to load settings:', error);
+            // Use defaults
+            this.applySettings({});
+        }
+    }
+
+    applySettings(settings) {
+        // Voice settings
+        document.getElementById('voiceSelect').value = settings.voiceUri || '';
+        document.getElementById('defaultSpeed').value = settings.defaultSpeed || '1';
+        document.getElementById('autoPlayPlaylist').checked = settings.autoPlayPlaylist || false;
+
+        // Apply other settings as needed
+        this.speedSelect.value = settings.defaultSpeed || '1';
+    }
+
+    saveSettings() {
+        const settings = {
+            voiceUri: document.getElementById('voiceSelect').value,
+            defaultSpeed: document.getElementById('defaultSpeed').value,
+            autoPlayPlaylist: document.getElementById('autoPlayPlaylist').checked
+        };
+
+        try {
+            localStorage.setItem('neuralcloud_settings', JSON.stringify(settings));
+            this.showSuccess('Settings saved successfully');
+        } catch (error) {
+            this.showError('Failed to save settings');
+            console.error('Settings save error:', error);
+        }
+    }
+
+    // Error Handling and UI Feedback
+    showError(message, duration = 5000) {
+        this.showNotification(message, 'error', duration);
+    }
+
+    showSuccess(message, duration = 3000) {
+        this.showNotification(message, 'success', duration);
+    }
+
+    showNotification(message, type, duration) {
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.textContent = message;
+
+        document.body.appendChild(notification);
+
+        // Trigger animation
+        setTimeout(() => notification.classList.add('show'), 10);
+
+        // Remove after duration
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => notification.remove(), 300);
+        }, duration);
+    }
+
+    // UI Updates
+    updatePlayPauseButton() {
+        const icon = this.playPauseButton.querySelector('svg');
+        if (this.isPlaying) {
+            icon.innerHTML = `
+                <rect x="6" y="4" width="4" height="16"/>
+                <rect x="14" y="4" width="4" height="16"/>
+            `;
+        } else {
+            icon.innerHTML = `
+                <polygon points="5 3 19 12 5 21 5 3"/>
+            `;
+        }
+    }
+
+    setNuraStatus(state, message) {
+        this.nuraStatus.className = `nura-status ${state}`;
+        this.nuraStatus.querySelector('span').textContent = message;
+    }
+
+    // Event Listeners
+    setupEventListeners() {
+        // Voice input events
+        this.urlMicButton.addEventListener('click', () => this.toggleVoiceInput('url'));
+        this.commandMicButton.addEventListener('click', () => this.toggleVoiceInput('command'));
+
+        // Audio control events
+        this.playPauseButton.addEventListener('click', () => 
+            this.isPlaying ? this.pauseAudio() : this.resumeAudio()
+        );
+        this.stopButton.addEventListener('click', () => this.stopAudio());
+        this.speedSelect.addEventListener('change', () => this.updateSpeed());
+
+        // Export events
+        this.exportWavButton.addEventListener('click', () => this.exportToWav());
+        this.exportTextButton.addEventListener('click', () => {
+            const content = this.currentUtterance?.text;
+            if (content) this.exportToText(content);
+        });
+
+        // Quick action events
+        Object.entries(this.quickActionButtons).forEach(([action, button]) => {
+            button.addEventListener('click', () => this.executeQuickAction(action));
+        });
+
+        // Playlist events
+        this.processAllButton.addEventListener('click', () => this.processPlaylist());
+
+        // Settings events
+        document.getElementById('saveSettings')?.addEventListener('click', () => this.saveSettings());
+        document.getElementById('cancelSettings')?.addEventListener('click', () => 
+            document.getElementById('settingsModal').classList.remove('active')
+        );
+    }
+}
+
+// Initialize when document is ready
+document.addEventListener('DOMContentLoaded', () => {
+    window.neuralCloud = new NeuralCloudBrowser();
+});
     </script>
 </body>
 </html>
