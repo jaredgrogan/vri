@@ -732,7 +732,7 @@
       showSection(sectionId);
     });
 
-    // Initialize based on URL hash or default to summary
+// Initialize based on URL hash or default to summary
     document.addEventListener('DOMContentLoaded', () => {
       const sectionId = window.location.hash.slice(1) || 'summary';
       showSection(sectionId);
@@ -743,7 +743,73 @@
 
     // Add smooth scrolling for better UX
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click',
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+
+    // Handle keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      const sections = ['summary', 'experience', 'education', 'skills', 'achievements', 'publications', 'languages'];
+      const currentIndex = sections.indexOf(window.location.hash.slice(1) || 'summary');
+      
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        const nextIndex = (currentIndex + 1) % sections.length;
+        showSection(sections[nextIndex]);
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        const prevIndex = (currentIndex - 1 + sections.length) % sections.length;
+        showSection(sections[prevIndex]);
+      }
+    });
+
+    // Add touch swipe support for mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    document.addEventListener('touchstart', e => {
+      touchStartX = e.changedTouches[0].screenX;
+    });
+
+    document.addEventListener('touchend', e => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    });
+
+    function handleSwipe() {
+      const sections = ['summary', 'experience', 'education', 'skills', 'achievements', 'publications', 'languages'];
+      const currentIndex = sections.indexOf(window.location.hash.slice(1) || 'summary');
+      const swipeThreshold = 50;
+
+      if (touchEndX < touchStartX - swipeThreshold) {
+        // Swipe left - next section
+        const nextIndex = (currentIndex + 1) % sections.length;
+        showSection(sections[nextIndex]);
+      } else if (touchEndX > touchStartX + swipeThreshold) {
+        // Swipe right - previous section
+        const prevIndex = (currentIndex - 1 + sections.length) % sections.length;
+        showSection(sections[prevIndex]);
+      }
+    }
+
+    // Add print functionality
+    window.addEventListener('beforeprint', () => {
+      document.querySelectorAll('.section').forEach(section => {
+        section.style.display = 'block';
+      });
+    });
+
+    window.addEventListener('afterprint', () => {
+      document.querySelectorAll('.section').forEach(section => {
+        section.style.display = 'none';
+      });
+      document.querySelector('.section.active').style.display = 'block';
+    });
+  </script>
+</body>
+</html>
 
 </script>
 </body>
