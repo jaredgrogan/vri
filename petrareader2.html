@@ -481,3 +481,270 @@
     <footer class="container">
         <p>© 2024 Cognitive Cloud</p>
     </footer>
+
+ <script>
+        // Theme handling
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        function setTheme(isDark) {
+            body.setAttribute('data-theme', isDark ? 'dark' : 'light');
+            themeToggle.innerHTML = isDark ? `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="5"/>
+                    <line x1="12" y1="1" x2="12" y2="3"/>
+                    <line x1="12" y1="21" x2="12" y2="23"/>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                    <line x1="1" y1="12" x2="3" y2="12"/>
+                    <line x1="21" y1="12" x2="23" y2="12"/>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                </svg>` : `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </svg>`;
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        }
+
+        // Initialize theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        setTheme(savedTheme === 'dark');
+
+        themeToggle.addEventListener('click', () => {
+            const isDark = body.getAttribute('data-theme') !== 'dark';
+            setTheme(isDark);
+        });
+
+        // Time Display
+        function updateTime() {
+            const DateTime = luxon.DateTime;
+            const now = DateTime.local();
+            const formatted = now.toFormat("ccc MMM dd h:mm a");
+            document.getElementById('timeDisplay').textContent = formatted;
+        }
+        updateTime();
+        setInterval(updateTime, 1000);
+
+        // Text Input Handling
+        const textInput = document.getElementById('textInput');
+        const charCount = document.getElementById('charCount');
+        const wordCount = document.getElementById('wordCount');
+
+        textInput.addEventListener('input', () => {
+            const text = textInput.value;
+            const chars = text.length;
+            const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+
+            charCount.textContent = `${chars} / 25000 characters`;
+            wordCount.textContent = `${words} / 4000 words`;
+
+            if (words > 4000) {
+                const words = text.trim().split(/\s+/);
+                textInput.value = words.slice(0, 4000).join(' ');
+            }
+        });
+
+        // Settings Panel
+        const settingsButton = document.getElementById('settingsButton');
+        const settingsPanel = document.getElementById('settingsPanel');
+        const overlay = document.getElementById('overlay');
+        const speedSelect = document.getElementById('speedSelect');
+        const voiceSelect = document.getElementById('voiceSelect');
+
+        settingsButton.addEventListener('click', () => {
+            settingsPanel.classList.toggle('active');
+            overlay.classList.toggle('active');
+        });
+
+        overlay.addEventListener('click', () => {
+            settingsPanel.classList.remove('active');
+            overlay.classList.remove('active');
+        });
+
+        // Voice Synthesis Setup
+        let voices = [];
+        const synth = window.speechSynthesis;
+
+        function populateVoiceList() {
+            voices = synth.getVoices();
+            voiceSelect.innerHTML = '';
+            
+            voices.forEach((voice, i) => {
+                const option = document.createElement('option');
+                option.textContent = `${voice.name} (${voice.lang})`;
+                option.setAttribute('data-lang', voice.lang);
+                option.setAttribute('data-name', voice.name);
+                if (voice.default) option.selected = true;
+                voiceSelect.appendChild(option);
+            });
+        }
+
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = populateVoiceList;
+        }
+        populateVoiceList();
+
+        // Recording functionality
+        const recordButton = document.getElementById('recordButton');
+        let isRecording = false;
+        let mediaRecorder = null;
+        let audioChunks = [];
+
+        async function setupRecording() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+
+                mediaRecorder.ondataavailable = (event) => {
+                    audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    audioChunks = [];
+                    exportToWAV(audioBlob);
+                };
+            } catch (err) {
+                console.error('Error accessing microphone:', err);
+                alert('Unable to access microphone. Please check permissions.');
+            }
+        }
+
+        recordButton.addEventListener('click', async () => {
+            if (!mediaRecorder) {
+                await setupRecording();
+            }
+
+            isRecording = !isRecording;
+            recordButton.setAttribute('data-tooltip', isRecording ? 'Stop Recording' : 'Record');
+
+            if (isRecording) {
+                mediaRecorder.start();
+            } else {
+                mediaRecorder.stop();
+            }
+        });
+
+        // Play Button
+        const playButton = document.getElementById('playButton');
+        let isPlaying = false;
+
+        playButton.addEventListener('click', () => {
+            if (synth.speaking) {
+                synth.cancel();
+                isPlaying = false;
+                playButton.setAttribute('data-tooltip', 'Play');
+                return;
+            }
+
+            const text = textInput.value;
+            if (text) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                const selectedVoice = voices[voiceSelect.selectedIndex];
+                if (selectedVoice) utterance.voice = selectedVoice;
+                
+                utterance.lang = document.getElementById('languageSelect').value;
+                utterance.rate = parseFloat(speedSelect.value);
+
+                utterance.onend = () => {
+                    isPlaying = false;
+                    playButton.setAttribute('data-tooltip', 'Play');
+                };
+
+                synth.speak(utterance);
+                isPlaying = true;
+                playButton.setAttribute('data-tooltip', 'Pause');
+            }
+        });
+
+        // Export WAV
+        function exportToWAV(audioBlob) {
+            const url = URL.createObjectURL(audioBlob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = `petra-audio-${Date.now()}.wav`;
+            document.body.appendChild(a);
+            a.click();
+            URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        }
+
+        // Export TXT
+        const exportTxtButton = document.getElementById('exportTxtButton');
+
+        exportTxtButton.addEventListener('click', () => {
+            const text = textInput.value;
+            if (text) {
+                const blob = new Blob([text], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = `petra-text-${Date.now()}.txt`;
+                document.body.appendChild(a);
+                a.click();
+                URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            }
+        });
+
+        // Audio Export
+        const exportButton = document.getElementById('exportButton');
+        
+        exportButton.addEventListener('click', async () => {
+            const text = textInput.value;
+            if (!text) {
+                alert('Please enter some text to export.');
+                return;
+            }
+
+            try {
+                // Create Audio Context
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const mediaStreamDestination = audioContext.createMediaStreamDestination();
+                
+                // Create MediaRecorder
+                const recorder = new MediaRecorder(mediaStreamDestination.stream, {
+                    mimeType: 'audio/wav'
+                });
+                
+                const audioChunks = [];
+                
+                recorder.ondataavailable = (event) => {
+                    audioChunks.push(event.data);
+                };
+
+                recorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    exportToWAV(audioBlob);
+                };
+
+                // Start recording
+                recorder.start();
+
+                // Create utterance
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = document.getElementById('languageSelect').value;
+                utterance.rate = parseFloat(speedSelect.value);
+                const selectedVoice = voices[voiceSelect.selectedIndex];
+                if (selectedVoice) utterance.voice = selectedVoice;
+                
+                // Set up completion handling
+                utterance.onend = () => {
+                    recorder.stop();
+                    audioContext.close();
+                };
+
+                // Begin speech synthesis
+                speechSynthesis.speak(utterance);
+
+            } catch (error) {
+                console.error('Export error:', error);
+                alert('Error exporting audio. Please try again.');
+            }
+        });
+    </script>
+</body>
+</html>
