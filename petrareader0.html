@@ -671,9 +671,9 @@ class VectorNetwork {
             this.ctx = this.canvas.getContext('2d');
             this.vectors = [];
             this.connections = [];
-            this.vectorCount = 50;
-            this.connectionDistance = 150;
-            this.lineWeight = 1.5;
+            this.vectorCount = 400;
+            this.connectionDistance = 200;
+            this.lineWeight = 2;
             this.isRunning = false;
             
             this.setupCanvas();
@@ -714,16 +714,16 @@ class VectorNetwork {
     }
 
     createVectors() {
-        this.vectors = [];
-        for (let i = 0; i < this.vectorCount; i++) {
-            this.vectors.push({
-                x: Math.random() * this.canvas.width,
-                y: Math.random() * this.canvas.height,
-                vx: (Math.random() - 0.5) * 0.8,
-                vy: (Math.random() - 0.5) * 0.8
-            });
-        }
+    this.vectors = [];
+    for (let i = 0; i < this.vectorCount; i++) {
+        this.vectors.push({
+            x: Math.random() * this.canvas.width,
+            y: Math.random() * this.canvas.height,
+            vx: (Math.random() - 0.5) * 0.5, // Reduced from 0.8 for smoother movement
+            vy: (Math.random() - 0.5) * 0.5  // Reduced from 0.8 for smoother movement
+        });
     }
+}
 
     findConnections() {
         this.connections = [];
