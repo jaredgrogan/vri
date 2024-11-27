@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Petra Reader - Your Personal Polyglot">
+    <meta name="theme-color" content="#A51C30">
+    <title>Petra Reader</title>
+    
+    <script>
+        window.addEventListener('error', function(e) {
+            if (e.target.src && e.target.src.includes('luxon')) {
+                console.error('Failed to load Luxon library');
+                document.getElementById('timeDisplay').textContent = new Date().toLocaleString();
+            }
+        }, true);
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/luxon/3.4.4/luxon.min.js"></script>
+
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #A51C30, #ED1B34);
+            --button-color: #1e1e1e;
+            --gray-500: #6B7280;
+            --bg-color: #ffffff;
+            --text-color: #1e1e1e;
+            --input-bg: #f3f4f6;
+            --button-bg: #1e1e1e;
+            --button-text: #ffffff;
+            --input-border: rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #000000;
+            --text-color: #ffffff;
+            --input-bg: #1e1e1e;
+            --button-bg: #1e1e1e;
+            --button-text: #ffffff;
+            --input-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.3s, color 0.3s;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            transition: background-color 0.3s;
+        }
+
+        [data-theme="dark"] header {
+            background: rgba(30, 30, 30, 0.8);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .brand-logo {
+            height: 32px;
+            width: auto;
+            margin-right: 0.5rem;
+        }
+
+        .brand-name {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+            font-size: 1.5rem;
+            opacity: 0;
+            animation: fadeIn 1.5s forwards;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .brand-subtitle {
+            color: var(--text-color);
+            font-size: 1rem;
+            opacity: 0;
+            animation: fadeIn 1.5s forwards;
+            animation-delay: 0.5s;
+            white-space: nowrap;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 3rem 0;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .hero-title {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            white-space: nowrap;
+            overflow: hidden;
+            width: 0;
+            border-right: 2px solid var(--text-color);
+            animation: typing 2s steps(30, end) forwards,
+                       blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--text-color) }
+        }
+
+        .hero-subtitle {
+            color: var(--text-color);
+            font-size: 1.2rem;
+            opacity: 0;
+            animation: fadeIn 1.5s forwards;
+            animation-delay: 0.5s;
+        }
+
+        .input-section {
+            margin-bottom: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 1.5rem;
+            border: 1px solid var(--input-border);
+            border-radius: 12px;
+            resize: vertical;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            background: var(--input-bg);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        @media (min-width: 768px) {
+            textarea {
+                min-height: 300px;
+                max-width: 800px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            textarea {
+                min-height: 400px;
+                max-width: 1000px;
+            }
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #A51C30;
+            box-shadow: 0 0 0 2px rgba(165, 28, 48, 0.1);
+        }
+
+.section-title {
+            color: var(--text-color);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-align: center;
+            width: 100%;
+        }
+
+        .input-stats {
+            display: flex;
+            gap: 1.5rem;
+            color: var(--text-color);
+            font-size: 0.875rem;
+            margin-bottom: 2rem;
+        }
+
+        .timer-display {
+            font-family: monospace;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            background: var(--button-bg);
+            color: var(--button-text);
+        }
+
+        .controls {
+            margin-bottom: auto;
+            padding: 2rem 0;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .control-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            border: none;
+            background: var(--button-bg);
+            color: var(--button-text);
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        button#themeToggle {
+            background: var(--input-bg);
+            color: var(--text-color);
+        }
+
+        button.recording {
+            animation: recordingPulse 2s infinite;
+        }
+
+        @keyframes recordingPulse {
+            0% {
+                background: var(--primary-gradient);
+                transform: scale(1);
+            }
+            50% {
+                background: #ED1B34;
+                transform: scale(1.05);
+            }
+            100% {
+                background: var(--primary-gradient);
+                transform: scale(1);
+            }
+        }
+
+        button::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-top: 8px;
+            padding: 4px 8px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            font-size: 12px;
+            border-radius: 4px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        button:hover::after {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        select {
+            padding: 0.5rem 2rem 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--input-border);
+            appearance: none;
+            background: var(--input-bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 0.5rem center;
+            background-size: 1rem;
+            cursor: pointer;
+            color: var(--text-color);
+            transition: all 0.2s;
+            min-width: 150px;
+        }
+
+        select:hover {
+            border-color: #A51C30;
+        }
+
+        .settings-panel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: none;
+            min-width: 300px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        [data-theme="dark"] .settings-panel {
+            background: rgba(30, 30, 30, 0.9);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .settings-panel.active {
+            display: block;
+        }
+
+        .settings-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .settings-content h3 {
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+
+        .setting-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .setting-group label {
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-switch label {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--gray-500);
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .toggle-switch label:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        .toggle-switch input:checked + label {
+            background: var(--primary-gradient);
+        }
+
+        .toggle-switch input:checked + label:before {
+            transform: translateX(26px);
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 999;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: var(--text-color);
+            margin-top: auto;
+            margin-bottom: 2rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @media (max-width: 640px) {
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+            }
+
+            .control-buttons {
+                justify-content: center;
+            }
+
+            select {
+                width: 100%;
+            }
+
+            .settings-panel {
+                width: 90%;
+                max-width: none;
+            }
+
+            .brand-subtitle {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Initialize theme before content to prevent flash -->
+    <script>
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.body.setAttribute('data-theme', savedTheme);
+    </script>
+
+    <div class="overlay" id="overlay"></div>
+    <canvas id="particleCanvas"></canvas>
+    
+    <header>
+        <div class="container header-content">
+            <div class="brand-container">
+                <img src="logo1.svg" alt="Petra Logo" class="brand-logo"/>
+                <a href="index.html" class="brand-name">Petra.chat</a>
+                <span class="brand-subtitle">Your Personal Polyglot</span>
+            </div>
+            <div class="header-controls">
+                <div class="time-display" id="timeDisplay"></div>
+                <button id="themeToggle" aria-label="Toggle theme" data-tooltip="Toggle theme">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="hero-section">
+            <h1 class="hero-title">What can I read for you today?</h1>
+            <p class="hero-subtitle">Voice Synthesis powered by Cognitive Cloud</p>
+        </div>
+
+        <div class="content-wrapper">
+            <div class="input-section">
+                <textarea 
+                    placeholder="Enter your text here (max 25,000 characters, 4000 words)"
+                    maxlength="25000"
+                    aria-label="Text input"
+                    id="textInput"
+                ></textarea>
+                <div class="input-stats">
+                    <span id="charCount">0 / 25000 characters</span>
+                    <span id="wordCount">0 / 4000 words</span>
+                    <span id="timerDisplay" class="timer-display">0:00</span>
+                </div>
+            </div>
+
+            <h2 class="section-title">Petra Reader Tools</h2>
+            
+            <div class="controls">
+                <select aria-label="Select language" id="languageSelect">
+                    <option value="en">English</option>
+                    <option value="ar">Arabic</option>
+                    <option value="zh">Chinese</option>
+                    <option value="da">Danish</option>
+                    <option value="nl">Dutch</option>
+                    <option value="fr">French</option>
+                    <option value="de">German</option>
+                    <option value="el">Greek</option>
+                    <option value="he">Hebrew</option>
+                    <option value="it">Italian</option>
+                    <option value="ja">Japanese</option>
+                    <option value="ko">Korean</option>
+                    <option value="pl">Polish</option>
+                    <option value="pt">Portuguese</option>
+                    <option value="ro">Romanian</option>
+                    <option value="ru">Russian</option>
+                    <option value="es">Spanish</option>
+                    <option value="sv">Swedish</option>
+                    <option value="tr">Turkish</option>
+                    <option value="vi">Vietnamese</option>
+                </select>
+
+                <div class="control-buttons">
+                    <button id="dictateButton" aria-label="Start dictation" data-tooltip="Dictate">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+                            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                            <line x1="12" x2="12" y1="19" y2="22"/>
+                        </svg>
+                    </button>
+
+                    <button id="playButton" aria-label="Play text" data-tooltip="Play">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                        </svg>
+                    </button>
+
+                    <button id="pauseButton" aria-label="Pause playback" data-tooltip="Pause">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="6" y="4" width="4" height="16"/>
+                            <rect x="14" y="4" width="4" height="16"/>
+                        </svg>
+                    </button>
+
+                    <button id="exportButton" aria-label="Export as WAV" data-tooltip="Export WAV">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" x2="12" y1="15" y2="3"/>
+                        </svg>
+                    </button>
+
+                    <button id="exportTxtButton" aria-label="Export as TXT" data-tooltip="Export TXT">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                            <line x1="10" y1="9" x2="8" y2="9"/>
+                        </svg>
+                    </button>
+
+                    <button id="settingsButton" aria-label="Settings" data-tooltip="Settings">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"/>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+<div class="settings-panel" id="settingsPanel">
+        <div class="settings-content">
+            <h3>Settings</h3>
+            <div class="setting-group">
+                <label for="speedSelect">Speed</label>
+                <select id="speedSelect">
+                    <option value="0.5">0.5x</option>
+                    <option value="0.75">0.75x</option>
+                    <option value="1" selected>1x</option>
+                    <option value="1.25">1.25x</option>
+                    <option value="1.5">1.5x</option>
+                    <option value="1.75">1.75x</option>
+                    <option value="2">2x</option>
+                </select>
+            </div>
+            <div class="setting-group">
+                <label for="voiceSelect">Voice</label>
+                <select id="voiceSelect"></select>
+            </div>
+            <div class="setting-group">
+                <label for="bgAnimation">Background Animation</label>
+                <div class="toggle-switch">
+                    <input type="checkbox" id="bgAnimation" checked>
+                    <label for="bgAnimation"></label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="container">
+        <p>© 2024 Cognitive Cloud</p>
+    </footer>
+
+<script>
+// Core initialization
+let isDarkMode = localStorage.getItem('theme') === 'dark';
+let isAnimationEnabled = true;
+let particleSystem = null;
+let timerInterval;
+let isPlaying = false;
+let isDictating = false;
+let currentUtterance = null;
+let synth = window.speechSynthesis;
+
+// Browser compatibility checks
+const hasSpeechRecognition = 'SpeechRecognition' in window || 'webkitSpeechRecognition' in window;
+const hasSpeechSynthesis = 'speechSynthesis' in window;
+const hasAudioContext = 'AudioContext' in window || 'webkitAudioContext' in window;
+
+// Enhanced error handling
+function handleError(error, context) {
+    console.error(`Error in ${context}:`, error);
+    // Only show user-friendly messages for critical errors
+    if (context === 'speech-synthesis' || context === 'audio-export') {
+        alert(`Failed to process audio: ${error.message || 'Unknown error'}`);
+    }
+}
+
+// Vector Particle System Implementation
+class VectorNetwork {
+    constructor() {
+        try {
+            this.canvas = document.getElementById('particleCanvas');
+            this.ctx = this.canvas.getContext('2d');
+            this.vectors = [];
+            this.connections = [];
+            this.vectorCount = 50;
+            this.connectionDistance = 150;
+            this.lineWeight = 1.5;
+            this.isRunning = false;
+            
+            this.setupCanvas();
+            this.init();
+            this.setupEventListeners();
+        } catch (error) {
+            handleError(error, 'vector-network-init');
+        }
+    }
+
+    setupCanvas() {
+        this.canvas.style.position = 'fixed';
+        this.canvas.style.top = '0';
+        this.canvas.style.left = '0';
+        this.canvas.style.width = '100%';
+        this.canvas.style.height = '100%';
+        this.canvas.style.zIndex = '-1';
+        this.canvas.style.pointerEvents = 'none';
+        this.resize();
+    }
+
+    setupEventListeners() {
+        window.addEventListener('resize', () => this.resize(), { passive: true });
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                this.pause();
+            } else if (isAnimationEnabled) {
+                this.resume();
+            }
+        });
+    }
+
+    init() {
+        this.createVectors();
+        if (isAnimationEnabled) {
+            this.start();
+        }
+    }
+
+    createVectors() {
+        this.vectors = [];
+        for (let i = 0; i < this.vectorCount; i++) {
+            this.vectors.push({
+                x: Math.random() * this.canvas.width,
+                y: Math.random() * this.canvas.height,
+                vx: (Math.random() - 0.5) * 0.8,
+                vy: (Math.random() - 0.5) * 0.8
+            });
+        }
+    }
+
+    findConnections() {
+        this.connections = [];
+        for (let i = 0; i < this.vectors.length; i++) {
+            for (let j = i + 1; j < this.vectors.length; j++) {
+                const dx = this.vectors[i].x - this.vectors[j].x;
+                const dy = this.vectors[i].y - this.vectors[j].y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < this.connectionDistance) {
+                    this.connections.push({
+                        start: this.vectors[i],
+                        end: this.vectors[j],
+                        opacity: 1 - (distance / this.connectionDistance)
+                    });
+                }
+            }
+        }
+    }
+animate() {
+        if (!this.isRunning || !isAnimationEnabled) return;
+
+        try {
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+            // Update vector positions
+            this.vectors.forEach(vector => {
+                vector.x += vector.vx;
+                vector.y += vector.vy;
+
+                // Bounce off edges
+                if (vector.x < 0 || vector.x > this.canvas.width) vector.vx *= -1;
+                if (vector.y < 0 || vector.y > this.canvas.height) vector.vy *= -1;
+            });
+
+            // Find and draw triangulated connections
+            this.findConnections();
+            this.drawConnections();
+
+            requestAnimationFrame(() => this.animate());
+        } catch (error) {
+            this.isRunning = false;
+            handleError(error, 'vector-animation');
+        }
+    }
+
+    drawConnections() {
+        const isDark = document.body.getAttribute('data-theme') === 'dark';
+        this.ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.3)';
+        this.ctx.lineWidth = this.lineWeight;
+
+        this.connections.forEach(connection => {
+            this.ctx.beginPath();
+            this.ctx.moveTo(connection.start.x, connection.start.y);
+            this.ctx.lineTo(connection.end.x, connection.end.y);
+            this.ctx.globalAlpha = connection.opacity;
+            this.ctx.stroke();
+        });
+
+        this.ctx.globalAlpha = 1;
+    }
+
+    resize() {
+        try {
+            const dpr = window.devicePixelRatio || 1;
+            const rect = this.canvas.getBoundingClientRect();
+            this.canvas.width = rect.width * dpr;
+            this.canvas.height = rect.height * dpr;
+            this.ctx.scale(dpr, dpr);
+            this.createVectors();
+        } catch (error) {
+            handleError(error, 'canvas-resize');
+        }
+    }
+
+    start() {
+        if (!this.isRunning) {
+            this.isRunning = true;
+            this.animate();
+        }
+    }
+
+    pause() {
+        this.isRunning = false;
+    }
+
+    resume() {
+        if (!this.isRunning) {
+            this.start();
+        }
+    }
+}
+
+// Enhanced Speech System
+class SpeechController {
+    constructor() {
+        this.synth = window.speechSynthesis;
+        this.recognition = null;
+        this.voices = [];
+        this.currentUtterance = null;
+        this.isInitialized = false;
+        this.setupVoices();
+        
+        if (hasSpeechRecognition) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            this.recognition = new SpeechRecognition();
+            this.setupRecognition();
+        }
+    }
+
+    setupVoices() {
+        const loadVoices = () => {
+            this.voices = this.synth.getVoices();
+            this.updateVoiceSelect();
+        };
+
+        if (this.synth.onvoiceschanged !== undefined) {
+            this.synth.onvoiceschanged = loadVoices;
+        }
+        loadVoices();
+    }
+
+    updateVoiceSelect() {
+        const voiceSelect = document.getElementById('voiceSelect');
+        voiceSelect.innerHTML = '';
+        
+        const currentLang = document.getElementById('languageSelect').value;
+        const langVoices = this.voices.filter(voice => voice.lang.startsWith(currentLang));
+        
+        (langVoices.length ? langVoices : this.voices).forEach(voice => {
+            const option = document.createElement('option');
+            option.textContent = `${voice.name} (${voice.lang})`;
+            option.setAttribute('data-lang', voice.lang);
+            option.setAttribute('data-name', voice.name);
+            if (voice.default) option.selected = true;
+            voiceSelect.appendChild(option);
+        });
+    }
+
+    setupRecognition() {
+        if (!this.recognition) return;
+
+        this.recognition.continuous = true;
+        this.recognition.interimResults = true;
+        this.recognition.lang = document.getElementById('languageSelect').value;
+
+        this.recognition.onstart = () => {
+            isDictating = true;
+            const dictateButton = document.getElementById('dictateButton');
+            dictateButton.classList.add('recording');
+            dictateButton.setAttribute('data-tooltip', 'Stop Dictation');
+        };
+
+        this.recognition.onend = () => {
+            isDictating = false;
+            const dictateButton = document.getElementById('dictateButton');
+            dictateButton.classList.remove('recording');
+            dictateButton.setAttribute('data-tooltip', 'Start Dictation');
+        };
+
+        this.recognition.onerror = (event) => {
+            handleError(event, 'speech-recognition');
+            this.stopRecognition();
+        };
+
+        this.setupResultsHandler();
+    }
+
+    setupResultsHandler() {
+        if (!this.recognition) return;
+
+        this.recognition.onresult = (event) => {
+            const textInput = document.getElementById('textInput');
+            let finalTranscript = '';
+
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                const transcript = event.results[i][0].transcript;
+                if (event.results[i].isFinal) {
+                    finalTranscript += transcript + ' ';
+                }
+            }
+
+            if (finalTranscript) {
+                const cursorPosition = textInput.selectionStart;
+                const currentText = textInput.value;
+                textInput.value = currentText.slice(0, cursorPosition) + 
+                                finalTranscript + 
+                                currentText.slice(cursorPosition);
+                textInput.dispatchEvent(new Event('input'));
+            }
+        };
+    }
+
+speak(text, options = {}) {
+        return new Promise((resolve, reject) => {
+            try {
+                if (this.currentUtterance) {
+                    this.synth.cancel();
+                }
+
+                const utterance = new SpeechSynthesisUtterance(text);
+                const selectedVoice = this.voices[document.getElementById('voiceSelect').selectedIndex];
+                
+                if (selectedVoice) utterance.voice = selectedVoice;
+                utterance.lang = document.getElementById('languageSelect').value;
+                utterance.rate = parseFloat(document.getElementById('speedSelect').value);
+
+                utterance.onstart = () => {
+                    isPlaying = true;
+                    document.getElementById('playButton').setAttribute('data-tooltip', 'Pause');
+                    startTimer();
+                };
+
+                utterance.onend = () => {
+                    isPlaying = false;
+                    this.currentUtterance = null;
+                    document.getElementById('playButton').setAttribute('data-tooltip', 'Play');
+                    stopTimer();
+                    resolve();
+                };
+
+                utterance.onerror = (event) => {
+                    handleError(event, 'speech-synthesis');
+                    stopTimer();
+                    isPlaying = false;
+                    this.currentUtterance = null;
+                    reject(event);
+                };
+
+                this.currentUtterance = utterance;
+                this.synth.speak(utterance);
+            } catch (error) {
+                handleError(error, 'speech-synthesis');
+                reject(error);
+            }
+        });
+    }
+
+    startRecognition() {
+        if (!this.recognition) {
+            alert('Speech recognition is not supported in your browser');
+            return;
+        }
+        try {
+            this.recognition.start();
+        } catch (error) {
+            handleError(error, 'speech-recognition-start');
+        }
+    }
+
+    stopRecognition() {
+        if (this.recognition) {
+            try {
+                this.recognition.stop();
+            } catch (error) {
+                handleError(error, 'speech-recognition-stop');
+            }
+        }
+    }
+
+    pause() {
+        if (this.currentUtterance && this.synth.speaking) {
+            this.synth.pause();
+            clearInterval(timerInterval);
+        }
+    }
+
+    resume() {
+        if (this.currentUtterance) {
+            this.synth.resume();
+            startTimer();
+        }
+    }
+}
+
+// Timer Implementation
+let startTime;
+let pausedTime = 0;
+
+function startTimer() {
+    startTime = Date.now() - pausedTime;
+    updateTimer();
+    timerInterval = setInterval(updateTimer, 100);
+}
+
+function stopTimer() {
+    clearInterval(timerInterval);
+    document.getElementById('timerDisplay').textContent = '0:00';
+    pausedTime = 0;
+}
+
+function updateTimer() {
+    const elapsed = Date.now() - startTime;
+    const seconds = Math.floor(elapsed / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    document.getElementById('timerDisplay').textContent = 
+        `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+}
+
+// Application Initialization
+document.addEventListener('DOMContentLoaded', () => {
+    const speechController = new SpeechController();
+    const textInput = document.getElementById('textInput');
+    const particleSystem = new VectorNetwork();
+
+    // Update character and word counts
+    function updateCounters() {
+        const text = textInput.value;
+        const chars = text.length;
+        const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+
+        document.getElementById('charCount').textContent = `${chars} / 25000 characters`;
+        document.getElementById('wordCount').textContent = `${words} / 4000 words`;
+
+        return { chars, words };
+    }
+
+    // Text input handler
+    textInput.addEventListener('input', () => {
+        const { words } = updateCounters();
+        if (words > 4000) {
+            const wordArray = textInput.value.trim().split(/\s+/);
+            textInput.value = wordArray.slice(0, 4000).join(' ');
+            updateCounters();
+        }
+    });
+
+    // Playback controls
+    document.getElementById('playButton').addEventListener('click', () => {
+        if (speechController.synth.speaking && isPlaying) {
+            speechController.pause();
+            isPlaying = false;
+            document.getElementById('playButton').setAttribute('data-tooltip', 'Resume');
+        } else {
+            const text = textInput.value;
+            if (text && !isPlaying) {
+                speechController.speak(text).catch(error => 
+                    handleError(error, 'playback-control'));
+            }
+        }
+    });
+
+    document.getElementById('pauseButton').addEventListener('click', () => {
+        if (speechController.synth.speaking) {
+            if (isPlaying) {
+                speechController.pause();
+                clearInterval(timerInterval);
+            } else {
+                speechController.resume();
+                startTimer();
+            }
+            isPlaying = !isPlaying;
+        }
+    });
+
+// Theme toggle functionality
+    const themeToggle = document.getElementById('themeToggle');
+    
+    function toggleTheme() {
+        const isDark = document.body.getAttribute('data-theme') !== 'dark';
+        document.body.setAttribute('data-theme', isDark ? 'dark' : 'light');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        
+        // Update particle system colors
+        if (particleSystem && isAnimationEnabled) {
+            particleSystem.drawConnections();
+        }
+    }
+
+    themeToggle.addEventListener('click', toggleTheme);
+
+    // Export functionality
+    async function exportAudio(text) {
+        if (!hasAudioContext) {
+            alert('Audio export is not supported in your browser');
+            return;
+        }
+
+        try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const mediaStreamDestination = audioContext.createMediaStreamDestination();
+            const mediaRecorder = new MediaRecorder(mediaStreamDestination.stream, {
+                mimeType: 'audio/wav'
+            });
+            
+            const audioChunks = [];
+            
+            mediaRecorder.ondataavailable = (event) => {
+                audioChunks.push(event.data);
+            };
+
+            return new Promise((resolve, reject) => {
+                mediaRecorder.onstop = () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    resolve(audioBlob);
+                    audioContext.close();
+                };
+
+                mediaRecorder.onerror = reject;
+                mediaRecorder.start();
+
+                speechController.speak(text)
+                    .then(() => mediaRecorder.stop())
+                    .catch(error => {
+                        mediaRecorder.stop();
+                        reject(error);
+                    });
+            });
+        } catch (error) {
+            throw new Error(`Failed to setup audio export: ${error.message}`);
+        }
+    }
+
+    // Export buttons handlers
+    document.getElementById('exportButton').addEventListener('click', async () => {
+        const text = textInput.value;
+        if (!text) {
+            alert('Please enter some text to export.');
+            return;
+        }
+
+        const exportButton = document.getElementById('exportButton');
+        try {
+            exportButton.disabled = true;
+            exportButton.setAttribute('data-tooltip', 'Exporting...');
+            
+            const audioBlob = await exportAudio(text);
+            const url = URL.createObjectURL(audioBlob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = `petra-audio-${Date.now()}.wav`;
+            document.body.appendChild(a);
+            a.click();
+            URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        } catch (error) {
+            handleError(error, 'audio-export');
+        } finally {
+            exportButton.disabled = false;
+            exportButton.setAttribute('data-tooltip', 'Export WAV');
+        }
+    });
+
+    document.getElementById('exportTxtButton').addEventListener('click', () => {
+        const text = textInput.value;
+        if (!text) {
+            alert('Please enter some text to export.');
+            return;
+        }
+
+        try {
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = `petra-text-${Date.now()}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        } catch (error) {
+            handleError(error, 'text-export');
+        }
+    });
+
+    // Settings panel handlers
+    const settingsButton = document.getElementById('settingsButton');
+    const settingsPanel = document.getElementById('settingsPanel');
+    const overlay = document.getElementById('overlay');
+    const bgAnimation = document.getElementById('bgAnimation');
+
+    function toggleSettings(show) {
+        settingsPanel.classList.toggle('active', show);
+        overlay.classList.toggle('active', show);
+    }
+
+    settingsButton.addEventListener('click', () => toggleSettings(true));
+    overlay.addEventListener('click', () => toggleSettings(false));
+
+    // Close settings with Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && settingsPanel.classList.contains('active')) {
+            toggleSettings(false);
+        }
+    });
+
+    // Background animation toggle
+    bgAnimation.addEventListener('change', (e) => {
+        isAnimationEnabled = e.target.checked;
+        if (isAnimationEnabled) {
+            particleSystem.start();
+        } else {
+            particleSystem.pause();
+            const ctx = particleSystem.canvas.getContext('2d');
+            ctx.clearRect(0, 0, particleSystem.canvas.width, particleSystem.canvas.height);
+        }
+        localStorage.setItem('bgAnimation', isAnimationEnabled);
+    });
+
+    // Time display
+    function updateTime() {
+        try {
+            const DateTime = luxon.DateTime;
+            const now = DateTime.local();
+            const formatted = now.toFormat("ccc MMM dd h:mm a");
+            document.getElementById('timeDisplay').textContent = formatted;
+        } catch (error) {
+            const now = new Date();
+            document.getElementById('timeDisplay').textContent = now.toLocaleString();
+        }
+    }
+
+    // Dictation button handler
+    document.getElementById('dictateButton').addEventListener('click', () => {
+        if (!isDictating) {
+            speechController.startRecognition();
+        } else {
+            speechController.stopRecognition();
+        }
+    });
+
+    // Language change handler
+    document.getElementById('languageSelect').addEventListener('change', () => {
+        if (speechController.recognition) {
+            speechController.recognition.lang = document.getElementById('languageSelect').value;
+        }
+        speechController.updateVoiceSelect();
+    });
+
+    // Initialize components
+    function initializeApp() {
+        // Restore background animation state
+        const savedAnimationState = localStorage.getItem('bgAnimation');
+        if (savedAnimationState !== null) {
+            isAnimationEnabled = savedAnimationState === 'true';
+            bgAnimation.checked = isAnimationEnabled;
+            if (!isAnimationEnabled) {
+                particleSystem.pause();
+            }
+        }
+
+        updateTime();
+        setInterval(updateTime, 1000);
+        updateCounters();
+    }
+
+    // Start the application
+    initializeApp();
+});
+</script>
+</body>
+</html>
+
