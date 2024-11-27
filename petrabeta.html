@@ -846,19 +846,30 @@ class SpeechController {
         loadVoices();
     }
 
-    updateVoiceSelect() {
+  updateVoiceSelect() {
         const voiceSelect = document.getElementById('voiceSelect');
         voiceSelect.innerHTML = '';
         
         const currentLang = document.getElementById('languageSelect').value;
-        const langVoices = this.voices.filter(voice => voice.lang.startsWith(currentLang));
         
-        (langVoices.length ? langVoices : this.voices).forEach(voice => {
+        // First add default voices for current language
+        const defaultLangVoices = this.voices.filter(voice => 
+            voice.lang.startsWith(currentLang) && voice.default);
+        
+        // Then add other voices for current language
+        const otherLangVoices = this.voices.filter(voice => 
+            voice.lang.startsWith(currentLang) && !voice.default);
+        
+        // Then add all remaining voices
+        const remainingVoices = this.voices.filter(voice => 
+            !voice.lang.startsWith(currentLang));
+
+        [...defaultLangVoices, ...otherLangVoices, ...remainingVoices].forEach(voice => {
             const option = document.createElement('option');
             option.textContent = `${voice.name} (${voice.lang})`;
             option.setAttribute('data-lang', voice.lang);
             option.setAttribute('data-name', voice.name);
-            if (voice.default) option.selected = true;
+            if (voice === defaultLangVoices[0]) option.selected = true;
             voiceSelect.appendChild(option);
         });
     }
@@ -924,13 +935,18 @@ speak(text, options = {}) {
                     this.synth.cancel();
                 }
 
-                const utterance = new SpeechSynthesisUtterance(text);
-                const selectedVoice = this.voices[document.getElementById('voiceSelect').selectedIndex];
-                
-                if (selectedVoice) utterance.voice = selectedVoice;
-                utterance.lang = document.getElementById('languageSelect').value;
-                utterance.rate = parseFloat(document.getElementById('speedSelect').value);
+           const utterance = new SpeechSynthesisUtterance(text);
+            const selectedLanguage = document.getElementById('languageSelect').value;
+            utterance.lang = selectedLanguage;
 
+            // Get best matching voice for language
+            const defaultVoice = this.voices.find(v => v.lang.startsWith(selectedLanguage) && v.default) ||
+                                this.voices.find(v => v.lang.startsWith(selectedLanguage)) ||
+                                this.voices.find(v => v.default) ||
+                                this.voices[0];
+
+            utterance.voice = defaultVoice;
+                
                 utterance.onstart = () => {
                     isPlaying = true;
                     document.getElementById('playButton').setAttribute('data-tooltip', 'Pause');
