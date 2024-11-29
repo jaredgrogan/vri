@@ -1,0 +1,628 @@
+!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Becoming Multi-Planetary - A landmark documentary chronicling humanity's journey to Mars through unprecedented access to SpaceX, NASA, and leading visionaries.">
+    <meta name="keywords" content="Mars, Space, Documentary, SpaceX, NASA, Space Exploration, VR, Mars Observer, Multi-Planetary, Space Technology">
+    <meta name="author" content="Starbridge Media">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="Becoming Multi-Planetary | Journey to Mars Documentary">
+    <meta property="og:description" content="Join humanity's journey to Mars through this groundbreaking documentary and interactive experience.">
+    <meta property="og:image" content="/assets/images/og-image.jpg">
+    <meta property="og:url" content="https://becomingmultiplanetary.com">
+    <meta property="og:type" content="website">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Becoming Multi-Planetary">
+    <meta name="twitter:description" content="A landmark documentary chronicling humanity's journey to Mars.">
+    <meta name="twitter:image" content="/assets/images/twitter-card.jpg">
+    
+    <title>Becoming Multi-Planetary | Journey to Mars Documentary</title>
+    
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/assets/favicon/site.webmanifest">
+    <link rel="mask-icon" href="/assets/favicon/safari-pinned-tab.svg" color="#DD4814">
+    <meta name="msapplication-TileColor" content="#DD4814">
+    <meta name="theme-color" content="#000000">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        /* Reset and Base Styles */
+        :root {
+            --color-mars-dark: #B22C0D;
+            --color-mars: #DD4814;
+            --color-background: #000000;
+            --color-background-alt: #121212;
+            --color-text: #FFFFFF;
+            --color-text-secondary: #CCCCCC;
+            --font-primary: 'Space Grotesk', sans-serif;
+            --transition-standard: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+            overflow-x: hidden;
+        }
+
+        body {
+            background: linear-gradient(to bottom, var(--color-background), var(--color-background-alt));
+            color: var(--color-text);
+            font-family: var(--font-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Accessibility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+
+        /* Loading State */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--color-background);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loading__spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--color-text-secondary);
+            border-top-color: var(--color-mars);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: var(--transition-standard);
+        }
+
+        .nav--scrolled {
+            padding: 0.5rem 0;
+            background: rgba(0, 0, 0, 0.98);
+        }
+
+        .nav__container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .nav__logo {
+            font-weight: 700;
+            font-size: 1.5rem;
+            text-decoration: none;
+            color: var(--color-text);
+            background: linear-gradient(45deg, var(--color-mars-dark), var(--color-mars));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav__links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav__link {
+            color: var(--color-text);
+            text-decoration: none;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            transition: var(--transition-standard);
+            position: relative;
+        }
+
+        .nav__link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(45deg, var(--color-mars-dark), var(--color-mars));
+            transition: var(--transition-standard);
+        }
+
+        .nav__link:hover::after {
+            width: 100%;
+        }
+
+        /* Mobile Navigation */
+        .nav__toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--color-text);
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav__toggle {
+                display: block;
+            }
+
+            .nav__links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(0, 0, 0, 0.95);
+                padding: 1rem;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav__links--active {
+                display: flex;
+            }
+        }
+          /* Starfield */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            padding: 0 1rem;
+        }
+
+        .hero__content {
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero__title {
+            font-size: clamp(2rem, 8vw, 8rem);
+            line-height: 1.1;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeIn 2s forwards;
+        }
+
+        .hero__subtitle {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            color: var(--color-text-secondary);
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            opacity: 0;
+            animation: fadeIn 2s 0.5s forwards;
+        }
+
+        /* Gradient Text Animation */
+        .gradient-text {
+            background: linear-gradient(45deg, var(--color-mars-dark), var(--color-mars));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+        .typing-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1em;
+            background: var(--color-mars);
+            margin-left: 5px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        /* Sections */
+        .section {
+            padding: 8rem 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section--dark {
+            background: rgba(18, 18, 18, 0.8);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Video Section */
+        .video {
+            position: relative;
+            aspect-ratio: 16/9;
+            background: black;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .video__play {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--color-mars-dark), var(--color-mars));
+            border: none;
+            cursor: pointer;
+            transition: var(--transition-standard);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video__play:hover {
+            transform: translate(-50%, -50%) scale(1.1);
+            box-shadow: 0 0 30px rgba(221, 72, 20, 0.3);
+        }
+
+        .video__play-icon {
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 15px 0 15px 25px;
+            border-color: transparent transparent transparent white;
+            margin-left: 5px;
+        }
+
+        /* VR Section */
+        .vr {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .vr__content {
+            text-align: left;
+        }
+
+        .vr__image {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Game Section */
+        .game {
+            text-align: center;
+            background: var(--color-background-alt);
+        }
+
+        .game__buttons {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+
+        /* Buttons */
+        .button {
+            padding: 1rem 2rem;
+            border-radius: 9999px;
+            border: none;
+            background: linear-gradient(45deg, var(--color-mars-dark), var(--color-mars));
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: var(--transition-standard);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(221, 72, 20, 0.3);
+        }
+
+        .button--secondary {
+            background: linear-gradient(45deg, #333, #666);
+        }
+
+        /* Footer */
+        .footer {
+            padding: 2rem;
+            text-align: center;
+            background: var(--color-background);
+            color: var(--color-text);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Media Queries */
+        @media (max-width: 768px) {
+            .vr {
+                grid-template-columns: 1fr;
+            }
+
+            .game__buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .button {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading" id="loading">
+        <div class="loading__spinner"></div>
+    </div>
+
+    <!-- Stars Background -->
+    <div class="stars" id="stars"></div>
+
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <div class="nav__container">
+            <a href="#" class="nav__logo">BMP</a>
+            <button class="nav__toggle" aria-label="Toggle navigation" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav__links" id="navLinks">
+                <li><a href="#about" class="nav__link">About</a></li>
+                <li><a href="#vr" class="nav__link">Mars Observer VR</a></li>
+                <li><a href="#game" class="nav__link">The Game</a></li>
+                <li><a href="#contact" class="nav__link">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero__content">
+            <h1 class="hero__title">
+                <span class="gradient-text" id="typingText"></span>
+                <span class="typing-cursor"></span>
+            </h1>
+            <p class="hero__subtitle">
+                Among the defining events of the 21st century, humanity's interplanetary migration to Mars 
+                marks a milestone in the evolution of intelligent life, emerging in real time.
+            </p>
+            <a href="#about" class="button">Explore the Mission</a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section section--dark">
+        <div class="container">
+            <div class="video">
+                <button class="video__play" id="videoPlay">
+                    <div class="video__play-icon"></div>
+                </button>
+                <video id="mainVideo" style="display: none; width: 100%;" controls>
+                    <source src="/assets/video/trailer.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+    </section>
+
+    <!-- VR Section -->
+    <section id="vr" class="section">
+        <div class="container">
+            <div class="vr">
+                <div class="vr__content">
+                    <h2>Mars Observer VR</h2>
+                    <p>Experience Mars like never before through our groundbreaking VR simulation.</p>
+                    <a href="#" class="button">Learn More</a>
+                </div>
+                <img src="/assets/images/vr-preview.jpg" alt="Mars VR Experience" class="vr__image">
+            </div>
+        </div>
+    </section>
+
+    <!-- Game Section -->
+    <section id="game" class="section game">
+        <div class="container">
+            <h2>Mars: The Game</h2>
+            <p>Join the global community of Mars explorers in our interactive web game.</p>
+            <div class="game__buttons">
+                <a href="https://marsthegame.com" target="_blank" rel="noopener noreferrer" class="button">
+                    Play Mars: The Game
+                </a>
+                <a href="#" class="button button--secondary">Join Community</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Copyright © 2024 Starbridge Media</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Initialize loading state
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                document.getElementById('loading').style.display = 'none';
+            }, 1000);
+        });
+
+        // Create starfield
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 200; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = `${Math.random() * 2}px`;
+                star.style.height = star.style.width;
+                star.style.left = `${Math.random() * 100}vw`;
+                star.style.top = `${Math.random() * 100}vh`;
+                star.style.animationDelay = `${Math.random() * 2}s`;
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Typing animation
+        function typeText() {
+            const text = "BECOMING MULTI-PLANETARY";
+            const element = document.getElementById('typingText');
+            element.textContent = "";
+            let i = 0;
+
+            function type() {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(type, 150);
+                }
+            }
+
+            type();
+        }
+
+        // Handle video playback
+        document.getElementById('videoPlay').addEventListener('click', function() {
+            const video = document.getElementById('mainVideo');
+            this.style.display = 'none';
+            video.style.display = 'block';
+            video.play().catch(function(error) {
+                console.log("Video playback failed:", error);
+            });
+        });
+
+        // Handle navigation
+        document.getElementById('navToggle').addEventListener('click', function() {
+            document.getElementById('navLinks').classList.toggle('nav__links--active');
+        });
+
+        // Handle scroll events
+        window.addEventListener('scroll', function() {
+            const nav = document.getElementById('nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('nav--scrolled');
+            } else {
+                nav.classList.remove('nav--scrolled');
+            }
+        });
+
+        // Initialize
+        createStars();
+        typeText();
+
+        // Analytics
+        function initAnalytics() {
+            // Add your analytics code here
+        }
+
+        // Error handling
+        window.onerror = function(msg, url, lineNo, columnNo, error) {
+            console.error('Error: ' + msg + '\nURL: ' + url + '\nLine: ' + lineNo + '\nColumn: ' + columnNo + '\nError object: ' + error);
+            return false;
+        };
+
+        // Performance monitoring
+        if ('performance' in window) {
+            window.addEventListener('load', function() {
+                let timing = window.performance.timing;
+                let loadTime = timing.loadEventEnd - timing.navigationStart;
+                console.log('Page load time:', loadTime + 'ms');
+            });
+        }
+    </script>
+</body>
+</html>
