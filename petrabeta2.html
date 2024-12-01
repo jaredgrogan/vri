@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- [Existing head content remains unchanged except where specified] -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petra Reader</title>
+    <!-- Include Recorder.js library for WAV export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/recorderjs/0.1.0/recorder.min.js"></script>
+    <!-- [Rest of the head content remains unchanged] -->
+
+    <style>
+        /* [Existing styles remain unchanged except where specified] */
+
+        /* Hero text responsiveness using clamp() */
+        .hero-title {
+            /* Adjust font-size using clamp */
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            /* [Other existing styles remain unchanged] */
+        }
+
+        /* Pause button stays red when paused */
+        #pauseButton.paused {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        /* Expandable sidebar styles */
+        .sidebar {
+            position: fixed;
+            left: -250px;
+            top: 0;
+            width: 250px;
+            height: 100%;
+            background: var(--bg-color);
+            overflow-y: auto;
+            transition: left 0.3s ease;
+            z-index: 1001;
+            border-right: 1px solid var(--input-border);
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar-toggle {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            background: var(--button-bg);
+            color: var(--button-text);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1002;
+        }
+
+        .sidebar-toggle:hover {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        /* [Rest of the styles remain unchanged] */
+    </style>
+</head>
+
+<body>
+    <!-- Initialize theme before content to prevent flash -->
+    <script>
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.body.setAttribute('data-theme', savedTheme);
+    </script>
+
+    <!-- Sidebar for history -->
+    <div class="sidebar" id="historySidebar" aria-label="History Sidebar">
+        <h2>History</h2>
+        <ul id="historyList"></ul>
+    </div>
+    <div class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle History Sidebar">
+        <!-- SVG icon for the sidebar toggle -->
+        <svg width="24" height="24" fill="currentColor">
+            <path d="M3 12h18M3 6h18M3 18h18"/>
+        </svg>
+    </div>
+
+    <!-- [Existing overlay and canvas elements remain unchanged] -->
+
+    <header>
+        <!-- [Existing header content remains unchanged] -->
+    </header>
+
+    <main class="container">
+        <!-- [Existing main content remains unchanged] -->
+
+        <!-- Add ARIA attributes to the controls -->
+        <div class="controls" role="region" aria-label="Playback Controls">
+            <!-- [Existing controls with added aria-labels and roles] -->
+            <button id="dictateButton" aria-label="Start dictation" data-tooltip="Dictate" role="button">
+                <!-- [SVG icon remains unchanged] -->
+            </button>
+
+            <button id="playButton" aria-label="Play text" data-tooltip="Play" role="button">
+                <!-- [SVG icon remains unchanged] -->
+            </button>
+
+            <button id="pauseButton" aria-label="Pause playback" data-tooltip="Pause" role="button">
+                <!-- [SVG icon remains unchanged] -->
+            </button>
+
+            <button id="stopButton" aria-label="Stop playback" data-tooltip="Stop" role="button">
+                <!-- [SVG icon for stop button] -->
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="6" y="6" width="12" height="12"/>
+                </svg>
+            </button>
+
+            <button id="exportButton" aria-label="Export as WAV" data-tooltip="Export WAV" role="button">
+                <!-- [SVG icon remains unchanged] -->
+            </button>
+
+            <button id="exportTxtButton" aria-label="Export as TXT" data-tooltip="Export TXT" role="button">
+                <!-- [SVG icon remains unchanged] -->
+            </button>
+
+            <button id="settingsButton" aria-label="Settings" data-tooltip="Settings" role="button">
+                <!-- [SVG icon remains unchanged] -->
+            </button>
+        </div>
+    </main>
+
+    <!-- [Existing settings panel remains unchanged] -->
+
+    <footer class="container">
+        <!-- [Existing footer content remains unchanged] -->
+    </footer>
+
+    <script>
+        // Core initialization
+        let isDarkMode = localStorage.getItem('theme') === 'dark';
+        let isAnimationEnabled = true;
+        let particleSystem = null;
+        let timerInterval;
+        let isPlaying = false;
+        let isDictating = false;
+        let currentUtterance = null;
+        let synth = window.speechSynthesis;
+        let historyList = [];
+        const maxHistoryItems = 10;
+
+        // [Existing browser compatibility checks and error handling remain unchanged]
+
+        // [Existing VectorNetwork class remains unchanged]
+
+        // Enhanced Speech System with fixed voice selection
+        class SpeechController {
+            constructor() {
+                this.synth = window.speechSynthesis;
+                this.recognition = null;
+                this.voices = [];
+                this.currentUtterance = null;
+                this.isInitialized = false;
+                this.setupVoices();
+
+                if (hasSpeechRecognition) {
+                    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                    this.recognition = new SpeechRecognition();
+                    this.setupRecognition();
+                }
+            }
+
+            setupVoices() {
+                const loadVoices = () => {
+                    this.voices = this.synth.getVoices();
+                    this.updateVoiceSelect();
+                };
+
+                if (this.synth.onvoiceschanged !== undefined) {
+                    this.synth.onvoiceschanged = loadVoices;
+                }
+                // Delay loadVoices to ensure voices are loaded
+                setTimeout(loadVoices, 100);
+            }
+
+            updateVoiceSelect() {
+                const voiceSelect = document.getElementById('voiceSelect');
+                voiceSelect.innerHTML = '';
+
+                const currentLang = document.getElementById('languageSelect').value;
+
+                const matchingVoices = this.voices.filter(voice => voice.lang.startsWith(currentLang));
+
+                if (matchingVoices.length === 0) {
+                    // If no matching voices, use default language
+                    matchingVoices.push(...this.voices.filter(voice => voice.default));
+                }
+
+                matchingVoices.forEach(voice => {
+                    const option = document.createElement('option');
+                    option.textContent = `${voice.name} (${voice.lang})`;
+                    option.setAttribute('data-lang', voice.lang);
+                    option.setAttribute('data-name', voice.name);
+                    voiceSelect.appendChild(option);
+                });
+            }
+
+            // [Rest of the SpeechController methods remain unchanged, with adjustments to use selected voice]
+
+            speak(text, options = {}) {
+                return new Promise((resolve, reject) => {
+                    try {
+                        if (this.currentUtterance) {
+                            this.synth.cancel();
+                        }
+
+                        const utterance = new SpeechSynthesisUtterance(text);
+                        const selectedLanguage = document.getElementById('languageSelect').value;
+                        const voiceSelect = document.getElementById('voiceSelect');
+                        const selectedVoiceName = voiceSelect.selectedOptions[0].getAttribute('data-name');
+
+                        utterance.lang = selectedLanguage;
+                        utterance.voice = this.voices.find(voice => voice.name === selectedVoiceName);
+
+                        // [Rest of the method remains unchanged]
+                    } catch (error) {
+                        handleError(error, 'speech-synthesis');
+                        reject(error);
+                    }
+                });
+            }
+
+            // [Rest of the SpeechController class remains unchanged]
+        }
+
+        // Timer Implementation
+        // [Remains unchanged]
+
+        // Application Initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            const speechController = new SpeechController();
+            const textInput = document.getElementById('textInput');
+            const particleSystem = new VectorNetwork();
+
+            // Load history from localStorage
+            function loadHistory() {
+                const savedHistory = JSON.parse(localStorage.getItem('historyList')) || [];
+                historyList = savedHistory.slice(0, maxHistoryItems);
+                updateHistoryUI();
+            }
+
+            function saveToHistory(text) {
+                if (text.trim() === '') return;
+                historyList.unshift(text);
+                if (historyList.length > maxHistoryItems) {
+                    historyList.pop();
+                }
+                localStorage.setItem('historyList', JSON.stringify(historyList));
+                updateHistoryUI();
+            }
+
+            function updateHistoryUI() {
+                const historyUl = document.getElementById('historyList');
+                historyUl.innerHTML = '';
+                historyList.forEach((item, index) => {
+                    const li = document.createElement('li');
+                    li.textContent = item.substring(0, 50) + (item.length > 50 ? '...' : '');
+                    li.addEventListener('click', () => {
+                        textInput.value = item;
+                        updateCounters();
+                    });
+                    historyUl.appendChild(li);
+                });
+            }
+
+            // [Existing updateCounters function remains unchanged]
+
+            // Text input handler
+            textInput.addEventListener('input', () => {
+                const { words } = updateCounters();
+                if (words > 4000) {
+                    const wordArray = textInput.value.trim().split(/\s+/);
+                    textInput.value = wordArray.slice(0, 4000).join(' ');
+                    updateCounters();
+                }
+                // Save current text to localStorage
+                localStorage.setItem('currentText', textInput.value);
+            });
+
+            // Load saved text on page load
+            const savedText = localStorage.getItem('currentText');
+            if (savedText) {
+                textInput.value = savedText;
+                updateCounters();
+            }
+
+            // Playback controls
+            document.getElementById('playButton').addEventListener('click', () => {
+                if (speechController.synth.speaking && isPlaying) {
+                    speechController.pause();
+                    isPlaying = false;
+                    document.getElementById('playButton').setAttribute('data-tooltip', 'Resume');
+                } else {
+                    const text = textInput.value;
+                    if (text && !isPlaying) {
+                        speechController.speak(text).catch(error =>
+                            handleError(error, 'playback-control'));
+                        saveToHistory(text);
+                    }
+                }
+            });
+
+            // Pause button modification
+            document.getElementById('pauseButton').addEventListener('click', () => {
+                const pauseButton = document.getElementById('pauseButton');
+                if (speechController.synth.speaking) {
+                    if (isPlaying) {
+                        speechController.pause();
+                        clearInterval(timerInterval);
+                        pauseButton.classList.add('paused');
+                    } else {
+                        speechController.resume();
+                        startTimer();
+                        pauseButton.classList.remove('paused');
+                    }
+                    isPlaying = !isPlaying;
+                }
+            });
+
+            // Stop button functionality
+            document.getElementById('stopButton').addEventListener('click', () => {
+                if (speechController.synth.speaking) {
+                    speechController.synth.cancel();
+                    stopTimer();
+                    isPlaying = false;
+                    document.getElementById('pauseButton').classList.remove('paused');
+                }
+                // Reset animations and audio playback
+                if (particleSystem) {
+                    particleSystem.resume();
+                }
+            });
+
+            // Theme toggle functionality
+            // [Remains unchanged]
+
+            // Export functionality using Recorder.js
+            async function exportAudio(text) {
+                return new Promise((resolve, reject) => {
+                    try {
+                        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                        const source = audioContext.createBufferSource();
+                        const recorder = new Recorder(source, {
+                            numChannels: 1
+                        });
+
+                        speechController.speak(text).then(() => {
+                            recorder.exportWAV(blob => {
+                                resolve(blob);
+                                audioContext.close();
+                            });
+                        }).catch(error => {
+                            reject(error);
+                            audioContext.close();
+                        });
+                    } catch (error) {
+                        reject(new Error(`Failed to setup audio export: ${error.message}`));
+                    }
+                });
+            }
+
+            // Export buttons handlers
+            // [Adjust the exportButton click handler to use the new exportAudio function]
+
+            // Settings panel handlers
+            // [Remains unchanged]
+
+            // Sidebar toggle functionality
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const historySidebar = document.getElementById('historySidebar');
+
+            sidebarToggle.addEventListener('click', () => {
+                const isActive = historySidebar.classList.toggle('active');
+                localStorage.setItem('sidebarOpen', isActive);
+            });
+
+            // Restore sidebar state
+            if (localStorage.getItem('sidebarOpen') === 'true') {
+                historySidebar.classList.add('active');
+            }
+
+            // Time display
+            // [Remains unchanged]
+
+            // Dictation button handler
+            // [Remains unchanged]
+
+            // Language change handler
+            document.getElementById('languageSelect').addEventListener('change', () => {
+                if (speechController.recognition) {
+                    speechController.recognition.lang = document.getElementById('languageSelect').value;
+                }
+                speechController.updateVoiceSelect();
+            });
+
+            // Initialize components
+            function initializeApp() {
+                // Restore background animation state
+                // [Remains unchanged]
+
+                updateTime();
+                setInterval(updateTime, 1000);
+                updateCounters();
+                loadHistory();
+            }
+
+            // Start the application
+            initializeApp();
+        });
+    </script>
+</body>
+</html>
