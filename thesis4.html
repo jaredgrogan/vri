@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Venture Research Fund | De-Risking Innovation</title>
-    <meta name="description" content="Join the Venture Research Fund in pioneering the science of venture capital through systematic de-risking and reverse-induction innovation.">
-    <meta name="keywords" content="venture capital, investment, innovation, AI, SaaS, fintech, research, technology">
-    <meta name="author" content="Venture Research Fund">
+    <title>Venture Research Institute | De-Risking Innovation</title>
+    <meta name="description" content="Join the Venture Research Institute in pioneering the science of venture capital through systematic de-risking and reverse-induction innovation.">
+    <meta name="keywords" content="venture capital, investment, innovation, AI, decentralized computing, research, technology">
+    <meta name="author" content="Venture Research Institute">
 
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Venture Research Fund | De-Risking Innovation">
+    <meta property="og:title" content="Venture Research Institute | De-Risking Innovation">
     <meta property="og:description" content="Maximize returns by investing in de-risked, high-growth ventures across multiple verticals.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://ventureresearch.fund">
@@ -22,13 +22,13 @@
     <style>
         :root {
             --vr-red-dark: #A51C30;
-            --vr-red-light: #ED1B34;
+            --vr-red-light: #FF2E5B;
             --black: #000000;
             --dark-gray: #1e1e1e;
             --white: #FFFFFF;
             --light-silver: #f3f4f6;
-            --cobalt: #0047AB;
-            --cobalt-light: #0062E6;
+            --cobalt: #0020c2;
+            --cobalt-light: #0047FF;
         }
 
         /* Global Styles */
@@ -88,6 +88,15 @@
             color: var(--vr-red-light);
         }
 
+        /* Invest Now Button in Navigation */
+        .nav .pill-button {
+            color: var(--white);
+        }
+
+        .nav .pill-button:hover {
+            color: var(--white);
+        }
+
         /* Hero Section */
         .hero {
             min-height: 100vh;
@@ -99,6 +108,19 @@
             position: relative;
             overflow: hidden;
             text-align: center;
+            background: url('vri_bg.jpeg') no-repeat center center;
+            background-size: cover;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.6);
+            z-index: -1;
         }
 
         .hero h1 {
@@ -147,7 +169,7 @@
         .pill-button:hover {
             background: linear-gradient(45deg, var(--cobalt), var(--cobalt-light));
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 71, 171, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 32, 194, 0.3);
             color: var(--white);
         }
 
@@ -165,6 +187,16 @@
             font-size: 2.5rem;
             margin-bottom: 2rem;
             text-align: center;
+        }
+
+        /* Subtitles */
+        .section-subtitle {
+            background: linear-gradient(45deg, var(--vr-red-dark), var(--vr-red-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
         }
 
         /* Lab Grid */
@@ -271,7 +303,7 @@
 
         /* Footer */
         footer {
-            background: linear-gradient(135deg, #000000, #1e1e1e);
+            background: linear-gradient(135deg, #1e1e1e, #2a2a2a);
             text-align: center;
             padding: 3rem;
             margin-top: 4rem;
@@ -330,14 +362,14 @@
 <body>
 
     <!-- Navigation -->
-    <nav>
+    <nav class="nav">
         <div class="nav-content" role="navigation">
-            <a href="#" class="logo">Venture Research Fund</a>
+            <a href="#" class="logo">Venture Research Institute</a>
             <div class="nav-links">
                 <a href="#thesis">Thesis</a>
-                <a href="#labs">CRGs</a>
+                <a href="#labs">CRLs</a>
                 <a href="#portfolio">Portfolio</a>
-                <a href="#invest">Why Invest Now</a>
+                <a href="#invest">Why Invest Now?</a>
                 <a href="#contact" class="pill-button">Invest Now</a>
             </div>
         </div>
@@ -350,7 +382,7 @@
                 <h1 id="main-title">Join Our Mission to De-Risk Innovation</h1>
                 <h2 id="sub-title">Invest in the Science of Venture</h2>
                 <div class="hero-description">
-                    Venture Research Fund is revolutionizing venture creation through our reverse-induction methodology and network of Commercial Research Groups (CRGs). Partner with us to capitalize on high-growth opportunities across AI, SaaS, FinTech, and more.
+                    The Venture Research Fund is revolutionizing venture creation through our reverse-induction methodology and organization of Commercial Research Labs (CRLs). Partner with us to capitalize on high-growth opportunities across AI and Decentralized Computing.
                 </div>
                 <a href="#invest" class="pill-button">Invest Now</a>
             </div>
@@ -366,7 +398,7 @@
 
         <!-- Why Invest Now Section -->
         <section id="invest" class="section">
-            <h2 class="section-title">Why Invest Now</h2>
+            <h2 class="section-title">Why Invest Now?</h2>
             <p style="text-align: center; margin-bottom: 3rem;">Seize the opportunity to be part of a fund that's systematically de-risking innovation and poised for exponential growth.</p>
             <ul class="benefits-list">
                 <li><strong>Exclusive Access:</strong> Invest in high-growth ventures before they hit the mainstream market.</li>
@@ -380,7 +412,7 @@
         <!-- Benefits for LPs and CVCs -->
         <section id="benefits" class="section">
             <h2 class="section-title">Benefits for LPs and CVCs</h2>
-            <p style="text-align: center; margin-bottom: 3rem;">Unlock strategic advantages and maximize ROI potential by partnering with Venture Research Fund.</p>
+            <p style="text-align: center; margin-bottom: 3rem;">Unlock strategic advantages and maximize ROI potential by partnering with Venture Research Institute.</p>
             <ul class="benefits-list">
                 <li><strong>High ROI Potential:</strong> Access to meticulously vetted ventures with significant growth potential.</li>
                 <li><strong>Strategic Alignment:</strong> Tailored investment opportunities that align with your corporate objectives.</li>
@@ -392,9 +424,9 @@
 
         <!-- VR Labs Section -->
         <section id="labs" class="section">
-            <h2 class="section-title">Commercial Research Groups (CRGs)</h2>
+            <h2 class="section-title">Commercial Research Labs (CRLs)</h2>
             <p style="text-align: center; margin-bottom: 3rem;">
-                Organized around problem statements, our CRGs are led by industry for industry. Steering by industry equates to reverse induction; we meet proven demands validated by industry before we start.
+                Organized around problem statements, our CRLs are led by industry for industry. Steering by industry equates to reverse induction; we meet proven demands validated by industry before we start.
             </p>
 
             <div class="lab-grid">
@@ -573,7 +605,7 @@
                 <li><strong>Business Development:</strong> Accelerated CBDO capabilities and marketing reach.</li>
                 <li><strong>Portfolio Catalyst:</strong> Strategic platform for portfolio company growth and expansion.</li>
             </ul>
-            <h3 style="text-align: center; margin-top: 4rem;">VR Incubator Program</h3>
+            <h3 class="section-subtitle" style="margin-top: 4rem;">VR Incubator Program</h3>
             <p style="text-align: center; margin-bottom: 2rem;">We offer a 2-week incubator with domestic US applicants and international clients to instill the science of venture. This not only generates revenue but also furthers our mission through thought leadership, white papers, and podcasts available at <a href="https://ventureresearch.science" target="_blank">ventureresearch.science</a>.</p>
         </section>
 
@@ -593,7 +625,7 @@
 
     <!-- Footer -->
     <footer role="contentinfo">
-        <p>© 2025 Venture Research Fund</p>
+        <p>© 2025 Venture Research Institute</p>
         <div class="locations">Palo Alto, CA | Miami, FL</div>
     </footer>
 
