@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venture Research Fund | De-Risking Innovation</title>
+    <meta name="description" content="Join the Venture Research Fund in pioneering the science of venture capital through systematic de-risking and reverse-induction innovation.">
+    <meta name="keywords" content="venture capital, investment, innovation, AI, SaaS, fintech, research, technology">
+    <meta name="author" content="Venture Research Fund">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Venture Research Fund | De-Risking Innovation">
+    <meta property="og:description" content="Maximize returns by investing in de-risked, high-growth ventures across multiple verticals.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ventureresearch.fund">
+
+    <!-- Fonts and Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/framer-motion/10.16.4/framer-motion.js"></script>
+
+    <!-- Styles -->
+    <style>
+        :root {
+            --vr-red-dark: #A51C30;
+            --vr-red-light: #ED1B34;
+            --black: #000000;
+            --dark-gray: #1e1e1e;
+            --white: #FFFFFF;
+            --light-silver: #F5F5F5;
+            --cobalt: #0047AB;
+            --cobalt-light: #0062E6;
+        }
+
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: linear-gradient(135deg, var(--white) 0%, var(--light-silver) 100%) no-repeat;
+            background-attachment: fixed;
+            color: var(--black);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 1rem 2rem;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            background: linear-gradient(45deg, var(--vr-red-dark), var(--vr-red-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .nav-links a {
+            margin-left: 2rem;
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--vr-red-light);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 6rem 2rem;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--vr-red-dark), var(--vr-red-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: var(--black);
+        }
+
+        .hero-description {
+            max-width: 700px;
+            margin: 0 auto 3rem auto;
+            font-size: 1.2rem;
+            color: var(--black);
+        }
+
+        .pill-button {
+            background: linear-gradient(45deg, var(--vr-red-dark), var(--vr-red-light));
+            color: var(--white);
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .pill-button:hover {
+            background: linear-gradient(45deg, var(--cobalt), var(--cobalt-light));
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 71, 171, 0.3);
+        }
+
+        /* Sections */
+        .section {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            background: linear-gradient(45deg, var(--vr-red-dark), var(--vr-red-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        /* Lab Grid */
+        .lab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .lab-card {
+            background: linear-gradient(135deg, var(--vr-red-dark), var(--vr-red-light));
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            color: var(--white);
+            cursor: pointer;
+        }
+
+        .lab-card:hover {
+            filter: brightness(1.1);
+            transform: translateY(-5px);
+        }
+
+        .lab-card h3 {
+            color: var(--white);
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .lab-details {
+            display: none;
+            margin-top: 1rem;
+        }
+
+        .lab-card.active .lab-details {
+            display: block;
+        }
+
+        .problem-list {
+            list-style-type: none;
+            padding-left: 1rem;
+        }
+
+        .problem-list li {
+            margin-bottom: 1rem;
+        }
+
+        .problem-heading {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .problem-text {
+            font-weight: normal;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .kpi-placeholder {
+            margin-top: 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 10px;
+        }
+
+        .kpi-placeholder p {
+            margin-bottom: 0.5rem;
+        }
+
+        .chart-placeholder {
+            margin-top: 1rem;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 0.9rem;
+        }
+
+        /* Benefits List */
+        .benefits-list {
+            list-style-type: none;
+            padding-left: 0;
+            max-width: 800px;
+            margin: 0 auto 2rem auto;
+            color: var(--black);
+        }
+
+        .benefits-list li {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .benefits-list li strong {
+            color: var(--vr-red-dark);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark-gray);
+            text-align: center;
+            padding: 3rem;
+            margin-top: 4rem;
+            color: var(--white);
+        }
+
+        .locations {
+            margin-top: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.25rem;
+            }
+
+            .section {
+                padding: 4rem 1rem;
+            }
+
+            .lab-grid {
+                padding: 0 1rem;
+            }
+
+            .nav-links a {
+                margin-left: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-content" role="navigation">
+            <a href="#" class="logo">Venture Research Fund</a>
+            <div class="nav-links">
+                <a href="#thesis">Thesis</a>
+                <a href="#labs">CRGs</a>
+                <a href="#portfolio">Portfolio</a>
+                <a href="#invest">Why Invest Now</a>
+                <a href="#contact" class="pill-button">Invest Now</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <main>
+        <section class="hero" role="banner">
+            <div class="hero-content">
+                <h1 id="main-title">Join Our Mission to De-Risk Innovation</h1>
+                <p>Invest in the Science of Venture</p>
+                <div class="hero-description">
+                    Venture Research Fund is revolutionizing venture creation through our reverse-induction methodology and network of Commercial Research Groups (CRGs). Partner with us to capitalize on high-growth opportunities across AI, SaaS, FinTech, and more.
+                </div>
+                <a href="#invest" class="pill-button">Invest Now</a>
+            </div>
+        </section>
+
+        <!-- Why Invest Now Section -->
+        <section id="invest" class="section">
+            <h2 class="section-title">Why Invest Now</h2>
+            <p style="text-align: center; margin-bottom: 3rem;">Seize the opportunity to be part of a fund that's systematically de-risking innovation and poised for exponential growth.</p>
+            <ul class="benefits-list">
+                <li><strong>Exclusive Access:</strong> Invest in high-growth ventures before they hit the mainstream market.</li>
+                <li><strong>Strategic Partnerships:</strong> Leverage our equity partnership with CogX for unparalleled market reach.</li>
+                <li><strong>Proven Methodology:</strong> Our reverse-induction approach minimizes risk and maximizes returns.</li>
+                <li><strong>First-Mover Advantage:</strong> Gain early entry into emerging markets and cutting-edge technologies.</li>
+            </ul>
+            <a href="#contact" class="pill-button">Secure Your Spot</a>
+        </section>
+
+        <!-- Benefits for LPs and CVCs -->
+        <section id="benefits" class="section">
+            <h2 class="section-title">Benefits for LPs and CVCs</h2>
+            <p style="text-align: center; margin-bottom: 3rem;">Unlock strategic advantages and maximize ROI potential by partnering with Venture Research Fund.</p>
+            <ul class="benefits-list">
+                <li><strong>High ROI Potential:</strong> Access to meticulously vetted ventures with significant growth potential.</li>
+                <li><strong>Strategic Alignment:</strong> Tailored investment opportunities that align with your corporate objectives.</li>
+                <li><strong>Risk Mitigation:</strong> Our reverse-induction methodology systematically reduces investment risk.</li>
+                <li><strong>Market Insights:</strong> Gain exclusive insights into emerging trends and technologies.</li>
+            </ul>
+            <a href="#contact" class="pill-button">Learn More</a>
+        </section>
+
+        <!-- VR Labs Section -->
+        <section id="labs" class="section">
+            <h2 class="section-title">Commercial Research Groups (CRGs)</h2>
+            <p style="text-align: center; margin-bottom: 3rem;">Our CRGs are focused on high-growth verticals, each running concurrent venture creation projects.</p>
+
+            <div class="lab-grid">
+
+                <!-- AI SaaS & Decentralized Computing -->
+                <div class="lab-card" tabindex="0" role="button" aria-expanded="false">
+                    <h3>AI SaaS & Decentralized Computing</h3>
+                    <div class="lab-details">
+                        <ul class="problem-list">
+                            <li>
+                                <span class="problem-heading">Automated Corporate Formation</span>
+                                <span class="problem-text">Streamlining corporate formation for blockchain-native businesses</span>
+                            </li>
+                            <li>
+                                <span class="problem-heading">Decentralized AI Integration</span>
+                                <span class="problem-text">Simplifying AI model integration in decentralized apps</span>
+                            </li>
+                            <li>
+                                <span class="problem-heading">Global AI Compliance</span>
+                                <span class="problem-text">Automating multi-regional AI regulatory compliance</span>
+                            </li>
+                        </ul>
+                        <div class="kpi-placeholder">
+                            <p><strong>Total Addressable Market (TAM):</strong> [Placeholder]</p>
+                            <p><strong>Projected Returns:</strong> [Placeholder]</p>
+                            <p><strong>Growth Potential:</strong> [Placeholder]</p>
+                            <div class="chart-placeholder">[Chart Placeholder]</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Productivity SaaS -->
+                <!-- Repeat similar structure for other labs with collapsible details and KPI placeholders -->
+
+                <!-- Fintech & DeFi -->
+                <div class="lab-card" tabindex="0" role="button" aria-expanded="false">
+                    <h3>FinTech & DeFi</h3>
+                    <div class="lab-details">
+                        <ul class="problem-list">
+                            <li>
+                                <span class="problem-heading">Investment Instruments</span>
+                                <span class="problem-text">Tokenizing convertible notes for enhanced liquidity</span>
+                            </li>
+                            <li>
+                                <span class="problem-heading">Global Transactions</span>
+                                <span class="problem-text">Decentralized cross-border payment infrastructure</span>
+                            </li>
+                            <li>
+                                <span class="problem-heading">Security Solutions</span>
+                                <span class="problem-text">AI-powered fraud detection for DeFi networks</span>
+                            </li>
+                        </ul>
+                        <div class="kpi-placeholder">
+                            <p><strong>Total Addressable Market (TAM):</strong> [Placeholder]</p>
+                            <p><strong>Projected Returns:</strong> [Placeholder]</p>
+                            <p><strong>Growth Potential:</strong> [Placeholder]</p>
+                            <div class="chart-placeholder">[Chart Placeholder]</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Add other labs similarly -->
+
+            </div>
+        </section>
+
+        <!-- Strategic Portfolio Section -->
+        <section id="portfolio" class="section">
+            <h2 class="section-title">Strategic Equity Partnership with CogX</h2>
+            <p style="text-align: center; margin-bottom: 3rem;">Our partnership with CogX amplifies our reach and accelerates growth across our portfolio.</p>
+            <ul class="benefits-list">
+                <li><strong>Transatlantic Synergy:</strong> Enhanced deal flow and market access across US and UK markets.</li>
+                <li><strong>Business Development:</strong> Accelerated CBDO capabilities and marketing reach.</li>
+                <li><strong>Portfolio Catalyst:</strong> Strategic platform for portfolio company growth and expansion.</li>
+            </ul>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="section">
+            <h2 class="section-title">Connect with Us</h2>
+            <p style="text-align: center; margin-bottom: 3rem;">Ready to invest or have questions? Reach out to us today.</p>
+            <!-- Contact Form Placeholder -->
+            <form action="#" method="post" style="max-width: 600px; margin: 0 auto;">
+                <!-- Form fields go here -->
+                <button type="submit" class="pill-button">Submit</button>
+            </form>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer role="contentinfo">
+        <p>© 2025 Venture Research Fund</p>
+        <div class="locations">Palo Alto, CA | Miami, FL</div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Collapsible Lab Cards
+        document.querySelectorAll('.lab-card').forEach(card => {
+            card.addEventListener('click', () => {
+                card.classList.toggle('active');
+                const expanded = card.getAttribute('aria-expanded') === 'true' || false;
+                card.setAttribute('aria-expanded', !expanded);
+            });
+            card.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    card.click();
+                }
+            });
+        });
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Accessibility: Focus Styles
+        document.querySelectorAll('a, button, .lab-card').forEach(el => {
+            el.addEventListener('focus', () => {
+                el.style.outline = '2px solid var(--vr-red-light)';
+            });
+            el.addEventListener('blur', () => {
+                el.style.outline = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
