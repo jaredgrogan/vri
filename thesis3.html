@@ -112,16 +112,18 @@
             background-size: cover;
         }
 
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(255, 255, 255, 0.6);
-            z-index: -1;
-        }
+       .hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('vri_bg.jpeg') no-repeat center center;
+    background-size: cover;
+    opacity: 0.4; /* Set the opacity to 40% */
+    z-index: -1; /* Place it behind the content */
+}
 
         .hero h1 {
             font-size: 3.5rem;
