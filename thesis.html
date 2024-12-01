@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Venture Research Fund - Pioneering the Science of Venture through reverse-induction innovation and systematic de-risking">
+    <meta name="keywords" content="venture capital, innovation, AI, SaaS, research, technology investment">
+    <meta name="author" content="Venture Research Fund">
+    <meta property="og:title" content="Venture Research Fund | The Science of Venture">
+    <meta property="og:description" content="Pioneering the Science of Venture through reverse-induction innovation">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ventureresearch.fund">
+    
+    <title>Venture Research Fund | The Science of Venture</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/framer-motion/10.16.4/framer-motion.js"></script>
+    
+    <style>
+        :root {
+            --vr-red-dark: #A51C30;
+            --vr-red-light: #ed1b34;
+            --black: #000000;
+            --dark-gray: #1e1e1e;
+            --white: #FFFFFF;
+            --light-silver: #F5F5F5;
+            --cobalt: #0047AB;
+            --cobalt-light: #0062E6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: linear-gradient(135deg, var(--white) 0%, var(--light-silver) 100%) no-repeat;
+            background-attachment: fixed;
+            color: var(--black);
+            line-height: 1.6;
+        }
+
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 1rem 2rem;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            background: linear-gradient(45deg, var(--vr-red-dark), var(--vr-red-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 6rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--vr-red-dark), var(--vr-red-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 3rem;
+            color: var(--black);
+        }
+
+        .hero-description {
+            max-width: 600px;
+            margin: 2rem auto;
+            font-size: 1.1rem;
+            color: var(--black);
+        }
+
+        .pill-button {
+            background: linear-gradient(45deg, var(--vr-red-dark), var(--vr-red-light));
+            color: var(--white);
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .pill-button:hover {
+            background: linear-gradient(45deg, var(--cobalt), var(--cobalt-light));
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 71, 171, 0.3);
+        }
+
+        .section {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            background: linear-gradient(45deg, var(--vr-red-dark), var(--vr-red-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .lab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .lab-card {
+            background: linear-gradient(135deg, var(--vr-red-dark), var(--vr-red-light));
+            border-radius: 50px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            color: var(--white);
+        }
+
+        .lab-card:hover {
+            filter: brightness(1.2);
+            transform: translateY(-5px);
+        }
+
+        .lab-card h3 {
+            color: var(--white);
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            font-size: 1.25rem;
+        }
+
+        .problem-list {
+            list-style-type: none;
+            padding-left: 1rem;
+        }
+
+        .problem-list li {
+            margin-bottom: 1.5rem;
+        }
+
+        .problem-heading {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .problem-text {
+            font-weight: normal;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .strategic-section {
+            background: rgba(255, 255, 255, 0.5);
+            padding: 4rem 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer {
+            background: var(--dark-gray);
+            text-align: center;
+            padding: 3rem;
+            margin-top: 4rem;
+            color: var(--white);
+        }
+
+        .locations {
+            margin-top: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.25rem;
+            }
+
+            .section {
+                padding: 4rem 1rem;
+            }
+
+            .lab-grid {
+                padding: 0 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-content">
+            <a href="#" class="logo">VRF</a>
+            <a href="#contact" class="pill-button">Connect</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 id="main-title">Invest in the Science of Venture</h1>
+            <p>De-Risking Innovation through Science</p>
+            <div class="hero-description">
+                Venture Research Fund pioneers a scientific approach to venture creation through our network of Commercial Research Groups (CRGs). We systematically identify market needs, validate solutions, and scale ventures across high-growth verticals using our reverse-induction methodology.
+            </div>
+            <a href="#thesis" class="pill-button">Explore Our Thesis</a>
+        </div>
+    </section>
+
+    <!-- VR Labs Section -->
+    <section class="section">
+        <h2 class="section-title">Venture Research Labs</h2>
+        <p style="text-align: center; margin-bottom: 3rem;">Our VR Labs are organized into six focused Commercial Research Groups (CRGs), each addressing specific market verticals and running concurrent venture creation projects.</p>
+        
+        <div class="lab-grid">
+            <div class="lab-card">
+                <h3>AI SaaS & Decentralized Computing</h3>
+                <ul class="problem-list">
+                    <li>
+                        <span class="problem-heading">Automated Corporate Formation</span>
+                        <span class="problem-text">Streamlining corporate formation for blockchain-native businesses</span>
+                    </li>
+                    <li>
+                        <span class="problem-heading">Decentralized AI Integration</span>
+                        <span class="problem-text">Simplifying AI model integration in decentralized apps</span>
+                    </li>
+                    <li>
+                        <span class="problem-heading">Global AI Compliance</span>
+                        <span class="problem-text">Automating multi-regional AI regulatory compliance</span>
+                    </li>
+                </ul>
+            </div>
+
+<div class="lab-card">
+                <h3>Productivity SaaS</h3>
+                <ul class="problem-list">
+                    <li>
+                        <span class="problem-heading">Energy Optimization</span>
+                        <span class="problem-text">AI-driven energy waste reduction in logistics operations</span>
+                    </li>
+                    <li>
+                        <span class="problem-heading">Enterprise Training</span>
+                        <span class="problem-text">Personalized AI training programs at enterprise scale</span>
+                    </li>
+                    <li>
+                        <span class="problem-heading">Workflow Integration</span>
+                        <span class="problem-text">Seamless AI integration into existing productivity tools</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="lab-card">
+                <h3>Fintech & DeFi</h3>
+                <ul class="problem-list">
+                    <li>
+                        <span class="problem-heading">Investment Instruments</span>
+                        <span class="problem-text">Tokenizing convertible notes for enhanced liquidity</span>
+                    </li>
+                    <li>
+                        <span class="problem-heading">Global Transactions</span>
+                        <span class="problem-text">Decentralized cross-border payment infrastructure</span>
+                    </li>
+                    <li>
+                        <span class="problem-heading">Security Solutions</span>
+                        <span class="problem-text">AI-powered fraud detection for DeFi networks</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="lab-card">
+                <h3>Cybersecurity</h3>
+                <ul class="problem-list">
+                    <li>
+                        <span class="problem-heading">Real-Time Protection</span>
+                        <span class="problem-text">AI-driven threat detection and mitigation systems</span>
+                    </li>
+                    <li>
+                        <span class="problem-heading">Government Compliance</span>
+                        <span class="problem-text">Automated compliance for international B2G projects</span>
+                    </li>
+                    <li>
+                        <span class="problem-heading">Blockchain Security</span>
+                        <span class="problem-text">High-performance security protocols for blockchain apps</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="lab-card">
+                <h3>Longevity Analytics</h3>
+                <ul class="problem-list">
+                    <li>
+                        <span class="problem-heading">Workforce Analytics</span>
+                        <span class="problem-text">Predictive modeling for workforce health planning</span>
+                    </li>
+                    <li>
+                        <span class="problem-heading">Health Optimization</span>
+                        <span class="problem-text">Data-driven personalized longevity strategies</span>
+                    </li>
+                    <li>
+                        <span class="problem-heading">Insurance Innovation</span>
+                        <span class="problem-text">Longevity-based insurance and healthcare solutions</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="lab-card">
+                <h3>Entertainment & Experiential Tech</h3>
+                <ul class="problem-list">
+                    <li>
+                        <span class="problem-heading">AI Content Creation</span>
+                        <span class="problem-text">Automated design and narrative generation tools</span>
+                    </li>
+                    <li>
+                        <span class="problem-heading">Virtual Commerce</span>
+                        <span class="problem-text">AI-personalized VR shopping experiences</span>
+                    </li>
+                    <li>
+                        <span class="problem-heading">B2B Engagement</span>
+                        <span class="problem-text">Immersive platforms for B2B product showcasing</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Strategic Portfolio Section -->
+    <section class="strategic-section">
+        <div class="strategic-content">
+            <h2 class="section-title">Strategic Portfolio Company</h2>
+            <div class="lab-card" style="max-width: 600px; margin: 0 auto;">
+                <h3>CogX Partnership</h3>
+                <ul class="problem-list">
+                    <li>
+                        <span class="problem-heading">Transatlantic Synergy</span>
+                        <span class="problem-text">Enhanced deal flow and market access across US and UK markets</span>
+                    </li>
+                    <li>
+                        <span class="problem-heading">Business Development</span>
+                        <span class="problem-text">Accelerated CBDO capabilities and marketing reach</span>
+                    </li>
+                    <li>
+                        <span class="problem-heading">Portfolio Catalyst</span>
+                        <span class="problem-text">Strategic platform for portfolio company growth and expansion</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Incubator Program Section -->
+    <section class="strategic-section">
+        <div class="strategic-content">
+            <h2 class="section-title">VR Incubator Program</h2>
+            <div class="lab-card" style="max-width: 600px; margin: 0 auto;">
+                <h3>Global Innovation Bootcamps</h3>
+                <ul class="problem-list">
+                    <li>
+                        <span class="problem-heading">International Reach</span>
+                        <span class="problem-text">2-week intensive programs for global innovators</span>
+                    </li>
+                    <li>
+                        <span class="problem-heading">Government Partnerships</span>
+                        <span class="problem-text">Specialized programs for international government initiatives</span>
+                    </li>
+                    <li>
+                        <span class="problem-heading">Revenue Generation</span>
+                        <span class="problem-text">Sustainable funding stream supporting fund operations</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2025 Venture Research Fund</p>
+        <div class="locations">Palo Alto, CA | Miami, FL</div>
+    </footer>
+
+    <script>
+        // Typing animation
+        function typeWriter(text, element, speed = 50) {
+            let i = 0;
+            element.style.opacity = 1;
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML = text.substring(0, i + 1);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+
+        // Initialize animations
+        window.onload = function() {
+            const title = document.getElementById('main-title');
+            typeWriter("Invest in the Science of Venture", title);
+
+            // Add scroll animations
+            const cards = document.querySelectorAll('.lab-card');
+            const observer = new IntersectionObserver(
+                entries => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.style.opacity = 1;
+                            entry.target.style.transform = 'translateY(0)';
+                        }
+                    });
+                },
+                { threshold: 0.1 }
+            );
+
+            cards.forEach(card => {
+                card.style.opacity = 0;
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'all 0.6s ease-out';
+                observer.observe(card);
+            });
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
