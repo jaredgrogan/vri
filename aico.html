@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aicosystem - Universal Solvent Theory</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'Berkeley Mono';
+            src: url('/fonts/BerkeleyMono-Regular.woff2') format('woff2');
+        }
+
+        :root {
+            --primary: #2563eb;
+            --background: #ffffff;
+            --text: #1f2937;
+            --secondary: #4b5563;
+        }
+
+        .dark {
+            --primary: #60a5fa;
+            --background: linear-gradient(180deg, #000000, #1e1e1e);
+            --text: #f3f4f6;
+            --secondary: #9ca3af;
+        }
+
+        body {
+            font-family: 'Berkeley Mono', monospace;
+            background: var(--background);
+            color: var(--text);
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .typing-effect::after {
+            content: '|';
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .framework-diagram {
+            transition: transform 0.3s;
+        }
+
+        .framework-diagram:hover {
+            transform: scale(1.02);
+        }
+
+        button:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="fixed w-full bg-opacity-90 backdrop-blur-sm z-50" role="navigation" aria-label="Main Navigation">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-label="Aicosystem Logo">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
+                    <span class="ml-2 text-lg font-semibold">Aicosystem</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="theme-toggle" class="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700" aria-label="Toggle Dark Mode">
+                        <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="min-h-screen flex items-center justify-center pt-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h1 class="text-4xl sm:text-6xl font-bold mb-8 typing-effect" aria-label="Universal Solvent Theory">
+                    Universal Solvent Theory
+                </h1>
+                <p class="text-xl sm:text-2xl mb-12 text-secondary">
+                    Pioneering the Cognitive Computing paradigm
+                </p>
+                <div class="flex justify-center space-x-4">
+                    <button class="bg-primary text-white px-8 py-3 rounded-lg hover:opacity-90 transition">
+                        Download Whitepaper
+                    </button>
+                    <button class="bg-secondary text-white px-8 py-3 rounded-lg hover:opacity-90 transition">
+                        Learn More
+                    </button>
+                </div>
+                <button id="skip-typing" class="mt-4 text-primary underline">
+                    Skip Animation
+                </button>
+            </div>
+        </section>
+
+        <!-- Framework Overview -->
+        <section class="py-24 bg-gray-50 dark:bg-gray-900">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-bold mb-16 text-center">The Dual Imperative Framework</h2>
+                <div class="grid md:grid-cols-2 gap-12">
+                    <!-- Functionality -->
+                    <div class="framework-diagram p-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
+                        <h3 class="text-2xl font-bold mb-6">Functionality</h3>
+                        <ul class="space-y-4">
+                            <li class="flex items-center">
+                                <svg class="h-6 w-6 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/>
+                                </svg>
+                                <span>Compute Performance</span>
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="h-6 w-6 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                </svg>
+                                <span>Energy Efficiency</span>
+                            </li>
+                            <li class="flex items-center">
+                                <svg class="h-6 w-6 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                </svg>
+                                <span>Explainability</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- Capacity Building -->
+                    <div class="framework-diagram p-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
+                        <h3 class="text-2xl font-bold mb-6">Capacity Building</h3>
+                        <ul class="space-y-4">
+                            <li class="flex items-center">
+                                <svg class="h-6 w-6 mr-3" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+                                </svg>
+                                <span>Full-Stack R&D</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+
+        function setTheme(isDark) {
+            isDark ? html.classList.add('dark') : html.classList.remove('dark');
+        }
+
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            setTheme(true);
+        }
+
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+        });
+
+        // Typing Effect
+        const text = "Universal Solvent Theory";
+        const typingElement = document.querySelector('.typing-effect');
+        const skipButton = document.getElementById('skip-typing');
+        let index = 0;
+
+        function type() {
+            if (index < text.length) {
+                typingElement.textContent = text.slice(0, index + 1);
+                index++;
+                setTimeout(type, 100);
+            }
+        }
+
+        skipButton.addEventListener('click', () => {
+            typingElement.textContent = text;
+        });
+
+        type();
+    </script>
+</body>
+</html>
