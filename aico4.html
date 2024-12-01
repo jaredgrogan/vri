@@ -13,158 +13,234 @@
 
         :root {
             --primary: #2563eb;
-            --accent: #9af764;
-            --background: linear-gradient(180deg, #ffffff, #f7f7f7);
+            --background: #ffffff;
             --text: #1f2937;
             --secondary: #4b5563;
+            --accent-color: #9af764;
+            --hero-background: linear-gradient(180deg, #ffffff, #f9f9f9);
         }
 
         .dark {
             --primary: #60a5fa;
-            --accent: #9af764;
-            --background: linear-gradient(180deg, #000000, #2a2a2a);
+            --background: #2e2e2e;
             --text: #f3f4f6;
             --secondary: #9ca3af;
+            --hero-background: linear-gradient(180deg, #000000, #2a2a2a);
         }
 
         body {
             font-family: 'Berkeley Mono', monospace;
-            background: var(--background);
+            background-color: var(--background);
             color: var(--text);
-            margin: 0;
-            padding: 0;
             transition: background 0.3s, color 0.3s;
         }
 
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            z-index: 3;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .framework-title {
+            color: #000000;
         }
 
-        header.dark {
-            background: rgba(0, 0, 0, 0.8);
+        .dark .framework-title {
+            color: #f3f4f6;
         }
 
-        .hero {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            height: 100vh;
-            background: var(--background);
+        .typing-effect::after {
+            content: '|';
+            animation: blink 1s infinite;
         }
 
-        .hero h1 {
-            font-size: 4rem;
-            font-weight: bold;
-        }
-
-        .hero p {
-            font-size: 1.5rem;
-            margin: 1rem 0;
-        }
-
-        button {
-            background: var(--accent);
-            border: none;
-            color: #ffffff;
-            padding: 0.8rem 2rem;
-            font-size: 1rem;
-            font-weight: bold;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            transition: opacity 0.3s;
-        }
-
-        button:hover {
-            opacity: 0.8;
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
         }
 
         .framework-diagram {
-            padding: 1.5rem;
-            background: var(--background);
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s;
         }
 
         .framework-diagram:hover {
-            transform: translateY(-5px);
+            transform: scale(1.02);
         }
 
-        footer {
-            text-align: center;
-            padding: 1rem;
-            background: var(--background);
-            border-top: 1px solid var(--secondary);
+        button:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        .hero-section {
+            background: var(--hero-background);
+        }
+
+        .btn-accent {
+            background-color: var(--accent-color);
+            color: #000;
+        }
+
+        .dark .btn-accent {
+            color: #000;
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <h1 class="text-lg font-bold">Aicosystem</h1>
-        <button id="theme-toggle">
-            <svg xmlns="http://www.w3.org/2000/svg" class="sun-icon">
-                <path d="M12 3a9 9 0 1 0 9 9 9.014 9.014 0 0 0-9-9zm0 16a7 7 0 1 1 7-7 7.008 7.008 0 0 1-7 7z"/>
-            </svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="moon-icon" style="display: none;">
-                <path d="M12.1 22c-4.9 0-9.1-3.5-9.9-8.2-.8-4.7 1.9-9.3 6.4-11 .4-.2.9-.1 1.2.3.3.4.3.9 0 1.2-2.2 2.5-2.6 6.1-1.1 9 1.5 3 4.6 4.7 7.9 4.5.5 0 .9.3 1.1.7.2.4.1.9-.2 1.2-1.5 1.5-3.5 2.3-5.4 2.3z"/>
-            </svg>
-        </button>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <h1>AICOSYSTEM</h1>
-        <p id="typed-text">Your AI co-system</p>
-        <button>Building Super Intelligence: Two Grand Challenges in Cognitive Computing</button>
-    </section>
-
-    <!-- Framework Section -->
-    <section class="py-24">
-        <div class="max-w-7xl mx-auto px-6">
-            <h2 class="text-3xl font-bold text-center">The Dual Imperative Framework</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="framework-diagram">
-                    <h3 class="font-bold">Functionality</h3>
-                    <p>Compute Performance, Energy Efficiency, Explainability</p>
+    <nav class="fixed w-full bg-opacity-90 backdrop-blur-sm z-50" role="navigation" aria-label="Main Navigation">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-label="Aicosystem Logo">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
+                    <span class="ml-2 text-lg font-semibold">Aicosystem</span>
                 </div>
-                <div class="framework-diagram">
-                    <h3 class="font-bold">Capacity Building</h3>
-                    <p>Full-Stack R&D, Supply Chains, Workforce Development</p>
+                <div class="flex items-center space-x-4">
+                    <button id="theme-toggle" class="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700" aria-label="Toggle Dark Mode">
+                        <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                        </svg>
+                    </button>
                 </div>
             </div>
         </div>
-    </section>
+    </nav>
 
-    <!-- Footer -->
-    <footer>
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-section min-h-screen flex items-center justify-center pt-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h1 class="text-4xl sm:text-6xl font-bold mb-8" aria-label="AICOSYSTEM">
+                    AICOSYSTEM
+                </h1>
+                <p class="text-xl sm:text-2xl mb-12 text-secondary">
+                    <span id="typed-text" class=""></span>
+                </p>
+                <div class="flex justify-center space-x-4">
+                    <button class="btn-accent px-8 py-3 rounded-lg hover:opacity-90 transition">
+                        Building Super Intelligence: Two Grand Challenges in Cognitive Computing
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Framework Overview -->
+        <section class="py-24 bg-gray-50 dark:bg-gray-900">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-bold mb-16 text-center framework-title">The Dual Imperative Framework</h2>
+                <div class="grid md:grid-cols-2 gap-12">
+                    <!-- Functionality -->
+                    <div class="framework-diagram p-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
+                        <h3 class="text-2xl font-bold mb-6">Functionality</h3>
+                        <ul class="space-y-4">
+                            <li>Compute Performance</li>
+                            <li>Energy Efficiency</li>
+                            <li>Explainability</li>
+                        </ul>
+                    </div>
+
+                    <!-- Capacity Building -->
+                    <div class="framework-diagram p-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
+                        <h3 class="text-2xl font-bold mb-6">Capacity Building</h3>
+                        <ul class="space-y-4">
+                            <li>Full-Stack R&D</li>
+                            <li>Supply Chains</li>
+                            <li>Workforce Development</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services -->
+        <section class="py-24">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-bold mb-16 text-center">Our Services</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
+                        <h3 class="text-xl font-bold mb-4">Strategic Consulting</h3>
+                        <p class="text-secondary">Enterprise AI strategy and implementation</p>
+                    </div>
+                    <div class="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
+                        <h3 class="text-xl font-bold mb-4">Research Partnership</h3>
+                        <p class="text-secondary">Collaborative R&D and innovation</p>
+                    </div>
+                    <div class="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
+                        <h3 class="text-xl font-bold mb-4">Government Advisory</h3>
+                        <p class="text-secondary">Policy and regulatory guidance</p>
+                    </div>
+                    <div class="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
+                        <h3 class="text-xl font-bold mb-4">Venture Partnership</h3>
+                        <p class="text-secondary">Investment strategy and due diligence</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact -->
+        <section class="py-24 bg-gray-50 dark:bg-gray-900">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="text-3xl font-bold mb-8">Start the Conversation</h2>
+                <p class="text-xl text-secondary mb-12">
+                    Partner with us to shape the future of cognitive computing
+                </p>
+                <button class="bg-primary text-white px-8 py-3 rounded-lg hover:opacity-90 transition">
+                    Contact Us
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <footer class="py-8 text-center text-secondary">
         <p>&copy; 2025 Aicosystem. All rights reserved.</p>
     </footer>
 
     <script>
+        // Theme Toggle
         const themeToggle = document.getElementById('theme-toggle');
-        const sunIcon = themeToggle.querySelector('.sun-icon');
-        const moonIcon = themeToggle.querySelector('.moon-icon');
+        const html = document.documentElement;
 
-        function toggleTheme() {
-            document.body.classList.toggle('dark');
-            const isDark = document.body.classList.contains('dark');
-            sunIcon.style.display = isDark ? 'none' : 'block';
-            moonIcon.style.display = isDark ? 'block' : 'none';
+        function setTheme(isDark) {
+            isDark ? html.classList.add('dark') : html.classList.remove('dark');
         }
 
-        themeToggle.addEventListener('click', toggleTheme);
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            setTheme(true);
+        }
+
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+        });
+
+        // Typing Effect
+        const texts = ["Your AI co-pilot", "Your AI co-founder", "Your AI co-system"];
+        const typedTextElement = document.getElementById('typed-text');
+        let textIndex = 0;
+        let charIndex = 0;
+
+        function type() {
+            if (charIndex === 0) {
+                typedTextElement.classList.add('typing-effect');
+            }
+            if (charIndex < texts[textIndex].length) {
+                typedTextElement.textContent += texts[textIndex][charIndex];
+                charIndex++;
+                setTimeout(type, 100);
+            } else {
+                typedTextElement.classList.remove('typing-effect');
+                setTimeout(erase, 2000);
+            }
+        }
+
+        function erase() {
+            if (charIndex > 0) {
+                typedTextElement.textContent = texts[textIndex].substring(0, charIndex - 1);
+                charIndex--;
+                setTimeout(erase, 50);
+            } else {
+                textIndex = (textIndex + 1) % texts.length;
+                type();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            type();
+        });
     </script>
 </body>
 </html>
