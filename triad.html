@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        :root {
+            --gradient-start: #1a365d;
+            --gradient-end: #2a4365;
+            --accent-color: #4299e1;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: white;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .presentation-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .slide {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .slide.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .slide-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .framework-diagram {
+            width: 100%;
+            height: 600px;
+            position: relative;
+            margin: 2rem 0;
+        }
+
+        .triad {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+        }
+
+        .triad-left {
+            left: 0;
+        }
+
+        .triad-right {
+            right: 0;
+        }
+
+        .node {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .node:hover {
+            transform: scale(1.1);
+            background: #63b3ed;
+        }
+
+        .node-text {
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .connection-line {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.2);
+            height: 2px;
+            transform-origin: left center;
+        }
+
+        .slide-controls {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .control-button {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            padding: 1rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .control-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        #infoPanel {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            max-width: 500px;
+            display: none;
+        }
+
+        .particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-start);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-overlay">
+        <div>Loading Presentation...</div>
+    </div>
+
+    <div class="particles-container"></div>
+
+    <div class="presentation-container">
+        <div class="slide active" data-slide="1">
+            <h1 class="slide-title">Aicosystem Theory</h1>
+            <div class="subtitle">A Strategic Framework for the AI Revolution</div>
+        </div>
+
+        <div class="framework-diagram">
+            <div class="triad triad-left">
+                <div class="node" data-type="compute">
+                    <div class="node-text">Compute</div>
+                </div>
+                <div class="node" data-type="energy">
+                    <div class="node-text">Energy</div>
+                </div>
+                <div class="node" data-type="control">
+                    <div class="node-text">Control</div>
+                </div>
+            </div>
+            
+            <div class="triad triad-right">
+                <div class="node" data-type="rd">
+                    <div class="node-text">Full-Stack R&D</div>
+                </div>
+                <div class="node" data-type="supply">
+                    <div class="node-text">Supply Chain</div>
+                </div>
+                <div class="node" data-type="workforce">
+                    <div class="node-text">Workforce</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="infoPanel"></div>
+    </div>
+
+    <div class="slide-controls">
+        <button class="control-button" id="prevSlide">←</button>
+        <button class="control-button" id="nextSlide">→</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Remove loading overlay
+            setTimeout(() => {
+                document.querySelector('.loading-overlay').style.display = 'none';
+            }, 1000);
+
+            // Initialize particles
+            const particlesContainer = document.querySelector('.particles-container');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.width = Math.random() * 5 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animation = `float ${Math.random() * 3 + 2}s infinite`;
+                particlesContainer.appendChild(particle);
+            }
+
+            // Node interaction
+            const nodes = document.querySelectorAll('.node');
+            const infoPanel = document.getElementById('infoPanel');
+            
+            const nodeInfo = {
+                compute: {
+                    title: 'Compute (Performance)',
+                    description: 'Foundation of AI systems requiring unprecedented processing capabilities.'
+                },
+                energy: {
+                    title: 'Energy (Efficiency)',
+                    description: 'Sustainable power management for AI infrastructure.'
+                },
+                control: {
+                    title: 'Control (Explainability)',
+                    description: 'Ensuring transparency and understanding of AI decisions.'
+                },
+                rd: {
+                    title: 'Full-Stack R&D',
+                    description: 'Integrated research and development across the AI stack.'
+                },
+                supply: {
+                    title: 'Supply Chain Resilience',
+                    description: 'Building robust and secure supply networks.'
+                },
+                workforce: {
+                    title: 'Workforce Development',
+                    description: 'Creating skilled teams for AI development and deployment.'
+                }
+            };
+
+            nodes.forEach(node => {
+                node.addEventListener('mouseenter', function() {
+                    const type = this.dataset.type;
+                    const info = nodeInfo[type];
+                    infoPanel.innerHTML = `
+                        <h3>${info.title}</h3>
+                        <p>${info.description}</p>
+                    `;
+                    infoPanel.style.display = 'block';
+                });
+
+                node.addEventListener('mouseleave', function() {
+                    infoPanel.style.display = 'none';
+                });
+            });
+
+            // Position nodes in triads
+            function positionNodes() {
+                const triads = document.querySelectorAll('.triad');
+                triads.forEach(triad => {
+                    const nodes = triad.querySelectorAll('.node');
+                    const radius = 150;
+                    nodes.forEach((node, i) => {
+                        const angle = (i * 2 * Math.PI / 3) - Math.PI/2;
+                        const x = radius * Math.cos(angle) + radius;
+                        const y = radius * Math.sin(angle) + radius;
+                        node.style.transform = `translate(${x}px, ${y}px)`;
+                    });
+                });
+            }
+
+            positionNodes();
+            window.addEventListener('resize', positionNodes);
+        });
+    </script>
+</body>
+</html>
