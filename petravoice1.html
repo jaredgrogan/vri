@@ -19,15 +19,20 @@
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/luxon/3.4.4/luxon.min.js"></script>
 
+    <!-- Recorder.js library for WAV export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/recorderjs/0.1.0/recorder.min.js"></script>
+
     <!-- Styles -->
     <style>
         /* Existing styles remain unchanged */
 
-        /* Add styles for new elements */
+        /* New styles for action buttons and output section */
         .action-buttons {
             display: flex;
+            flex-wrap: wrap;
             gap: 0.5rem;
             margin-bottom: 1rem;
+            justify-content: center;
         }
 
         .action-buttons button,
@@ -66,6 +71,25 @@
             color: var(--text-color);
             transition: all 0.3s ease;
             margin-bottom: 1rem;
+        }
+
+        /* Adjusting controls for two rows of buttons */
+        .controls {
+            margin-bottom: auto;
+            padding: 2rem 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .control-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         /* Advanced Settings Modal */
@@ -150,6 +174,21 @@
     <!-- Header -->
     <header>
         <!-- Existing header code remains unchanged -->
+        <div class="container header-content">
+            <div class="brand-container">
+                <img src="logo1.svg" alt="Petra Logo" class="brand-logo"/>
+                <a href="index.html" class="brand-name">Petra.chat</a>
+                <span class="brand-subtitle">Your Personal Polyglot</span>
+            </div>
+            <div class="header-controls">
+                <div class="time-display" id="timeDisplay"></div>
+                <button id="themeToggle" aria-label="Toggle theme" data-tooltip="Toggle theme" role="button">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
     </header>
 
     <!-- Main content -->
@@ -204,7 +243,85 @@
                 ></textarea>
             </div>
 
-            <!-- Existing controls (e.g., playback controls) remain unchanged -->
+            <!-- Existing controls (e.g., playback controls) with buttons adjusted for two rows -->
+            <h2 class="section-title">Petra Reader Tools</h2>
+            <div class="controls" role="region" aria-label="Playback Controls">
+                <!-- First row: Language select and voice settings -->
+                <div class="control-buttons">
+                    <select aria-label="Select language" id="languageSelect">
+                        <option value="en">English</option>
+                        <option value="ar">Arabic</option>
+                        <option value="zh">Chinese</option>
+                        <!-- Other language options -->
+                    </select>
+
+                    <select aria-label="Select voice" id="voiceSelect">
+                        <!-- Voices will be populated dynamically -->
+                    </select>
+                </div>
+
+                <!-- Second row: Playback and export buttons -->
+                <div class="control-buttons">
+                    <button id="dictateButton" aria-label="Start dictation" data-tooltip="Dictate" role="button">
+                        <!-- SVG icon for dictation -->
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+                            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                            <line x1="12" x2="12" y1="19" y2="22"/>
+                        </svg>
+                    </button>
+
+                    <button id="playButton" aria-label="Play text" data-tooltip="Play" role="button">
+                        <!-- SVG icon for play -->
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                        </svg>
+                    </button>
+
+                    <button id="pauseButton" aria-label="Pause playback" data-tooltip="Pause" role="button">
+                        <!-- SVG icon for pause -->
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="6" y="4" width="4" height="16"></rect>
+                            <rect x="14" y="4" width="4" height="16"></rect>
+                        </svg>
+                    </button>
+
+                    <button id="stopButton" aria-label="Stop playback" data-tooltip="Stop" role="button">
+                        <!-- SVG icon for stop -->
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="5" y="5" width="14" height="14"></rect>
+                        </svg>
+                    </button>
+
+                    <button id="exportButton" aria-label="Export as WAV" data-tooltip="Export WAV" role="button">
+                        <!-- SVG icon for export -->
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                    </button>
+
+                    <button id="exportTxtButton" aria-label="Export as TXT" data-tooltip="Export TXT" role="button">
+                        <!-- SVG icon for export TXT -->
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h8"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <line x1="10" y1="9" x2="8" y2="9"></line>
+                        </svg>
+                    </button>
+
+                    <button id="settingsButton" aria-label="Settings" data-tooltip="Settings" role="button">
+                        <!-- SVG icon for settings -->
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33h-.09a1.65 1.65 0 0 0-1.51 1v.09a2 2 0 0 1-2 2h-1.09a2 2 0 0 1-2-2v-.09a1.65 1.65 0 0 0-1-1.51h-.09a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82V15a1.65 1.65 0 0 0-1.51-1H3.09a2 2 0 0 1-2-2v-1.09a2 2 0 0 1 2-2h.09a1.65 1.65 0 0 0 1.51-1v-.09a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3.09a2 2 0 0 1 2-2h1.09a2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51h.09a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1h.09a2 2 0 0 1 2 2v1.09a2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -223,11 +340,11 @@
             <label for="verbosityRange">Verbosity:</label>
             <input type="range" id="verbosityRange" min="0" max="2" step="0.1" value="1">
 
-            <label for="whisperAccuracy">Whisper Accuracy:</label>
-            <select id="whisperAccuracy">
-                <option value="normal">Normal</option>
-                <option value="high">High</option>
-            </select>
+            <label for="bgAnimation">Background Animation</label>
+            <div class="toggle-switch">
+                <input type="checkbox" id="bgAnimation" checked>
+                <label for="bgAnimation"></label>
+            </div>
         </div>
     </div>
 
@@ -255,11 +372,11 @@
             const closeSettings = document.getElementById('closeSettings');
             const toneSelect = document.getElementById('toneSelect');
             const verbosityRange = document.getElementById('verbosityRange');
-            const whisperAccuracy = document.getElementById('whisperAccuracy');
+            const bgAnimation = document.getElementById('bgAnimation');
 
             // Event listener for Compose button
             composeButton.addEventListener('click', async () => {
-                const userInput = textInput.value;
+                const userInput = document.getElementById('textInput').value;
                 const style = styleSelect.value;
                 const tone = toneSelect.value;
                 const verbosity = verbosityRange.value;
@@ -299,7 +416,7 @@
 
             // Event listener for Summarize button
             summarizeButton.addEventListener('click', async () => {
-                const userInput = textInput.value;
+                const userInput = document.getElementById('textInput').value;
                 const summaryType = summarySelect.value;
 
                 if (!userInput.trim()) {
@@ -356,7 +473,7 @@
                 // Initialize advanced settings from local storage (if needed)
                 toneSelect.value = localStorage.getItem('tone') || 'neutral';
                 verbosityRange.value = localStorage.getItem('verbosity') || '1';
-                whisperAccuracy.value = localStorage.getItem('whisperAccuracy') || 'normal';
+                bgAnimation.checked = localStorage.getItem('bgAnimation') !== 'false';
 
                 // Save advanced settings on change
                 toneSelect.addEventListener('change', () => {
@@ -367,9 +484,24 @@
                     localStorage.setItem('verbosity', verbosityRange.value);
                 });
 
-                whisperAccuracy.addEventListener('change', () => {
-                    localStorage.setItem('whisperAccuracy', whisperAccuracy.value);
+                bgAnimation.addEventListener('change', () => {
+                    isAnimationEnabled = bgAnimation.checked;
+                    localStorage.setItem('bgAnimation', isAnimationEnabled);
+                    if (isAnimationEnabled) {
+                        particleSystem.start();
+                    } else {
+                        particleSystem.pause();
+                    }
                 });
+
+                // Initialize voice select
+                speechController.updateVoiceSelect();
+
+                // Call existing initialization steps
+                updateTime();
+                setInterval(updateTime, 1000);
+                updateCounters();
+                loadHistory();
             }
 
             // Call initializeApp
