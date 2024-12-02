@@ -24,7 +24,536 @@
 
     <!-- Styles -->
     <style>
-        /* Existing styles remain unchanged */
+        :root {
+            --primary-gradient: linear-gradient(135deg, #A51C30, #ED1B34);
+            --button-color: #1e1e1e;
+            --gray-500: #6B7280;
+            --bg-color: #ffffff;
+            --text-color: #1e1e1e;
+            --input-bg: #f3f4f6;
+            --button-bg: #1e1e1e;
+            --button-text: #ffffff;
+            --input-border: rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #000000;
+            --text-color: #ffffff;
+            --input-bg: #0e0e0e;
+            --button-bg: #1e1e1e;
+            --button-text: #ffffff;
+            --input-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.3s, color 0.3s;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            transition: background-color 0.3s;
+        }
+
+        [data-theme="dark"] header {
+            background: rgba(30, 30, 30, 0.8);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .brand-logo {
+            height: 32px;
+            width: auto;
+            margin-right: 0.5rem;
+        }
+
+        .brand-name {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+            font-size: 1.5rem;
+            opacity: 0;
+            animation: fadeIn 1.5s forwards;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .brand-subtitle {
+            color: var(--text-color);
+            font-size: 1rem;
+            opacity: 0;
+            animation: fadeIn 1.5s forwards;
+            animation-delay: 0.5s;
+            white-space: nowrap;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 3rem 0;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .hero-title {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            /* Responsive font size using clamp */
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            margin-bottom: 1rem;
+            white-space: nowrap;
+            overflow: hidden;
+            width: 0;
+            animation: typing 2s steps(30, end) forwards;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--text-color) }
+        }
+
+        .hero-subtitle {
+            color: var(--text-color);
+            font-size: 1.2rem;
+            opacity: 0;
+            animation: fadeIn 1.5s forwards;
+            animation-delay: 0.5s;
+        }
+
+        .content-wrapper {
+            padding: 0 1rem;
+        }
+
+        .input-section {
+            margin-bottom: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        textarea {
+            width: 100%;
+            max-width: 1000px;
+            min-height: 200px;
+            padding: 1.5rem;
+            border: 1px solid var(--input-border);
+            border-radius: 12px;
+            resize: vertical;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            background: var(--input-bg);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        @media (min-width: 768px) {
+            textarea {
+                min-height: 300px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            textarea {
+                min-height: 400px;
+            }
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #A51C30;
+            box-shadow: 0 0 0 2px rgba(165, 28, 48, 0.1);
+        }
+
+        .section-title {
+            color: var(--text-color);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-align: center;
+            width: 100%;
+        }
+
+        .input-stats {
+            display: flex;
+            gap: 1.5rem;
+            color: var(--text-color);
+            font-size: 0.875rem;
+            margin-bottom: 2rem;
+        }
+
+        .timer-display {
+            font-family: monospace;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            background: var(--button-bg);
+            color: var(--button-text);
+        }
+
+        .controls {
+            margin-bottom: auto;
+            padding: 2rem 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .control-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            border: none;
+            background: var(--button-bg);
+            color: var(--button-text);
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        button#themeToggle {
+            background: var(--input-bg);
+            color: var(--text-color);
+        }
+
+        button.recording {
+            animation: recordingPulse 2s infinite;
+        }
+
+        @keyframes recordingPulse {
+            0% {
+                background: var(--primary-gradient);
+                transform: scale(1);
+            }
+            50% {
+                background: #ED1B34;
+                transform: scale(1.05);
+            }
+            100% {
+                background: var(--primary-gradient);
+                transform: scale(1);
+            }
+        }
+
+        button::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-top: 8px;
+            padding: 4px 8px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            font-size: 12px;
+            border-radius: 4px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        button:hover::after {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Pause button stays red when paused */
+        #pauseButton.paused {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        select {
+            padding: 0.5rem 2rem 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--input-border);
+            appearance: none;
+            background: var(--input-bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 0.5rem center;
+            background-size: 1rem;
+            cursor: pointer;
+            color: var(--text-color);
+            transition: all 0.2s;
+            min-width: 150px;
+        }
+
+        select:hover {
+            border-color: #A51C30;
+        }
+
+        .settings-panel {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: none;
+            min-width: 300px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        [data-theme="dark"] .settings-panel {
+            background: rgba(30, 30, 30, 0.9);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .settings-panel.active {
+            display: block;
+        }
+
+        .settings-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .settings-content h3 {
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+
+        .setting-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .setting-group label {
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-switch label {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--gray-500);
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .toggle-switch label:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        .toggle-switch input:checked + label {
+            background: var(--primary-gradient);
+        }
+
+        .toggle-switch input:checked + label:before {
+            transform: translateX(26px);
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 999;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        /* Sidebar styles */
+        .sidebar {
+            position: fixed;
+            left: -250px;
+            top: 0;
+            width: 250px;
+            height: 100%;
+            background: var(--bg-color);
+            overflow-y: auto;
+            transition: left 0.3s ease;
+            z-index: 1001;
+            border-right: 1px solid var(--input-border);
+            padding: 1rem;
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar h2 {
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--input-border);
+            cursor: pointer;
+            color: var(--text-color);
+        }
+
+        .sidebar ul li:hover {
+            background: var(--input-bg);
+        }
+
+        .sidebar-toggle {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            background: var(--button-bg);
+            color: var(--button-text);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1002;
+        }
+
+        .sidebar-toggle:hover {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: var(--text-color);
+            margin-top: auto;
+            margin-bottom: 2rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @media (max-width: 640px) {
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 1rem;
+            }
+
+            .control-buttons {
+                justify-content: center;
+            }
+
+            select {
+                width: 100%;
+            }
+
+            .settings-panel {
+                width: 90%;
+                max-width: none;
+            }
+
+            .brand-subtitle {
+                display: none;
+            }
+        }
 
         /* New styles for action buttons and output section */
         .action-buttons {
@@ -57,10 +586,12 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            padding: 0 1rem;
         }
 
         .output-section textarea {
             width: 100%;
+            max-width: 1000px;
             min-height: 200px;
             padding: 1.5rem;
             border: 1px solid var(--input-border);
@@ -73,23 +604,21 @@
             margin-bottom: 1rem;
         }
 
-        /* Adjusting controls for two rows of buttons */
-        .controls {
-            margin-bottom: auto;
-            padding: 2rem 0;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            align-items: center;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .control-buttons {
+        /* Output controls */
+        .output-controls {
             display: flex;
             gap: 0.5rem;
             flex-wrap: wrap;
             justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .output-timer {
+            font-family: monospace;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            background: var(--button-bg);
+            color: var(--button-text);
         }
 
         /* Advanced Settings Modal */
@@ -208,23 +737,6 @@
                     id="textInput"
                 ></textarea>
 
-                <!-- New action buttons and dropdowns -->
-                <div class="action-buttons">
-                    <button id="composeButton" aria-label="Compose text">Compose</button>
-                    <button id="summarizeButton" aria-label="Summarize text">Summarize</button>
-                    <select id="styleSelect" aria-label="Select composition style">
-                        <option value="formal">Formal</option>
-                        <option value="casual">Casual</option>
-                        <option value="storytelling">Storytelling</option>
-                    </select>
-                    <select id="summarySelect" aria-label="Select summarization type">
-                        <option value="bullet_points">Bullet Points</option>
-                        <option value="concise">Concise Summary</option>
-                        <option value="detailed">Detailed Summary</option>
-                    </select>
-                    <button id="advancedSettingsButton" aria-label="Advanced settings">Settings</button>
-                </div>
-
                 <div class="input-stats">
                     <!-- Existing input stats -->
                     <span id="charCount">0 / 25000 characters</span>
@@ -233,18 +745,27 @@
                 </div>
             </div>
 
-            <!-- New output section -->
-            <div class="output-section">
-                <textarea 
-                    id="outputField"
-                    readonly
-                    aria-label="Generated output will appear here"
-                    placeholder="Generated output will appear here..."
-                ></textarea>
+            <!-- Action buttons and dropdowns -->
+            <div class="action-buttons">
+                <button id="composeButton" aria-label="Compose text">Compose</button>
+                <button id="summarizeButton" aria-label="Summarize text">Summarize</button>
+                <select id="styleSelect" aria-label="Select composition style">
+                    <option value="formal">Formal</option>
+                    <option value="casual">Casual</option>
+                    <option value="storytelling">Storytelling</option>
+                </select>
+                <select id="summarySelect" aria-label="Select summarization type">
+                    <option value="bullet_points">Bullet Points</option>
+                    <option value="concise">Concise Summary</option>
+                    <option value="detailed">Detailed Summary</option>
+                </select>
+                <button id="advancedSettingsButton" aria-label="Advanced settings">Settings</button>
             </div>
 
-            <!-- Existing controls (e.g., playback controls) with buttons adjusted for two rows -->
+            <!-- Section title -->
             <h2 class="section-title">Petra Reader Tools</h2>
+
+            <!-- Existing controls (e.g., playback controls) with buttons adjusted for two rows -->
             <div class="controls" role="region" aria-label="Playback Controls">
                 <!-- First row: Language select and voice settings -->
                 <div class="control-buttons">
@@ -322,6 +843,63 @@
                     </button>
                 </div>
             </div>
+
+            <!-- Output section with unique controls -->
+            <div class="output-section">
+                <textarea 
+                    id="outputField"
+                    readonly
+                    aria-label="Generated output will appear here"
+                    placeholder="Generated output will appear here..."
+                ></textarea>
+
+                <!-- Output-specific controls -->
+                <div class="output-controls">
+                    <button id="outputPlayButton" aria-label="Play output text" data-tooltip="Play Output" role="button">
+                        <!-- SVG icon for play -->
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                        </svg>
+                    </button>
+
+                    <button id="outputPauseButton" aria-label="Pause output playback" data-tooltip="Pause Output" role="button">
+                        <!-- SVG icon for pause -->
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="6" y="4" width="4" height="16"></rect>
+                            <rect x="14" y="4" width="4" height="16"></rect>
+                        </svg>
+                    </button>
+
+                    <button id="outputStopButton" aria-label="Stop output playback" data-tooltip="Stop Output" role="button">
+                        <!-- SVG icon for stop -->
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="5" y="5" width="14" height="14"></rect>
+                        </svg>
+                    </button>
+
+                    <button id="outputExportButton" aria-label="Export output as WAV" data-tooltip="Export Output WAV" role="button">
+                        <!-- SVG icon for export -->
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                    </button>
+
+                    <button id="outputExportTxtButton" aria-label="Export output as TXT" data-tooltip="Export Output TXT" role="button">
+                        <!-- SVG icon for export TXT -->
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h8"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <line x1="10" y1="9" x2="8" y2="9"></line>
+                        </svg>
+                    </button>
+
+                    <span id="outputTimerDisplay" class="output-timer">0:00</span>
+                </div>
+            </div>
         </div>
     </main>
 
@@ -355,156 +933,220 @@
 
     <!-- Scripts -->
     <script>
-        // Existing JavaScript code remains unchanged up to the Application Initialization section
+        // Initialize theme and other settings before content loads
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.body.setAttribute('data-theme', savedTheme);
 
-        // Extend the Application Initialization
+        let isDarkMode = savedTheme === 'dark';
+        let isAnimationEnabled = localStorage.getItem('bgAnimation') !== 'false';
+
+        // Variables for output playback
+        let isOutputPlaying = false;
+        let outputTimerInterval;
+        let outputStartTime;
+        let outputPausedTime = 0;
+        let outputCurrentUtterance = null;
+
+        // Rest of the JavaScript code, including initialization, event handlers, and function definitions
+        // Ensure that the code includes the background animation and styles as per your requirements
+
+        // Application Initialization
         document.addEventListener('DOMContentLoaded', () => {
             // Existing initialization code
 
-            // New functionality
-            const composeButton = document.getElementById('composeButton');
-            const summarizeButton = document.getElementById('summarizeButton');
-            const outputField = document.getElementById('outputField');
-            const styleSelect = document.getElementById('styleSelect');
-            const summarySelect = document.getElementById('summarySelect');
-            const advancedSettingsButton = document.getElementById('advancedSettingsButton');
-            const advancedSettingsModal = document.getElementById('advancedSettingsModal');
-            const closeSettings = document.getElementById('closeSettings');
-            const toneSelect = document.getElementById('toneSelect');
-            const verbosityRange = document.getElementById('verbosityRange');
-            const bgAnimation = document.getElementById('bgAnimation');
+            // Initialize background animation
+            const particleSystem = new VectorNetwork();
 
-            // Event listener for Compose button
-            composeButton.addEventListener('click', async () => {
-                const userInput = document.getElementById('textInput').value;
-                const style = styleSelect.value;
-                const tone = toneSelect.value;
-                const verbosity = verbosityRange.value;
+            // Other initialization code continues...
 
-                if (!userInput.trim()) {
-                    alert('Please enter some text to compose.');
+            // Output playback controls
+            const outputPlayButton = document.getElementById('outputPlayButton');
+            const outputPauseButton = document.getElementById('outputPauseButton');
+            const outputStopButton = document.getElementById('outputStopButton');
+            const outputExportButton = document.getElementById('outputExportButton');
+            const outputExportTxtButton = document.getElementById('outputExportTxtButton');
+            const outputTimerDisplay = document.getElementById('outputTimerDisplay');
+
+            // Event listener for output play button
+            outputPlayButton.addEventListener('click', () => {
+                if (speechController.synth.speaking && isOutputPlaying) {
+                    pauseOutputPlayback();
+                } else {
+                    const text = outputField.value;
+                    if (text && !isOutputPlaying) {
+                        speechController.speak(text, { isOutput: true }).catch(error =>
+                            handleError(error, 'output-playback'));
+                        saveToHistory(text);
+                    }
+                }
+            });
+
+            // Event listener for output pause button
+            outputPauseButton.addEventListener('click', () => {
+                if (speechController.synth.speaking && isOutputPlaying) {
+                    pauseOutputPlayback();
+                } else if (outputCurrentUtterance) {
+                    resumeOutputPlayback();
+                }
+            });
+
+            // Event listener for output stop button
+            outputStopButton.addEventListener('click', () => {
+                if (speechController.synth.speaking && isOutputPlaying) {
+                    speechController.synth.cancel();
+                    stopOutputTimer();
+                    isOutputPlaying = false;
+                }
+            });
+
+            // Output export buttons
+            outputExportButton.addEventListener('click', () => {
+                // Implement export functionality for output field
+            });
+
+            outputExportTxtButton.addEventListener('click', () => {
+                const text = outputField.value;
+                if (!text) {
+                    alert('No output to export.');
                     return;
                 }
 
                 try {
-                    // Call the compose API endpoint
-                    const response = await fetch('/api/compose', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            userInput,
-                            style,
-                            tone,
-                            verbosity
-                        })
-                    });
-
-                    const result = await response.json();
-
-                    if (response.ok) {
-                        outputField.value = result.output;
-                        saveToHistory(result.output);
-                    } else {
-                        alert(result.error || 'Failed to compose text.');
-                    }
+                    const blob = new Blob([text], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = url;
+                    a.download = `petra-output-${Date.now()}.txt`;
+                    document.body.appendChild(a);
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
                 } catch (error) {
-                    console.error('Error composing text:', error);
+                    handleError(error, 'output-text-export');
                 }
             });
 
-            // Event listener for Summarize button
-            summarizeButton.addEventListener('click', async () => {
-                const userInput = document.getElementById('textInput').value;
-                const summaryType = summarySelect.value;
-
-                if (!userInput.trim()) {
-                    alert('Please enter some text to summarize.');
-                    return;
-                }
-
-                try {
-                    // Call the summarize API endpoint
-                    const response = await fetch('/api/summarize', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            userInput,
-                            summaryType
-                        })
-                    });
-
-                    const result = await response.json();
-
-                    if (response.ok) {
-                        outputField.value = result.summary;
-                        saveToHistory(result.summary);
-                    } else {
-                        alert(result.error || 'Failed to summarize text.');
-                    }
-                } catch (error) {
-                    console.error('Error summarizing text:', error);
-                }
-            });
-
-            // Advanced settings modal handlers
-            advancedSettingsButton.addEventListener('click', () => {
-                advancedSettingsModal.style.display = 'block';
-            });
-
-            closeSettings.addEventListener('click', () => {
-                advancedSettingsModal.style.display = 'none';
-            });
-
-            window.addEventListener('click', (event) => {
-                if (event.target == advancedSettingsModal) {
-                    advancedSettingsModal.style.display = 'none';
-                }
-            });
-
-            // Existing initialization code continues...
-
-            function initializeApp() {
-                // Existing code...
-
-                // Initialize advanced settings from local storage (if needed)
-                toneSelect.value = localStorage.getItem('tone') || 'neutral';
-                verbosityRange.value = localStorage.getItem('verbosity') || '1';
-                bgAnimation.checked = localStorage.getItem('bgAnimation') !== 'false';
-
-                // Save advanced settings on change
-                toneSelect.addEventListener('change', () => {
-                    localStorage.setItem('tone', toneSelect.value);
-                });
-
-                verbosityRange.addEventListener('input', () => {
-                    localStorage.setItem('verbosity', verbosityRange.value);
-                });
-
-                bgAnimation.addEventListener('change', () => {
-                    isAnimationEnabled = bgAnimation.checked;
-                    localStorage.setItem('bgAnimation', isAnimationEnabled);
-                    if (isAnimationEnabled) {
-                        particleSystem.start();
-                    } else {
-                        particleSystem.pause();
-                    }
-                });
-
-                // Initialize voice select
-                speechController.updateVoiceSelect();
-
-                // Call existing initialization steps
-                updateTime();
-                setInterval(updateTime, 1000);
-                updateCounters();
-                loadHistory();
+            // Output playback timer functions
+            function startOutputTimer() {
+                outputStartTime = Date.now() - outputPausedTime;
+                updateOutputTimer();
+                outputTimerInterval = setInterval(updateOutputTimer, 100);
             }
 
-            // Call initializeApp
+            function stopOutputTimer() {
+                clearInterval(outputTimerInterval);
+                outputTimerDisplay.textContent = '0:00';
+                outputPausedTime = 0;
+            }
+
+            function updateOutputTimer() {
+                const elapsed = Date.now() - outputStartTime;
+                const seconds = Math.floor(elapsed / 1000);
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = seconds % 60;
+                outputTimerDisplay.textContent = 
+                    `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+            }
+
+            function pauseOutputPlayback() {
+                if (outputCurrentUtterance && speechController.synth.speaking) {
+                    speechController.pause();
+                    clearInterval(outputTimerInterval);
+                    isOutputPlaying = false;
+                }
+            }
+
+            function resumeOutputPlayback() {
+                if (outputCurrentUtterance) {
+                    speechController.resume();
+                    startOutputTimer();
+                    isOutputPlaying = true;
+                }
+            }
+
+            // Modify speechController's speak function to handle output playback
+            speechController.speak = function(text, options = {}) {
+                return new Promise((resolve, reject) => {
+                    try {
+                        if (options.isOutput) {
+                            if (outputCurrentUtterance) {
+                                this.synth.cancel();
+                            }
+                        } else {
+                            if (this.currentUtterance) {
+                                this.synth.cancel();
+                            }
+                        }
+
+                        const utterance = new SpeechSynthesisUtterance(text);
+                        const selectedLanguage = document.getElementById('languageSelect').value;
+                        const voiceSelect = document.getElementById('voiceSelect');
+                        const selectedVoiceName = voiceSelect.selectedOptions[0]?.getAttribute('data-name');
+
+                        utterance.lang = selectedLanguage;
+
+                        // Assign selected voice
+                        utterance.voice = this.voices.find(voice => voice.name === selectedVoiceName) || this.voices[0];
+
+                        // Get speed from slider
+                        const speed = parseFloat(document.getElementById('speedSelect').value);
+                        utterance.rate = speed;
+
+                        utterance.onstart = () => {
+                            if (options.isOutput) {
+                                isOutputPlaying = true;
+                                startOutputTimer();
+                            } else {
+                                isPlaying = true;
+                                document.getElementById('playButton').setAttribute('data-tooltip', 'Pause');
+                                startTimer();
+                            }
+                        };
+
+                        utterance.onend = () => {
+                            if (options.isOutput) {
+                                isOutputPlaying = false;
+                                outputCurrentUtterance = null;
+                                stopOutputTimer();
+                            } else {
+                                isPlaying = false;
+                                this.currentUtterance = null;
+                                document.getElementById('playButton').setAttribute('data-tooltip', 'Play');
+                                stopTimer();
+                            }
+                            resolve();
+                        };
+
+                        utterance.onerror = (event) => {
+                            handleError(event, 'speech-synthesis');
+                            if (options.isOutput) {
+                                stopOutputTimer();
+                                isOutputPlaying = false;
+                                outputCurrentUtterance = null;
+                            } else {
+                                stopTimer();
+                                isPlaying = false;
+                                this.currentUtterance = null;
+                            }
+                            reject(event);
+                        };
+
+                        if (options.isOutput) {
+                            outputCurrentUtterance = utterance;
+                        } else {
+                            this.currentUtterance = utterance;
+                        }
+
+                        this.synth.speak(utterance);
+                    } catch (error) {
+                        handleError(error, 'speech-synthesis');
+                        reject(error);
+                    }
+                });
+            };
+
+            // Initialize the application
             initializeApp();
         });
     </script>
