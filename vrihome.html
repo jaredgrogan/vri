@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VRI | De-Risking Innovation Through Venture Science</title>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/framer-motion/10.16.4/framer-motion.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    
+    <style>
+        :root {
+            --vr-red-dark: #A51C30;
+            --vr-red-light: #FF2E5B;
+            --black: #000000;
+            --dark-gray: #1e1e1e;
+            --white: #FFFFFF;
+            --light-silver: #f3f4f6;
+            --cobalt: #0020c2;
+            --cobalt-light: #0047FF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: linear-gradient(135deg, var(--white) 0%, var(--light-silver) 100%) no-repeat;
+            background-attachment: fixed;
+            color: var(--black);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            background: linear-gradient(45deg, var(--vr-red-dark), var(--vr-red-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        /* Hero Section with Enhanced Gradient */
+        .hero {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                135deg,
+                rgba(165, 28, 48, 0.95),
+                rgba(255, 46, 91, 0.85)
+            );
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            color: var(--white);
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        /* CRL Tech Stack Section */
+        .crl-section {
+            padding: 4rem 2rem;
+            background: var(--white);
+        }
+
+        .crl-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .crl-card {
+            background: linear-gradient(135deg, var(--vr-red-dark), var(--vr-red-light));
+            border-radius: 15px;
+            padding: 2rem;
+            color: var(--white);
+            transform: translateY(0);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .crl-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(165, 28, 48, 0.2);
+        }
+
+        /* Investment Strategy Visualization */
+        .strategy-section {
+            padding: 4rem 2rem;
+            background: var(--light-silver);
+        }
+
+        .strategy-flow {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            height: 600px;
+        }
+
+        /* Risk Management Framework */
+        .risk-section {
+            padding: 4rem 2rem;
+            background: var(--white);
+        }
+
+        .risk-matrix {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .risk-cell {
+            padding: 1.5rem;
+            border-radius: 10px;
+            background: var(--light-silver);
+            transition: all 0.3s ease;
+        }
+
+        /* Timeline */
+        .timeline-section {
+            padding: 4rem 2rem;
+            background: var(--dark-gray);
+            color: var(--white);
+        }
+
+        .timeline {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 2px;
+            height: 100%;
+            background: var(--vr-red-light);
+        }
+
+        /* LP Dashboard */
+        .dashboard-section {
+            padding: 4rem 2rem;
+            background: var(--light-silver);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .metric-card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .crl-grid,
+            .risk-matrix,
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-content">
+            <a href="#" class="logo">VRI</a>
+            <div class="nav-links">
+                <a href="#crls">CRLs</a>
+                <a href="#strategy">Strategy</a>
+                <a href="#risk">Risk</a>
+                <a href="#timeline">Timeline</a>
+                <a href="#dashboard">Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>De-Risking Innovation Through Venture Science</h1>
+            <p>Pioneering the systematic approach to venture capital through reverse-induction methodology and industry-led Commercial Research Labs.</p>
+        </div>
+    </section>
+<!-- Continuing from previous HTML - CRL Tech Stack Section -->
+    <section id="crls" class="crl-section">
+        <div class="crl-grid">
+            <!-- AI SaaS & Decentralized Computing -->
+            <div class="crl-card" onclick="expandCRL('ai')">
+                <h3>AI SaaS & Decentralized Computing</h3>
+                <div class="tech-stack">
+                    <h4>Technology Stack:</h4>
+                    <ul>
+                        <li>Distributed AI Infrastructure</li>
+                        <li>Edge Computing Solutions</li>
+                        <li>Blockchain Integration</li>
+                        <li>Smart Contract Platforms</li>
+                        <li>API Ecosystems</li>
+                    </ul>
+                    <div class="market-data">
+                        <canvas id="aiMarketChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FinTech & DeFi -->
+            <div class="crl-card" onclick="expandCRL('fintech')">
+                <h3>FinTech & DeFi</h3>
+                <div class="tech-stack">
+                    <h4>Technology Stack:</h4>
+                    <ul>
+                        <li>Smart Contract Networks</li>
+                        <li>Cross-chain Protocols</li>
+                        <li>DeFi Infrastructure</li>
+                        <li>Payment Systems</li>
+                        <li>Regulatory Tech</li>
+                    </ul>
+                    <div class="market-data">
+                        <canvas id="fintechMarketChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cybersecurity -->
+            <div class="crl-card" onclick="expandCRL('cyber')">
+                <h3>Cybersecurity</h3>
+                <div class="tech-stack">
+                    <h4>Technology Stack:</h4>
+                    <ul>
+                        <li>Zero-trust Architecture</li>
+                        <li>Quantum-safe Encryption</li>
+                        <li>Threat Detection AI</li>
+                        <li>Blockchain Security</li>
+                        <li>Identity Management</li>
+                    </ul>
+                    <div class="market-data">
+                        <canvas id="cyberMarketChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Longevity Analytics -->
+            <div class="crl-card" onclick="expandCRL('longevity')">
+                <h3>Longevity Analytics</h3>
+                <div class="tech-stack">
+                    <h4>Technology Stack:</h4>
+                    <ul>
+                        <li>Biodata Analytics</li>
+                        <li>Health AI Models</li>
+                        <li>Secure Data Exchange</li>
+                        <li>Predictive Analytics</li>
+                        <li>IoT Integration</li>
+                    </ul>
+                    <div class="market-data">
+                        <canvas id="longevityMarketChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Entertainment & Tech -->
+            <div class="crl-card" onclick="expandCRL('entertainment')">
+                <h3>Entertainment & Tech</h3>
+                <div class="tech-stack">
+                    <h4>Technology Stack:</h4>
+                    <ul>
+                        <li>XR Platforms</li>
+                        <li>Content Generation AI</li>
+                        <li>Blockchain Gaming</li>
+                        <li>Virtual Worlds</li>
+                        <li>Digital Assets</li>
+                    </ul>
+                    <div class="market-data">
+                        <canvas id="entertainmentMarketChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Investment Strategy Section -->
+    <section id="strategy" class="strategy-section">
+        <div class="strategy-flow">
+            <h2>Investment Strategy & Portfolio Construction</h2>
+            <div class="flow-diagram">
+                <canvas id="strategyFlow"></canvas>
+            </div>
+            <div class="strategy-metrics">
+                <div class="metric-card">
+                    <h3>Portfolio Allocation</h3>
+                    <canvas id="allocationChart"></canvas>
+                </div>
+                <div class="metric-card">
+                    <h3>Return Targets</h3>
+                    <canvas id="returnsChart"></canvas>
+                </div>
+                <div class="metric-card">
+                    <h3>Stage Distribution</h3>
+                    <canvas id="stageChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Risk Management Framework -->
+    <section id="risk" class="risk-section">
+        <h2>Risk Management Framework</h2>
+        <div class="risk-matrix">
+            <!-- Technical Risk -->
+            <div class="risk-cell">
+                <h3>Technical Risk</h3>
+                <canvas id="technicalRiskChart"></canvas>
+                <div class="risk-metrics">
+                    <div class="risk-score">Risk Score: <span id="technicalRiskScore">75</span></div>
+                    <div class="mitigation-status">Mitigation: <span id="technicalMitigation">Active</span></div>
+                </div>
+            </div>
+
+            <!-- Market Risk -->
+            <div class="risk-cell">
+                <h3>Market Risk</h3>
+                <canvas id="marketRiskChart"></canvas>
+                <div class="risk-metrics">
+                    <div class="risk-score">Risk Score: <span id="marketRiskScore">82</span></div>
+                    <div class="mitigation-status">Mitigation: <span id="marketMitigation">Active</span></div>
+                </div>
+            </div>
+
+            <!-- Execution Risk -->
+            <div class="risk-cell">
+                <h3>Execution Risk</h3>
+                <canvas id="executionRiskChart"></canvas>
+                <div class="risk-metrics">
+                    <div class="risk-score">Risk Score: <span id="executionRiskScore">78</span></div>
+                    <div class="mitigation-status">Mitigation: <span id="executionMitigation">Active</span></div>
+                </div>
+            </div>
+
+            <!-- Regulatory Risk -->
+            <div class="risk-cell">
+                <h3>Regulatory Risk</h3>
+                <canvas id="regulatoryRiskChart"></canvas>
+                <div class="risk-metrics">
+                    <div class="risk-score">Risk Score: <span id="regulatoryRiskScore">85</span></div>
+                    <div class="mitigation-status">Mitigation: <span id="regulatoryMitigation">Active</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Interactive Timeline Section -->
+    <section id="timeline" class="timeline-section">
+        <div class="timeline">
+            <h2>Venture Science Process Timeline</h2>
+            <div class="timeline-markers">
+                <!-- Phase 1: Problem Statement -->
+                <div class="timeline-node active">
+                    <div class="node-content">
+                        <h3>Problem Statement</h3>
+                        <p>Industry-validated problem identification</p>
+                        <div class="metrics">
+                            <canvas id="phase1Metrics"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 2: Market Validation -->
+                <div class="timeline-node">
+                    <div class="node-content">
+                        <h3>Market Validation</h3>
+                        <p>Data-driven market analysis</p>
+                        <div class="metrics">
+                            <canvas id="phase2Metrics"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 3: Technology Stack -->
+                <div class="timeline-node">
+                    <div class="node-content">
+                        <h3>Technology Stack</h3>
+                        <p>Solution architecture development</p>
+                        <div class="metrics">
+                            <canvas id="phase3Metrics"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 4: MVP Development -->
+                <div class="timeline-node">
+                    <div class="node-content">
+                        <h3>MVP Development</h3>
+                        <p>Rapid prototyping and testing</p>
+                        <div class="metrics">
+                            <canvas id="phase4Metrics"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 5: Market Launch -->
+                <div class="timeline-node">
+                    <div class="node-content">
+                        <h3>Market Launch</h3>
+                        <p>Go-to-market execution</p>
+                        <div class="metrics">
+                            <canvas id="phase5Metrics"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LP Dashboard Section -->
+    <section id="dashboard" class="dashboard-section">
+        <div class="dashboard-container">
+            <h2>Limited Partner Dashboard</h2>
+            
+            <!-- Portfolio Overview -->
+            <div class="dashboard-grid">
+                <!-- Portfolio Performance -->
+                <div class="metric-card">
+                    <h3>Portfolio Performance</h3>
+                    <div class="performance-chart">
+                        <canvas id="portfolioPerformance"></canvas>
+                    </div>
+                    <div class="key-metrics">
+                        <div class="metric">
+                            <span class="label">IRR</span>
+                            <span class="value" id="irrValue">32.5%</span>
+                        </div>
+                        <div class="metric">
+                            <span class="label">MOIC</span>
+                            <span class="value" id="moicValue">2.8x</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Capital Deployment -->
+                <div class="metric-card">
+                    <h3>Capital Deployment</h3>
+                    <div class="deployment-chart">
+                        <canvas id="capitalDeployment"></canvas>
+                    </div>
+                    <div class="deployment-metrics">
+                        <div class="metric">
+                            <span class="label">Deployed</span>
+                            <span class="value" id="deployedValue">45%</span>
+                        </div>
+                        <div class="metric">
+                            <span class="label">Reserved</span>
+                            <span class="value" id="reservedValue">30%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CRL Performance -->
+                <div class="metric-card">
+                    <h3>CRL Performance</h3>
+                    <div class="crl-performance-chart">
+                        <canvas id="crlPerformance"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Initialize Charts and Visualizations
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCharts();
+            setupTimelineInteraction();
+            initializeDashboard();
+            setupRiskManagement();
+        });
+
+        function initializeCharts() {
+            // Market Data Charts
+            const marketData = {
+                labels: ['2024', '2025', '2026', '2027'],
+                datasets: [{
+                    label: 'Market Size ($B)',
+                    data: [450, 612, 845, 1180],
+                    borderColor: 'rgba(165, 28, 48, 1)',
+                    backgroundColor: 'rgba(255, 46, 91, 0.1)',
+                    fill: true
+                }]
+            };
+
+            // Initialize CRL Charts
+            const crlCharts = document.querySelectorAll('.market-data canvas');
+            crlCharts.forEach(canvas => {
+                new Chart(canvas.getContext('2d'), {
+                    type: 'line',
+                    data: marketData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            });
+        }
+
+        function setupTimelineInteraction() {
+            const nodes = document.querySelectorAll('.timeline-node');
+            nodes.forEach(node => {
+                node.addEventListener('click', () => {
+                    nodes.forEach(n => n.classList.remove('active'));
+                    node.classList.add('active');
+                    updateTimelineMetrics(node);
+                });
+            });
+        }
+
+        function initializeDashboard() {
+            // Portfolio Performance Chart
+            const portfolioChart = new Chart(
+                document.getElementById('portfolioPerformance').getContext('2d'),
+                {
+                    type: 'line',
+                    data: {
+                        labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+                        datasets: [{
+                            label: 'Portfolio Value',
+                            data: [100, 125, 155, 180],
+                            borderColor: 'rgba(165, 28, 48, 1)',
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                }
+            );
+        }
+
+        function setupRiskManagement() {
+            // Risk Matrix Charts
+            const riskCharts = document.querySelectorAll('.risk-cell canvas');
+            riskCharts.forEach(canvas => {
+                new Chart(canvas.getContext('2d'), {
+                    type: 'radar',
+                    data: {
+                        labels: ['Impact', 'Likelihood', 'Control', 'Velocity'],
+                        datasets: [{
+                            label: 'Risk Profile',
+                            data: [75, 82, 78, 85],
+                            backgroundColor: 'rgba(165, 28, 48, 0.2)',
+                            borderColor: 'rgba(165, 28, 48, 1)',
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false
+                    }
+                });
+            });
+        }
+
+        // Real-time Updates
+        setInterval(() => {
+            updateMetrics();
+            updateRiskScores();
+        }, 5000);
+
+        function updateMetrics() {
+            // Simulate real-time metric updates
+            document.getElementById('irrValue').textContent = 
+                (30 + Math.random() * 5).toFixed(1) + '%';
+            document.getElementById('moicValue').textContent = 
+                (2.5 + Math.random() * 0.5).toFixed(1) + 'x';
+        }
+
+        function updateRiskScores() {
+            // Simulate risk score updates
+            const riskElements = document.querySelectorAll('.risk-score span');
+            riskElements.forEach(element => {
+                const currentScore = parseInt(element.textContent);
+                element.textContent = Math.max(70, Math.min(90, 
+                    currentScore + (Math.random() - 0.5) * 5)).toFixed(0);
+            });
+        }
+    </script>
+</body>
+</html>
