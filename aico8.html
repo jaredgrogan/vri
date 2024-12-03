@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta and Title -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aicosystem - Cognitive Computing</title>
+
+    <!-- Tailwind CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <style>
+        @font-face {
+            font-family: 'Berkeley Mono';
+            src: url('/fonts/BerkeleyMono-Regular.woff2') format('woff2');
+        }
+    </style>
+
+    <!-- Custom Styles -->
+    <style>
+        :root {
+            --primary: #2563eb;
+            --background-light: linear-gradient(180deg, #ffffff, #f9f9f9);
+            --background-dark: linear-gradient(180deg, #000000, #2a2a2a);
+            --text: #1f2937;
+            --text-light: #f3f4f6;
+        }
+
+        body {
+            font-family: 'Berkeley Mono', monospace;
+            background: var(--background-light);
+            color: var(--text);
+            transition: background 0.3s, color 0.3s;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* Section-Specific Backgrounds */
+        .hero-section {
+            background: var(--background-dark);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 4rem; /* To account for fixed navbar */
+        }
+
+        .framework-overview {
+            background: var(--background-light);
+            color: var(--text);
+        }
+
+        .our-services {
+            background: var(--background-dark);
+            color: var(--text-light);
+        }
+
+        .footer {
+            background: var(--background-light);
+            color: var(--text);
+        }
+
+        /* Hero Content */
+        .hero-content {
+            text-align: center;
+        }
+
+        .btn-accent {
+            background-color: #9af764;
+            color: #000;
+        }
+
+        .dark .btn-accent {
+            color: #000;
+        }
+
+        /* Typing Effect */
+        .typing-effect::after {
+            content: '|';
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed w-full bg-opacity-90 backdrop-blur-sm z-50" role="navigation" aria-label="Main Navigation">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-label="Aicosystem Logo">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
+                    <span class="ml-2 text-lg font-semibold">Aicosystem</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="theme-toggle" class="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700" aria-label="Toggle Dark Mode">
+                        <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M20.354 15.354A9 9 0 1 1 8.646 3.646 9.003
+                                  9.003 0 0 0 12 21a9.003 9.003 0 0 0 8.354-5.646z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="text-4xl sm:text-6xl font-bold mb-8">AICOSYSTEM</h1>
+            <p class="text-xl sm:text-2xl mb-12">Introducing the Future of Cognitive Computing</p>
+            <button class="btn-accent px-8 py-3 rounded-lg hover:opacity-90 transition">
+                Explore Our Solutions
+            </button>
+        </div>
+    </section>
+
+    <!-- Framework Overview -->
+    <section class="framework-overview py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold mb-16 text-center">The Dual Imperative Framework</h2>
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="p-8 bg-white rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold mb-6">Functionality</h3>
+                    <ul class="space-y-4">
+                        <li>Compute Performance</li>
+                        <li>Energy Efficiency</li>
+                        <li>Explainability</li>
+                    </ul>
+                </div>
+                <div class="p-8 bg-white rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold mb-6">Capacity Building</h3>
+                    <ul class="space-y-4">
+                        <li>Full-Stack R&D</li>
+                        <li>Supply Chains</li>
+                        <li>Workforce Development</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Services Section -->
+    <section class="our-services py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold mb-16 text-center">Our Services</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="p-6 bg-gray-800 rounded-xl shadow-lg">
+                    <h3 class="text-xl font-bold mb-4">Strategic Consulting</h3>
+                    <p>Enterprise AI strategy and implementation</p>
+                </div>
+                <div class="p-6 bg-gray-800 rounded-xl shadow-lg">
+                    <h3 class="text-xl font-bold mb-4">Research Partnership</h3>
+                    <p>Collaborative R&D and innovation</p>
+                </div>
+                <div class="p-6 bg-gray-800 rounded-xl shadow-lg">
+                    <h3 class="text-xl font-bold mb-4">Government Advisory</h3>
+                    <p>Policy and regulatory guidance</p>
+                </div>
+                <div class="p-6 bg-gray-800 rounded-xl shadow-lg">
+                    <h3 class="text-xl font-bold mb-4">Venture Partnership</h3>
+                    <p>Investment strategy and due diligence</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer py-8 text-center">
+        <p>&copy; 2025 Aicosystem. All rights reserved.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+        });
+    </script>
+</body>
+</html>
