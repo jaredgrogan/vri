@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuralCloud - Beyond Browsing</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Custom CSS Variables */
+        :root {
+            --neon-green: #39ff14;
+            --fuchsia-400: #e879f9;
+            --fuchsia-500: #d946ef;
+            --fuchsia-600: #c026d3;
+        }
+
+        /* Base Styles */
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+                Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background-color: #000;
+            color: #fff;
+        }
+
+        /* Gradient Background */
+        .gradient-bg {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(to bottom right, #111827, #1e3a8a, #000);
+            z-index: -2;
+        }
+
+        .grid-overlay {
+            position: fixed;
+            inset: 0;
+            background-image: 
+                linear-gradient(120deg, rgba(128, 128, 128, 0.1) 1px, transparent 1px),
+                linear-gradient(60deg, rgba(128, 128, 128, 0.1) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(128, 128, 128, 0.1) 1px, transparent 1px);
+            background-size: 20px 34.64px;
+            z-index: -1;
+        }
+
+        /* Typography */
+        .title {
+            font-size: 4rem;
+            line-height: 1.2;
+            font-weight: 700;
+            min-height: 4rem;
+        }
+
+        @media (min-width: 768px) {
+            .title {
+                font-size: 5rem;
+            }
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(to right, var(--fuchsia-600), var(--fuchsia-500));
+            color: white;
+            border-radius: 9999px;
+            padding: 1rem 2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(to right, var(--fuchsia-500), var(--fuchsia-400));
+            transform: scale(1.05);
+        }
+
+        .btn-outline {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 9999px;
+            padding: 0.5rem 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--neon-green);
+            color: var(--neon-green);
+        }
+
+        /* Icons */
+        .icon {
+            width: 3rem;
+            height: 3rem;
+            margin: 0 auto 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .feature:hover .icon {
+            transform: scale(1.1);
+            color: var(--fuchsia-400);
+        }
+
+        /* Modal */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 50;
+            padding: 1rem;
+        }
+
+        .modal-content {
+            background-color: #111827;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            width: 100%;
+            max-width: 28rem;
+            position: relative;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 0.5rem 1rem;
+            background-color: #1f2937;
+            border-radius: 0.5rem;
+            border: none;
+            outline: none;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .input-field:focus {
+            box-shadow: 0 0 0 2px var(--fuchsia-500);
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .cursor {
+            animation: pulse 1s infinite;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+        }
+
+        /* Footer Link Hover */
+        a:hover {
+            color: var(--neon-green);
+        }
+    </style>
+</head>
+<body>
+    <div class="gradient-bg"></div>
+    <div class="grid-overlay"></div>
+
+    <div class="relative z-10">
+        <header class="container mx-auto px-6 py-8 flex justify-between items-center">
+            <div class="text-2xl font-bold">NeuralCloud</div>
+            <button class="btn-outline" id="headerCTA">Join Waitlist</button>
+        </header>
+
+        <section class="container mx-auto px-6 py-24 text-center">
+            <h1 class="title">
+                <span id="typewriter"></span>
+                <span class="cursor" id="cursor">|</span>
+            </h1>
+            <p id="subtitle" class="text-xl md:text-2xl text-gray-300 mb-4 opacity-0 transition-opacity duration-1000">
+                The Internet is getting an upgrade.
+            </p>
+            <button class="btn-primary mt-12" id="mainCTA">
+                Join Web 4.0
+                <svg class="w-6 h-6 transform transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+            </button>
+        </section>
+
+        <section class="container mx-auto px-6 py-24">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+                <div class="feature text-center cursor-pointer">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 19v-8.93a2 2 0 01.89-1.664l7-4.666a2 2 0 012.22 0l7 4.666A2 2 0 0121 10.07V19M3 19a2 2 0 002 2h14a2 2 0 002-2M3 19l6.75-4.5M21 19l-6.75-4.5M3 10l6.75 4.5M21 10l-6.75 4.5m0 0l-1.14.76a2 2 0 01-2.22 0l-1.14-.76" />
+                    </svg>
+                    <h3 class="text-xl font-semibold mb-2">W2V Web-to-Voice</h3>
+                    <p class="text-gray-400">Consume your favorite content on the go</p>
+                </div>
+                <div class="feature text-center cursor-pointer">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                    </svg>
+                    <h3 class="text-xl font-semibold mb-2">Beyond AI</h3>
+                    <p class="text-gray-400">Your Cognitive Web Companion</p>
+                </div>
+                <div class="feature text-center cursor-pointer">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <h3 class="text-xl font-semibold mb-2">Social and Monetizable</h3>
+                    <p class="text-gray-400">Share and earn from your contributions</p>
+                </div>
+                <div class="feature text-center cursor-pointer">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                    <h3 class="text-xl font-semibold mb-2">Web Layer 2</h3>
+                    <p class="text-gray-400">A New Creator Economy</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="container mx-auto px-6 py-12 text-center">
+            <h2 class="text-3xl font-bold mb-6">Meet Nura</h2>
+            <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                Your personal web agent, transforming how you interact with the World.
+            </p>
+        </section>
+
+        <footer class="container mx-auto px-6 py-8 mt-24 border-t border-white/10">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="text-sm text-gray-400">&copy; 2025 NeuralCloud. All rights reserved.</div>
+                <div class="flex gap-6">
+                    <a href="#" class="text-sm text-gray-400 hover:text-neon-green transition-colors">Privacy Policy</a>
+                    <a href="#" class="text-sm text-gray-400 hover:text-neon-green transition-colors">Contact Us</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal-backdrop">
+        <div class="modal-content">
+            <button id="closeModal" class="absolute top-4 right-4 text-gray-400 hover:text-neon-green transition-colors">✕</button>
+            <h2 class="text-2xl font-bold mb-6">Join the Waitlist</h2>
+            <form id="waitlistForm" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Name</label>
+                    <input type="text" required class="input-field" placeholder="Your name" />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Email Address</label>
+                    <input type="email" required class="input-field" placeholder="you@example.com" />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Interest Area</label>
+                    <select class="input-field">
+                        <option value="">Select an option</option>
+                        <option value="creator">Creator</option>
+                        <option value="professional">Professional</option>
+                        <option value="enterprise">Enterprise</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary w-full">Join Waitlist</button>
+                <p class="text-xs text-gray-400 text-center">
+                    This is an exclusive preview for early adopters.
+                </p>
+            </form>
+        </div>
+    </div>
+<script>
+class TypeWriter {
+    constructor(element, phrases, options = {}) {
+        this.element = element;
+        this.phrases = phrases;
+        this.currentPhrase = 0;
+        this.currentChar = 0;
+        this.delay = options.delay || 100;
+        this.pauseDelay = options.pauseDelay || 2000;
+        this.cursor = document.getElementById('cursor');
+        this.isTyping = true;
+    }
+
+    type() {
+        const current = this.phrases[this.currentPhrase];
+        if (this.currentChar < current.length) {
+            this.element.textContent = current.slice(0, this.currentChar + 1);
+            this.currentChar++;
+            setTimeout(() => this.type(), this.delay);
+        } else {
+            this.cursor.style.display = 'none';
+            setTimeout(() => {
+                this.currentChar = 0;
+                this.currentPhrase = (this.currentPhrase + 1) % this.phrases.length;
+                this.element.textContent = '';
+                this.cursor.style.display = 'inline';
+                this.type();
+            }, this.pauseDelay);
+        }
+    }
+
+    start() {
+        this.type();
+    }
+}
+
+// Modal functionality
+class Modal {
+    constructor() {
+        this.modal = document.getElementById('modal');
+        this.closeBtn = document.getElementById('closeModal');
+        this.form = document.getElementById('waitlistForm');
+        this.openBtns = document.querySelectorAll('#headerCTA, #mainCTA');
+        this.setupListeners();
+    }
+
+    setupListeners() {
+        this.openBtns.forEach(btn => {
+            btn.addEventListener('click', () => this.open());
+        });
+        
+        this.closeBtn.addEventListener('click', () => this.close());
+        
+        this.modal.addEventListener('click', (e) => {
+            if (e.target === this.modal) this.close();
+        });
+
+        this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+    }
+
+    open() {
+        this.modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    close() {
+        this.modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
+    async handleSubmit(e) {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const data = Object.fromEntries(formData.entries());
+        
+        try {
+            // Simulate API call
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            console.log('Form submitted:', data);
+            this.close();
+            e.target.reset();
+        } catch (error) {
+            console.error('Error submitting form:', error);
+        }
+    }
+}
+
+
+// Intersection Observer for fade-in animations
+class AnimationObserver {
+    constructor() {
+        this.observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            },
+            { threshold: 0.1 }
+        );
+    }
+
+    observe(elements) {
+        elements.forEach(el => this.observer.observe(el));
+    }
+}
+
+// Initialize everything when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize typewriter
+    const typewriterElement = document.getElementById('typewriter');
+    const typewriter = new TypeWriter(typewriterElement, [
+        "Like surfing?",
+        "Welcome to NeuralCloud",
+        "Ride the W2V"
+    ], { delay: 100, pauseDelay: 2000 });
+    typewriter.start();
+
+    // Initialize modal
+    const modal = new Modal();
+
+    // Initialize animations
+    const animator = new AnimationObserver();
+    animator.observe(document.querySelectorAll('.fade-in'));
+
+    // Reveal subtitle after initial typing sequence
+    setTimeout(() => {
+        const subtitle = document.getElementById('subtitle');
+        subtitle.style.opacity = '1';
+    }, 4000);
+
+    // Feature hover effects
+    document.querySelectorAll('.feature').forEach(feature => {
+        feature.addEventListener('mouseenter', () => {
+            const icon = feature.querySelector('.icon');
+            icon.style.transform = 'scale(1.1)';
+        });
+        
+        feature.addEventListener('mouseleave', () => {
+            const icon = feature.querySelector('.icon');
+            icon.style.transform = 'scale(1)';
+        });
+    });
+});
+</script>
+</body>
+</html>
+</body>
+</html>
