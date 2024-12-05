@@ -33,16 +33,27 @@
             z-index: -2;
         }
 
-        .grid-overlay {
-            position: fixed;
-            inset: 0;
-            background-image: 
-                linear-gradient(120deg, rgba(128, 128, 128, 0.1) 1px, transparent 1px),
-                linear-gradient(60deg, rgba(128, 128, 128, 0.1) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(128, 128, 128, 0.1) 1px, transparent 1px);
-            background-size: 20px 34.64px;
-            z-index: -1;
-        }
+     .grid-overlay {
+    position: fixed;
+    inset: 0;
+    background-image: 
+        repeating-linear-gradient(
+            60deg,
+            transparent,
+            transparent 25px,
+            rgba(128, 128, 128, 0.1) 25px,
+            rgba(128, 128, 128, 0.1) 26px
+        ),
+        repeating-linear-gradient(
+            120deg,
+            transparent,
+            transparent 25px,
+            rgba(128, 128, 128, 0.1) 25px,
+            rgba(128, 128, 128, 0.1) 26px
+        );
+    transform: translateY(-14.5px);
+    z-index: -1;
+}
 
         /* Typography */
         .title {
