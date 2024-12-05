@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat Console with Image Generation</title>
+  <style>
+    /* Basic styling for chat console */
+    #chat {
+      width: 80%;
+      height: 500px;
+      border: 1px solid #ccc;
+      overflow-y: scroll;
+      margin: 20px auto;
+      padding: 10px;
+    }
+    #inputArea {
+      width: 80%;
+      margin: 0 auto;
+      display: flex;
+    }
+    #prompt {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+    }
+    #sendBtn {
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+    .message {
+      margin: 10px 0;
+    }
+    .image {
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+  <div id="chat"></div>
+  <div id="inputArea">
+    <input type="text" id="prompt" placeholder="Type your message or image prompt here..." />
+    <button id="sendBtn">Send</button>
+  </div>
+
+  <script>
+    const chat = document.getElementById('chat');
+    const promptInput = document.getElementById('prompt');
+    const sendBtn = document.getElementById('sendBtn');
+
+    sendBtn.addEventListener('click', async () => {
+      const prompt = promptInput.value.trim();
+      if (!prompt) return;
+
+      // Display user message
+      appendMessage('User', prompt);
+
+      // Determine if the prompt is for image generation (e.g., starts with /image)
+      if (prompt.startsWith('/image')) {
+        const imagePrompt = prompt.replace('/image', '').trim();
+        if (imagePrompt) {
+          appendMessage('System', 'Generating image...', 'loading');
+
+          try {
+            const response = await fetch('/api/generateImage', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ prompt: imagePrompt }),
+            });
+
+            const data = await response.json();
+            if (data.imageUrl) {
+              appendImage('System', data.imageUrl);
+            } else {
+              appendMessage('System', 'Failed to generate image.');
+            }
+          } catch (error) {
+            appendMessage('System', 'Error generating image.');
+          }
+        }
+      } else {
+        // Handle regular text message (e.g., send to your LLM)
+        // Implement your existing text handling here
+        appendMessage('Bot', 'This is a response to your text message.');
+      }
+
+      promptInput.value = '';
+    });
+
+    function appendMessage(sender, message, status) {
+      const msgDiv = document.createElement('div');
+      msgDiv.classList.add('message');
+      msgDiv.innerHTML = `<strong>${sender}:</strong> ${message}`;
+      if (status === 'loading') {
+        msgDiv.classList.add('loading');
+      }
+      chat.appendChild(msgDiv);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function appendImage(sender, imageUrl) {
+      const msgDiv = document.createElement('div');
+      msgDiv.classList.add('message');
+      msgDiv.innerHTML = `<strong>${sender}:</strong><br><img src="${imageUrl}" alt="Generated Image" class="image" />`;
+      chat.appendChild(msgDiv);
+      chat.scrollTop = chat.scrollHeight;
+    }
+  </script>
+</body>
+</html>
