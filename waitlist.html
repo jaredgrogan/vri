@@ -106,10 +106,11 @@
             transition: transform 0.3s ease;
         }
 
-        .feature:hover .icon {
-            transform: scale(1.1);
-            color: var(--fuchsia-400);
-        }
+      /* Update the feature hover style */
+.feature:hover .icon {
+    transform: scale(1.1);
+    color: var(--neon-green) !important; /* Added !important to override any Tailwind classes */
+}
 
         /* Modal */
         .modal-backdrop {
