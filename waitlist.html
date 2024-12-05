@@ -233,7 +233,9 @@
         </section>
 
         <section class="container mx-auto px-6 py-12 text-center">
-            <h2 class="text-3xl font-bold mb-6">Meet Nura</h2>
+            <h2 class="text-3xl font-bold mb-6 hover:text-[#39ff14] transition-colors cursor-pointer" id="meetNura">Meet Nura</h2>
+<!-- Add audio element -->
+<audio id="nuraSound" src="nura.mp3"></audio>
             <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
                 Your personal web agent, transforming how you interact with the World.
             </p>
@@ -398,6 +400,15 @@ document.addEventListener('DOMContentLoaded', () => {
         "Ride the W2V"
     ], { delay: 100, pauseDelay: 2000 });
     typewriter.start();
+
+// Add to the DOMContentLoaded event listener
+const meetNura = document.getElementById('meetNura');
+const nuraSound = document.getElementById('nuraSound');
+
+meetNura.addEventListener('click', () => {
+    nuraSound.currentTime = 0; // Reset audio to start
+    nuraSound.play();
+});
 
     // Initialize modal
     const modal = new Modal();
