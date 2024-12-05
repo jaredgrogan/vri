@@ -33,11 +33,40 @@
             z-index: -2;
         }
 
+        /* Hexagonal Grid Pattern */
         .grid-overlay {
             position: fixed;
             inset: 0;
-            background-image: linear-gradient(45deg, rgba(128, 128, 128, 0.1) 1px, transparent 1px), linear-gradient(-45deg, rgba(128, 128, 128, 0.1) 1px, transparent 1px); background-size: 20px 20px;
-            background-size: 20px 34.64px;
+            background-image: 
+                repeating-linear-gradient(
+                    to right,
+                    transparent,
+                    transparent 25px,
+                    rgba(128, 128, 128, 0.1) 25px,
+                    rgba(128, 128, 128, 0.1) 26px
+                ),
+                repeating-linear-gradient(
+                    to right,
+                    transparent,
+                    transparent 25px,
+                    rgba(128, 128, 128, 0.1) 25px,
+                    rgba(128, 128, 128, 0.1) 26px
+                ),
+                repeating-linear-gradient(
+                    60deg,
+                    transparent,
+                    transparent 25px,
+                    rgba(128, 128, 128, 0.1) 25px,
+                    rgba(128, 128, 128, 0.1) 26px
+                ),
+                repeating-linear-gradient(
+                    120deg,
+                    transparent,
+                    transparent 25px,
+                    rgba(128, 128, 128, 0.1) 25px,
+                    rgba(128, 128, 128, 0.1) 26px
+                );
+            transform: translateY(-14.5px);
             z-index: -1;
         }
 
@@ -89,12 +118,12 @@
             width: 3rem;
             height: 3rem;
             margin: 0 auto 1rem;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, color 0.3s ease;
         }
 
         .feature:hover .icon {
             transform: scale(1.1);
-            color: var(--fuchsia-400);
+            color: var(--neon-green);
         }
 
         /* Modal */
@@ -157,6 +186,8 @@
             color: var(--neon-green);
         }
     </style>
+</head>
+
 </head>
 <body>
     <div class="gradient-bg"></div>
