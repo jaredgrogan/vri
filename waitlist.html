@@ -13,6 +13,7 @@
             --fuchsia-base: #c026d3;
             --fuchsia-mid: #d946ef;
             --fuchsia-light: #e459f7;
+            --dark-bg: #111827;
             
             --gradient-pink: linear-gradient(to right, var(--fuchsia-base), var(--fuchsia-light));
             --gradient-green: linear-gradient(to right, var(--neon-green), var(--neon-green-alt));
@@ -33,7 +34,7 @@
         .gradient-bg {
             position: fixed;
             inset: 0;
-            background: linear-gradient(to bottom right, #111827, #1e3a8a, #000);
+            background: linear-gradient(to bottom right, var(--dark-bg), #1e3a8a, #000);
             z-index: -2;
         }
 
@@ -89,6 +90,7 @@
         .btn-primary:hover {
             background: var(--gradient-green);
             transform: scale(1.05);
+            color: var(--dark-bg);
         }
 
         .btn-outline {
@@ -142,7 +144,7 @@
         }
 
         .modal-content {
-            background-color: #111827;
+            background-color: var(--dark-bg);
             padding: 2rem;
             border-radius: 0.75rem;
             width: 100%;
