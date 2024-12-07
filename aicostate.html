@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Aicosystem State Graph</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.6/vis-network.min.js"></script>
+    <style>
+        #graph-container {
+            width: 100%;
+            height: 800px;
+            border: 1px solid #ccc;
+            background-color: #ffffff;
+        }
+        
+        .legend {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 1px solid #ccc;
+        }
+        
+        .legend-item {
+            margin: 5px 0;
+        }
+        
+        .legend-color {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="legend">
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #ff7675;"></div>
+            Meta Machine States
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #00b894;"></div>
+            CEC States
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background-color: #0984e3;"></div>
+            RSH States
+        </div>
+    </div>
+    <div id="graph-container"></div>
+
+    <script>
+        const nodes = new vis.DataSet([
+            // Meta Machine States (Red)
+            {id: 'M1', label: '[1,1]', color: '#ff7675', group: 'meta'},
+            {id: 'M2', label: '[1,φ]', color: '#ff7675', group: 'meta'},
+            {id: 'M3', label: '[1,ψ]', color: '#ff7675', group: 'meta'},
+            {id: 'M4', label: '[φ,1]', color: '#ff7675', group: 'meta'},
+            {id: 'M5', label: '[φ,φ]', color: '#ff7675', group: 'meta'},
+            {id: 'M6', label: '[φ,ψ]', color: '#ff7675', group: 'meta'},
+            {id: 'M7', label: '[ψ,1]', color: '#ff7675', group: 'meta'},
+            {id: 'M8', label: '[ψ,φ]', color: '#ff7675', group: 'meta'},
+            {id: 'M9', label: '[ψ,ψ]', color: '#ff7675', group: 'meta'},
+
+            // CEC States (Green) - First 5 shown, expand as needed
+            {id: 'C1', label: '[1,1,1]', color: '#00b894', group: 'cec'},
+            {id: 'C2', label: '[1,1,φ]', color: '#00b894', group: 'cec'},
+            {id: 'C3', label: '[1,1,ψ]', color: '#00b894', group: 'cec'},
+            {id: 'C4', label: '[1,φ,1]', color: '#00b894', group: 'cec'},
+            {id: 'C5', label: '[1,φ,φ]', color: '#00b894', group: 'cec'},
+
+            // RSH States (Blue) - First 5 shown, expand as needed
+            {id: 'R1', label: '[1,1,1]', color: '#0984e3', group: 'rsh'},
+            {id: 'R2', label: '[1,1,φ]', color: '#0984e3', group: 'rsh'},
+            {id: 'R3', label: '[1,1,ψ]', color: '#0984e3', group: 'rsh'},
+            {id: 'R4', label: '[1,φ,1]', color: '#0984e3', group: 'rsh'},
+            {id: 'R5', label: '[1,φ,φ]', color: '#0984e3', group: 'rsh'}
+        ]);
+
+        const edges = new vis.DataSet([
+            // Meta Machine Transitions
+            {from: 'M1', to: 'M2'},
+            {from: 'M2', to: 'M3'},
+            {from: 'M3', to: 'M1'},
+            {from: 'M4', to: 'M5'},
+            {from: 'M5', to: 'M6'},
+            {from: 'M6', to: 'M4'},
+            {from: 'M7', to: 'M8'},
+            {from: 'M8', to: 'M9'},
+            {from: 'M9', to: 'M7'},
+
+            // Component State Connections (examples)
+            {from: 'C1', to: 'C2'},
+            {from: 'C2', to: 'C3'},
+            {from: 'R1', to: 'R2'},
+            {from: 'R2', to: 'R3'}
+        ]);
+
+        const container = document.getElementById('graph-container');
+        
+        const data = {
+            nodes: nodes,
+            edges: edges
+        };
+        
+        const options = {
+            nodes: {
+                shape: 'circle',
+                size: 25,
+                font: {
+                    size: 16
+                }
+            },
+            edges: {
+                arrows: 'to',
+                smooth: {
+                    type: 'curvedCW',
+                    roundness: 0.2
+                }
+            },
+            physics: {
+                stabilization: true,
+                barnesHut: {
+                    gravitationalConstant: -80000,
+                    springConstant: 0.001,
+                    springLength: 200
+                }
+            },
+            groups: {
+                meta: {
+                    shape: 'circle'
+                },
+                cec: {
+                    shape: 'square'
+                },
+                rsh: {
+                    shape: 'triangle'
+                }
+            }
+        };
+        
+        const network = new vis.Network(container, data, options);
+    </script>
+</body>
+</html>
