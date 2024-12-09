@@ -29,6 +29,20 @@
             --light-silver: #f3f4f6;
             --cobalt: #0020c2;
             --cobalt-light: #0047FF;
+
+            /* Theme Variables */
+            --background-color: linear-gradient(135deg, var(--white) 0%, var(--light-silver) 100%);
+            --text-color: var(--black);
+            --nav-background: rgba(255, 255, 255, 0.9);
+            --footer-gradient: linear-gradient(to bottom, #000000, #2a2a2a);
+        }
+
+        /* Dark Theme Variables */
+        [data-theme="dark"] {
+            --background-color: linear-gradient(135deg, #1e1e1e 0%, #2a2a2a 100%);
+            --text-color: var(--white);
+            --nav-background: rgba(0, 0, 0, 0.9);
+            --footer-gradient: linear-gradient(to bottom, #2a2a2a, #000000);
         }
 
         /* Global Styles */
@@ -40,10 +54,11 @@
 
         body {
             font-family: 'Inter', -apple-system, sans-serif;
-            background: linear-gradient(135deg, var(--white) 0%, var(--light-silver) 100%) no-repeat;
+            background: var(--background-color) no-repeat;
             background-attachment: fixed;
-            color: var(--black);
+            color: var(--text-color);
             line-height: 1.6;
+            transition: background 0.3s, color 0.3s;
         }
 
         /* Navigation */
@@ -51,12 +66,20 @@
             position: fixed;
             top: 0;
             width: 100%;
-            background: rgba(255, 255, 255, 0.9);
+            background: var(--nav-background);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(0, 0, 0, 0.1);
             z-index: 1000;
             padding: 1rem 2rem;
+            transition: background 0.3s;
+        }
+
+        /* Fallback for browsers that do not support backdrop-filter */
+        @supports not ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
+            nav {
+                background: rgba(255, 255, 255, 1);
+            }
         }
 
         .nav-content {
@@ -78,13 +101,28 @@
 
         .nav-links a {
             margin-left: 2rem;
-            color: var(--black);
+            color: var(--text-color);
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s ease;
         }
 
         .nav-links a:hover {
+            color: var(--vr-red-light);
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            margin-left: 2rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            color: var(--text-color);
+            transition: color 0.3s ease;
+        }
+
+        .theme-toggle:hover {
             color: var(--vr-red-light);
         }
 
@@ -97,35 +135,42 @@
             color: var(--white);
         }
 
-       .hero {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 8rem 2rem 6rem 2rem;
-    position: relative;
-    overflow: hidden;
-    text-align: center;
-    background: url('vri_bg.jpeg') no-repeat center center;
-    background-size: cover;
-}
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 8rem 2rem 6rem 2rem;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            background: url('vri_bg.jpeg') no-repeat center center;
+            background-size: cover;
+            transition: background 0.3s;
+        }
 
-.hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(255, 255, 255, 0.5); /* White layer with 60% opacity */
-    z-index: 1; /* Place it above the background image */
-}
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.5); /* White layer with 50% opacity */
+            z-index: 1; /* Place it above the background image */
+            transition: background-color 0.3s;
+        }
 
-.hero-content {
-    position: relative;
-    z-index: 2; /* Ensure content appears above the overlay */
-}
+        [data-theme="dark"] .hero::before {
+            background-color: rgba(0, 0, 0, 0.5); /* Dark overlay for dark mode */
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2; /* Ensure content appears above the overlay */
+        }
 
         .hero h1 {
             font-size: 3.5rem;
@@ -134,6 +179,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             opacity: 0;
+            transition: opacity 1s ease-in;
         }
 
         .hero h2 {
@@ -147,14 +193,14 @@
         .hero p {
             font-size: 1.5rem;
             margin-bottom: 2rem;
-            color: var(--black);
+            color: var(--text-color);
         }
 
         .hero-description {
             max-width: 700px;
             margin: 0 auto 3rem auto;
             font-size: 1.2rem;
-            color: var(--black);
+            color: var(--text-color);
         }
 
         .pill-button {
@@ -219,11 +265,19 @@
             transition: all 0.3s ease;
             color: var(--white);
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .lab-card.active .lab-details {
+            display: block;
         }
 
         .lab-card:hover {
-            filter: brightness(1.1);
-            transform: translateY(-5px);
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
         }
 
         .lab-card h3 {
@@ -237,10 +291,6 @@
         .lab-details {
             display: none;
             margin-top: 1rem;
-        }
-
-        .lab-card.active .lab-details {
-            display: block;
         }
 
         .problem-list {
@@ -293,7 +343,7 @@
             padding-left: 0;
             max-width: 800px;
             margin: 0 auto 2rem auto;
-            color: var(--black);
+            color: var(--text-color);
         }
 
         .benefits-list li {
@@ -307,11 +357,12 @@
 
         /* Footer */
         footer {
-            background: linear-gradient(135deg, #1e1e1e, #2a2a2a);
+            background: var(--footer-gradient);
             text-align: center;
             padding: 3rem;
             margin-top: 4rem;
             color: var(--white);
+            transition: background 0.3s;
         }
 
         .locations {
@@ -337,6 +388,33 @@
 
         .contact-form button {
             margin-top: 1rem;
+        }
+
+        /* CTA Section (Reusing Hero Image) */
+        #cta-section {
+            background: url('vri_bg.jpeg') no-repeat center center;
+            background-size: cover;
+            position: relative;
+            padding: 6rem 2rem;
+            transition: background 0.3s;
+        }
+
+        #cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3); /* Dark overlay with 30% opacity */
+            z-index: 1;
+            transition: background-color 0.3s;
+        }
+
+        #cta-section .section-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
         }
 
         /* Responsive */
@@ -375,6 +453,7 @@
                 <a href="#portfolio">Portfolio</a>
                 <a href="#invest">Why Invest Now?</a>
                 <a href="#contact" class="pill-button">Invest Now</a>
+                <button class="theme-toggle" aria-label="Toggle Theme">🌙</button>
             </div>
         </div>
     </nav>
@@ -389,6 +468,17 @@
                     The Venture Research Fund is revolutionizing venture creation through our reverse-induction methodology and organization of Commercial Research Labs (CRLs). Partner with us to capitalize on high-growth opportunities across AI and Decentralized Computing.
                 </div>
                 <a href="#invest" class="pill-button">Invest Now</a>
+            </div>
+        </section>
+
+        <!-- CTA Section (Reusing Hero Image) -->
+        <section id="cta-section" class="section">
+            <div class="section-content">
+                <h2 class="section-title">Take the Next Step with Us</h2>
+                <p style="text-align: center; margin-bottom: 3rem;">
+                    Become a part of a transformative journey in de-risking innovation and securing high returns on your investments.
+                </p>
+                <a href="#contact" class="pill-button">Get Started</a>
             </div>
         </section>
 
@@ -724,6 +814,23 @@
             el.addEventListener('blur', () => {
                 el.style.outline = 'none';
             });
+        });
+
+        // Theme Toggle Functionality
+        const themeToggle = document.querySelector('.theme-toggle');
+        const body = document.body;
+
+        // Check for saved theme in localStorage
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        body.setAttribute('data-theme', savedTheme);
+        themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            body.setAttribute('data-theme', newTheme);
+            themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+            localStorage.setItem('theme', newTheme);
         });
     </script>
 </body>
