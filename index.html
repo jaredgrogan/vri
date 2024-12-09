@@ -3,35 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Venture Research Institute | De-Risking Innovation</title>
-    <meta name="description" content="Join the Venture Research Institute in pioneering the science of venture capital through systematic de-risking and reverse-induction innovation.">
-    <meta name="keywords" content="venture capital, investment, innovation, AI, decentralized computing, research, technology">
-    <meta name="author" content="Venture Research Institute">
-
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Venture Research Institute | De-Risking Innovation">
-    <meta property="og:description" content="Maximize returns by investing in de-risked, high-growth ventures across multiple verticals.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://ventureresearch.fund">
-
-    <!-- Fonts and Icons -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/framer-motion/10.16.4/framer-motion.js"></script>
-
-    <!-- Styles -->
+    <title>Introducing the Chariot Protocol</title>
     <style>
-        :root {
-            --vr-red-dark: #A51C30;
-            --vr-red-light: #FF2E5B;
-            --black: #000000;
-            --dark-gray: #1e1e1e;
-            --white: #FFFFFF;
-            --light-silver: #f3f4f6;
-            --cobalt: #0020c2;
-            --cobalt-light: #0047FF;
-        }
-
-        /* Global Styles */
         * {
             margin: 0;
             padding: 0;
@@ -39,692 +12,203 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background: linear-gradient(135deg, var(--white) 0%, var(--light-silver) 100%) no-repeat;
-            background-attachment: fixed;
-            color: var(--black);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #000;
+            color: #fff;
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            padding: 1rem 2rem;
-        }
-
-        .nav-content {
-            max-width: 1200px;
-            margin: 0 auto;
+        .hero {
+            position: relative;
+            min-height: 100vh;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            background: linear-gradient(45deg, var(--vr-red-dark), var(--vr-red-light));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-size: 1.5rem;
-            font-weight: bold;
-            text-decoration: none;
-        }
-
-        .nav-links a {
-            margin-left: 2rem;
-            color: var(--black);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--vr-red-light);
-        }
-
-        /* Invest Now Button in Navigation */
-        .nav .pill-button {
-            color: var(--white);
-        }
-
-        .nav .pill-button:hover {
-            color: var(--white);
-        }
-
-       .hero {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 8rem 2rem 6rem 2rem;
-    position: relative;
-    overflow: hidden;
-    text-align: center;
-    background: url('vri_bg.jpeg') no-repeat center center;
-    background-size: cover;
-}
-
-.hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(255, 255, 255, 0.5); /* White layer with 60% opacity */
-    z-index: 1; /* Place it above the background image */
-}
-
-.hero-content {
-    position: relative;
-    z-index: 2; /* Ensure content appears above the overlay */
-}
-
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(45deg, var(--vr-red-dark), var(--vr-red-light));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            opacity: 0;
-        }
-
-        .hero h2 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            font-weight: bold;
-            opacity: 0;
-            transition: opacity 1s ease-in;
-        }
-
-        .hero p {
-            font-size: 1.5rem;
-            margin-bottom: 2rem;
-            color: var(--black);
-        }
-
-        .hero-description {
-            max-width: 700px;
-            margin: 0 auto 3rem auto;
-            font-size: 1.2rem;
-            color: var(--black);
-        }
-
-        .pill-button {
-            background: linear-gradient(45deg, var(--vr-red-dark), var(--vr-red-light));
-            color: var(--white);
-            padding: 1rem 2.5rem;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.25rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .pill-button:hover {
-            background: linear-gradient(45deg, var(--cobalt), var(--cobalt-light));
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 32, 194, 0.3);
-            color: var(--white);
-        }
-
-        /* Sections */
-        .section {
-            padding: 6rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            background: linear-gradient(45deg, var(--vr-red-dark), var(--vr-red-light));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-        /* Subtitles */
-        .section-subtitle {
-            background: linear-gradient(45deg, var(--vr-red-dark), var(--vr-red-light));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-align: center;
-            font-size: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        /* Lab Grid */
-        .lab-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-            margin: 2rem auto;
-            padding: 0 2rem;
-        }
-
-        .lab-card {
-            background: linear-gradient(135deg, var(--vr-red-dark), var(--vr-red-light));
-            border-radius: 20px;
-            padding: 2rem;
-            transition: all 0.3s ease;
-            color: var(--white);
-            cursor: pointer;
-        }
-
-        .lab-card:hover {
-            filter: brightness(1.1);
-            transform: translateY(-5px);
-        }
-
-        .lab-card h3 {
-            color: var(--white);
-            text-align: center;
-            font-weight: bold;
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-        }
-
-        .lab-details {
-            display: none;
-            margin-top: 1rem;
-        }
-
-        .lab-card.active .lab-details {
-            display: block;
-        }
-
-        .problem-list {
-            list-style-type: none;
-            padding-left: 1rem;
-        }
-
-        .problem-list li {
-            margin-bottom: 1rem;
-        }
-
-        .problem-heading {
-            font-weight: bold;
-            margin-bottom: 0.5rem;
-            display: block;
-        }
-
-        .problem-text {
-            font-weight: normal;
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
-
-        .kpi-placeholder {
-            margin-top: 1.5rem;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 1rem;
-            border-radius: 10px;
-        }
-
-        .kpi-placeholder p {
-            margin-bottom: 0.5rem;
-        }
-
-        .chart-placeholder {
-            margin-top: 1rem;
-            height: 150px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-            display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: var(--white);
-            font-size: 0.9rem;
+            padding: 2rem;
+            overflow: hidden;
         }
 
-        /* Benefits List */
-        .benefits-list {
-            list-style-type: none;
-            padding-left: 0;
+        .particle-field {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            opacity: 0.2;
+        }
+
+        .particle {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle 3s infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            background: linear-gradient(145deg, #000, #121212);
+            border-radius: 20px;
+            padding: 3rem 2rem;
             max-width: 800px;
-            margin: 0 auto 2rem auto;
-            color: var(--black);
-        }
-
-        .benefits-list li {
-            margin-bottom: 1.5rem;
-            font-size: 1.1rem;
-        }
-
-        .benefits-list li strong {
-            color: var(--vr-red-dark);
-        }
-
-        /* Footer */
-        footer {
-            background: linear-gradient(135deg, #1e1e1e, #2a2a2a);
             text-align: center;
-            padding: 3rem;
-            margin-top: 4rem;
-            color: var(--white);
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
         }
 
-        .locations {
-            margin-top: 1rem;
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        /* Form Styles */
-        .contact-form {
-            max-width: 600px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .contact-form input, .contact-form textarea {
-            width: 100%;
-            padding: 1rem;
+        .chariot-logo {
+            width: 125%; /* Logo 25% larger */
             margin-bottom: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 10px;
+        }
+
+        .title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #D4AF37;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: #50C878; /* Emerald Green for innovation */
+            margin-bottom: 1rem;
+            border-right: 2px solid #50C878;
+            animation: fadeIn 1s forwards 0.8s, blink 0.5s step-end infinite;
+        }
+
+        @keyframes blink {
+            50% { border-color: transparent; }
+        }
+
+        .description {
+            font-size: 1.25rem;
+            color: #ccc;
+            max-width: 600px;
+            margin: 1rem auto 2rem;
+            text-align: center;
+        }
+
+        .cta-button {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            color: #fff;
+            background: linear-gradient(90deg, #50C878, #D4AF37);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.6);
+        }
+
+        .secondary-cta {
             font-size: 1rem;
+            color: #50C878;
+            text-decoration: underline;
+            cursor: pointer;
         }
 
-        .contact-form button {
-            margin-top: 1rem;
+        .footer {
+            margin-top: 2rem;
+            font-size: 0.85rem;
+            color: #ccc;
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
+            .chariot-logo {
+                width: 100%;
             }
 
-            .hero p {
+            .title {
+                font-size: 2rem;
+            }
+
+            .subtitle {
                 font-size: 1.25rem;
             }
 
-            .section {
-                padding: 4rem 1rem;
-            }
-
-            .lab-grid {
-                padding: 0 1rem;
-            }
-
-            .nav-links a {
-                margin-left: 1rem;
+            .description {
+                font-size: 1rem;
             }
         }
     </style>
 </head>
 <body>
+    <section class="hero">
+        <div class="particle-field" id="particleField"></div>
 
-    <!-- Navigation -->
-    <nav class="nav">
-        <div class="nav-content" role="navigation">
-            <a href="#" class="logo">Venture Research Institute</a>
-            <div class="nav-links">
-                <a href="#thesis">Thesis</a>
-                <a href="#labs">CRLs</a>
-                <a href="#portfolio">Portfolio</a>
-                <a href="#invest">Why Invest Now?</a>
-                <a href="#contact" class="pill-button">Invest Now</a>
+        <div class="container">
+            <img src="/chariot-wheel.png" alt="Chariot Logo" class="chariot-logo">
+
+            <h1 class="title">Introducing the Chariot Protocol</h1>
+
+            <p class="subtitle" id="typingEffect"></p>
+
+            <p class="description">
+                Introducing a protocol for global AI alignment and Agent-to-Agent (A2A) interactions – the first purpose-built decentralized infrastructure for the AI economy. Optimized for a virtuous cycle that advances personalized Agentic AI and data sovereignty.
+            </p>
+
+            <button class="cta-button">Join the Web 4.0</button>
+            <div class="secondary-cta">Get the Whitepaper</div>
+
+            <div class="footer">
+                &copy; 2025 BlockchainTech.ai
             </div>
         </div>
-    </nav>
+    </section>
 
-    <!-- Hero Section -->
-    <main>
-        <section class="hero" role="banner">
-            <div class="hero-content">
-                <h1 id="main-title">Join Our Mission to De-Risk Innovation</h1>
-                <h2 id="sub-title">Invest in the Science of Venture</h2>
-                <div class="hero-description">
-                    The Venture Research Fund is revolutionizing venture creation through our reverse-induction methodology and organization of Commercial Research Labs (CRLs). Partner with us to capitalize on high-growth opportunities across AI and Decentralized Computing.
-                </div>
-                <a href="#invest" class="pill-button">Invest Now</a>
-            </div>
-        </section>
-
-        <!-- Thesis Section -->
-        <section id="thesis" class="section">
-            <h2 class="section-title">Our Thesis</h2>
-            <p style="text-align: center; margin-bottom: 3rem;">
-                We employ a reverse-induction method, organizing around problem statements led by industry experts. By meeting proven demands validated by industry before we start, we systematically de-risk innovation. Our core focus lies where Decentralization meets AI, primarily targeting B2B and B2G markets, with B2C being ancillary. Across the board, we aim to be an "API Factory" enabling seamless integration and scalability.
-            </p>
-        </section>
-
-        <!-- Why Invest Now Section -->
-        <section id="invest" class="section">
-            <h2 class="section-title">Why Invest Now?</h2>
-            <p style="text-align: center; margin-bottom: 3rem;">Seize the opportunity to be part of a fund that's systematically de-risking innovation and poised for exponential growth.</p>
-            <ul class="benefits-list">
-                <li><strong>Exclusive Access:</strong> Invest in high-growth ventures before they hit the mainstream market.</li>
-                <li><strong>Strategic Partnerships:</strong> Leverage our equity partnership with CogX for unparalleled market reach.</li>
-                <li><strong>Proven Methodology:</strong> Our reverse-induction approach minimizes risk and maximizes returns.</li>
-                <li><strong>First-Mover Advantage:</strong> Gain early entry into emerging markets and cutting-edge technologies.</li>
-            </ul>
-            <a href="#contact" class="pill-button">Secure Your Spot</a>
-        </section>
-
-        <!-- Benefits for LPs and CVCs -->
-        <section id="benefits" class="section">
-            <h2 class="section-title">Benefits for LPs and CVCs</h2>
-            <p style="text-align: center; margin-bottom: 3rem;">Unlock strategic advantages and maximize ROI potential by partnering with Venture Research Institute.</p>
-            <ul class="benefits-list">
-                <li><strong>High ROI Potential:</strong> Access to meticulously vetted ventures with significant growth potential.</li>
-                <li><strong>Strategic Alignment:</strong> Tailored investment opportunities that align with your corporate objectives.</li>
-                <li><strong>Risk Mitigation:</strong> Our reverse-induction methodology systematically reduces investment risk.</li>
-                <li><strong>Market Insights:</strong> Gain exclusive insights into emerging trends and technologies.</li>
-            </ul>
-            <a href="#contact" class="pill-button">Learn More</a>
-        </section>
-
-        <!-- VR Labs Section -->
-        <section id="labs" class="section">
-            <h2 class="section-title">Commercial Research Labs (CRLs)</h2>
-            <p style="text-align: center; margin-bottom: 3rem;">
-                Organized around problem statements, our CRLs are led by industry for industry. Steering by industry equates to reverse induction; we meet proven demands validated by industry before we start.
-            </p>
-
-            <div class="lab-grid">
-
-                <!-- AI SaaS & Decentralized Computing -->
-                <div class="lab-card" tabindex="0" role="button" aria-expanded="false">
-                    <h3>AI SaaS & Decentralized Computing</h3>
-                    <div class="lab-details">
-                        <ul class="problem-list">
-                            <li>
-                                <span class="problem-heading">Automated Corporate Formation</span>
-                                <span class="problem-text">Streamlining corporate formation for blockchain-native businesses</span>
-                            </li>
-                            <li>
-                                <span class="problem-heading">Decentralized AI Integration</span>
-                                <span class="problem-text">Simplifying AI model integration in decentralized apps</span>
-                            </li>
-                            <li>
-                                <span class="problem-heading">Global AI Compliance</span>
-                                <span class="problem-text">Automating multi-regional AI regulatory compliance</span>
-                            </li>
-                        </ul>
-                        <div class="kpi-placeholder">
-                            <p><strong>Total Addressable Market (TAM):</strong> [Placeholder]</p>
-                            <p><strong>Projected Returns:</strong> [Placeholder]</p>
-                            <p><strong>Growth Potential:</strong> [Placeholder]</p>
-                            <div class="chart-placeholder">[Chart Placeholder]</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Productivity SaaS -->
-                <div class="lab-card" tabindex="0" role="button" aria-expanded="false">
-                    <h3>Productivity SaaS</h3>
-                    <div class="lab-details">
-                        <ul class="problem-list">
-                            <li>
-                                <span class="problem-heading">Energy Optimization</span>
-                                <span class="problem-text">AI-driven energy waste reduction in logistics operations</span>
-                            </li>
-                            <li>
-                                <span class="problem-heading">Enterprise Training</span>
-                                <span class="problem-text">Personalized AI training programs at enterprise scale</span>
-                            </li>
-                            <li>
-                                <span class="problem-heading">Workflow Integration</span>
-                                <span class="problem-text">Seamless AI integration into existing productivity tools</span>
-                            </li>
-                        </ul>
-                        <div class="kpi-placeholder">
-                            <p><strong>Total Addressable Market (TAM):</strong> [Placeholder]</p>
-                            <p><strong>Projected Returns:</strong> [Placeholder]</p>
-                            <p><strong>Growth Potential:</strong> [Placeholder]</p>
-                            <div class="chart-placeholder">[Chart Placeholder]</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- FinTech & DeFi -->
-                <div class="lab-card" tabindex="0" role="button" aria-expanded="false">
-                    <h3>FinTech & DeFi</h3>
-                    <div class="lab-details">
-                        <ul class="problem-list">
-                            <li>
-                                <span class="problem-heading">Investment Instruments</span>
-                                <span class="problem-text">Tokenizing convertible notes for enhanced liquidity</span>
-                            </li>
-                            <li>
-                                <span class="problem-heading">Global Transactions</span>
-                                <span class="problem-text">Decentralized cross-border payment infrastructure</span>
-                            </li>
-                            <li>
-                                <span class="problem-heading">Security Solutions</span>
-                                <span class="problem-text">AI-powered fraud detection for DeFi networks</span>
-                            </li>
-                        </ul>
-                        <div class="kpi-placeholder">
-                            <p><strong>Total Addressable Market (TAM):</strong> [Placeholder]</p>
-                            <p><strong>Projected Returns:</strong> [Placeholder]</p>
-                            <p><strong>Growth Potential:</strong> [Placeholder]</p>
-                            <div class="chart-placeholder">[Chart Placeholder]</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Cybersecurity -->
-                <div class="lab-card" tabindex="0" role="button" aria-expanded="false">
-                    <h3>Cybersecurity</h3>
-                    <div class="lab-details">
-                        <ul class="problem-list">
-                            <li>
-                                <span class="problem-heading">Real-Time Protection</span>
-                                <span class="problem-text">AI-driven threat detection and mitigation systems</span>
-                            </li>
-                            <li>
-                                <span class="problem-heading">Government Compliance</span>
-                                <span class="problem-text">Automated compliance for international B2G projects</span>
-                            </li>
-                            <li>
-                                <span class="problem-heading">Blockchain Security</span>
-                                <span class="problem-text">High-performance security protocols for blockchain apps</span>
-                            </li>
-                        </ul>
-                        <div class="kpi-placeholder">
-                            <p><strong>Total Addressable Market (TAM):</strong> [Placeholder]</p>
-                            <p><strong>Projected Returns:</strong> [Placeholder]</p>
-                            <p><strong>Growth Potential:</strong> [Placeholder]</p>
-                            <div class="chart-placeholder">[Chart Placeholder]</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Longevity Analytics -->
-                <div class="lab-card" tabindex="0" role="button" aria-expanded="false">
-                    <h3>Longevity Analytics</h3>
-                    <div class="lab-details">
-                        <ul class="problem-list">
-                            <li>
-                                <span class="problem-heading">Workforce Analytics</span>
-                                <span class="problem-text">Predictive modeling for workforce health planning</span>
-                            </li>
-                            <li>
-                                <span class="problem-heading">Health Optimization</span>
-                                <span class="problem-text">Data-driven personalized longevity strategies</span>
-                            </li>
-                            <li>
-                                <span class="problem-heading">Insurance Innovation</span>
-                                <span class="problem-text">Longevity-based insurance and healthcare solutions</span>
-                            </li>
-                        </ul>
-                        <div class="kpi-placeholder">
-                            <p><strong>Total Addressable Market (TAM):</strong> [Placeholder]</p>
-                            <p><strong>Projected Returns:</strong> [Placeholder]</p>
-                            <p><strong>Growth Potential:</strong> [Placeholder]</p>
-                            <div class="chart-placeholder">[Chart Placeholder]</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Entertainment & Experiential Tech -->
-                <div class="lab-card" tabindex="0" role="button" aria-expanded="false">
-                    <h3>Entertainment & Experiential Tech</h3>
-                    <div class="lab-details">
-                        <ul class="problem-list">
-                            <li>
-                                <span class="problem-heading">AI Content Creation</span>
-                                <span class="problem-text">Automated design and narrative generation tools</span>
-                            </li>
-                            <li>
-                                <span class="problem-heading">Virtual Commerce</span>
-                                <span class="problem-text">AI-personalized VR shopping experiences</span>
-                            </li>
-                            <li>
-                                <span class="problem-heading">B2B Engagement</span>
-                                <span class="problem-text">Immersive platforms for B2B product showcasing</span>
-                            </li>
-                        </ul>
-                        <div class="kpi-placeholder">
-                            <p><strong>Total Addressable Market (TAM):</strong> [Placeholder]</p>
-                            <p><strong>Projected Returns:</strong> [Placeholder]</p>
-                            <p><strong>Growth Potential:</strong> [Placeholder]</p>
-                            <div class="chart-placeholder">[Chart Placeholder]</div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </section>
-
-        <!-- Strategic Portfolio Section -->
-        <section id="portfolio" class="section">
-            <h2 class="section-title">Strategic Equity Partnership with CogX</h2>
-            <p style="text-align: center; margin-bottom: 3rem;">Our partnership with CogX amplifies our reach and accelerates growth across our portfolio.</p>
-            <ul class="benefits-list">
-                <li><strong>Transatlantic Synergy:</strong> Enhanced deal flow and market access across US and UK markets.</li>
-                <li><strong>Business Development:</strong> Accelerated CBDO capabilities and marketing reach.</li>
-                <li><strong>Portfolio Catalyst:</strong> Strategic platform for portfolio company growth and expansion.</li>
-            </ul>
-            <h3 class="section-subtitle" style="margin-top: 4rem;">VR Incubator Program</h3>
-            <p style="text-align: center; margin-bottom: 2rem;">We offer a 2-week incubator with domestic US applicants and international clients to instill the science of venture. This not only generates revenue but also furthers our mission through thought leadership, white papers, and podcasts available at <a href="https://ventureresearch.science" target="_blank">ventureresearch.science</a>.</p>
-        </section>
-
-        <!-- Contact Section -->
-        <section id="contact" class="section">
-            <h2 class="section-title">Connect with Us</h2>
-            <p style="text-align: center; margin-bottom: 3rem;">Ready to invest or have questions? Reach out to us today.</p>
-            <!-- Contact Form -->
-            <form action="#" method="post" class="contact-form">
-                <input type="email" name="email" placeholder="Your Email" required>
-                <textarea name="message" placeholder="Your Message" rows="6" required></textarea>
-                <button type="submit" class="pill-button">Submit</button>
-            </form>
-        </section>
-
-    </main>
-
-    <!-- Footer -->
-    <footer role="contentinfo">
-        <p>© 2025 Venture Research Institute</p>
-        <div class="locations">Palo Alto, CA | Miami, FL</div>
-    </footer>
-
-    <!-- Scripts -->
     <script>
-        // Typing animation
-        function typeWriter(text, element, speed = 50) {
-            let i = 0;
-            element.style.opacity = 1;
-            const cursor = document.createElement('span');
-            cursor.classList.add('cursor');
-            cursor.textContent = '|';
-            element.appendChild(cursor);
+        // Typing animation for subtitle
+        const tagline = "Your AI. Your Vehicle.";
+        const typingElement = document.getElementById('typingEffect');
+        let index = 0;
 
-            function type() {
-                if (i < text.length) {
-                    element.innerHTML = text.substring(0, i + 1);
-                    element.appendChild(cursor);
-                    i++;
-                    setTimeout(type, speed);
-                } else {
-                    cursor.style.display = 'none';
-                    // Fade in the sub-title
-                    document.getElementById('sub-title').style.opacity = 1;
-                }
+        function typeEffect() {
+            if (index < tagline.length) {
+                typingElement.textContent += tagline.charAt(index);
+                index++;
+                setTimeout(typeEffect, 100); // Typing speed
+            } else {
+                typingElement.classList.remove('subtitle'); // Remove blinking cursor
             }
-            type();
         }
 
-        // Initialize animations
-        window.onload = function() {
-            const title = document.getElementById('main-title');
-            const subTitle = document.getElementById('sub-title');
+        typeEffect();
 
-            typeWriter("Join Our Mission to De-Risk Innovation", title);
+        // Create particles
+        function createParticles() {
+            const particleField = document.getElementById('particleField');
+            const particleCount = 50;
 
-            // Fade in sub-title after typing animation
-            subTitle.style.opacity = 0;
-            subTitle.style.transition = 'opacity 1s ease-in';
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random positioning and size
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                const size = Math.random() * 3 + 1;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
 
-            // Add scroll animations
-            const cards = document.querySelectorAll('.lab-card');
-            const observer = new IntersectionObserver(
-                entries => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            entry.target.style.opacity = 1;
-                            entry.target.style.transform = 'translateY(0)';
-                        }
-                    });
-                },
-                { threshold: 0.1 }
-            );
-
-            cards.forEach(card => {
-                card.style.opacity = 0;
-                card.style.transform = 'translateY(20px)';
-                card.style.transition = 'all 0.6s ease-out';
-                observer.observe(card);
-            });
+                // Random animation delay
+                particle.style.animationDelay = `${Math.random() * 3}s`;
+                particle.style.opacity = Math.random(); // Vary initial opacity
+                
+                particleField.appendChild(particle);
+            }
         }
 
-        // Collapsible Lab Cards
-        document.querySelectorAll('.lab-card').forEach(card => {
-            card.addEventListener('click', () => {
-                card.classList.toggle('active');
-                const expanded = card.getAttribute('aria-expanded') === 'true' || false;
-                card.setAttribute('aria-expanded', !expanded);
-            });
-            card.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    card.click();
-                }
-            });
-        });
-
-        // Smooth Scroll
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
-
-        // Accessibility: Focus Styles
-        document.querySelectorAll('a, button, .lab-card').forEach(el => {
-            el.addEventListener('focus', () => {
-                el.style.outline = '2px solid var(--vr-red-light)';
-            });
-            el.addEventListener('blur', () => {
-                el.style.outline = 'none';
-            });
-        });
+        // Initialize particles on load
+        window.addEventListener('load', createParticles);
     </script>
 </body>
 </html>
