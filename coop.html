@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoCoop - The Future of Cooperative Finance</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.158.0/three.min.js"></script>
+    <style>
+        :root {
+            --primary: #3B82F6;
+            --secondary: #10B981;
+            --background: #0F172A;
+            --text: #E2E8F0;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        #heroCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .hero-content {
+            z-index: 2;
+            text-align: center;
+            max-width: 800px;
+            padding: 2rem;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .cta-button {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 2rem;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+        }
+
+        .features {
+            padding: 4rem 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 1rem;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 4rem 2rem;
+            background: linear-gradient(45deg, rgba(59, 130, 246, 0.1), rgba(16, 185, 129, 0.1));
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <canvas id="heroCanvas"></canvas>
+        <div class="hero-content">
+            <h1>Welcome to CryptoCoop</h1>
+            <p>The future of cooperative finance powered by AI and blockchain technology</p>
+            <button class="cta-button" id="joinWaitlist">Join the Waitlist</button>
+        </div>
+    </div>
+
+    <div class="features">
+        <div class="feature-card">
+            <h3>Personal AI Assistant</h3>
+            <p>Your dedicated financial advisor available 24/7, powered by advanced artificial intelligence.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Democratic Governance</h3>
+            <p>Every member has a voice in shaping the future of our cooperative through secure blockchain voting.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Automated Banking</h3>
+            <p>Experience seamless financial services with AI-driven automation and smart contracts.</p>
+        </div>
+    </div>
+
+    <div class="stats">
+        <div class="stat-item">
+            <div class="stat-number" id="memberCount">0</div>
+            <div>Members</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number" id="transactionCount">0</div>
+            <div>Transactions</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number" id="tvl">$0</div>
+            <div>Total Value Locked</div>
+        </div>
+    </div>
+
+    <script>
+        // Three.js Animation
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({
+            canvas: document.querySelector('#heroCanvas'),
+            alpha: true
+        });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        // Create particle system
+        const particles = new THREE.BufferGeometry();
+        const particleCount = 1000;
+        const positions = new Float32Array(particleCount * 3);
+
+        for (let i = 0; i < particleCount * 3; i += 3) {
+            positions[i] = (Math.random() - 0.5) * 10;
+            positions[i + 1] = (Math.random() - 0.5) * 10;
+            positions[i + 2] = (Math.random() - 0.5) * 10;
+        }
+
+        particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        const material = new THREE.PointsMaterial({
+            color: 0x3B82F6,
+            size: 0.02
+        });
+
+        const particleSystem = new THREE.Points(particles, material);
+        scene.add(particleSystem);
+
+        camera.position.z = 5;
+
+        // Animation
+        function animate() {
+            requestAnimationFrame(animate);
+            particleSystem.rotation.x += 0.001;
+            particleSystem.rotation.y += 0.001;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+          // Animation function
+        function animate() {
+            requestAnimationFrame(animate);
+            particleSystem.rotation.x += 0.001;
+            particleSystem.rotation.y += 0.001;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Stats Animation with GSAP
+        gsap.to("#memberCount", {
+            innerHTML: 50000,
+            duration: 2,
+            snap: { innerHTML: 1 },
+            scrollTrigger: {
+                trigger: ".stats",
+                start: "top center"
+            }
+        });
+
+        gsap.to("#transactionCount", {
+            innerHTML: 1000000,
+            duration: 2,
+            snap: { innerHTML: 1 },
+            scrollTrigger: {
+                trigger: ".stats",
+                start: "top center"
+            }
+        });
+
+        gsap.to("#tvl", {
+            innerHTML: 100000000,
+            duration: 2,
+            snap: { innerHTML: 1 },
+            scrollTrigger: {
+                trigger: ".stats",
+                start: "top center"
+            },
+            onUpdate: function() {
+                document.getElementById("tvl").textContent = '$' + 
+                    Number(this.targets()[0].innerHTML).toLocaleString();
+            }
+        });
+
+        // Waitlist Modal and Form Handling
+        const joinWaitlistBtn = document.getElementById('joinWaitlist');
+        joinWaitlistBtn.addEventListener('click', () => {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.8);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+            `;
+
+            const form = document.createElement('form');
+            form.style.cssText = `
+                background: var(--background);
+                padding: 2rem;
+                border-radius: 1rem;
+                max-width: 400px;
+                width: 90%;
+            `;
+
+            form.innerHTML = `
+                <h2 style="margin-bottom: 1.5rem; color: var(--text);">Join the Waitlist</h2>
+                <input type="email" placeholder="Enter your email" required
+                    style="width: 100%; padding: 0.75rem; margin-bottom: 1rem; border-radius: 0.5rem; border: 1px solid var(--primary); background: transparent; color: var(--text);">
+                <button type="submit" class="cta-button" style="width: 100%;">Submit</button>
+                <button type="button" class="cta-button" style="width: 100%; margin-top: 1rem; background: transparent; border: 1px solid var(--primary);">Close</button>
+            `;
+
+            modal.appendChild(form);
+            document.body.appendChild(modal);
+
+            // Close button functionality
+            const closeBtn = form.querySelector('button[type="button"]');
+            closeBtn.addEventListener('click', () => {
+                document.body.removeChild(modal);
+            });
+
+            // Form submission
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const email = form.querySelector('input[type="email"]').value;
+                
+                // Add loading state
+                const submitBtn = form.querySelector('button[type="submit"]');
+                submitBtn.textContent = 'Submitting...';
+                submitBtn.disabled = true;
+
+                // Simulate API call
+                setTimeout(() => {
+                    form.innerHTML = `
+                        <h2 style="margin-bottom: 1.5rem; color: var(--text);">Thank you for joining!</h2>
+                        <p style="color: var(--text);">We'll keep you updated on our progress.</p>
+                        <button type="button" class="cta-button" style="width: 100%; margin-top: 1rem;">Close</button>
+                    `;
+
+                    form.querySelector('button').addEventListener('click', () => {
+                        document.body.removeChild(modal);
+                    });
+                }, 1500);
+            });
+        });
+
+        // Responsive handling
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Parallax effect for feature cards
+        document.addEventListener('mousemove', (e) => {
+            const cards = document.querySelectorAll('.feature-card');
+            const mouseX = e.clientX / window.innerWidth - 0.5;
+            const mouseY = e.clientY / window.innerHeight - 0.5;
+
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const cardX = rect.left + rect.width / 2;
+                const cardY = rect.top + rect.height / 2;
+
+                const angle = Math.atan2(e.clientY - cardY, e.clientX - cardX);
+                const distance = Math.sqrt(Math.pow(mouseX, 2) + Math.pow(mouseY, 2));
+
+                gsap.to(card, {
+                    duration: 0.5,
+                    x: mouseX * 30,
+                    y: mouseY * 30,
+                    rotation: angle * 5,
+                    ease: "power2.out"
+                });
+            });
+        });
+
+        // Intersection Observer for animated entrances
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = "translateY(0)";
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.feature-card, .stat-item').forEach(el => {
+            el.style.opacity = 0;
+            el.style.transform = "translateY(50px)";
+            el.style.transition = "opacity 0.5s ease, transform 0.5s ease";
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
