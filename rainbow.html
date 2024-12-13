@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Container Box</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Berkeley+Mono:wght@400&display=swap">
+
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Berkeley Mono', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--bg-color, #f4f4f4);
+            transition: background-color 0.3s;
+        }
+
+        :root {
+            --light-mode-bg: #f4f4f4;
+            --dark-mode-bg: #1e1e1e;
+            --dynamic-box-color: #ff9f43;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: var(--dark-mode-bg);
+        }
+
+        [data-theme="light"] {
+            --bg-color: var(--light-mode-bg);
+        }
+
+        .container {
+            position: relative;
+            width: 400px;
+            height: 250px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .dynamic-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .typing-text {
+            white-space: nowrap;
+            overflow: hidden;
+            display: inline-block;
+            animation: typing 4s steps(30) infinite, blink 0.5s step-end infinite;
+            border-right: 2px solid white;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        @keyframes blink {
+            from { border-right-color: transparent; }
+            to { border-right-color: white; }
+        }
+    </style>
+</head>
+<body data-theme="light">
+    <div class="container">
+        <canvas class="dynamic-bg" id="dynamic-bg"></canvas>
+        <div class="content">
+            <span class="typing-text">Welcome to Universitas AI</span>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeDynamicBackground } from './gradient-bg.js';
+        initializeDynamicBackground('dynamic-bg');
+
+        // Toggle theme
+        document.body.addEventListener('click', () => {
+            const currentTheme = document.body.getAttribute('data-theme');
+            document.body.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
+        });
+    </script>
+</body>
+</html>
