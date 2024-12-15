@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta and Title -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archipelago.science</title>
+
+    <!-- Tailwind CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <style>
+        @font-face {
+            font-family: 'Berkeley Mono';
+            src: url('/fonts/BerkeleyMono-Regular.woff2') format('woff2');
+        }
+    </style>
+
+    <!-- Custom Styles -->
+    <style>
+        :root {
+            --primary: #2563eb;
+            --background: linear-gradient(180deg, #ffffff, #f9f9f9);
+            --text: #1f2937;
+            --secondary: #4b5563;
+            --accent-color: #9af764;
+        }
+
+        .dark {
+            --primary: #60a5fa;
+            --background: linear-gradient(180deg, #000000, #2a2a2a);
+            --text: #f3f4f6;
+            --secondary: #9ca3af;
+        }
+
+        body {
+            font-family: 'Berkeley Mono', monospace;
+            background: var(--background);
+            color: var(--text);
+            transition: background 0.3s, color 0.3s;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            padding-top: 4rem; /* To account for fixed navbar */
+        }
+
+        /* Canvas Styling */
+        #networkCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Hero Content */
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .btn-accent {
+            background-color: var(--accent-color);
+            color: #000;
+        }
+
+        .dark .btn-accent {
+            color: #000;
+        }
+
+        /* Typing Effect */
+        .typing-effect::after {
+            content: '|';
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Black Text in Night Mode */
+        .dark .black-text {
+            color: #000000;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed w-full bg-opacity-90 backdrop-blur-sm z-50" role="navigation" aria-label="Main Navigation">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-label="Aicosystem Logo">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
+                    <span class="ml-2 text-lg font-semibold">Aicosystem</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="theme-toggle" class="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700" aria-label="Toggle Dark Mode">
+                        <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <!-- Reverted back to the original SVG path -->
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M20.354 15.354A9 9 0 1 1 8.646 3.646 9.003
+                                  9.003 0 0 0 12 21a9.003 9.003 0 0 0 8.354-5.646z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <!-- Canvas for Animation -->
+            <canvas id="networkCanvas"></canvas>
+
+            <!-- Hero Content -->
+            <div class="hero-content">
+                <h1 class="text-4xl sm:text-6xl font-bold mb-8" aria-label="AICOSYSTEM">
+                    Archipelago
+                </h1>
+                <p class="text-xl sm:text-2xl mb-12 text-secondary">
+                    <span id="typed-text"></span>
+                </p>
+                <div class="flex justify-center space-x-4">
+                    <button class="btn-accent px-8 py-3 rounded-lg hover:opacity-90 transition">
+                        Building Computational Ontology
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Framework Overview -->
+        <section class="py-24 bg-gray-50 dark:bg-gray-900">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-bold mb-16 text-center framework-title black-text">The Twin Imperative Framework</h2>
+                <div class="grid md:grid-cols-2 gap-12">
+                    <!-- Functionality -->
+                    <div class="framework-diagram p-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
+                        <h3 class="text-2xl font-bold mb-6 black-text">AI - Functionality</h3>
+                        <ul class="space-y-4">
+                            <li class="black-text">Compute Performance</li>
+                            <li class="black-text">Energy Efficiency</li>
+                            <li class="black-text">Explainability</li>
+                        </ul>
+                    </div>
+
+                    <!-- Capacity Building -->
+                    <div class="framework-diagram p-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
+                        <h3 class="text-2xl font-bold mb-6 black-text">Ecosystem - Capacity Building</h3>
+                        <ul class="space-y-4">
+                            <li class="black-text">Full-Stack R&D</li>
+                            <li class="black-text">Supply Chains</li>
+                            <li class="black-text">Workforce Development</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services -->
+        <section class="py-24">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-bold mb-16 text-center">Our Services</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
+                        <h3 class="text-xl font-bold mb-4 black-text">Strategic Consulting</h3>
+                        <p class="text-secondary black-text">Enterprise AI strategy and implementation</p>
+                    </div>
+                    <div class="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
+                        <h3 class="text-xl font-bold mb-4 black-text">Research Partnership</h3>
+                        <p class="text-secondary black-text">Collaborative R&D and innovation</p>
+                    </div>
+                    <div class="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
+                        <h3 class="text-xl font-bold mb-4 black-text">Government Advisory</h3>
+                        <p class="text-secondary black-text">Policy and regulatory guidance</p>
+                    </div>
+                    <div class="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg">
+                        <h3 class="text-xl font-bold mb-4 black-text">Venture Partnership</h3>
+                        <p class="text-secondary black-text">Investment strategy and due diligence</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-8 text-center text-secondary">
+        <p>&copy; 2025 Aicosystem. All rights reserved.</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+
+        function setTheme(isDark) {
+            isDark ? html.classList.add('dark') : html.classList.remove('dark');
+        }
+
+        // Initial Theme Check
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            setTheme(true);
+        }
+
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            // Update isDarkMode for canvas animation
+            isDarkMode = html.classList.contains('dark');
+        });
+
+        // Typing Effect
+        const texts = ["Your AI co-pilot", "Your AI co-founder", "Your AI co-system"];
+        const typedTextElement = document.getElementById('typed-text');
+        let textIndex = 0;
+        let charIndex = 0;
+
+        function type() {
+            if (charIndex === 0) {
+                typedTextElement.classList.add('typing-effect');
+            }
+            if (charIndex < texts[textIndex].length) {
+                typedTextElement.textContent += texts[textIndex][charIndex];
+                charIndex++;
+                setTimeout(type, 100);
+            } else {
+                typedTextElement.classList.remove('typing-effect');
+                setTimeout(erase, 2000);
+            }
+        }
+
+        function erase() {
+            if (charIndex > 0) {
+                typedTextElement.textContent = texts[textIndex].substring(0, charIndex - 1);
+                charIndex--;
+                setTimeout(erase, 50);
+            } else {
+                textIndex = (textIndex + 1) % texts.length;
+                type();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            type();
+        });
+
+        // Network Canvas Animation
+        const canvas = document.getElementById('networkCanvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particles = [];
+        const particleCount = 200;
+        const maxVelocity = 0.5;
+        const connectionDistance = 100;
+        let isDarkMode = html.classList.contains('dark');
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * maxVelocity;
+                this.vy = (Math.random() - 0.5) * maxVelocity;
+                this.size = 2;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Wrap around edges
+                if (this.x < 0) this.x = canvas.width;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.y < 0) this.y = canvas.height;
+                if (this.y > canvas.height) this.y = 0;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = isDarkMode ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.8)';
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            particles.forEach((particle, index) => {
+                particle.update();
+                particle.draw();
+
+                // Draw connections
+                for (let j = index + 1; j < particles.length; j++) {
+                    const dx = particle.x - particles[j].x;
+                    const dy = particle.y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < connectionDistance) {
+                        ctx.beginPath();
+                        ctx.moveTo(particle.x, particle.y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = isDarkMode
+                            ? `rgba(255, 255, 255, ${1 - distance / connectionDistance})`
+                            : `rgba(0, 0, 0, ${1 - distance / connectionDistance})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.stroke();
+                    }
+                }
+            });
+
+            requestAnimationFrame(animateParticles);
+        }
+
+        // Update Canvas Size on Resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            initParticles();
+        });
+
+        // Initialize and Animate Particles
+        initParticles();
+        animateParticles();
+    </script>
+</body>
+</html>
