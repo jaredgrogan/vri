@@ -134,7 +134,7 @@
 
         .hero-section {
             text-align: center;
-            padding: 3rem 0;
+            padding: 2rem 0; /* Reduced padding to prevent excessive margins */
             animation: fadeIn 1s ease-out;
         }
 
@@ -143,13 +143,13 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            /* Responsive font size using clamp */
             font-size: clamp(1.5rem, 5vw, 2.5rem);
             margin-bottom: 1rem;
             white-space: nowrap;
             overflow: hidden;
-            width: 0;
-            animation: typing 2s steps(30, end) forwards;
+            display: inline-block; /* Allows width animation */
+            width: 0; /* Initial width for typing animation */
+            animation: typing 4s steps(40, end) forwards; /* Adjusted timing for better effect */
             cursor: pointer;
             transition: filter 0.3s;
         }
@@ -679,7 +679,7 @@
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                             <polyline points="7 10 12 15 17 10"/>
-                            <line x1="12" x2="12" y1="15" y2="3"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
                         </svg>
                     </button>
 
