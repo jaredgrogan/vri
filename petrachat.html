@@ -133,30 +133,26 @@
         }
 
         .hero-section {
-    position: relative; /* Ensure the child `.hero-title` can use `absolute` positioning */
-    width: 100%; /* Take the full width of the viewport */
-    height: 100vh; /* Take the full height of the viewport */
-    text-align: center; /* Center-align any other content horizontally */
-    margin: 0; /* Remove any extra margins */
-    overflow: hidden; /* Prevent accidental scrolling from overflowing elements */
-}
+            text-align: center;
+            padding: 3rem 0;
+            animation: fadeIn 1s ease-out;
+        }
 
-      .hero-title {
-    position: absolute; /* Ensures precise placement */
-    top: 50%; /* Center vertically */
-    left: 50%; /* Center horizontally */
-    transform: translate(-50%, -50%); /* Align center */
-    background: var(--primary-gradient);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    font-size: clamp(1.5rem, 5vw, 2.5rem); /* Responsive font size */
-    white-space: nowrap; /* Prevent wrapping */
-    overflow: hidden; /* Hide overflowing text during animation */
-    width: 0; /* Required for typing animation to start at zero width */
-    animation: typing 2s steps(30, end) forwards; /* Typing effect */
-    cursor: pointer; /* Optional visual feedback */
-}
+        .hero-title {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            /* Responsive font size using clamp */
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            margin-bottom: 1rem;
+            white-space: nowrap;
+            overflow: hidden;
+            width: 0;
+            animation: typing 2s steps(30, end) forwards;
+            cursor: pointer;
+            transition: filter 0.3s;
+        }
 
         .hero-title:hover {
             filter: brightness(1.2);
