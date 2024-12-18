@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venture Research Institute - Investment Deck</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --vr-red-dark: #A51C30;
+            --vr-red-light: #FF2E5B;
+            --black: #000000;
+            --dark-gray: #1e1e1e;
+            --white: #FFFFFF;
+            --light-silver: #f3f4f6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--white);
+            color: var(--black);
+            line-height: 1.6;
+            overflow: hidden;
+        }
+
+        /* Progress Bar */
+        #progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--vr-red-dark), var(--vr-red-light));
+            z-index: 9999;
+            transition: width 0.2s ease;
+        }
+
+        /* Slides Container */
+        .slides-container {
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+            scroll-behavior: smooth;
+        }
+
+        /* Individual Slides */
+        .slide {
+            height: 100vh;
+            scroll-snap-align: start;
+            padding: 4rem 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Gradient Background with Animation */
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(243,244,246,0.95) 100%);
+            z-index: -1;
+            transition: opacity 0.5s ease;
+        }
+
+        .slide.active::before {
+            opacity: 1;
+        }
+
+        /* Typography */
+        .title {
+            font-family: 'Inter', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, var(--vr-red-dark), var(--vr-red-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease;
+        }
+
+        .subtitle {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--dark-gray);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease 0.2s;
+        }
+
+        /* Content Box with Glassmorphism */
+        .content-box {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            width: 90%;
+            margin: 2rem auto;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease 0.4s;
+        }
+
+        /* Feature Grid */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            width: 100%;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(165, 28, 48, 0.15);
+        }
+
+        /* Active States */
+        .slide.active .title,
+        .slide.active .subtitle,
+        .slide.active .content-box,
+        .slide.active .feature-card {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Navigation Dots */
+        .nav-dots {
+            position: fixed;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            z-index: 100;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(165, 28, 48, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot.active {
+            background: var(--vr-red-light);
+            transform: scale(1.2);
+        }
+
+        /* Additional slide-specific styles will be added here */
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.5rem;
+            }
+
+            .subtitle {
+                font-size: 1.5rem;
+            }
+
+            .content-box {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="progress"></div>
+    
+    <div class="slides-container">
+        <!-- Title Slide -->
+        <div class="slide active" id="slide1">
+            <h1 class="title">Join Our Mission to De-Risk Innovation</h1>
+            <h2 class="subtitle">Invest in the Science of Venture</h2>
+            <div class="content-box">
+                <p style="font-family: 'Playfair Display', serif; font-size: 1.5rem;">
+                    Pioneering a systematic approach to venture creation, inspired by the world's leading research institutions
+                </p>
+            </div>
+        </div>
+
+        <!-- Continue with all slides... -->
+    </div>
+
+    <script>
+        // Enhanced scroll handling and animations
+        const slidesContainer = document.querySelector('.slides-container');
+        const slides = document.querySelectorAll('.slide');
+        const progressBar = document.getElementById('progress');
+
+        // Create navigation dots
+        const navDots = document.createElement('div');
+        navDots.className = 'nav-dots';
+        slides.forEach((_, index) => {
+            const dot = document.createElement('div');
+            dot.className = 'nav-dot';
+            if (index === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => {
+                slides[index].scrollIntoView({ behavior: 'smooth' });
+            });
+            navDots.appendChild(dot);
+        });
+        document.body.appendChild(navDots);
+
+        // Intersection Observer for slides
+        const observerOptions = {
+            root: slidesContainer,
+            threshold: 0.5
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    const index = Array.from(slides).indexOf(entry.target);
+                    document.querySelectorAll('.nav-dot').forEach((dot, i) => {
+                        dot.classList.toggle('active', i === index);
+                    });
+                } else {
+                    entry.target.classList.remove('active');
+                }
+            });
+        }, observerOptions);
+
+        slides.forEach(slide => observer.observe(slide));
+
+        // Progress bar
+        slidesContainer.addEventListener('scroll', () => {
+            const scrolled = slidesContainer.scrollTop;
+            const maxScroll = slidesContainer.scrollHeight - slidesContainer.clientHeight;
+            const progress = (scrolled / maxScroll) * 100;
+            progressBar.style.width = `${progress}%`;
+        });
+
+        // Additional animations and interactivity will be added here
+    </script>
+</body>
+</html>
