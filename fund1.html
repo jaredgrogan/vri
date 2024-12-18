@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venture Research Institute - Fund I</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --vr-red-dark: #A51C30;
+            --vr-red-light: #FF2E5B;
+            --black: #000000;
+            --dark-gray: #1e1e1e;
+            --white: #FFFFFF;
+            --light-silver: #f3f4f6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--white);
+            color: var(--black);
+            line-height: 1.6;
+        }
+
+        /* Fixed Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-logo {
+            background: linear-gradient(45deg, var(--vr-red-dark), var(--vr-red-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        /* Progress Bar */
+        #progress {
+            position: fixed;
+            top: 64px; /* Height of header */
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--vr-red-dark), var(--vr-red-light));
+            z-index: 1000;
+            transition: width 0.2s ease;
+        }
+
+        /* Main Content */
+        .content-container {
+            margin-top: 64px; /* Height of header */
+            height: calc(100vh - 64px);
+            overflow-y: scroll;
+            scroll-behavior: smooth;
+        }
+
+        .slide {
+            min-height: calc(100vh - 64px);
+            padding: 4rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Typography */
+        .title {
+            font-family: 'Inter', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, var(--vr-red-dark), var(--vr-red-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-family: 'Inter', sans-serif;
+            font-size: 2rem;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            color: var(--dark-gray);
+        }
+
+        .body-text {
+            font-family: 'Lora', serif;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--dark-gray);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Content Sections */
+        .content-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .content-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Continue with specific section styles... */
+
+    </style>
+</head>
+<body>
+    <!-- Fixed Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="header-logo">Venture Research Institute</div>
+        </div>
+    </header>
+
+    <!-- Progress Bar -->
+    <div id="progress"></div>
+
+ <!-- Main Content Container with ALL Sections -->
+    <div class="content-container">
+        <!-- Title/Hero Section -->
+        <div class="slide" id="hero">
+            <div class="content-section">
+                <h1 class="title">Join Our Mission to De-Risk Innovation</h1>
+                <h2 class="subtitle">Invest in the Science of Venture</h2>
+                <p class="body-text">
+                    The Venture Research Fund is revolutionizing venture creation through our reverse-induction methodology and organization of Commercial Research Labs (CRLs). Partner with us to capitalize on high-growth opportunities across AI and Decentralized Computing.
+                </p>
+            </div>
+        </div>
+
+        <!-- Our Thesis -->
+        <div class="slide" id="thesis">
+            <div class="content-section">
+                <h2 class="title">Our Thesis</h2>
+                <div class="thesis-content">
+                    <p class="body-text">
+                        We employ a reverse-induction method, organizing around problem statements led by industry experts. By meeting proven demands validated by industry before we start, we systematically de-risk innovation. Our core focus lies where Decentralization meets AI, primarily targeting B2B and B2G markets, with B2C being ancillary. Across the board, we aim to be an "API Factory" enabling seamless integration and scalability.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Complete Value Stack -->
+        <div class="slide" id="value-stack">
+            <div class="content-section">
+                <h2 class="title">Value Stack</h2>
+                
+                <!-- Saudi Partnership -->
+                <div class="value-component">
+                    <h3>Strategic Capital Partnership</h3>
+                    <p class="body-text">1:1 capital matching program enabling rapid scale and enhanced risk mitigation. This strategic partnership provides:</p>
+                    <ul>
+                        <li>Capital amplification</li>
+                        <li>Risk reduction</li>
+                        <li>MENA market access</li>
+                        <li>Enhanced credibility</li>
+                    </ul>
+                </div>
+
+                <!-- Starbase Asset -->
+                <div class="value-component">
+                    <h3>Strategic R&D Infrastructure</h3>
+                    <p class="body-text">1.72 acres in Starbase, TX - the world's premier deep tech R&D precinct, offering:</p>
+                    <ul>
+                        <li>Premium location adjacent to advanced manufacturing</li>
+                        <li>Access to cutting-edge engineering ecosystem</li>
+                        <li>Strategic proximity to industry leaders</li>
+                        <li>Infrastructure for deep tech development</li>
+                    </ul>
+                </div>
+
+                <!-- CogX Partnership -->
+                <div class="value-component">
+                    <h3>Global Market Access</h3>
+                    <p class="body-text">Strategic equity partnership with CogX providing:</p>
+                    <ul>
+                        <li>Enhanced deal flow across US and UK markets</li>
+                        <li>Accelerated CBDO capabilities</li>
+                        <li>Expanded marketing reach</li>
+                        <li>Portfolio company growth platform</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- CRL Innovation Model -->
+        <div class="slide" id="crl-model">
+            <div class="content-section">
+                <h2 class="title">Commercial Research Labs (CRLs)</h2>
+                <p class="body-text">
+                    Organized around problem statements, our CRLs are led by industry for industry. Steering by industry equates to reverse induction; we meet proven demands validated by industry before we start.
+                </p>
+                
+                <!-- CRL Grid -->
+                <div class="crl-grid">
+                    <!-- AI SaaS & Decentralized Computing -->
+                    <div class="crl-card">
+                        <h3>AI SaaS & Decentralized Computing</h3>
+                        <div class="crl-content">
+                            <p>Parent category focusing on seamless integration and scalability</p>
+                        </div>
+                    </div>
+
+                    <!-- Productivity & Efficiency -->
+                    <div class="crl-card">
+                        <h3>Productivity & Efficiency SaaS</h3>
+                        <div class="crl-content">
+                            <p>B2B and B2G solutions optimizing resource utilization and performance</p>
+                        </div>
+                    </div>
+
+                    <!-- FinTech & DeFi -->
+                    <div class="crl-card">
+                        <h3>FinTech & DeFi</h3>
+                        <div class="crl-content">
+                            <p>Institutional-grade financial innovation and blockchain solutions</p>
+                        </div>
+                    </div>
+
+                    <!-- Cybersecurity -->
+                    <div class="crl-card">
+                        <h3>Cybersecurity</h3>
+                        <div class="crl-content">
+                            <p>Enterprise-focused security and compliance solutions</p>
+                        </div>
+                    </div>
+
+                    <!-- Health & Wellness in Silico -->
+                    <div class="crl-card">
+                        <h3>Health & Wellness in Silico</h3>
+                        <div class="crl-content">
+                            <p>Digital health optimization and in silico therapeutic development</p>
+                        </div>
+                    </div>
+
+                    <!-- Entertainment & Tech -->
+                    <div class="crl-card">
+                        <h3>Entertainment & Tech</h3>
+                        <div class="crl-content">
+                            <p>B2B focused entertainment and experiential technology solutions</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Investment Strategy -->
+        <div class="slide" id="investment-strategy">
+            <div class="content-section">
+                <h2 class="title">Investment Strategy</h2>
+                
+                <!-- Deal Flow -->
+                <div class="strategy-component">
+                    <h3>Deal Flow Generation</h3>
+                    <ul>
+                        <li>CRL research output</li>
+                        <li>CogX partnership network</li>
+                        <li>Strategic partner referrals</li>
+                        <li>Incubator program participants</li>
+                    </ul>
+                </div>
+
+                <!-- Portfolio Construction -->
+                <div class="strategy-component">
+                    <h3>Portfolio Strategy</h3>
+                    <ul>
+                        <li>Initial check size: $500K-2M</li>
+                        <li>Follow-on reserves: 50% of fund</li>
+                        <li>Target portfolio: 15-20 companies</li>
+                        <li>Ownership target: 7-15%</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fund Terms -->
+        <div class="slide" id="fund-terms">
+            <div class="content-section">
+                <h2 class="title">Fund Structure</h2>
+                <div class="terms-content">
+                    <h3>Key Terms</h3>
+                    <ul>
+                        <li>Target Fund Size: $50M-75M</li>
+                        <li>Investment Period: 3 years</li>
+                        <li>Fund Term: 10 years (2 one-year extensions)</li>
+                        <li>Minimum LP Commitment: $500K institutions, $250K strategic</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Section -->
+        <div class="slide" id="contact">
+            <div class="content-section">
+                <h2 class="title">Connect With Us</h2>
+                <p class="body-text">Ready to invest or have questions? Reach out to us today.</p>
+                <div class="contact-form">
+                    <!-- Form implementation -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced scroll handling and progress tracking
+        const container = document.querySelector('.content-container');
+        const progressBar = document.getElementById('progress');
+        const sections = document.querySelectorAll('.slide');
+
+        // Update progress bar
+        container.addEventListener('scroll', () => {
+            const scrolled = container.scrollTop;
+            const maxScroll = container.scrollHeight - container.clientHeight;
+            const progress = (scrolled / maxScroll) * 100;
+            progressBar.style.width = `${progress}%`;
+        });
+
+        // Intersection Observer for animations
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.querySelector('.content-section').classList.add('visible');
+                    }
+                });
+            },
+            { threshold: 0.1 }
+        );
+
+        sections.forEach(section => observer.observe(section));
+    </script>
+
+    <script>
+        // Basic scroll handling and progress bar
+        const container = document.querySelector('.content-container');
+        const progressBar = document.getElementById('progress');
+
+        container.addEventListener('scroll', () => {
+            const scrolled = container.scrollTop;
+            const maxScroll = container.scrollHeight - container.clientHeight;
+            const progress = (scrolled / maxScroll) * 100;
+            progressBar.style.width = `${progress}%`;
+        });
+
+        // Would add more interactivity and animations here
+    </script>
+</body>
+</html>
