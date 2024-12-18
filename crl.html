@@ -27,6 +27,7 @@
             background: var(--white);
             color: var(--black);
             line-height: 1.6;
+            overflow: hidden;
         }
 
         /* Fixed Header */
@@ -37,6 +38,7 @@
             right: 0;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             z-index: 1000;
             padding: 1rem 2rem;
             border-bottom: 1px solid rgba(0,0,0,0.1);
@@ -61,7 +63,7 @@
         /* Progress Bar */
         #progress {
             position: fixed;
-            top: 64px; /* Height of header */
+            top: 64px;
             left: 0;
             width: 0%;
             height: 3px;
@@ -72,17 +74,21 @@
 
         /* Main Content */
         .content-container {
-            margin-top: 64px; /* Height of header */
+            margin-top: 64px;
             height: calc(100vh - 64px);
             overflow-y: scroll;
             scroll-behavior: smooth;
+            position: relative;
         }
 
         .slide {
             min-height: calc(100vh - 64px);
             padding: 4rem 2rem;
             position: relative;
-            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--white) 0%, var(--light-silver) 100%);
         }
 
         /* Typography */
@@ -94,6 +100,7 @@
             background: linear-gradient(45deg, var(--vr-red-dark), var(--vr-red-light));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-align: center;
         }
 
         .subtitle {
@@ -102,6 +109,7 @@
             font-weight: 500;
             margin-bottom: 2rem;
             color: var(--dark-gray);
+            text-align: center;
         }
 
         .body-text {
@@ -111,6 +119,7 @@
             color: var(--dark-gray);
             max-width: 800px;
             margin: 0 auto;
+            text-align: center;
         }
 
         /* Content Sections */
@@ -121,6 +130,7 @@
             opacity: 0;
             transform: translateY(20px);
             transition: all 0.6s ease;
+            width: 100%;
         }
 
         .content-section.visible {
@@ -128,8 +138,200 @@
             transform: translateY(0);
         }
 
-        /* Continue with specific section styles... */
+        /* Stats Styling */
+        .market-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
 
+        .stat {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat h3 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--vr-red-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Market Metrics Styling */
+        .market-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .metric {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .metric:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .metric h3 {
+            color: var(--vr-red-dark);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        /* CRL Content Styling */
+        .crl-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .market-size, .focus-areas {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .market-size:hover, .focus-areas:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .market-size h3, .focus-areas h3 {
+            color: var(--vr-red-dark);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        ul li {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        ul li:before {
+            content: "•";
+            color: var(--vr-red-light);
+            position: absolute;
+            left: 0;
+        }
+
+        /* Aggregate Stats Styling */
+        .aggregate-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .total-tam, .growth-metrics {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .total-tam:hover, .growth-metrics:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .massive-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--vr-red-dark);
+            margin: 1rem 0;
+        }
+
+        /* Urgency Points Styling */
+        .urgency-points {
+            margin: 2rem 0;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-cta {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-cta h3 {
+            color: var(--vr-red-dark);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.5rem;
+            }
+
+            .subtitle {
+                font-size: 1.5rem;
+            }
+
+            .slide {
+                padding: 2rem 1rem;
+            }
+
+            .stat h3 {
+                font-size: 2rem;
+            }
+
+            .massive-number {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .title {
+                font-size: 2rem;
+            }
+
+            .subtitle {
+                font-size: 1.2rem;
+            }
+
+            .body-text {
+                font-size: 1rem;
+            }
+
+            .stat h3 {
+                font-size: 1.8rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -143,247 +345,313 @@
     <!-- Progress Bar -->
     <div id="progress"></div>
 
- <!-- Main Content -->
-<div class="content-container">
-    <!-- Opening/Hero -->
-    <div class="slide" id="hero">
-        <div class="content-section">
-            <h1 class="title">Join Our Mission to De-Risk Innovation</h1>
-            <h2 class="subtitle">The Science of Venture Creation</h2>
-            <p class="body-text">
-                Through our Commercial Research Labs (CRLs), we're systematically capturing a $2 trillion+ market opportunity across AI and decentralized computing verticals. Our reverse-induction methodology enables us to target validated demand before development begins.
-            </p>
+    <!-- Main Content Container -->
+    <div class="content-container">
+        <!-- Title/Hero Section -->
+        <div class="slide" id="hero">
+            <div class="content-section">
+                <h1 class="title">Join Our Mission to De-Risk Innovation</h1>
+                <h2 class="subtitle">The Science of Venture Creation</h2>
+                <p class="body-text">
+                    Through our Commercial Research Labs (CRLs), we're systematically capturing a $2 trillion+ market opportunity across AI and decentralized computing verticals. Our reverse-induction methodology enables us to target validated demand before development begins.
+                </p>
+            </div>
         </div>
-    </div>
 
-    <!-- CRL Framework Introduction -->
-    <div class="slide" id="crl-intro">
-        <div class="content-section">
-            <h2 class="title">The CRL Revolution</h2>
-            <p class="body-text">
-                Commercial Research Labs represent a paradigm shift in venture creation. By organizing around industry-validated problem statements, we ensure market demand before development begins. This reverse-induction approach systematically de-risks innovation while accelerating time to market.
-            </p>
-            <div class="market-stats">
-                <div class="stat">
-                    <h3>$2.1T+</h3>
-                    <p>Combined TAM by 2030</p>
+        <!-- CRL Framework Introduction -->
+        <div class="slide" id="crl-intro">
+            <div class="content-section">
+                <h2 class="title">The CRL Revolution</h2>
+                <p class="body-text">
+                    Commercial Research Labs represent a paradigm shift in venture creation. By organizing around industry-validated problem statements, we ensure market demand before development begins. This reverse-induction approach systematically de-risks innovation while accelerating time to market.
+                </p>
+                <div class="market-stats">
+                    <div class="stat">
+                        <h3>$2.1T+</h3>
+                        <p>Combined TAM by 2030</p>
+                    </div>
+                    <div class="stat">
+                        <h3>47%</h3>
+                        <p>Average CAGR Across Verticals</p>
+                    </div>
+                    <div class="stat">
+                        <h3>5</h3>
+                        <p>Specialized Research Labs</p>
+                    </div>
                 </div>
-                <div class="stat">
-                    <h3>47%</h3>
-                    <p>Average CAGR Across Verticals</p>
+            </div>
+        </div>
+
+        <!-- Parent Category -->
+        <div class="slide" id="parent-category">
+            <div class="content-section">
+                <h2 class="title">AI SaaS & Decentralized Computing</h2>
+                <p class="body-text">
+                    Our umbrella category focuses on the intersection of AI and decentralized computing, targeting the exponential growth in these converging markets.
+                </p>
+                <div class="market-metrics">
+                    <div class="metric">
+                        <h3>Global AI Market</h3>
+                        <p>2023: $387.3B</p>
+                        <p>2030: $1.39T</p>
+                        <p>CAGR: 43.8%</p>
+                    </div>
+                    <div class="metric">
+                        <h3>Decentralized Computing</h3>
+                        <p>2023: $48.2B</p>
+                        <p>2030: $248.6B</p>
+                        <p>CAGR: 38.9%</p>
+                    </div>
                 </div>
-                <div class="stat">
-                    <h3>5</h3>
-                    <p>Specialized Research Labs</p>
+            </div>
+        </div>
+
+        <!-- Individual CRL Analysis -->
+        <div class="slide" id="productivity-saas">
+            <div class="content-section">
+                <h2 class="title">Productivity & Efficiency SaaS</h2>
+                <div class="crl-content">
+                    <div class="market-size">
+                        <h3>Market Opportunity</h3>
+                        <ul>
+                            <li>Current Market: $186B</li>
+                            <li>2030 Projection: $462B</li>
+                            <li>CAGR: 32.4%</li>
+                        </ul>
+                    </div>
+                    <div class="focus-areas">
+                        <h3>Key Focus Areas</h3>
+                        <ul>
+                            <li>Enterprise Resource Optimization</li>
+                            <li>B2G Digital Transformation</li>
+                            <li>AI-Driven Performance Enhancement</li>
+                            <li>Workflow Automation Platforms</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="fintech-defi">
+          <div class="content-section">
+                <h2 class="title">FinTech & DeFi</h2>
+                <div class="crl-content">
+                    <div class="market-size">
+                        <h3>Market Opportunity</h3>
+                        <ul>
+                            <li>Current Market: $245B</li>
+                            <li>2030 Projection: $698B</li>
+                            <li>CAGR: 41.7%</li>
+                        </ul>
+                    </div>
+                    <div class="focus-areas">
+                        <h3>Key Focus Areas</h3>
+                        <ul>
+                            <li>Institutional DeFi Infrastructure</li>
+                            <li>Cross-Border Payment Solutions</li>
+                            <li>AI-Powered Risk Management</li>
+                            <li>Digital Asset Platforms</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="cybersecurity">
+            <div class="content-section">
+                <h2 class="title">Cybersecurity</h2>
+                <div class="crl-content">
+                    <div class="market-size">
+                        <h3>Market Opportunity</h3>
+                        <ul>
+                            <li>Current Market: $172B</li>
+                            <li>2030 Projection: $478B</li>
+                            <li>CAGR: 36.3%</li>
+                        </ul>
+                    </div>
+                    <div class="focus-areas">
+                        <h3>Key Focus Areas</h3>
+                        <ul>
+                            <li>AI-Driven Threat Detection</li>
+                            <li>Zero-Trust Architecture</li>
+                            <li>Blockchain Security Solutions</li>
+                            <li>Compliance Automation</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="health-wellness">
+            <div class="content-section">
+                <h2 class="title">Health & Wellness in Silico</h2>
+                <div class="crl-content">
+                    <div class="market-size">
+                        <h3>Market Opportunity</h3>
+                        <ul>
+                            <li>Current Market: $157B</li>
+                            <li>2030 Projection: $524B</li>
+                            <li>CAGR: 45.2%</li>
+                        </ul>
+                    </div>
+                    <div class="focus-areas">
+                        <h3>Key Focus Areas</h3>
+                        <ul>
+                            <li>Digital Health Optimization</li>
+                            <li>In Silico Drug Development</li>
+                            <li>Longevity Analytics</li>
+                            <li>Biodata Platforms</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide" id="entertainment-tech">
+            <div class="content-section">
+                <h2 class="title">Entertainment & Tech</h2>
+                <div class="crl-content">
+                    <div class="market-size">
+                        <h3>Market Opportunity</h3>
+                        <ul>
+                            <li>Current Market: $98B</li>
+                            <li>2030 Projection: $312B</li>
+                            <li>CAGR: 33.8%</li>
+                        </ul>
+                    </div>
+                    <div class="focus-areas">
+                        <h3>Key Focus Areas</h3>
+                        <ul>
+                            <li>B2B Content Platforms</li>
+                            <li>AI-Powered Creation Tools</li>
+                            <li>Immersive Technologies</li>
+                            <li>Enterprise Engagement Solutions</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Aggregate Opportunity -->
+        <div class="slide" id="total-opportunity">
+            <div class="content-section">
+                <h2 class="title">Total Market Opportunity</h2>
+                <div class="aggregate-stats">
+                    <div class="total-tam">
+                        <h3>Combined TAM by 2030</h3>
+                        <p class="massive-number">$2.474T</p>
+                    </div>
+                    <div class="growth-metrics">
+                        <h3>Average CAGR</h3>
+                        <p class="massive-number">39.8%</p>
+                    </div>
+                </div>
+                <p class="body-text urgency">
+                    The convergence of AI and decentralized computing is creating unprecedented opportunities. Our systematic approach through CRLs positions us to capture significant market share across all verticals while minimizing risk through validated demand.
+                </p>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="slide" id="cta">
+            <div class="content-section">
+                <h2 class="title">The Time is Now</h2>
+                <div class="urgency-points">
+                    <ul>
+                        <li>Market inflection point across all verticals</li>
+                        <li>First-mover advantage in systematic venture creation</li>
+                        <li>Validated methodology reducing investment risk</li>
+                        <li>Strategic partnerships accelerating growth</li>
+                    </ul>
+                </div>
+                <div class="contact-cta">
+                    <h3>Join Our Mission to De-Risk Innovation</h3>
+                    <p>Limited partnership opportunities available</p>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Parent Category -->
-    <div class="slide" id="parent-category">
-        <div class="content-section">
-            <h2 class="title">AI SaaS & Decentralized Computing</h2>
-            <p class="body-text">
-                Our umbrella category focuses on the intersection of AI and decentralized computing, targeting the exponential growth in these converging markets.
-            </p>
-            <div class="market-metrics">
-                <div class="metric">
-                    <h3>Global AI Market</h3>
-                    <p>2023: $387.3B</p>
-                    <p>2030: $1.39T</p>
-                    <p>CAGR: 43.8%</p>
-                </div>
-                <div class="metric">
-                    <h3>Decentralized Computing</h3>
-                    <p>2023: $48.2B</p>
-                    <p>2030: $248.6B</p>
-                    <p>CAGR: 38.9%</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Individual CRL Analysis -->
-    <div class="slide" id="productivity-saas">
-        <div class="content-section">
-            <h2 class="title">Productivity & Efficiency SaaS</h2>
-            <div class="crl-content">
-                <div class="market-size">
-                    <h3>Market Opportunity</h3>
-                    <ul>
-                        <li>Current Market: $186B</li>
-                        <li>2030 Projection: $462B</li>
-                        <li>CAGR: 32.4%</li>
-                    </ul>
-                </div>
-                <div class="focus-areas">
-                    <h3>Key Focus Areas</h3>
-                    <ul>
-                        <li>Enterprise Resource Optimization</li>
-                        <li>B2G Digital Transformation</li>
-                        <li>AI-Driven Performance Enhancement</li>
-                        <li>Workflow Automation Platforms</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="slide" id="fintech-defi">
-        <div class="content-section">
-            <h2 class="title">FinTech & DeFi</h2>
-            <div class="crl-content">
-                <div class="market-size">
-                    <h3>Market Opportunity</h3>
-                    <ul>
-                        <li>Current Market: $245B</li>
-                        <li>2030 Projection: $698B</li>
-                        <li>CAGR: 41.7%</li>
-                    </ul>
-                </div>
-                <div class="focus-areas">
-                    <h3>Key Focus Areas</h3>
-                    <ul>
-                        <li>Institutional DeFi Infrastructure</li>
-                        <li>Cross-Border Payment Solutions</li>
-                        <li>AI-Powered Risk Management</li>
-                        <li>Digital Asset Platforms</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="slide" id="cybersecurity">
-        <div class="content-section">
-            <h2 class="title">Cybersecurity</h2>
-            <div class="crl-content">
-                <div class="market-size">
-                    <h3>Market Opportunity</h3>
-                    <ul>
-                        <li>Current Market: $172B</li>
-                        <li>2030 Projection: $478B</li>
-                        <li>CAGR: 36.3%</li>
-                    </ul>
-                </div>
-                <div class="focus-areas">
-                    <h3>Key Focus Areas</h3>
-                    <ul>
-                        <li>AI-Driven Threat Detection</li>
-                        <li>Zero-Trust Architecture</li>
-                        <li>Blockchain Security Solutions</li>
-                        <li>Compliance Automation</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="slide" id="health-wellness">
-        <div class="content-section">
-            <h2 class="title">Health & Wellness in Silico</h2>
-            <div class="crl-content">
-                <div class="market-size">
-                    <h3>Market Opportunity</h3>
-                    <ul>
-                        <li>Current Market: $157B</li>
-                        <li>2030 Projection: $524B</li>
-                        <li>CAGR: 45.2%</li>
-                    </ul>
-                </div>
-                <div class="focus-areas">
-                    <h3>Key Focus Areas</h3>
-                    <ul>
-                        <li>Digital Health Optimization</li>
-                        <li>In Silico Drug Development</li>
-                        <li>Longevity Analytics</li>
-                        <li>Biodata Platforms</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="slide" id="entertainment-tech">
-        <div class="content-section">
-            <h2 class="title">Entertainment & Tech</h2>
-            <div class="crl-content">
-                <div class="market-size">
-                    <h3>Market Opportunity</h3>
-                    <ul>
-                        <li>Current Market: $98B</li>
-                        <li>2030 Projection: $312B</li>
-                        <li>CAGR: 33.8%</li>
-                    </ul>
-                </div>
-                <div class="focus-areas">
-                    <h3>Key Focus Areas</h3>
-                    <ul>
-                        <li>B2B Content Platforms</li>
-                        <li>AI-Powered Creation Tools</li>
-                        <li>Immersive Technologies</li>
-                        <li>Enterprise Engagement Solutions</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Aggregate Opportunity -->
-    <div class="slide" id="total-opportunity">
-        <div class="content-section">
-            <h2 class="title">Total Market Opportunity</h2>
-            <div class="aggregate-stats">
-                <div class="total-tam">
-                    <h3>Combined TAM by 2030</h3>
-                    <p class="massive-number">$2.474T</p>
-                </div>
-                <div class="growth-metrics">
-                    <h3>Average CAGR</h3>
-                    <p class="massive-number">39.8%</p>
-                </div>
-            </div>
-            <p class="body-text urgency">
-                The convergence of AI and decentralized computing is creating unprecedented opportunities. Our systematic approach through CRLs positions us to capture significant market share across all verticals while minimizing risk through validated demand.
-            </p>
-        </div>
-    </div>
-
-    <!-- Call to Action -->
-    <div class="slide" id="cta">
-        <div class="content-section">
-            <h2 class="title">The Time is Now</h2>
-            <div class="urgency-points">
-                <ul>
-                    <li>Market inflection point across all verticals</li>
-                    <li>First-mover advantage in systematic venture creation</li>
-                    <li>Validated methodology reducing investment risk</li>
-                    <li>Strategic partnerships accelerating growth</li>
-                </ul>
-            </div>
-            <div class="contact-cta">
-                <h3>Join Our Mission to De-Risk Innovation</h3>
-                <p>Limited partnership opportunities available</p>
-            </div>
-        </div>
-    </div>
-</div>
-
 
     <script>
-        // Basic scroll handling and progress bar
+        // Initialize variables
         const container = document.querySelector('.content-container');
         const progressBar = document.getElementById('progress');
+        const sections = document.querySelectorAll('.slide');
+        
+        // Error handling wrapper for scroll functionality
+        function handleScroll() {
+            try {
+                const scrolled = container.scrollTop;
+                const maxScroll = container.scrollHeight - container.clientHeight;
+                const progress = (scrolled / maxScroll) * 100;
+                
+                // Ensure progress stays within bounds
+                if (progress >= 0 && progress <= 100) {
+                    progressBar.style.width = `${progress}%`;
+                }
+            } catch (error) {
+                console.error('Scroll handling error:', error);
+            }
+        }
 
-        container.addEventListener('scroll', () => {
-            const scrolled = container.scrollTop;
-            const maxScroll = container.scrollHeight - container.clientHeight;
-            const progress = (scrolled / maxScroll) * 100;
-            progressBar.style.width = `${progress}%`;
-        });
+        // Throttle function for performance
+        function throttle(func, limit) {
+            let inThrottle;
+            return function() {
+                const args = arguments;
+                const context = this;
+                if (!inThrottle) {
+                    func.apply(context, args);
+                    inThrottle = true;
+                    setTimeout(() => inThrottle = false, limit);
+                }
+            };
+        }
 
-        // Would add more interactivity and animations here
+        // Add scroll event listener with throttling
+        container.addEventListener('scroll', throttle(handleScroll, 10));
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            root: container
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                try {
+                    if (entry.isIntersecting) {
+                        const contentSection = entry.target.querySelector('.content-section');
+                        if (contentSection) {
+                            contentSection.classList.add('visible');
+                        }
+                    }
+                } catch (error) {
+                    console.error('Observer callback error:', error);
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections
+        sections.forEach(section => observer.observe(section));
+
+        // Initialize first slide as visible
+        document.querySelector('.slide').querySelector('.content-section').classList.add('visible');
+
+        // Handle resize events
+        window.addEventListener('resize', throttle(() => {
+            handleScroll();
+        }, 100));
+
+        // Cleanup function
+        function cleanup() {
+            observer.disconnect();
+            container.removeEventListener('scroll', handleScroll);
+            window.removeEventListener('resize', handleScroll);
+        }
+
+        // Optional: Cleanup on page unload
+        window.addEventListener('unload', cleanup);
     </script>
 </body>
 </html>
