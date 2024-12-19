@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CognitiveCloud.tv Ebert - Pitch Deck</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6e3aff;
+            --secondary: #2a2d3e;
+            --background: #131520;
+            --surface: rgba(255, 255, 255, 0.05);
+            --text: #ffffff;
+            --text-secondary: #8b8d96;
+            --accent: #ff3a8c;
+            --gradient: linear-gradient(135deg, var(--primary), var(--accent));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .slides-container {
+            height: 100vh;
+            overflow-y: auto;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        .slide {
+            height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            position: relative;
+            background: var(--background);
+        }
+
+        .content {
+            max-width: 1200px;
+            width: 100%;
+            padding: 2rem;
+            background: var(--surface);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideIn 0.5s ease forwards;
+        }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .navigation {
+            position: fixed;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 100;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot.active {
+            background: var(--primary);
+            transform: scale(1.2);
+        }
+
+        .chart {
+            height: 200px;
+            background: var(--surface);
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: var(--gradient);
+            bottom: 0;
+            left: 0;
+            animation: growLine 2s ease-out forwards;
+        }
+
+        @keyframes growLine {
+            from { transform: scaleX(0); }
+            to { transform: scaleX(1); }
+        }
+
+        .team-member {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--gradient);
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: var(--surface);
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress {
+            height: 100%;
+            background: var(--gradient);
+            width: 0;
+            animation: progress 2s ease-out forwards;
+        }
+
+        @keyframes progress {
+            to { width: 75%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="slides-container">
+        <!-- Cover Slide -->
+        <section id="cover" class="slide">
+            <div class="content">
+                <h1 class="logo">CognitiveCloud.tv</h1>
+                <p class="tagline">Revolutionizing Content Discovery with AI</p>
+                <div class="team-member">
+                    <div class="avatar"></div>
+                    <div>
+                        <h3>John Smith</h3>
+                        <p>Chief Innovation Officer</p>
+                        <p>john@cognitivecloud.tv</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Problem Slide -->
+        <section id="problem" class="slide">
+            <div class="content">
+                <h2>The Problem</h2>
+                <div class="grid">
+                    <div class="card">
+                        <div class="stat">18min</div>
+                        <p>Average time spent deciding what to watch</p>
+                    </div>
+                    <div class="card">
+                        <div class="stat">67%</div>
+                        <p>Users frustrated with content discovery</p>
+                    </div>
+                    <div class="card">
+                        <div class="stat">42%</div>
+                        <p>Abandon search without watching</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Solution Slide -->
+        <section id="solution" class="slide">
+            <div class="content">
+                <h2>Introducing Ebert</h2>
+                <div class="grid">
+                    <div class="card">
+                        <i class="fas fa-brain fa-2x"></i>
+                        <h3>AI-Powered Recommendations</h3>
+                        <p>Personalized content suggestions using advanced machine learning</p>
+                    </div>
+                    <div class="card">
+                        <i class="fas fa-search fa-2x"></i>
+                        <h3>Natural Language Search</h3>
+                        <p>Find content using conversational queries</p>
+                    </div>
+                    <div class="card">
+                        <i class="fas fa-chart-line fa-2x"></i>
+                        <h3>Smart Analytics</h3>
+                        <p>Real-time insights and viewing patterns</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Market Opportunity -->
+        <section id="market" class="slide">
+            <div class="content">
+                <h2>Market Opportunity</h2>
+                <div class="chart"></div>
+                <div class="grid">
+                    <div class="card">
+                        <div class="stat">$82B</div>
+                        <p>Global TAM by 2025</p>
+                    </div>
+                    <div class="card">
+                        <div class="stat">1.2B</div>
+                        <p>Potential Users</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technology Stack -->
+        <section id="tech" class="slide">
+            <div class="content">
+                <h2>Technology Stack</h2>
+                <div class="grid">
+                    <div class="card">
+                        <h3>AI Models</h3>
+                        <ul>
+                            <li>LLaMA 2</li>
+                            <li>GPT-4 Turbo</li>
+                            <li>Custom NLP</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Infrastructure</h3>
+                        <ul>
+                            <li>AWS Cloud</li>
+                            <li>MongoDB Atlas</li>
+                            <li>Redis Cache</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section id="cta" class="slide">
+            <div class="content">
+                <h2>Join the Future of Content Discovery</h2>
+                <div class="progress-bar">
+                    <div class="progress"></div>
+                </div>
+                <p>Contact us to schedule a demo</p>
+                <h3>contact@cognitivecloud.tv</h3>
+            </div>
+        </section>
+    </div>
+
+    <nav class="navigation">
+        <div class="nav-dot active" data-slide="cover"></div>
+        <div class="nav-dot" data-slide="problem"></div>
+        <div class="nav-dot" data-slide="solution"></div>
+        <div class="nav-dot" data-slide="market"></div>
+        <div class="nav-dot" data-slide="tech"></div>
+        <div class="nav-dot" data-slide="cta"></div>
+    </nav>
+
+    <script>
+        // Navigation dots functionality
+        const dots = document.querySelectorAll('.nav-dot');
+        const slides = document.querySelectorAll('.slide');
+        const container = document.querySelector('.slides-container');
+
+        dots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                const slideId = dot.getAttribute('data-slide');
+                document.getElementById(slideId).scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // Update active dot on scroll
+        container.addEventListener('scroll', () => {
+            const currentScroll = container.scrollTop;
+            const windowHeight = window.innerHeight;
+            
+            slides.forEach((slide, index) => {
+                const slideTop = slide.offsetTop;
+                if (currentScroll >= slideTop - windowHeight/2) {
+                    dots.forEach(dot => dot.classList.remove('active'));
+                    dots[index].classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
