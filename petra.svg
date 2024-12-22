@@ -6,5 +6,5 @@
         </linearGradient>
     </defs>
     <circle cx="50" cy="50" r="45" fill="url(#button-gradient)" />
-    <text x="50" y="70" font-family="'Roboto', monospace" font-size="75" font-weight="bold" fill="white" text-anchor="middle">P</text>
+    <text x="50" y="50" font-family="'Roboto', monospace" font-size="75" font-weight="bold" fill="white" text-anchor="middle">P</text>
 </svg>
