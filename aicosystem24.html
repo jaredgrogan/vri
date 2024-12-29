@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aicosystem | AI Innovation Partner</title>
+    
+    <!-- Import required libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+
+    <style>
+        /* Core Variables */
+        :root {
+            --white: #ffffff;
+            --black: #000000;
+            --gold: #C0A080;
+            --blue: #00B8E6;
+            --mint: #00D4AA;
+            --animation-slow: 0.6s;
+            --animation-medium: 0.3s;
+            --animation-fast: 0.15s;
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--white);
+            color: var(--black);
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem;
+            z-index: 1000;
+            transition: all var(--animation-medium) var(--ease-out-expo);
+        }
+
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+        }
+
+        .navbar.scrolled .logo {
+            color: var(--black);
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--white);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--white);
+            background: var(--black);
+        }
+
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 0 1rem;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--blue), var(--mint));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Shimmer Effect */
+        .shimmer {
+            background: linear-gradient(
+                90deg,
+                var(--blue) 0%,
+                var(--mint) 50%,
+                var(--blue) 100%
+            );
+            background-size: 200% 100%;
+            animation: shimmer 2.5s var(--ease-out-expo) infinite;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 100% 0; }
+            100% { background-position: -100% 0; }
+        }
+
+        /* Sections */
+        .section {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Services Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .service-card {
+            background: var(--white);
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all var(--animation-medium) var(--ease-out-expo);
+        }
+
+        .service-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-card ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 1rem;
+        }
+
+        .service-card ul li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .service-card ul li:before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--blue);
+        }
+
+        /* Case Studies Section */
+        .case-studies {
+            background: var(--black);
+            color: var(--white);
+            padding: 6rem 2rem;
+        }
+
+        .case-study-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        /* Contact Form */
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact-form form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .contact-form input,
+        .contact-form select {
+            padding: 1rem;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        /* Buttons */
+        .button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 4px;
+            background: linear-gradient(135deg, var(--blue), var(--mint));
+            color: var(--white);
+            font-weight: bold;
+            text-decoration: none;
+            transition: all var(--animation-medium) var(--ease-out-expo);
+            cursor: pointer;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--black);
+            color: var(--white);
+            padding: 4rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-column h3 {
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+
+        .footer-column ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: color var(--animation-fast) var(--ease-out-expo);
+        }
+
+        .footer-column ul li:hover {
+            color: var(--gold);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all var(--animation-medium) var(--ease-out-expo);
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .section {
+                padding: 4rem 1rem;
+            }
+
+            .service-card {
+                margin: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="logo shimmer">aicosystem</div>
+            <div class="nav-links">
+                <!-- Navigation links can be added here -->
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div id="particles-js"></div>
+        <div class="hero-content">
+            <h1 class="hero-title typed-text"></h1>
+            <div class="hero-cta">
+                <a href="#contact" class="button">Get Started</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="section">
+        <h2 class="shimmer">Our Services</h2>
+        <div class="services-grid">
+            <div class="service-card fade-in">
+                <h3>Enterprise AI Implementation</h3>
+                <p>Transform your business operations with custom AI solutions:</p>
+                <ul>
+                    <li>AI Readiness Assessment</li>
+                    <li>Custom Solution Development</li>
+                    <li>Integration & Deployment</li>
+                    <li>Team Training & Support</li>
+                </ul>
+            </div>
+            <div class="service-card fade-in">
+                <h3>Ecosystem Development</h3>
+                <p>Build and nurture thriving AI communities:</p>
+                <ul>
+                    <li>Ecosystem Strategy Design</li>
+                    <li>Partner Network Development</li>
+                    <li>Innovation Hub Creation</li>
+                    <li>Community Management</li>
+                </ul>
+            </div>
+            <div class="service-card fade-in">
+                <h3>Government & Public Sector</h3>
+                <p>Enable AI-driven public innovation:</p>
+                <ul>
+                    <li>Policy Framework Development</li>
+                    <li>Capacity Building Programs</li>
+                    <li>Innovation District Planning</li>
+                    <li>Public-Private Partnerships</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Case Studies Section -->
+    <section class="case-studies">
+        <div class="section">
+            <h2 class="shimmer">Success Stories</h2>
+            <div class="case-study-grid">
+                <div class="service-card fade-in">
+                    <h3>Enterprise Transformation</h3>
+                    <p>How we helped a Fortune 500 company achieve 300% ROI through AI implementation</p>
+                </div>
+                <div class="service-card fade-in">
+                    <h3>Government Innovation</h3>
+                    <p>Building a thriving AI ecosystem for a major metropolitan area</p>
+                </div>
+                <div class="service-card fade-in">
+                    <h3>Startup Acceleration</h3>
+                    <p>Enabling 10x growth for AI-driven startups in our ecosystem</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section">
+        <h2 class="shimmer">Start Your Journey</h2>
+        <div class="contact-form fade-in">
+            <form>
+                <input type="email" placeholder="Your Email" required>
+                <select required>
+                    <option value="">Select Your Interest</option>
+                    <option value="enterprise">Enterprise AI</option>
+                    <option value="ecosystem">Ecosystem Development</option>
+                    <option value="government">Government & Public Sector</option>
+                </select>
+                <button type="submit" class="button">Get Started</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>Services</h3>
+                <ul>
+                    <li>Enterprise AI</li>
+                    <li>Ecosystem Development</li>
+                    <li>Government Solutions</li>
+                    <li>Strategic Advisory</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Solutions</h3>
+                <ul>
+                    <li>AI Implementation</li>
+                    <li>Innovation Hubs</li>
+                    <li>Capacity Building</li>
+                    <li>Community Development</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Company</h3>
+                <ul>
+                    <li>About Us</li>
+                    <li>Case Studies</li>
+                    <li>Careers</li>
+                    <li>Contact</li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Connect</h3>
+                <ul>
+                    <li>LinkedIn</li>
+                    <li>Twitter</li>
+                    <li>Medium</li>
+                    <li>Newsletter</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 Aicosystem. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Typed.js
+        const typedText = new Typed('.typed-text', {
+            strings: [
+                'Accelerate Your AI Evolution',
+                'Build Tomorrow\'s Ecosystem',
+                'Transform Your Enterprise'
+            ],
+            typeSpeed: 50,
+            backSpeed: 30,
+            backDelay: 2000,
+            loop: true,
+            showCursor: false,
+            fadeOut: true
+        });
+
+        // Initialize Particles.js
+        particlesJS('particles-js', {
+            particles: {
+                number: {
+                    value: 50,
+                    density: {
+                        enable: true,
+                        value_area: 800
+                    }
+                },
+                color: {
+                    value: '#00B8E6'
+                },
+                opacity: {
+                    value: 0.2,
+                    random: true,
+                   anim: {
+                        enable: true,
+                        speed: 1,
+                        opacity_min: 0.1,
+                        sync: false
+                    }
+                },
+                size: {
+                    value: 3,
+                    random: true,
+                    anim: {
+                        enable: true,
+                        speed: 2,
+                        size_min: 0.1,
+                        sync: false
+                    }
+                },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: '#00B8E6',
+                    opacity: 0.1,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 1,
+                    direction: 'none',
+                    random: true,
+                    straight: false,
+                    out_mode: 'out',
+                    bounce: false,
+                    attract: {
+                        enable: true,
+                        rotateX: 600,
+                        rotateY: 1200
+                    }
+                }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: {
+                    onhover: {
+                        enable: true,
+                        mode: 'grab'
+                    },
+                    onclick: {
+                        enable: true,
+                        mode: 'push'
+                    },
+                    resize: true
+                },
+                modes: {
+                    grab: {
+                        distance: 140,
+                        line_linked: {
+                            opacity: 0.5
+                        }
+                    },
+                    push: {
+                        particles_nb: 4
+                    }
+                }
+            },
+            retina_detect: true
+        });
+
+        // Scroll animations setup
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        // Observe all elements with fade-in class
+        document.querySelectorAll('.fade-in').forEach(element => {
+            observer.observe(element);
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scroll implementation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = anchor.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Form submission handling
+        const form = document.querySelector('form');
+        if (form) {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // Here you would typically handle the form submission
+                // For now, we'll just show a success message
+                const button = form.querySelector('button');
+                const originalText = button.textContent;
+                button.textContent = 'Message Sent!';
+                button.style.background = 'linear-gradient(135deg, var(--mint), var(--blue))';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '';
+                    form.reset();
+                }, 3000);
+            });
+        }
+
+        // Performance optimization
+        document.addEventListener('DOMContentLoaded', () => {
+            // Lazy load images
+            const lazyImages = document.querySelectorAll('img[data-src]');
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        img.removeAttribute('data-src');
+                        observer.unobserve(img);
+                    }
+                });
+            });
+
+            lazyImages.forEach(img => imageObserver.observe(img));
+        });
+
+        // Add hover effects for service cards
+        document.querySelectorAll('.service-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-4px)';
+                card.style.boxShadow = '0 12px 24px rgba(0, 0, 0, 0.1)';
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+                card.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+            });
+        });
+    </script>
+</body>
+</html>
