@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="theme-color" content="#A51C30">
+  <title>PETRA - Your Personal Polyglot</title>
+
+  <!-- Favicon (optional) -->
+  <link rel="icon" href="favicon.png" type="image/png">
+
+  <!-- Custom Styles -->
+  <style>
+    /* ----------------------------
+       Root + Variables
+    ---------------------------- */
+    :root {
+      --color-primary: #A51C30;
+      --color-secondary: #ed1b34;
+      --color-crimson: crimson;
+      --color-bg: #ffffff;
+      --color-bg-glass: rgba(255, 255, 255, 0.15);
+      --color-text: #ffffff; /* Because we want main text in white on the background */
+      --backdrop-blur: 20px;
+      --border-radius: 12px;
+      --transition-speed: 0.3s;
+      --box-shadow-light: 0 4px 8px rgba(0, 0, 0, 0.1);
+      --box-shadow-hover: 0 8px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    /* ----------------------------
+       Global Resets
+    ---------------------------- */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+        Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      background: url("petra1.png") no-repeat center center/cover;
+      color: var(--color-text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Slight overlay if you want to dim the background
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 0;
+    } 
+    */
+
+    /* ----------------------------
+       Glassmorphic Container
+    ---------------------------- */
+    .glass-card {
+      background: var(--color-bg-glass);
+      backdrop-filter: blur(var(--backdrop-blur));
+      -webkit-backdrop-filter: blur(var(--backdrop-blur));
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow-light);
+      transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+      position: relative;
+      z-index: 1;
+    }
+
+    .glass-card:hover {
+      box-shadow: var(--box-shadow-hover);
+      transform: translateY(-2px);
+    }
+
+    /* ----------------------------
+       Header
+    ---------------------------- */
+    header {
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: var(--box-shadow-light);
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      padding: 1rem;
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--color-text); /* White */
+    }
+
+    /* Language & Level Selectors */
+    .controls {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    select {
+      padding: 0.4rem 1rem;
+      border-radius: var(--border-radius);
+      border: 1px solid #ccc;
+      font-size: 0.9rem;
+      outline: none;
+      transition: box-shadow var(--transition-speed);
+      background: #fff;
+      color: #000;
+    }
+
+    select:focus {
+      box-shadow: 0 0 0 2px rgba(165, 28, 48, 0.2);
+      border-color: var(--color-primary);
+    }
+
+    /* ----------------------------
+       Main Layout
+    ---------------------------- */
+    main {
+      flex: 1;
+      padding: 1rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    @media (min-width: 768px) {
+      .dashboard-grid {
+        grid-template-columns: 2fr 1fr;
+      }
+    }
+
+    .glass-section {
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Quick Start Buttons / Layout */
+    .quick-start {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .quick-start button {
+      color: var(--color-text);
+      background: var(--color-bg-glass);
+      backdrop-filter: blur(var(--backdrop-blur));
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: var(--border-radius);
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      transition: background var(--transition-speed);
+    }
+
+    .quick-start button:hover {
+      background: rgba(255,255,255,0.3);
+    }
+
+    /* Learning Modes */
+    .learning-modes {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .learning-modes button {
+      color: var(--color-text);
+      padding: 0.5rem 1rem;
+      border-radius: var(--border-radius);
+      border: 1px solid rgba(255,255,255,0.3);
+      backdrop-filter: blur(var(--backdrop-blur));
+      cursor: pointer;
+      transition: background var(--transition-speed);
+    }
+    .learning-modes button:hover {
+      background: rgba(255,255,255,0.3);
+    }
+
+    /* Goals */
+    .goals-list {
+      margin-top: 1rem;
+    }
+    .goals-list h4 {
+      margin-bottom: 0.5rem;
+    }
+    .goals-list li {
+      margin: 0.25rem 0;
+      list-style: inside disc;
+    }
+
+    /* Footer */
+    footer {
+      background: rgba(0, 0, 0, 0.5);
+      text-align: center;
+      padding: 0.5rem;
+      font-size: 0.85rem;
+      color: #fff;
+      backdrop-filter: blur(10px);
+      position: relative;
+      z-index: 999;
+    }
+
+    /* ----------------------------
+       Chat Interface
+    ---------------------------- */
+    .chat-interface {
+      display: grid;
+      grid-template-rows: 1fr auto;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      height: 500px;
+      max-height: 60vh;
+      background: rgba(0,0,0,0.2);
+    }
+
+    .chat-messages {
+      padding: 1rem;
+      overflow-y: auto;
+      background: linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.1),
+        rgba(0,0,0,0.2)
+      );
+    }
+
+    .message {
+      margin-bottom: 0.5rem;
+      max-width: 70%;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--border-radius);
+      line-height: 1.4;
+      position: relative;
+      color: #fff;
+    }
+    .message.user {
+      margin-left: auto;
+      background: var(--color-primary);
+    }
+    .message.petra {
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+
+    .typing-indicator {
+      font-size: 0.85rem;
+      opacity: 0.75;
+      margin-top: 0.25rem;
+    }
+
+    .chat-suggestions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .chat-suggestions button {
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.3);
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      color: #fff;
+      transition: background var(--transition-speed);
+    }
+    .chat-suggestions button:hover {
+      background: rgba(255,255,255,0.3);
+    }
+
+    .chat-input {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      padding: 0.5rem;
+      background: rgba(255,255,255,0.1);
+      border-top: 1px solid rgba(255,255,255,0.3);
+    }
+
+    .chat-input button {
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.3);
+      background: rgba(255,255,255,0.2);
+      color: #fff;
+      transition: background var(--transition-speed);
+    }
+    .chat-input button:hover {
+      background: rgba(255,255,255,0.3);
+    }
+
+    .chat-input input {
+      flex: 1;
+      padding: 0.5rem 0.75rem;
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: var(--border-radius);
+      outline: none;
+      font-size: 0.95rem;
+      background: rgba(255,255,255,0.2);
+      color: #fff;
+      transition: box-shadow var(--transition-speed);
+    }
+    .chat-input input:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 2px rgba(165, 28, 48, 0.2);
+    }
+
+    /* ----------------------------
+       Vocabulary Builder
+    ---------------------------- */
+    .vocab-section {
+      margin-top: 1rem;
+    }
+
+    .vocab-list {
+      margin-top: 0.75rem;
+    }
+
+    .vocab-item {
+      background: rgba(255,255,255,0.15);
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow-light);
+      margin-bottom: 0.75rem;
+      padding: 0.5rem 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      color: #fff;
+    }
+    .vocab-item h4 {
+      font-size: 1rem;
+      margin-bottom: 0.25rem;
+      color: var(--color-text);
+    }
+    .vocab-controls {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .vocab-controls button {
+      border: 1px solid rgba(255,255,255,0.3);
+      background: rgba(255,255,255,0.2);
+      padding: 0.25rem 0.5rem;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      color: #fff;
+      transition: background var(--transition-speed);
+    }
+    .vocab-controls button:hover {
+      background: rgba(255,255,255,0.3);
+    }
+
+    /* Progress & Analytics */
+    .progress-bar-container {
+      background: rgba(255,255,255,0.3);
+      border-radius: 999px;
+      height: 8px;
+      width: 100%;
+      margin-top: 0.5rem;
+      overflow: hidden;
+    }
+    .progress-bar {
+      background: var(--color-primary);
+      height: 100%;
+      transition: width 0.4s ease;
+    }
+
+    /* Learning Analytics Headings - WHITE */
+    .analytics-section h2,
+    .analytics-section p,
+    .analytics-section em {
+      color: #fff !important;
+    }
+
+    /* Crimson Gradient Buttons */
+    .crimson-btn {
+      background: linear-gradient(to right, crimson, #f03b4f);
+      color: #fff;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: background var(--transition-speed);
+    }
+    .crimson-btn:hover {
+      /* 20% lighter on hover */
+      background: linear-gradient(to right, #db2e42, #f45765);
+    }
+
+    /* Toast / Notifications */
+    .toast-container {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      z-index: 9999;
+    }
+    .toast {
+      background: #fff;
+      padding: 0.75rem 1rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow-light);
+      border-left: 4px solid var(--color-primary);
+      min-width: 200px;
+      animation: fadeIn var(--transition-speed) ease;
+      color: #000;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+
+    /* Screen Readers */
+    .sr-only {
+      position: absolute !important;
+      height: 1px; width: 1px;
+      overflow: hidden;
+      clip: rect(1px,1px,1px,1px);
+      white-space: nowrap;
+      border: 0;
+      padding: 0;
+      margin: -1px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Toast Container -->
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <!-- Header -->
+  <header>
+    <div class="header-content">
+      <div class="header-title">PETRA - Your Personal Polyglot</div>
+      <div class="controls">
+        <label for="languageSelect" class="sr-only">Select Language</label>
+        <select id="languageSelect" aria-label="Language selection">
+          <option value="russian" selected>Russian</option>
+          <option value="spanish">Spanish</option>
+          <option value="french">French</option>
+          <option value="german">German</option>
+          <option value="chinese">Chinese</option>
+        </select>
+
+        <label for="levelSelect" class="sr-only">Select Difficulty Level</label>
+        <select id="levelSelect" aria-label="Level selection">
+          <option value="beginner">Beginner</option>
+          <option value="intermediate" selected>Intermediate</option>
+          <option value="advanced">Advanced</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main>
+    <!-- Dashboard Layout -->
+    <div class="dashboard-grid">
+      <!-- Left column (main content) -->
+      <div>
+        <!-- Glass Section: Cards & Quick Start -->
+        <section class="glass-card glass-section">
+          <!-- White text for these lines -->
+          <h2 style="color: #fff;">Welcome Back, <span id="username">Alex</span>! Your Learning Streak: <span id="learningStreak">10</span> Days 🔥</h2>
+          <div style="margin-top:1rem;">
+            <div style="display:flex; gap:1rem; flex-wrap: wrap;">
+              <!-- Example: "Cards" -->
+              <div class="glass-card" style="flex:1; padding:1rem;">
+                <h3 style="color: #fff;">Suggested Lesson</h3>
+                <p style="color: #fff;">🇷🇺 Daily Conversation</p>
+                <p style="color: #fff;">🕒 Time: 5 min</p>
+                <button style="color:#fff; border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.2)">🔊 Listen</button>
+                <button style="color:#fff; border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.2)">🖊️ Practice</button>
+              </div>
+              <div class="glass-card" style="flex:1; padding:1rem;">
+                <h3 style="color: #fff;">Vocabulary Mastery</h3>
+                <div class="progress-bar-container">
+                  <div class="progress-bar" style="width: 75%;"></div>
+                </div>
+                <p style="color: #fff;">75% Mastery</p>
+              </div>
+              <div class="glass-card" style="flex:1; padding:1rem;">
+                <h3 style="color: #fff;">Grammar Progress</h3>
+                <div class="progress-bar-container">
+                  <div class="progress-bar" style="width: 60%;"></div>
+                </div>
+                <p style="color: #fff;">60% Completion</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="quick-start">
+            <button id="startConversationBtn">Start a Conversation 🗨️</button>
+            <button id="translateBtn">Translate 🌐</button>
+            <button id="practiceVocabBtn">Practice Vocabulary 📖</button>
+          </div>
+
+          <div class="learning-modes">
+            <button id="voiceModeBtn">🎤 Voice Mode</button>
+            <button id="chatModeBtn">💬 Chat Mode</button>
+            <button id="listeningModeBtn">🎧 Listening Mode</button>
+          </div>
+
+          <div class="goals-list">
+            <h4 style="color: #fff;">Today's Goals:</h4>
+            <ul>
+              <li style="color: #fff;">Complete 2 Conversations</li>
+              <li style="color: #fff;">Learn 20 New Words</li>
+              <li style="color: #fff;">Finish Grammar Exercises</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- Chat Interface Demo -->
+        <section class="glass-section">
+          <h2 style="color: #fff;">Petra - Chat Mode</h2>
+          <div class="chat-interface" id="chatInterface" aria-label="Chat interface">
+            <!-- Chat messages -->
+            <div class="chat-messages" id="chatMessages" role="log" aria-live="polite">
+              <!-- Example messages -->
+              <div class="message petra">
+                <strong>Petra:</strong> Привет! Как я могу помочь тебе сегодня? 😊
+              </div>
+              <div class="message user">
+                <strong>You:</strong> Можешь ли ты перевести "Where is the nearest bookstore?"
+              </div>
+              <div class="message petra">
+                <strong>Petra:</strong> Где находится ближайший книжный магазин?
+                <div class="typing-indicator">Grammar Tip: "находится" is a reflexive verb requiring the prepositional case.</div>
+                <div class="chat-suggestions">
+                  <button>Translate</button>
+                  <button>Correct</button>
+                  <button>Explain</button>
+                  <button>Roleplay</button>
+                </div>
+              </div>
+            </div>
+            <!-- Chat input -->
+            <div class="chat-input">
+              <button id="recordVoiceBtn" aria-label="Record Voice">🗣️</button>
+              <input 
+                type="text"
+                id="chatInputField"
+                placeholder="Type a message..."
+                aria-label="Chat input field"
+              />
+              <button id="sendMessageBtn" aria-label="Send Message">Send ▶️</button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Right column (sidebar) -->
+      <aside>
+        <!-- Vocabulary Builder Section -->
+        <section class="glass-card glass-section vocab-section">
+          <h2 style="color:#fff;">Vocabulary Mastery</h2>
+          <p style="color:#fff;">Theme: <strong>Daily Life 🇷🇺</strong></p>
+          <div class="vocab-list" id="vocabList">
+            <!-- Example vocab items -->
+            <div class="vocab-item">
+              <div>
+                <h4>Магазин (Store)</h4>
+                <small style="color:#fff;">Progress: Mastered</small>
+              </div>
+              <div class="vocab-controls">
+                <button>🔊 Listen</button>
+                <button>Quiz Me</button>
+                <button>Use in Sentence</button>
+              </div>
+            </div>
+
+            <div class="vocab-item">
+              <div>
+                <h4>Книжный магазин (Bookstore)</h4>
+                <small style="color:#fff;">Progress: Learning</small>
+              </div>
+              <div class="vocab-controls">
+                <button>🔊 Listen</button>
+                <button>Quiz Me</button>
+                <button>Use in Sentence</button>
+              </div>
+            </div>
+
+            <div class="vocab-item">
+              <div>
+                <h4>Ближайший (Nearest)</h4>
+                <small style="color:#fff;">Progress: Unfamiliar</small>
+              </div>
+              <div class="vocab-controls">
+                <button>🔊 Listen</button>
+                <button>Quiz Me</button>
+                <button>Use in Sentence</button>
+              </div>
+            </div>
+          </div>
+          <p style="color:#fff;">Next Theme: <button style="color:#fff;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.2)">Travel 🚂</button></p>
+        </section>
+
+        <!-- Progress / Analytics -->
+        <section class="glass-card glass-section analytics-section">
+          <h2>Learning Analytics</h2>
+          <p><strong>Vocabulary:</strong> 80% Mastery</p>
+          <div class="progress-bar-container">
+            <div class="progress-bar" style="width:80%;"></div>
+          </div>
+          <p><strong>Grammar:</strong> 70% Accuracy</p>
+          <div class="progress-bar-container">
+            <div class="progress-bar" style="width:70%;"></div>
+          </div>
+          <p><strong>Listening:</strong> 85% Comprehension</p>
+          <div class="progress-bar-container">
+            <div class="progress-bar" style="width:85%;"></div>
+          </div>
+          <p style="margin-top:0.75rem;">
+            <em>Insights:</em><br>
+            • Focus more on verb conjugations.<br>
+            • Practice listening with native audio clips.
+          </p>
+          <div style="margin-top:0.75rem; display:flex; gap:0.5rem;">
+            <button class="crimson-btn">Generate Report</button>
+            <button class="crimson-btn">Set New Goals</button>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    © 2025 Petra - Cognitive Cloud. 
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    /* -------------------------------------
+       Basic State + Demo Logic
+    -------------------------------------- */
+    const toastContainer = document.getElementById('toastContainer');
+    const chatMessages = document.getElementById('chatMessages');
+    const chatInputField = document.getElementById('chatInputField');
+    const currentYear = new Date().getFullYear();
+
+    // Placeholder: GPT-4 Integration, TTS, STT, etc.
+
+    function showToast(message, type = 'info') {
+      const toast = document.createElement('div');
+      toast.classList.add('toast');
+      toast.innerHTML = message;
+      toastContainer.appendChild(toast);
+      setTimeout(() => {
+        toast.style.animation = 'fadeOut 0.3s forwards';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    function sendMessage() {
+      const userInput = chatInputField.value.trim();
+      if (!userInput) return;
+      // Add user message to chat
+      addChatMessage('You', userInput, 'user');
+      // Clear input
+      chatInputField.value = '';
+      // Fake an AI response
+      setTimeout(() => {
+        const aiResponse = "That's interesting. Let me help you with that!";
+        addChatMessage('Petra', aiResponse, 'petra');
+      }, 1500);
+    }
+
+    function addChatMessage(sender, text, type) {
+      const msg = document.createElement('div');
+      msg.classList.add('message', type);
+      msg.innerHTML = `<strong>${sender}:</strong> ${text}`;
+      chatMessages.appendChild(msg);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Voice Recording Placeholder
+    function recordVoice() {
+      showToast('Voice recording started (placeholder)', 'info');
+      setTimeout(() => {
+        showToast('Voice recording ended (placeholder)', 'info');
+      }, 2000);
+    }
+
+    // Event Listeners
+    document.getElementById('sendMessageBtn').addEventListener('click', sendMessage);
+    chatInputField.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+    document.getElementById('recordVoiceBtn').addEventListener('click', recordVoice);
+
+    // Additional Buttons (placeholders)
+    document.getElementById('startConversationBtn').addEventListener('click', () => {
+      showToast('Start a Conversation action triggered!', 'info');
+    });
+    document.getElementById('translateBtn').addEventListener('click', () => {
+      showToast('Translate action triggered!', 'info');
+    });
+    document.getElementById('practiceVocabBtn').addEventListener('click', () => {
+      showToast('Practice Vocabulary action triggered!', 'info');
+    });
+    document.getElementById('voiceModeBtn').addEventListener('click', () => {
+      showToast('Voice Mode activated (placeholder)', 'info');
+    });
+    document.getElementById('chatModeBtn').addEventListener('click', () => {
+      showToast('Chat Mode is active', 'info');
+    });
+    document.getElementById('listeningModeBtn').addEventListener('click', () => {
+      showToast('Listening Mode activated (placeholder)', 'info');
+    });
+
+    // Example "dynamic" language or level changes
+    document.getElementById('languageSelect').addEventListener('change', (e) => {
+      showToast(`Language changed to: ${e.target.value}`, 'info');
+    });
+    document.getElementById('levelSelect').addEventListener('change', (e) => {
+      showToast(`Level changed to: ${e.target.value}`, 'info');
+    });
+  </script>
+</body>
+</html>
