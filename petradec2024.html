@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="theme-color" content="#A51C30">
+  <title>Petra - Your Polyglot AI</title>
+
+  <!-- Favicon and Apple Icons -->
+  <link rel="icon" href="favicon.png" type="image/png">
+  
+  <!-- Example: Could use external CSS or a framework; here we show a minimal, custom approach -->
+  <style>
+    /* ----------------------------
+       Root + Variables
+    ---------------------------- */
+    :root {
+      --color-primary: #A51C30;
+      --color-secondary: #ed1b34;
+      --color-bg: #ffffff;
+      --color-bg-glass: rgba(255, 255, 255, 0.15);
+      --color-text: #1a1a1a;
+      --backdrop-blur: 20px;
+      --border-radius: 12px;
+      --transition-speed: 0.3s;
+      --box-shadow-light: 0 4px 8px rgba(0, 0, 0, 0.1);
+      --box-shadow-hover: 0 8px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    /* ----------------------------
+       Global Resets
+    ---------------------------- */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+        Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      background: linear-gradient(
+        135deg,
+        var(--color-primary),
+        var(--color-secondary)
+      );
+      color: var(--color-text);
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ----------------------------
+       Glassmorphic Container
+    ---------------------------- */
+    .glass-card {
+      background: var(--color-bg-glass);
+      backdrop-filter: blur(var(--backdrop-blur));
+      -webkit-backdrop-filter: blur(var(--backdrop-blur));
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow-light);
+      transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+    }
+
+    .glass-card:hover {
+      box-shadow: var(--box-shadow-hover);
+      transform: translateY(-2px);
+    }
+
+    /* ----------------------------
+       Header
+    ---------------------------- */
+    header {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: var(--box-shadow-light);
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      padding: 1rem;
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--color-primary);
+    }
+
+    /* Language & Level Selectors */
+    .controls {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    select {
+      padding: 0.4rem 1rem;
+      border-radius: var(--border-radius);
+      border: 1px solid #ccc;
+      font-size: 0.9rem;
+      outline: none;
+      transition: box-shadow var(--transition-speed);
+    }
+
+    select:focus {
+      box-shadow: 0 0 0 2px rgba(165, 28, 48, 0.2);
+      border-color: var(--color-primary);
+    }
+
+    /* ----------------------------
+       Main Layout
+    ---------------------------- */
+    main {
+      flex: 1;
+      padding: 1rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    /* Larger screens */
+    @media (min-width: 768px) {
+      .dashboard-grid {
+        grid-template-columns: 2fr 1fr;
+      }
+    }
+
+    /* Example Glass "cards" */
+    .glass-section {
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Quick Start Buttons / Layout */
+    .quick-start {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .quick-start button {
+      background: var(--color-bg-glass);
+      backdrop-filter: blur(var(--backdrop-blur));
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: var(--border-radius);
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      transition: background var(--transition-speed);
+    }
+
+    .quick-start button:hover {
+      background: rgba(255,255,255,0.3);
+    }
+
+    /* Dynamic Learning Modes */
+    .learning-modes {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .learning-modes button {
+      padding: 0.5rem 1rem;
+      border-radius: var(--border-radius);
+      border: 1px solid rgba(255,255,255,0.3);
+      backdrop-filter: blur(var(--backdrop-blur));
+      cursor: pointer;
+    }
+
+    /* "Goals" Section */
+    .goals-list {
+      margin-top: 1rem;
+    }
+    .goals-list li {
+      margin: 0.25rem 0;
+      list-style: inside disc;
+    }
+
+    /* Footer */
+    footer {
+      background: rgba(255, 255, 255, 0.7);
+      text-align: center;
+      padding: 0.5rem;
+      font-size: 0.85rem;
+      color: #444;
+      backdrop-filter: blur(10px);
+    }
+
+    /* ----------------------------
+       Chat Interface
+    ---------------------------- */
+    .chat-interface {
+      display: grid;
+      grid-template-rows: 1fr auto;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      height: 500px;
+      max-height: 60vh;
+      background: #fff;
+    }
+
+    /* Chat messages area */
+    .chat-messages {
+      padding: 1rem;
+      overflow-y: auto;
+      background: linear-gradient(
+        to bottom,
+        rgba(245,245,245,0.2),
+        rgba(255,255,255,0.8)
+      );
+    }
+
+    .message {
+      margin-bottom: 0.5rem;
+      max-width: 70%;
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--border-radius);
+      line-height: 1.4;
+      position: relative;
+    }
+    .message.user {
+      margin-left: auto;
+      background: var(--color-primary);
+      color: #fff;
+    }
+    .message.petra {
+      background: #ffffff;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+
+    /* Chat typing indicator & suggestions */
+    .typing-indicator {
+      font-size: 0.85rem;
+      opacity: 0.75;
+      margin-top: 0.25rem;
+    }
+
+    .chat-suggestions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .chat-suggestions button {
+      background: #f1f1f1;
+      border: 1px solid #ccc;
+      padding: 0.25rem 0.75rem;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: background var(--transition-speed);
+    }
+    .chat-suggestions button:hover {
+      background: #e0e0e0;
+    }
+
+    /* Chat input area */
+    .chat-input {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      padding: 0.5rem;
+      background: #fafafa;
+      border-top: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .chat-input button {
+      padding: 0.5rem 0.75rem;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      border: 1px solid rgba(0,0,0,0.1);
+      transition: background var(--transition-speed);
+    }
+    .chat-input button:hover {
+      background: #f0f0f0;
+    }
+
+    .chat-input input {
+      flex: 1;
+      padding: 0.5rem 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: var(--border-radius);
+      outline: none;
+      font-size: 0.95rem;
+      transition: box-shadow var(--transition-speed);
+    }
+    .chat-input input:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 2px rgba(165, 28, 48, 0.2);
+    }
+
+    /* ----------------------------
+       Vocabulary Builder
+    ---------------------------- */
+    .vocab-section {
+      margin-top: 1rem;
+    }
+
+    .vocab-list {
+      margin-top: 0.75rem;
+    }
+
+    .vocab-item {
+      background: rgba(255,255,255,0.85);
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow-light);
+      margin-bottom: 0.75rem;
+      padding: 0.5rem 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .vocab-item h4 {
+      font-size: 1rem;
+      margin-bottom: 0.25rem;
+      color: var(--color-primary);
+    }
+    .vocab-controls {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .vocab-controls button {
+      border: 1px solid rgba(0,0,0,0.1);
+      background: #fff;
+      padding: 0.25rem 0.5rem;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: background var(--transition-speed);
+    }
+    .vocab-controls button:hover {
+      background: #f2f2f2;
+    }
+
+    /* Progress & Analytics */
+    .progress-bar-container {
+      background: #e2e2e2;
+      border-radius: 999px;
+      height: 8px;
+      width: 100%;
+      margin-top: 0.5rem;
+      overflow: hidden;
+    }
+    .progress-bar {
+      background: var(--color-primary);
+      height: 100%;
+      transition: width 0.4s ease;
+    }
+
+    /* Toast / Notifications */
+    .toast-container {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      z-index: 9999;
+    }
+    .toast {
+      background: #fff;
+      padding: 0.75rem 1rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow-light);
+      border-left: 4px solid var(--color-primary);
+      min-width: 200px;
+      animation: fadeIn var(--transition-speed) ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+
+  </style>
+</head>
+<body>
+  <!-- Toast Container -->
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <!-- Header -->
+  <header>
+    <div class="header-content">
+      <div class="header-title">Petra - Your Polyglot AI</div>
+      <div class="controls">
+        <label for="languageSelect" class="sr-only">Select Language</label>
+        <select id="languageSelect" aria-label="Language selection">
+          <option value="russian" selected>Russian</option>
+          <option value="spanish">Spanish</option>
+          <option value="french">French</option>
+          <option value="german">German</option>
+          <option value="chinese">Chinese</option>
+        </select>
+
+        <label for="levelSelect" class="sr-only">Select Difficulty Level</label>
+        <select id="levelSelect" aria-label="Level selection">
+          <option value="beginner">Beginner</option>
+          <option value="intermediate" selected>Intermediate</option>
+          <option value="advanced">Advanced</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main>
+    <!-- Dashboard Layout -->
+    <div class="dashboard-grid">
+      <!-- Left column (main content) -->
+      <div>
+        <!-- Glass Section: Cards & Quick Start -->
+        <section class="glass-card glass-section">
+          <h2>Welcome Back, <span id="username">Alex</span>! Your Learning Streak: <span id="learningStreak">10</span> Days 🔥</h2>
+          <div style="margin-top:1rem;">
+            <div style="display:flex; gap:1rem; flex-wrap: wrap;">
+              <!-- Example: "Cards" -->
+              <div class="glass-card" style="flex:1; padding:1rem;">
+                <h3>Suggested Lesson</h3>
+                <p>🇷🇺 Daily Conversation</p>
+                <p>🕒 Time: 5 min</p>
+                <button>🔊 Listen</button>
+                <button>🖊️ Practice</button>
+              </div>
+              <div class="glass-card" style="flex:1; padding:1rem;">
+                <h3>Vocabulary Mastery</h3>
+                <div class="progress-bar-container">
+                  <div class="progress-bar" style="width: 75%;"></div>
+                </div>
+                <p>75% Mastery</p>
+              </div>
+              <div class="glass-card" style="flex:1; padding:1rem;">
+                <h3>Grammar Progress</h3>
+                <div class="progress-bar-container">
+                  <div class="progress-bar" style="width: 60%;"></div>
+                </div>
+                <p>60% Completion</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="quick-start">
+            <button id="startConversationBtn">Start a Conversation 🗨️</button>
+            <button id="translateBtn">Translate 🌐</button>
+            <button id="practiceVocabBtn">Practice Vocabulary 📖</button>
+          </div>
+
+          <div class="learning-modes">
+            <button id="voiceModeBtn">🎤 Voice Mode</button>
+            <button id="chatModeBtn">💬 Chat Mode</button>
+            <button id="listeningModeBtn">🎧 Listening Mode</button>
+          </div>
+
+          <div class="goals-list">
+            <h4>Today's Goals:</h4>
+            <ul>
+              <li>Complete 2 Conversations</li>
+              <li>Learn 20 New Words</li>
+              <li>Finish Grammar Exercises</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- Chat Interface Demo -->
+        <section class="glass-section">
+          <h2>Petra - Chat Mode</h2>
+          <div class="chat-interface" id="chatInterface" aria-label="Chat interface">
+            <!-- Chat messages -->
+            <div class="chat-messages" id="chatMessages" role="log" aria-live="polite">
+              <!-- Example messages -->
+              <div class="message petra">
+                <strong>Petra:</strong> Привет! Как я могу помочь тебе сегодня? 😊
+              </div>
+              <div class="message user">
+                <strong>You:</strong> Можешь ли ты перевести "Where is the nearest bookstore?"
+              </div>
+              <div class="message petra">
+                <strong>Petra:</strong> Где находится ближайший книжный магазин?
+                <div class="typing-indicator">Grammar Tip: "находится" is a reflexive verb requiring the prepositional case.</div>
+                <div class="chat-suggestions">
+                  <button>Translate</button>
+                  <button>Correct</button>
+                  <button>Explain</button>
+                  <button>Roleplay</button>
+                </div>
+              </div>
+            </div>
+            <!-- Chat input -->
+            <div class="chat-input">
+              <button id="recordVoiceBtn" aria-label="Record Voice">🗣️</button>
+              <input 
+                type="text"
+                id="chatInputField"
+                placeholder="Type a message..."
+                aria-label="Chat input field"
+              />
+              <button id="sendMessageBtn" aria-label="Send Message">Send ▶️</button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Right column (sidebar) -->
+      <aside>
+        <!-- Vocabulary Builder Section -->
+        <section class="glass-card glass-section vocab-section">
+          <h2>Vocabulary Mastery</h2>
+          <p>Theme: <strong>Daily Life 🇷🇺</strong></p>
+          <div class="vocab-list" id="vocabList">
+            <!-- Example vocab items -->
+            <div class="vocab-item">
+              <div>
+                <h4>Магазин (Store)</h4>
+                <small>Progress: Mastered</small>
+              </div>
+              <div class="vocab-controls">
+                <button>🔊 Listen</button>
+                <button>Quiz Me</button>
+                <button>Use in Sentence</button>
+              </div>
+            </div>
+
+            <div class="vocab-item">
+              <div>
+                <h4>Книжный магазин (Bookstore)</h4>
+                <small>Progress: Learning</small>
+              </div>
+              <div class="vocab-controls">
+                <button>🔊 Listen</button>
+                <button>Quiz Me</button>
+                <button>Use in Sentence</button>
+              </div>
+            </div>
+
+            <div class="vocab-item">
+              <div>
+                <h4>Ближайший (Nearest)</h4>
+                <small>Progress: Unfamiliar</small>
+              </div>
+              <div class="vocab-controls">
+                <button>🔊 Listen</button>
+                <button>Quiz Me</button>
+                <button>Use in Sentence</button>
+              </div>
+            </div>
+          </div>
+          <p>Next Theme: <button>Travel 🚂</button></p>
+        </section>
+
+        <!-- Progress / Analytics -->
+        <section class="glass-card glass-section">
+          <h2>Learning Analytics</h2>
+          <p><strong>Vocabulary:</strong> 80% Mastery</p>
+          <div class="progress-bar-container">
+            <div class="progress-bar" style="width:80%;"></div>
+          </div>
+          <p><strong>Grammar:</strong> 70% Accuracy</p>
+          <div class="progress-bar-container">
+            <div class="progress-bar" style="width:70%;"></div>
+          </div>
+          <p><strong>Listening:</strong> 85% Comprehension</p>
+          <div class="progress-bar-container">
+            <div class="progress-bar" style="width:85%;"></div>
+          </div>
+          <p style="margin-top:0.75rem;">
+            <em>Insights:</em><br>
+            • Focus more on verb conjugations.<br>
+            • Practice listening with native audio clips.
+          </p>
+          <div style="margin-top:0.75rem; display:flex; gap:0.5rem;">
+            <button>Generate Report</button>
+            <button>Set New Goals</button>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    © <span id="currentYear"></span> Petra - Cognitive Cloud. All Rights Reserved.
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    /* -------------------------------------
+       Basic State + Demo Logic
+    -------------------------------------- */
+    const toastContainer = document.getElementById('toastContainer');
+    const chatMessages = document.getElementById('chatMessages');
+    const chatInputField = document.getElementById('chatInputField');
+    const currentYear = document.getElementById('currentYear');
+
+    currentYear.textContent = new Date().getFullYear();
+
+    // Placeholder: GPT-4 Integration, TTS, STT, etc.
+    // In a real application, you'd replace the placeholders with actual API calls.
+
+    function showToast(message, type = 'info') {
+      const toast = document.createElement('div');
+      toast.classList.add('toast');
+      toast.innerHTML = message;
+      toastContainer.appendChild(toast);
+      setTimeout(() => {
+        toast.style.animation = 'fadeOut 0.3s forwards';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    // Simulate sending a message to Petra
+    function sendMessage() {
+      const userInput = chatInputField.value.trim();
+      if (!userInput) return;
+      // Add user message to chat
+      addChatMessage('You', userInput, 'user');
+      // Clear input
+      chatInputField.value = '';
+      // Fake an AI response
+      setTimeout(() => {
+        // Placeholder for GPT-4 or AI response
+        const aiResponse = "That's interesting. Let me help you with that!";
+        addChatMessage('Petra', aiResponse, 'petra');
+      }, 1500);
+    }
+
+    function addChatMessage(sender, text, type) {
+      const msg = document.createElement('div');
+      msg.classList.add('message', type);
+      msg.innerHTML = `<strong>${sender}:</strong> ${text}`;
+      chatMessages.appendChild(msg);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Voice Recording Placeholder
+    // Replace with actual getUserMedia + SpeechRecognition
+    function recordVoice() {
+      showToast('Voice recording started (placeholder)', 'info');
+      // Simulate voice input
+      setTimeout(() => {
+        showToast('Voice recording ended (placeholder)', 'info');
+      }, 2000);
+    }
+
+    // Event Listeners
+    document.getElementById('sendMessageBtn').addEventListener('click', sendMessage);
+    chatInputField.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+    document.getElementById('recordVoiceBtn').addEventListener('click', recordVoice);
+
+    // Additional Buttons (placeholders)
+    document.getElementById('startConversationBtn').addEventListener('click', () => {
+      showToast('Start a Conversation action triggered!', 'info');
+    });
+    document.getElementById('translateBtn').addEventListener('click', () => {
+      showToast('Translate action triggered!', 'info');
+    });
+    document.getElementById('practiceVocabBtn').addEventListener('click', () => {
+      showToast('Practice Vocabulary action triggered!', 'info');
+    });
+    document.getElementById('voiceModeBtn').addEventListener('click', () => {
+      showToast('Voice Mode activated (placeholder)', 'info');
+    });
+    document.getElementById('chatModeBtn').addEventListener('click', () => {
+      showToast('Chat Mode is active', 'info');
+    });
+    document.getElementById('listeningModeBtn').addEventListener('click', () => {
+      showToast('Listening Mode activated (placeholder)', 'info');
+    });
+
+    // Example "dynamic" language or level changes
+    document.getElementById('languageSelect').addEventListener('change', (e) => {
+      showToast(`Language changed to: ${e.target.value}`, 'info');
+    });
+    document.getElementById('levelSelect').addEventListener('change', (e) => {
+      showToast(`Level changed to: ${e.target.value}`, 'info');
+    });
+  </script>
+</body>
+</html>
