@@ -173,20 +173,38 @@
             color: var(--blue);
         }
 
-        /* Case Studies Section */
-        .case-studies {
-            background: var(--black);
-            color: var(--white);
-            padding: 6rem 2rem;
-        }
+      /* Case Studies Section Update */
+.case-studies {
+    background: var(--black);
+    color: var(--white);
+    padding: 6rem 2rem;
+}
 
-        .case-study-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
-        }
+.case-studies .service-card {
+    background: var(--white);
+    color: var(--black); /* Ensuring text is black */
+}
 
+.case-studies .service-card h3 {
+    color: var(--black);
+    margin-bottom: 1rem;
+}
+
+.case-studies .service-card p {
+    color: var(--black);
+    opacity: 0.9;
+}
+
+/* Optional: Add a subtle border to make cards stand out more against dark background */
+.case-studies .service-card {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Enhance hover effect for better visibility on dark background */
+.case-studies .service-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
         /* Contact Form */
         .contact-form {
             max-width: 600px;
