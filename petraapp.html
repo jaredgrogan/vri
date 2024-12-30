@@ -112,21 +112,26 @@
       } /* Cycle starts and ends with Portugal */
     }
 
-    /* Invisible container to stabilize typed text layout */
-    .typed-text-stabilizer {
-      /* Big enough to hold the largest typed phrase */
-      min-height: 60px; 
-      /* No internal padding as requested */
-      padding: 0; 
-      margin: 0;
-      position: relative;
-      overflow: hidden;
+    /* Glassmorphic container fixed width for typing and companion text */
+    .glass-container-fixed {
+      /* Fixed width to accommodate longest text */
+      width: 350px;
+      /* Blurred glassmorphic background */
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      /* Fixed height to prevent layout shifts */
+      height: 100px;
+      /* Center content */
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
+      /* Prevent shrinking */
+      flex-shrink: 0;
     }
 
-    /* Typed text 10% smaller than previous ~36px */
+    /* Typed text 10% smaller than previous ~40px to ~36px */
     .typing-container {
       font-size: 36px; 
       font-weight: bold;
@@ -137,6 +142,13 @@
       color: transparent;
       letter-spacing: 0.15em;
       white-space: nowrap;
+    }
+
+    /* "Your Multilingual Companion" is now 10% larger than previous ~30px to ~33px and bold */
+    .multilingual-companion {
+      font-size: 33px;
+      font-weight: bold;
+      color: white;
     }
 
     .hidden-text {
@@ -207,21 +219,6 @@
     svg defs {
       display: none;
     }
-
-    /* New Glassmorphic Container for Typing Animation and Text */
-    .typing-glass-container {
-      background: rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(15px);
-      border-radius: 16px;
-      padding: 1.5rem 3rem; /* Increased padding for larger content */
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: fit-content; /* Adjusts width to fit content */
-      max-width: 100%; /* Ensures responsiveness */
-    }
   </style>
 </head>
 <body class="bg-gray-50">
@@ -232,8 +229,8 @@
   <header class="fixed w-full bg-white/90 backdrop-blur-sm shadow-sm z-50">
     <div class="max-w-7xl mx-auto px-4 py-6">
       <div class="flex justify-center md:justify-between items-center">
-        <!-- PETRA with shimmer and uppercase, bold, 20% larger -->
-        <h1 class="text-5xl font-bold shimmer-text">PETRA</h1>
+        <!-- PETRA with shimmer and uppercase, bold, 5% smaller -->
+        <h1 class="text-[45px] font-bold shimmer-text">PETRA</h1>
         <div class="text-center md:text-right mt-4 md:mt-0">
           <p class="text-xl text-gray-300">Investment Prospectus 2024</p>
           <p class="text-sm text-gray-400">COGNITIVE CLOUD</p>
@@ -259,16 +256,14 @@
           </p>
         </div>
 
-        <!-- Glassmorphic Container for Typing Animation and Text -->
-        <div class="text-center space-y-6 w-full flex flex-col items-center">
-          <div class="typing-glass-container">
-            <div class="typed-text-stabilizer">
-              <div class="typing-container brand-gradient" id="typingText">
-                <!-- Dynamically typed text goes here -->
-              </div>
+        <!-- Glassmorphic container fixed width for typing and companion text -->
+        <div class="flex justify-center items-center">
+          <div class="glass-container-fixed">
+            <div class="typing-container brand-gradient" id="typingText">
+              <!-- Dynamically typed text goes here -->
             </div>
-            <!-- 'Your Multilingual Companion' is now 15% bigger and bold -->
-            <p class="text-white text-[35px] font-bold mt-4">Your Multilingual Companion</p>
+            <!-- 'Your Multilingual Companion' is now 10% larger and bold -->
+            <p class="multilingual-companion">Your Multilingual Companion</p>
           </div>
         </div>
       </div>
@@ -435,7 +430,7 @@
                   fill="currentColor"
                 >
                   <defs>
-                    <linearGradient id="hoverGradientGitHub" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <linearGradient id="hoverGradient" x1="0%" y1="0%" x2="100%" y2="0%">
                       <stop offset="0%" style="stop-color:var(--brand-primary);stop-opacity:1" />
                       <stop offset="100%" style="stop-color:var(--brand-secondary);stop-opacity:1" />
                     </linearGradient>
@@ -451,7 +446,7 @@
                     3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 
                     1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576
                     C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"
-                    fill="url(#hoverGradientGitHub)"
+                    fill="url(#hoverGradient)"
                   />
                 </svg>
               </a>
@@ -463,7 +458,7 @@
                   fill="currentColor"
                 >
                   <defs>
-                    <linearGradient id="hoverGradientTwitter" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <linearGradient id="hoverGradient" x1="0%" y1="0%" x2="100%" y2="0%">
                       <stop offset="0%" style="stop-color:var(--brand-primary);stop-opacity:1" />
                       <stop offset="100%" style="stop-color:var(--brand-secondary);stop-opacity:1" />
                     </linearGradient>
@@ -472,7 +467,7 @@
                     d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 
                     21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 
                     17.52h1.833L7.084 4.126H5.117z"
-                    fill="url(#hoverGradientTwitter)"
+                    fill="url(#hoverGradient)"
                   />
                 </svg>
               </a>
@@ -484,7 +479,7 @@
                   fill="currentColor"
                 >
                   <defs>
-                    <linearGradient id="hoverGradientLinkedIn" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <linearGradient id="hoverGradient" x1="0%" y1="0%" x2="100%" y2="0%">
                       <stop offset="0%" style="stop-color:var(--brand-primary);stop-opacity:1" />
                       <stop offset="100%" style="stop-color:var(--brand-secondary);stop-opacity:1" />
                     </linearGradient>
@@ -500,7 +495,7 @@
                     0 .774 0 1.729v20.542C0 23.227.792 24 1.771 
                     24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 
                     .774 23.2 0 22.222 0h.003z"
-                    fill="url(#hoverGradientLinkedIn)"
+                    fill="url(#hoverGradient)"
                   />
                 </svg>
               </a>
