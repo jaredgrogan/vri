@@ -54,7 +54,7 @@
 
         body {
             min-height: 100vh;
-            background: url('petra2.png') no-repeat center center fixed;
+            background: url('petra.png') no-repeat center center fixed;
             background-size: cover;
             color: var(--text-color);
             display: flex;
@@ -119,12 +119,17 @@
         }
 
         .brand-subtitle {
-            color: white; /* Always white */
+            color: black; /* Day mode: Black */
             font-size: 1rem;
             opacity: 0;
             animation: fadeIn 1.5s forwards;
             animation-delay: 0.5s;
             white-space: nowrap;
+            transition: color 0.3s;
+        }
+
+        [data-theme="dark"] .brand-subtitle {
+            color: white; /* Night mode: White */
         }
 
         .header-controls {
@@ -231,9 +236,13 @@
         .input-stats {
             display: flex;
             gap: 1.5rem;
-            color: var(--text-color);
+            /* color: var(--text-color); */ /* Removed to override span colors */
             font-size: 0.875rem;
             margin-bottom: 2rem;
+        }
+
+        .input-stats span {
+            color: white; /* Always white */
         }
 
         .timer-display {
@@ -1191,7 +1200,7 @@
             // Settings panel handlers
             const settingsButton = document.getElementById('settingsButton');
             const settingsPanel = document.getElementById('settingsPanel');
-            const overlay = document.getElementById('overlay'); // Removed overlay element
+            // const overlay = document.getElementById('overlay'); // Removed overlay element
             const speedSelect = document.getElementById('speedSelect');
             const speedValue = document.getElementById('speedValue');
 
