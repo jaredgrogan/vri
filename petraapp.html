@@ -32,6 +32,7 @@
       -webkit-text-fill-color: transparent;
       color: transparent;
       animation: shimmer 2s linear infinite;
+      font-weight: bold;
     }
     @keyframes shimmer {
       0% {
@@ -82,40 +83,31 @@
       color: white;
     }
     @keyframes cycleImages {
-      0%,
-      11.11% {
+      0%, 11.11% {
         background-image: url("portugal.png");
       }
-      11.11%,
-      22.22% {
+      11.11%, 22.22% {
         background-image: url("china1.png");
       }
-      22.22%,
-      33.33% {
+      22.22%, 33.33% {
         background-image: url("italy.png");
       }
-      33.33%,
-      44.44% {
+      33.33%, 44.44% {
         background-image: url("eiffel.png");
       }
-      44.44%,
-      55.55% {
+      44.44%, 55.55% {
         background-image: url("brazil1.png");
       }
-      55.55%,
-      66.66% {
+      55.55%, 66.66% {
         background-image: url("zermatt.png");
       }
-      66.66%,
-      77.77% {
+      66.66%, 77.77% {
         background-image: url("giza.png");
       }
-      77.77%,
-      88.88% {
+      77.77%, 88.88% {
         background-image: url("russia.png");
       }
-      88.88%,
-      100% {
+      88.88%, 100% {
         background-image: url("portugal.png");
       } /* Cycle starts and ends with Portugal */
     }
@@ -134,11 +126,15 @@
       align-items: center;
     }
 
-    /* Typed text 5% bigger than original ~ 4xl was ~36px; now ~38px */
+    /* Typed text 5% bigger than original ~ 38px to ~40px */
     .typing-container {
-      font-size: 38px; 
+      font-size: 40px; 
       font-weight: bold;
-      color: white;
+      background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
       letter-spacing: 0.15em;
       white-space: nowrap;
     }
@@ -202,9 +198,14 @@
       transition: width 0.3s ease;
     }
 
-    /* Hover gradient color for social icons (filling path) */
-    .social-icons a .social-icon:hover path {
-      fill: var(--brand-secondary);
+    /* Hover gradient color for social icons */
+    .social-icons a:hover .social-icon path {
+      fill: url(#hoverGradient);
+    }
+
+    /* Define the gradient for hover effects */
+    svg defs {
+      display: none;
     }
   </style>
 </head>
@@ -215,10 +216,10 @@
   <!-- Header -->
   <header class="fixed w-full bg-white/90 backdrop-blur-sm shadow-sm z-50">
     <div class="max-w-7xl mx-auto px-4 py-6">
-      <div class="flex justify-between items-center">
-        <!-- PETRA with shimmer and uppercase -->
-        <h1 class="text-4xl shimmer-text">PETRA</h1>
-        <div class="text-right">
+      <div class="flex justify-center md:justify-between items-center">
+        <!-- PETRA with shimmer and uppercase, bold, 20% larger -->
+        <h1 class="text-5xl font-bold shimmer-text">PETRA</h1>
+        <div class="text-center md:text-right mt-4 md:mt-0">
           <p class="text-xl text-gray-300">Investment Prospectus 2024</p>
           <p class="text-sm text-gray-400">COGNITIVE CLOUD</p>
         </div>
@@ -244,14 +245,14 @@
         </div>
 
         <!-- Invisible container for typed text to prevent layout shift -->
-        <div class="text-center space-y-6 w-[130%] -ml-[15%]">
+        <div class="text-center space-y-6 w-full flex flex-col items-center">
           <div class="typed-text-stabilizer">
-            <div class="typing-container" id="typingText">
+            <div class="typing-container brand-gradient" id="typingText">
               <!-- Dynamically typed text goes here -->
             </div>
           </div>
-          <!-- 'Your Multilingual Companion' is now 10% bigger than text-2xl (24px) => ~26px -->
-          <p class="text-white text-[26px]">Your Multilingual Companion</p>
+          <!-- 'Your Multilingual Companion' is now 20% bigger and bold -->
+          <p class="text-white text-[30px] font-bold">Your Multilingual Companion</p>
         </div>
       </div>
     </div>
@@ -398,23 +399,30 @@
   <!-- Footer with additional columns -->
   <footer class="brand-footer py-12">
     <div class="max-w-7xl mx-auto px-4">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
         <!-- Left Column: Copyright -->
-        <div class="text-center md:text-left">
+        <div class="text-center">
           <p>© 2025 COGNITIVE CLOUD</p>
         </div>
 
         <!-- Right Column: Social Connect -->
-        <div class="text-center md:text-right">
-          <div class="footer-section inline-block text-left">
+        <div class="text-center">
+          <div class="footer-section inline-block text-center">
             <h4 class="font-bold mb-2">Connect</h4>
-            <div class="social-icons flex space-x-4">
+            <div class="social-icons flex justify-center space-x-4">
+              <!-- GitHub -->
               <a href="#" aria-label="GitHub">
                 <svg
                   class="social-icon w-6 h-6"
                   viewBox="0 0 24 24"
                   fill="currentColor"
                 >
+                  <defs>
+                    <linearGradient id="hoverGradientGitHub" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" style="stop-color:var(--brand-primary);stop-opacity:1" />
+                      <stop offset="100%" style="stop-color:var(--brand-secondary);stop-opacity:1" />
+                    </linearGradient>
+                  </defs>
                   <path
                     d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 
                     11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416
@@ -426,28 +434,44 @@
                     3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 
                     1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576
                     C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"
+                    fill="currentColor"
                   />
                 </svg>
               </a>
+              <!-- X (formerly Twitter) -->
               <a href="#" aria-label="X (formerly Twitter)">
                 <svg
                   class="social-icon w-6 h-6"
                   viewBox="0 0 24 24"
                   fill="currentColor"
                 >
+                  <defs>
+                    <linearGradient id="hoverGradientTwitter" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" style="stop-color:var(--brand-primary);stop-opacity:1" />
+                      <stop offset="100%" style="stop-color:var(--brand-secondary);stop-opacity:1" />
+                    </linearGradient>
+                  </defs>
                   <path
                     d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 
                     21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 
                     17.52h1.833L7.084 4.126H5.117z"
+                    fill="currentColor"
                   />
                 </svg>
               </a>
+              <!-- LinkedIn -->
               <a href="#" aria-label="LinkedIn">
                 <svg
                   class="social-icon w-6 h-6"
                   viewBox="0 0 24 24"
                   fill="currentColor"
                 >
+                  <defs>
+                    <linearGradient id="hoverGradientLinkedIn" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" style="stop-color:var(--brand-primary);stop-opacity:1" />
+                      <stop offset="100%" style="stop-color:var(--brand-secondary);stop-opacity:1" />
+                    </linearGradient>
+                  </defs>
                   <path
                     d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037
                     -1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046
@@ -459,6 +483,7 @@
                     0 .774 0 1.729v20.542C0 23.227.792 24 1.771 
                     24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 
                     .774 23.2 0 22.222 0h.003z"
+                    fill="currentColor"
                   />
                 </svg>
               </a>
