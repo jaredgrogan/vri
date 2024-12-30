@@ -40,17 +40,17 @@
         }
 
         @keyframes cycleImages {
-            0%, 14% { background-image: url('portugal.png'); }
-            14%, 28% { background-image: url('china.png'); }
-            28%, 42% { background-image: url('germany.png'); }
-            42%, 56% { background-image: url('paris.png'); }
-            56%, 70% { background-image: url('brazil.png'); }
-            70%, 84% { background-image: url('dubai.png'); }
-            84%, 100% { background-image: url('italy.png'); }
+            0%, 14.285% { background-image: url('portugal.png'); }
+            14.285%, 28.571% { background-image: url('china.png'); }
+            28.571%, 42.857% { background-image: url('germany.png'); }
+            42.857%, 57.142% { background-image: url('paris.png'); }
+            57.142%, 71.428% { background-image: url('brazil.png'); }
+            71.428%, 85.714% { background-image: url('dubai.png'); }
+            85.714%, 100% { background-image: url('italy.png'); }
         }
 
         .hero-section {
-            animation: cycleImages 21s infinite;
+            animation: cycleImages 35s infinite;
         }
 
         @keyframes typing {
@@ -81,6 +81,13 @@
             color: white;
         }
 
+        .opportunity-section {
+            background-image: url('petra.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
         .glass-container {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
@@ -239,33 +246,33 @@
     </section>
 
     <!-- Market Opportunity -->
-    <section class="bg-gray-50 py-20">
+    <section class="opportunity-section py-20">
         <div class="max-w-7xl mx-auto px-4">
-            <h3 class="text-3xl font-bold mb-16 text-center">Understanding the Opportunity</h3>
+            <h3 class="text-3xl font-bold mb-16 text-center text-white">Understanding the Opportunity</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                 <div class="space-y-6">
-                    <div class="feature-card p-6">
-                        <h4 class="text-xl font-bold mb-2">Global Understanding Gap</h4>
-                        <p class="text-gray-600">7.5B people need better ways to understand and connect across languages</p>
+                    <div class="glass-container">
+                        <h4 class="text-xl font-bold mb-2 text-white">Global Understanding Gap</h4>
+                        <p class="text-white">7.5B people need better ways to understand and connect across languages</p>
                     </div>
-                    <div class="feature-card p-6">
-                        <h4 class="text-xl font-bold mb-2">Cognitive Support Market</h4>
-                        <p class="text-gray-600">$172B language learning market transforming into cognitive assistance</p>
+                    <div class="glass-container">
+                        <h4 class="text-xl font-bold mb-2 text-white">Cognitive Support Market</h4>
+                        <p class="text-white">$172B language learning market transforming into cognitive assistance</p>
                     </div>
-                    <div class="feature-card p-6">
-                        <h4 class="text-xl font-bold mb-2">Voice-First Future</h4>
-                        <p class="text-gray-600">71% prefer voice interaction for language learning</p>
+                    <div class="glass-container">
+                        <h4 class="text-xl font-bold mb-2 text-white">Voice-First Future</h4>
+                        <p class="text-white">71% prefer voice interaction for language learning</p>
                     </div>
                 </div>
-                <div class="relative">
-                    <div class="text-4xl font-bold mb-6 brand-gradient">
+                <div class="glass-container">
+                    <div class="text-4xl font-bold mb-6 text-white">
                         Understanding as a Service
                     </div>
-                    <p class="text-xl text-gray-600 mb-8">
+                    <p class="text-xl text-white mb-8">
                         Petra transforms cognitive bandwidth into an on-demand resource, making understanding accessible to everyone.
                     </p>
-                    <div class="highlight-text p-4 bg-white rounded-lg shadow-sm">
-                        <p class="text-gray-800">
+                    <div class="p-4 rounded-lg">
+                        <p class="text-white">
                             "The next frontier isn't just learning - it's understanding. Petra makes this possible through personal cognitive companionship."
                         </p>
                     </div>
@@ -281,23 +288,23 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
                 <div class="space-y-6">
                     <div class="feature-card p-6">
-                        <h3 class="text-2xl font-bold mb-4">Voice-First Experience</h3>
-                        <p>Natural conversation with instant voice recognition and response</p>
+                        <h3 class="text-2xl font-bold mb-4">Intelligent Explanations</h3>
+                        <p>Clear breakdowns of grammar, word order, and verb conjugations in any language</p>
                     </div>
                     <div class="feature-card p-6">
-                        <h3 class="text-2xl font-bold mb-4">Real-Time Translation</h3>
-                        <p>Seamless switching between languages during conversation</p>
+                        <h3 class="text-2xl font-bold mb-4">Cross-Language Search</h3>
+                        <p>Search documents in any language using your native language - perfect for legal, academic, or business documents</p>
                     </div>
                     <div class="feature-card p-6">
                         <h3 class="text-2xl font-bold mb-4">Interactive Practice</h3>
-                        <p>Natural dialogue with immediate feedback and correction</p>
+                        <p>Natural dialogue with immediate explanations and corrections</p>
                     </div>
                 </div>
                 <div class="space-y-8">
                     <h3 class="text-3xl font-bold brand-gradient">The Petra Advantage</h3>
-                    <p class="text-xl">Your portable multilingual tutor available 24/7</p>
+                    <p class="text-xl">Your multilingual tutor and document assistant</p>
                     <div class="highlight-text p-6 bg-white rounded-lg">
-                        <p class="text-lg">Practice multiple languages naturally through conversation, whenever and wherever you need.</p>
+                        <p class="text-lg">Break through language barriers with intelligent explanations and cross-language document understanding</p>
                     </div>
                 </div>
             </div>
