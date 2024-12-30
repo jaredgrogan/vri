@@ -1,358 +1,546 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Petra.chat - Understanding Without Borders</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
-    <style>
-        :root {
-            --brand-primary: #A51C30;      /* Original Red */
-            --brand-secondary: #ed1b34;    /* Original Red Shade */
-            --brand-deep: #2A0A0F;
-            --accent-gold: #D4AF37;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Petra.chat - Understanding Without Borders</title>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"
+  />
+  <style>
+    :root {
+      --brand-primary: #A51C30;      /* Original Red */
+      --brand-secondary: #ed1b34;    /* Original Red Shade */
+      --brand-deep: #2A0A0F;
+      --accent-gold: #D4AF37;
+    }
 
-        /* Brand styles */
-        .brand-footer {
-            background: white !important; /* Changed to white */
-        }
-        
-        .brand-footer p {
-            color: black !important; /* Changed to black */
-        }
+    /* Shimmer Effect for PETRA */
+    .shimmer-text {
+      display: inline-block;
+      text-transform: uppercase;
+      background: linear-gradient(
+        90deg,
+        var(--brand-primary),
+        var(--brand-secondary),
+        var(--brand-primary)
+      );
+      background-size: 200%;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      animation: shimmer 2s linear infinite;
+    }
+    @keyframes shimmer {
+      0% {
+        background-position: 0% 50%;
+      }
+      100% {
+        background-position: 200% 50%;
+      }
+    }
 
-        .brand-gradient {
-            background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+    /* Brand styles */
+    .brand-footer {
+      background: white !important; /* Footer background changed to white */
+    }
+    .brand-footer p {
+      color: black !important; /* Footer text changed to black */
+    }
 
-        /* New Class for Solid Brand Text */
-        .brand-text {
-            color: var(--brand-primary);
-        }
+    .brand-gradient {
+      background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
 
-        .feature-card {
-            border-radius: 16px;
-            background: white;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(0,0,0,0.1);
-        }
+    /* Solid Brand Text (If needed for other elements) */
+    .brand-text {
+      color: var(--brand-primary);
+    }
 
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
-        }
+    .feature-card {
+      border-radius: 16px;
+      background: white;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
 
-        .vision-section {
-            background-color: #2a2a2a; /* Dark fallback color for better contrast */
-            background: linear-gradient(135deg, var(--brand-deep), var(--brand-primary)), #1e1e1e; /* Maintain the gradient as a backup */
-            animation: cycleImages 50s infinite; /* Increased duration for slower cycle */
-            background-size: cover;
-            background-position: center;
-            color: white;
-        }
-        @keyframes cycleImages {
-            0%, 11.11% { background-image: url('portugal.png'); }
-            11.11%, 22.22% { background-image: url('china1.png'); }
-            22.22%, 33.33% { background-image: url('italy.png'); }
-            33.33%, 44.44% { background-image: url('eiffel.png'); }
-            44.44%, 55.55% { background-image: url('brazil1.png'); }
-            55.55%, 66.66% { background-image: url('zermatt.png'); }
-            66.66%, 77.77% { background-image: url('giza.png'); }
-            77.77%, 88.88% { background-image: url('russia.png'); }
-            88.88%, 100% { background-image: url('portugal.png'); } /* Added portugal.png at the end */
-        }
+    .vision-section {
+      /* Fallback color changed from #2a2a2a to black */
+      background-color: black;
+      background: linear-gradient(135deg, var(--brand-deep), var(--brand-primary)), black;
+      animation: cycleImages 50s infinite; /* Slowed down for smoother cycling */
+      background-size: cover;
+      background-position: center;
+      color: white;
+    }
+    @keyframes cycleImages {
+      0%,
+      11.11% {
+        background-image: url("portugal.png");
+      }
+      11.11%,
+      22.22% {
+        background-image: url("china1.png");
+      }
+      22.22%,
+      33.33% {
+        background-image: url("italy.png");
+      }
+      33.33%,
+      44.44% {
+        background-image: url("eiffel.png");
+      }
+      44.44%,
+      55.55% {
+        background-image: url("brazil1.png");
+      }
+      55.55%,
+      66.66% {
+        background-image: url("zermatt.png");
+      }
+      66.66%,
+      77.77% {
+        background-image: url("giza.png");
+      }
+      77.77%,
+      88.88% {
+        background-image: url("russia.png");
+      }
+      88.88%,
+      100% {
+        background-image: url("portugal.png");
+      } /* Cycle starts and ends with Portugal */
+    }
 
-        .typing-container {
-            display: inline-block;
-            overflow: hidden;
-            white-space: nowrap;
-            margin: 0 auto;
-            letter-spacing: .15em;
-            transform: scale(0.9); /* Reduced size by 10% */
-        }
+    /* Invisible container to stabilize typed text layout */
+    .typed-text-stabilizer {
+      /* Big enough to hold the largest typed phrase */
+      min-height: 60px; 
+      /* No internal padding as requested */
+      padding: 0; 
+      margin: 0;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-        .hidden-text {
-            visibility: hidden;
-            height: 0;
-            margin: 0;
-            padding: 0;
-        }
+    /* Typed text 5% bigger than original ~ 4xl was ~36px; now ~38px */
+    .typing-container {
+      font-size: 38px; 
+      font-weight: bold;
+      color: white;
+      letter-spacing: 0.15em;
+      white-space: nowrap;
+    }
 
-        .join-vision-section {
-            background-image: url('petra2.png');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            color: white;
-        }
+    .hidden-text {
+      visibility: hidden;
+      height: 0;
+      margin: 0;
+      padding: 0;
+    }
 
-        .opportunity-section {
-            background-image: url('petra.png');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
-        
-        .glass-container {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
+    .join-vision-section {
+      background-image: url("petra2.png");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: white;
+    }
 
-        .highlight-text {
-            border-left: 4px solid var(--accent-gold);
-            padding-left: 1rem;
-        }
+    .opportunity-section {
+      background-image: url("petra.png");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
 
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+    .glass-container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
 
-        .animate-fade-up {
-            animation: fadeUp 0.6s ease forwards;
-        }
+    .highlight-text {
+      border-left: 4px solid var(--accent-gold);
+      padding-left: 1rem;
+    }
 
-        .progress-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 3px;
-            background: var(--brand-primary);
-            z-index: 1000;
-            transition: width 0.3s ease;
-        }
-    </style>
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .animate-fade-up {
+      animation: fadeUp 0.6s ease forwards;
+    }
+
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: var(--brand-primary);
+      z-index: 1000;
+      transition: width 0.3s ease;
+    }
+
+    /* Hover gradient color for social icons (filling path) */
+    .social-icons a .social-icon:hover path {
+      fill: var(--brand-secondary);
+    }
+  </style>
 </head>
 <body class="bg-gray-50">
-    <!-- Progress Bar -->
-    <div class="progress-bar" id="progressBar"></div>
+  <!-- Progress Bar -->
+  <div class="progress-bar" id="progressBar"></div>
 
-    <!-- Header -->
-    <header class="fixed w-full bg-white/90 backdrop-blur-sm shadow-sm z-50">
-        <div class="max-w-7xl mx-auto px-4 py-6">
-            <div class="flex justify-between items-center">
-                <h1 class="text-4xl font-bold brand-text">Petra</h1> <!-- Removed Gradient -->
-                <div class="text-right">
-                    <p class="text-xl text-gray-300">Investment Prospectus 2024</p>
-                    <p class="text-sm text-gray-400">COGNITIVE CLOUD</p>
-                </div>
-            </div>
+  <!-- Header -->
+  <header class="fixed w-full bg-white/90 backdrop-blur-sm shadow-sm z-50">
+    <div class="max-w-7xl mx-auto px-4 py-6">
+      <div class="flex justify-between items-center">
+        <!-- PETRA with shimmer and uppercase -->
+        <h1 class="text-4xl shimmer-text">PETRA</h1>
+        <div class="text-right">
+          <p class="text-xl text-gray-300">Investment Prospectus 2024</p>
+          <p class="text-sm text-gray-400">COGNITIVE CLOUD</p>
         </div>
-    </header>
+      </div>
+    </div>
+  </header>
 
-    <!-- Hero Section -->
-    <section class="vision-section min-h-screen flex items-center pt-24">
-        <div class="max-w-7xl mx-auto px-4 py-16">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                <div class="space-y-8 animate-fade-up glass-container">
-                    <h2 class="text-6xl font-bold leading-tight text-white">Understanding Without Borders</h2>
-                    <div class="highlight-text">
-                        <p class="text-2xl opacity-90 text-white">Your Personal Cognitive Companion</p>
-                    </div>
-                    <p class="text-xl opacity-80 text-white">Transforming language and cultural understanding through 1:1 AI companionship</p>
-                </div>
-                <!-- Removed the glass-container around the typing text -->
-                <div class="text-center space-y-6 w-[130%] -ml-[15%]"> <!-- Removed glass-container class -->
-                    <div class="typing-container text-4xl font-bold text-white" id="typingText">1:1</div> <!-- Reduced text size by 10% -->
-                    <div class="hidden-text text-5xl font-bold">
-                        Hi, I'm Petra مرحبا انا بترا 你好，我是佩特拉 Bonjour, je suis Petra Ciao, sono Petra Hallo, ich bin Petra Olá, eu sou Petra Привет, я Петра Hola, soy Petra
-                    </div>
-                    <p class="text-2xl text-white">Your Multilingual Companion</p> <!-- Placed directly on the image -->
-                </div>
-            </div>
+  <!-- Hero Section -->
+  <section class="vision-section min-h-screen flex items-center pt-24">
+    <div class="max-w-7xl mx-auto px-4 py-16">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div class="space-y-8 animate-fade-up glass-container">
+          <h2 class="text-6xl font-bold leading-tight text-white">
+            Understanding Without Borders
+          </h2>
+          <div class="highlight-text">
+            <!-- Changed to 'Your Personal Polyglot' -->
+            <p class="text-2xl opacity-90 text-white">Your Personal Polyglot</p>
+          </div>
+          <p class="text-xl opacity-80 text-white">
+            Transforming language and cultural understanding through 1:1 AI companionship
+          </p>
         </div>
-    </section>
 
-    <!-- Value Proposition -->
-    <section class="bg-white py-20">
-        <div class="max-w-7xl mx-auto px-4">
-            <h3 class="text-3xl font-bold mb-16 text-center">The Cognitive Cloud Advantage</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="feature-card p-8">
-                    <div class="text-2xl font-bold mb-4 brand-gradient">Personal Connection</div>
-                    <p class="text-gray-600">
-                        A dedicated AI companion that adapts to your learning style, personality, and goals.
-                    </p>
-                </div>
-                <div class="feature-card p-8">
-                    <div class="text-2xl font-bold mb-4 brand-gradient">Cognitive Enhancement</div>
-                    <p class="text-gray-600">
-                        On-demand cognitive support that helps you think, understand, and communicate in new languages.
-                    </p>
-                </div>
-                <div class="feature-card p-8">
-                    <div class="text-2xl font-bold mb-4 brand-gradient">Natural Interaction</div>
-                    <p class="text-gray-600">
-                        Voice-first interface that makes learning feel like speaking with a friend.
-                    </p>
-                </div>
+        <!-- Invisible container for typed text to prevent layout shift -->
+        <div class="text-center space-y-6 w-[130%] -ml-[15%]">
+          <div class="typed-text-stabilizer">
+            <div class="typing-container" id="typingText">
+              <!-- Dynamically typed text goes here -->
             </div>
+          </div>
+          <!-- 'Your Multilingual Companion' is now 10% bigger than text-2xl (24px) => ~26px -->
+          <p class="text-white text-[26px]">Your Multilingual Companion</p>
         </div>
-    </section>
+      </div>
+    </div>
+  </section>
 
-    <!-- Market Opportunity -->
-    <section class="opportunity-section py-20">
-        <div class="max-w-7xl mx-auto px-4">
-            <h3 class="text-3xl font-bold mb-16 text-center text-white">Understanding the Opportunity</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                <div class="space-y-6">
-                    <div class="glass-container">
-                        <h4 class="text-xl font-bold mb-2 text-white">Global Understanding Gap</h4>
-                        <p class="text-white">7.5B people need better ways to understand and connect across languages</p>
-                    </div>
-                    <div class="glass-container">
-                        <h4 class="text-xl font-bold mb-2 text-white">Cognitive Support Market</h4>
-                        <p class="text-white">$172B language learning market transforming into cognitive assistance</p>
-                    </div>
-                    <div class="glass-container">
-                        <h4 class="text-xl font-bold mb-2 text-white">Voice-First Future</h4>
-                        <p class="text-white">71% prefer voice interaction for language learning</p>
-                    </div>
-                </div>
-                <div class="glass-container">
-                    <div class="text-4xl font-bold mb-6 text-white">
-                        Understanding as a Service
-                    </div>
-                    <p class="text-xl text-white mb-8">
-                        Petra transforms cognitive bandwidth into an on-demand resource, making understanding accessible to everyone.
-                    </p>
-                    <div class="p-4 rounded-lg">
-                        <p class="text-white">
-                            "The next frontier isn't just learning - it's understanding. Petra makes this possible through personal cognitive companionship."
-                        </p>
-                    </div>
-                </div>
+  <!-- Value Proposition -->
+  <!-- 'The Cognitive Cloud Advantage' => 20% bigger than 'text-3xl' => text-4xl -->
+  <section class="bg-white py-20">
+    <div class="max-w-7xl mx-auto px-4">
+      <h3 class="text-4xl font-bold mb-16 text-center">
+        The Cognitive Cloud Advantage
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="feature-card p-8">
+          <div class="text-2xl font-bold mb-4 brand-gradient">
+            Personal Connection
+          </div>
+          <p class="text-gray-600">
+            A dedicated AI companion that adapts to your learning style, personality, and goals.
+          </p>
+        </div>
+        <div class="feature-card p-8">
+          <div class="text-2xl font-bold mb-4 brand-gradient">
+            Cognitive Enhancement
+          </div>
+          <p class="text-gray-600">
+            On-demand cognitive support that helps you think, understand, and communicate in new languages.
+          </p>
+        </div>
+        <div class="feature-card p-8">
+          <div class="text-2xl font-bold mb-4 brand-gradient">
+            Natural Interaction
+          </div>
+          <p class="text-gray-600">
+            Voice-first interface that makes learning feel like speaking with a friend.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Market Opportunity -->
+  <!-- 'Understanding the Opportunity' => 20% bigger => text-4xl -->
+  <section class="opportunity-section py-20">
+    <div class="max-w-7xl mx-auto px-4">
+      <h3 class="text-4xl font-bold mb-16 text-center text-white">
+        Understanding the Opportunity
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div class="space-y-6">
+          <div class="glass-container">
+            <h4 class="text-xl font-bold mb-2 text-white">Global Understanding Gap</h4>
+            <p class="text-white">
+              7.5B people need better ways to understand and connect across languages
+            </p>
+          </div>
+          <div class="glass-container">
+            <h4 class="text-xl font-bold mb-2 text-white">Cognitive Support Market</h4>
+            <p class="text-white">
+              $172B language learning market transforming into cognitive assistance
+            </p>
+          </div>
+          <div class="glass-container">
+            <h4 class="text-xl font-bold mb-2 text-white">Voice-First Future</h4>
+            <p class="text-white">
+              71% prefer voice interaction for language learning
+            </p>
+          </div>
+        </div>
+        <div class="glass-container">
+          <div class="text-4xl font-bold mb-6 text-white">
+            Understanding as a Service
+          </div>
+          <p class="text-xl text-white mb-8">
+            Petra transforms cognitive bandwidth into an on-demand resource,
+            making understanding accessible to everyone.
+          </p>
+          <div class="p-4 rounded-lg">
+            <p class="text-white">
+              "The next frontier isn't just learning - it's understanding.
+              Petra makes this possible through personal cognitive companionship."
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Technology -->
+  <section class="bg-white py-20">
+    <div class="max-w-7xl mx-auto px-4">
+      <h2 class="text-4xl font-bold mb-16 text-center">Technology Features</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+        <div class="space-y-6">
+          <div class="feature-card p-6">
+            <h3 class="text-2xl font-bold mb-4">Intelligent Explanations</h3>
+            <p>
+              Clear breakdowns of grammar, word order, and verb conjugations in any language
+            </p>
+          </div>
+          <div class="feature-card p-6">
+            <h3 class="text-2xl font-bold mb-4">Cross-Language Search</h3>
+            <p>
+              Search documents in any language using your native language -
+              perfect for legal, academic, or business documents
+            </p>
+          </div>
+          <div class="feature-card p-6">
+            <h3 class="text-2xl font-bold mb-4">Interactive Practice</h3>
+            <p>
+              Natural dialogue with immediate explanations and corrections
+            </p>
+          </div>
+        </div>
+        <div class="space-y-8">
+          <h3 class="text-3xl font-bold brand-gradient">The Petra Advantage</h3>
+          <p class="text-xl">Your multilingual tutor and document assistant</p>
+          <div class="highlight-text p-6 bg-white rounded-lg">
+            <p class="text-lg">
+              Break through language barriers with intelligent explanations and
+              cross-language document understanding
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Join Our Vision Section -->
+  <section class="join-vision-section py-20">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+      <div class="glass-container inline-block">
+        <h2 class="text-5xl font-bold mb-8 text-white">Join Our Vision</h2>
+        <p class="text-2xl mb-12 text-white">Transform how the world understands</p>
+        <button
+          class="bg-white px-8 py-4 rounded-full font-bold transition-all duration-300 transform hover:-translate-y-1 shadow-lg text-lg"
+        >
+          <span class="brand-gradient text-xl font-bold">Contact Us</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer with additional columns -->
+  <footer class="brand-footer py-12">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Left Column: Copyright -->
+        <div class="text-center md:text-left">
+          <p>© 2025 COGNITIVE CLOUD</p>
+        </div>
+
+        <!-- Right Column: Social Connect -->
+        <div class="text-center md:text-right">
+          <div class="footer-section inline-block text-left">
+            <h4 class="font-bold mb-2">Connect</h4>
+            <div class="social-icons flex space-x-4">
+              <a href="#" aria-label="GitHub">
+                <svg
+                  class="social-icon w-6 h-6"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 
+                    11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416
+                    -.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 
+                    1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604
+                    -2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221
+                    -.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 
+                    11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 
+                    3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 
+                    1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576
+                    C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"
+                  />
+                </svg>
+              </a>
+              <a href="#" aria-label="X (formerly Twitter)">
+                <svg
+                  class="social-icon w-6 h-6"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 
+                    21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 
+                    17.52h1.833L7.084 4.126H5.117z"
+                  />
+                </svg>
+              </a>
+              <a href="#" aria-label="LinkedIn">
+                <svg
+                  class="social-icon w-6 h-6"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path
+                    d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037
+                    -1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046
+                    c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 
+                    5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 
+                    0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 
+                    2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 
+                    13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 
+                    0 .774 0 1.729v20.542C0 23.227.792 24 1.771 
+                    24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 
+                    .774 23.2 0 22.222 0h.003z"
+                  />
+                </svg>
+              </a>
             </div>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+  </footer>
 
-    <!-- Core Technology -->
-    <section class="bg-white py-20">
-        <div class="max-w-7xl mx-auto px-4">
-            <h2 class="text-4xl font-bold mb-16 text-center">Technology Features</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                <div class="space-y-6">
-                    <div class="feature-card p-6">
-                        <h3 class="text-2xl font-bold mb-4">Intelligent Explanations</h3>
-                        <p>Clear breakdowns of grammar, word order, and verb conjugations in any language</p>
-                    </div>
-                    <div class="feature-card p-6">
-                        <h3 class="text-2xl font-bold mb-4">Cross-Language Search</h3>
-                        <p>Search documents in any language using your native language - perfect for legal, academic, or business documents</p>
-                    </div>
-                    <div class="feature-card p-6">
-                        <h3 class="text-2xl font-bold mb-4">Interactive Practice</h3>
-                        <p>Natural dialogue with immediate explanations and corrections</p>
-                    </div>
-                </div>
-                <div class="space-y-8">
-                    <h3 class="text-3xl font-bold brand-gradient">The Petra Advantage</h3>
-                    <p class="text-xl">Your multilingual tutor and document assistant</p>
-                    <div class="highlight-text p-6 bg-white rounded-lg">
-                        <p class="text-lg">Break through language barriers with intelligent explanations and cross-language document understanding</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+  <script>
+    // Progress Bar
+    window.onscroll = function () {
+      let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      let height =
+        document.documentElement.scrollHeight -
+        document.documentElement.clientHeight;
+      let scrolled = (winScroll / height) * 100;
+      document.getElementById("progressBar").style.width = scrolled + "%";
+    };
 
-    <!-- Join Our Vision Section -->
-    <section class="join-vision-section py-20">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <div class="glass-container inline-block">
-                <h2 class="text-5xl font-bold mb-8 text-white">Join Our Vision</h2>
-                <p class="text-2xl mb-12 text-white">Transform how the world understands</p>
-                <button class="bg-white px-8 py-4 rounded-full font-bold transition-all duration-300 transform hover:-translate-y-1 shadow-lg text-lg">
-                    <span class="brand-gradient text-xl font-bold">Contact Us</span>
-                </button>
-            </div>
-        </div>
-    </section>
+    // Typing Animation
+    const messages = [
+      "1:1",
+      "Hi, I'm Petra",
+      "مرحبا انا بترا",
+      "你好，我是佩特拉",
+      "Bonjour, je suis Petra",
+      "Ciao, sono Petra",
+      "Hallo, ich bin Petra",
+      "Olá, eu sou Petra",
+      "Привет, я Петра",
+      "Hola, soy Petra"
+    ];
 
-    <!-- Footer -->
-    <footer class="brand-footer py-12">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="text-center">
-                <p class="text-black">© 2025 COGNITIVE CLOUD</p> <!-- Changed text color to black -->
-            </div>
-        </div>
-    </footer>
+    let currentIndex = 0;
+    const typingDelay = 100;
+    const erasingDelay = 50;
+    const newTextDelay = 2000;
+    const typingElement = document.getElementById("typingText");
 
-    <script>
-        // Progress Bar
-        window.onscroll = function() {
-            let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-            let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            let scrolled = (winScroll / height) * 100;
-            document.getElementById("progressBar").style.width = scrolled + "%";
+    function type() {
+      if (currentIndex < messages.length) {
+        const currentText = messages[currentIndex];
+        let charIndex = 0;
+
+        const typeChar = () => {
+          if (charIndex < currentText.length) {
+            typingElement.textContent = currentText.substring(0, charIndex + 1);
+            charIndex++;
+            setTimeout(typeChar, typingDelay);
+          } else {
+            setTimeout(erase, newTextDelay);
+          }
         };
 
-        // Typing Animation
-        const messages = [
-            "1:1",
-            "Hi, I'm Petra",
-            "مرحبا انا بترا",
-            "你好，我是佩特拉",
-            "Bonjour, je suis Petra",
-            "Ciao, sono Petra",
-            "Hallo, ich bin Petra",
-            "Olá, eu sou Petra",
-            "Привет, я Петра",
-            "Hola, soy Petra"
-        ];
-        
-        let currentIndex = 0;
-        const typingDelay = 100;
-        const erasingDelay = 50;
-        const newTextDelay = 2000;
-        const typingElement = document.getElementById('typingText');
-        
-        function type() {
-            if (currentIndex < messages.length) {
-                const currentText = messages[currentIndex];
-                let charIndex = 0;
-                
-                const typeChar = () => {
-                    if (charIndex < currentText.length) {
-                        typingElement.textContent = currentText.substring(0, charIndex + 1);
-                        charIndex++;
-                        setTimeout(typeChar, typingDelay);
-                    } else {
-                        setTimeout(erase, newTextDelay);
-                    }
-                };
-                
-                typeChar();
-            }
+        typeChar();
+      }
+    }
+
+    function erase() {
+      const currentText = messages[currentIndex];
+      let charIndex = currentText.length;
+
+      const eraseChar = () => {
+        if (charIndex > 0) {
+          typingElement.textContent = currentText.substring(0, charIndex - 1);
+          charIndex--;
+          setTimeout(eraseChar, erasingDelay);
+        } else {
+          currentIndex = (currentIndex + 1) % messages.length;
+          setTimeout(type, typingDelay);
         }
-        
-        function erase() {
-            const currentText = messages[currentIndex];
-            let charIndex = currentText.length;
-            
-            const eraseChar = () => {
-                if (charIndex > 0) {
-                    typingElement.textContent = currentText.substring(0, charIndex - 1);
-                    charIndex--;
-                    setTimeout(eraseChar, erasingDelay);
-                } else {
-                    currentIndex = (currentIndex + 1) % messages.length;
-                    setTimeout(type, typingDelay);
-                }
-            };
-            
-            eraseChar();
-        }
-        
-        document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(type, newTextDelay);
-        });
-    </script>
+      };
+
+      eraseChar();
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      // Start the typing animation
+      setTimeout(type, newTextDelay);
+    });
+  </script>
 </body>
 </html>
