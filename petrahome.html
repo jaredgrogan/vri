@@ -1,0 +1,68 @@
+// Progress Bar
+window.onscroll = function() {
+    let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    let scrolled = (winScroll / height) * 100;
+    document.getElementById("progressBar").style.width = scrolled + "%";
+};
+
+// Typing Animation
+const messages = [
+    "1:1",
+    "Hi, I'm Petra",
+    "مرحبا انا بترا",
+    "你好，我是佩特拉",
+    "Bonjour, je suis Petra",
+    "Ciao, sono Petra",
+    "Hallo, ich bin Petra",
+    "Olá, eu sou Petra",
+    "Привет, я Петра",
+    "Hola, soy Petra"
+];
+
+let currentIndex = 0;
+const typingDelay = 100;
+const erasingDelay = 50;
+const newTextDelay = 2000;
+const typingElement = document.getElementById('typingText');
+
+function type() {
+    if (currentIndex < messages.length) {
+        const currentText = messages[currentIndex];
+        let charIndex = 0;
+        
+        const typeChar = () => {
+            if (charIndex < currentText.length) {
+                typingElement.textContent = currentText.substring(0, charIndex + 1);
+                charIndex++;
+                setTimeout(typeChar, typingDelay);
+            } else {
+                setTimeout(erase, newTextDelay);
+            }
+        };
+        
+        typeChar();
+    }
+}
+
+function erase() {
+    const currentText = messages[currentIndex];
+    let charIndex = currentText.length;
+    
+    const eraseChar = () => {
+        if (charIndex > 0) {
+            typingElement.textContent = currentText.substring(0, charIndex - 1);
+            charIndex--;
+            setTimeout(eraseChar, erasingDelay);
+        } else {
+            currentIndex = (currentIndex + 1) % messages.length;
+            setTimeout(type, typingDelay);
+        }
+    };
+    
+    eraseChar();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(type, newTextDelay);
+});
