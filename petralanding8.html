@@ -45,14 +45,14 @@
             box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
         }
 
-        .vision-section {
-            background: linear-gradient(135deg, var(--brand-deep), var(--brand-primary));
-            animation: cycleImages 40s infinite; /* Updated Duration for 8 Images */
-            background-size: cover;
-            background-position: center;
-            color: white;
-        }
-
+.vision-section {
+    background-color: #2a2a2a; /* Dark fallback color for better contrast */
+    background: linear-gradient(135deg, var(--brand-deep), var(--brand-primary)), #2a2a2a; /* Maintain the gradient as a backup */
+    animation: cycleImages 40s infinite;
+    background-size: cover;
+    background-position: center;
+    color: white;
+}
         @keyframes cycleImages {
             0%, 12.5% { background-image: url('portugal.png'); }
             12.5%, 25% { background-image: url('china1.png'); }
