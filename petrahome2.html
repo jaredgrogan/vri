@@ -1,7 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- [Head Content as Above] -->
+<style>
+:root {
+    --brand-primary: #A51C30;      /* Original Red */
+    --brand-secondary: #ed1b34;    /* Original Red Shade */
+    --brand-deep: #2A0A0F;
+    --accent-gold: #D4AF37;
+}
+
+/* Glassmorphic Dark Style */
+.glass-dark {
+    background: rgba(30, 30, 30, 0.5); /* Dark semi-transparent background */
+    backdrop-filter: blur(10px);       /* Blur effect */
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Subtle border */
+}
+
+/* Brand styles */
+.brand-footer {
+    background: rgba(30, 30, 30, 0.5);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.brand-gradient {
+    background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* New Class for Solid Brand Text */
+.brand-text {
+    color: var(--brand-primary);
+}
+
+.feature-card {
+    border-radius: 16px;
+    background: white;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+}
+
+.vision-section {
+    background-color: #2a2a2a; /* Dark fallback color for better contrast */
+    background: linear-gradient(135deg, var(--brand-deep), var(--brand-primary)), #2a2a2a; /* Gradient with fallback */
+    animation: cycleImages 45s infinite; /* Increased duration for smoother transitions */
+    background-size: cover;
+    background-position: center;
+    color: white;
+}
+
+@keyframes cycleImages {
+    0%, 11.11% { background-image: url('portugal.png'); }
+    11.11%, 22.22% { background-image: url('portugal.png'); } /* Duplicated Portugal */
+    22.22%, 33.33% { background-image: url('china1.png'); }
+    33.33%, 44.44% { background-image: url('italy.png'); }
+    44.44%, 55.55% { background-image: url('eiffel.png'); }
+    55.55%, 66.66% { background-image: url('brazil1.png'); }
+    66.66%, 77.77% { background-image: url('zermatt.png'); }
+    77.77%, 88.88% { background-image: url('giza.png'); }
+    88.88%, 100% { background-image: url('russia.png'); } /* Added Russia */
+}
+
+.typing-container {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    margin: 0 auto;
+    letter-spacing: .15em;
+    transform: scale(0.9); /* Reduced size by 10% */
+}
+
+.hidden-text {
+    visibility: hidden;
+    height: 0;
+    margin: 0;
+    padding: 0;
+}
+
+.join-vision-section {
+    background-image: url('petra2.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: white;
+    position: relative;
+}
+
+.opportunity-section {
+    background-image: url('petra.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.glass-container {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.highlight-text {
+    border-left: 4px solid var(--accent-gold);
+    padding-left: 1rem;
+}
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-up {
+    animation: fadeUp 0.6s ease forwards;
+}
+
+.progress-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: var(--brand-primary);
+    z-index: 1000;
+    transition: width 0.3s ease;
+}
+
+/* Footer Positioning to Extend Background Image Smoothly */
+.footer-container {
+    position: relative;
+}
+
+.footer-background {
+    position: absolute;
+    top: -100px; /* Adjust based on the footer height */
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('petra2.png');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.3; /* Adjust opacity for subtlety */
+    z-index: -1;
+}
+</style>
 </head>
 <body class="bg-gray-50">
     <!-- Progress Bar -->
