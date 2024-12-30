@@ -6,11 +6,21 @@
     <title>Petra.chat - Understanding Without Borders</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
     <style>
-        :root {
+        /* Add this to the top of the style block to ensure proper color variables */
+:root {
             --brand-primary: #A51C30;
             --brand-secondary: #ed1b34;
             --brand-deep: #2A0A0F;
             --accent-gold: #D4AF37;
+        }
+
+        /* Define a specific footer style */
+        .brand-footer {
+            background: linear-gradient(90deg, var(--brand-primary), var(--brand-secondary)) !important;
+        }
+        
+        .brand-footer p {
+            color: white !important;
         }
 
         .brand-gradient {
@@ -32,11 +42,11 @@
         }
 
         .vision-section {
+            animation: cycleImages 35s infinite;
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             color: white;
-            transition: background-image 1s ease-in-out;
         }
 
         @keyframes cycleImages {
