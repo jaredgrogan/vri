@@ -112,6 +112,37 @@
 
         .carousel-item {
             scroll-snap-align: start;
+            transition: opacity 0.3s ease;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 24px;
+        }
+
+        .carousel-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #e5e5e5;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .carousel-dot.active {
+            background-color: var(--crimson);
+            transform: scale(1.2);
         }
 
         @media (max-width: 768px) {
@@ -198,13 +229,14 @@
     </section>
 
     <!-- Portfolio Section -->
-    <section id="portfolio" class="py-24 bg-gray-50">
+    <section id="portfolio" class="py-24 bg-white">
         <div class="container mx-auto px-6">
             <h2 class="text-4xl font-bold mb-16 text-center">Our Work</h2>
-            <div class="carousel flex overflow-x-auto gap-8 pb-8">
+            <div class="relative">
+                <div class="carousel flex overflow-x-auto gap-8 pb-8 hide-scrollbar" id="workCarousel">
                 <!-- Portfolio Items -->
                 <div class="carousel-item flex-none w-96">
-                    <div class="bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="bg-white overflow-hidden shadow-lg">
                         <img src="/api/placeholder/400/300" alt="Project 1" class="w-full h-48 object-cover">
                         <div class="p-6">
                             <h3 class="text-xl font-bold mb-2">AI-Powered Analytics Platform</h3>
@@ -213,7 +245,7 @@
                     </div>
                 </div>
                 <div class="carousel-item flex-none w-96">
-                    <div class="bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="bg-white overflow-hidden shadow-lg">
                         <img src="/api/placeholder/400/300" alt="Project 2" class="w-full h-48 object-cover">
                         <div class="p-6">
                             <h3 class="text-xl font-bold mb-2">Enterprise Resource Management</h3>
@@ -222,7 +254,7 @@
                     </div>
                 </div>
                 <div class="carousel-item flex-none w-96">
-                    <div class="bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div class="bg-white overflow-hidden shadow-lg">
                         <img src="/api/placeholder/400/300" alt="Project 3" class="w-full h-48 object-cover">
                         <div class="p-6">
                             <h3 class="text-xl font-bold mb-2">Smart Process Automation</h3>
@@ -230,12 +262,40 @@
                         </div>
                     </div>
                 </div>
+                <div class="carousel-item flex-none w-96">
+                    <div class="bg-white overflow-hidden shadow-lg">
+                        <img src="/api/placeholder/400/300" alt="Project 4" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2">Cloud Infrastructure Optimization</h3>
+                            <p class="text-gray-600">AI-driven cloud resource management and cost optimization</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item flex-none w-96">
+                    <div class="bg-white overflow-hidden shadow-lg">
+                        <img src="/api/placeholder/400/300" alt="Project 5" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2">DevOps Pipeline Automation</h3>
+                            <p class="text-gray-600">Streamlined CI/CD with intelligent testing and deployment</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item flex-none w-96">
+                    <div class="bg-white overflow-hidden shadow-lg">
+                        <img src="/api/placeholder/400/300" alt="Project 6" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2">Machine Learning Operations</h3>
+                            <p class="text-gray-600">End-to-end MLOps platform for model deployment and monitoring</p>
+                        </div>
+                    </div>
+                </div>
             </div>
+            <div class="carousel-dots" id="carouselDots"></div>
         </div>
     </section>
 
     <!-- Developer Section -->
-    <section id="developers" class="py-24 hero-gradient text-white">
+    <section id="developers" class="py-24 text-white" style="background: linear-gradient(135deg, #000000 0%, var(--gold) 100%)">
         <div class="container mx-auto px-6">
             <div class="grid md:grid-cols-2 gap-12 items-center">
                 <div>
@@ -315,6 +375,45 @@
     </footer>
 
     <script>
+        // Carousel functionality
+        const carousel = document.getElementById('workCarousel');
+        const dotsContainer = document.getElementById('carouselDots');
+        const items = carousel.querySelectorAll('.carousel-item');
+        
+        // Create dots
+        items.forEach((_, index) => {
+            const dot = document.createElement('div');
+            dot.classList.add('carousel-dot');
+            if (index === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => scrollToItem(index));
+            dotsContainer.appendChild(dot);
+        });
+
+        // Update dots on scroll
+        let scrollTimeout;
+        carousel.addEventListener('scroll', () => {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(updateDots, 100);
+        });
+
+        function updateDots() {
+            const scrollPosition = carousel.scrollLeft;
+            const itemWidth = items[0].offsetWidth + 32; // Including gap
+            const currentIndex = Math.round(scrollPosition / itemWidth);
+            
+            document.querySelectorAll('.carousel-dot').forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentIndex);
+            });
+        }
+
+        function scrollToItem(index) {
+            const itemWidth = items[0].offsetWidth + 32; // Including gap
+            carousel.scrollTo({
+                left: itemWidth * index,
+                behavior: 'smooth'
+            });
+        }
+
         // Smooth scroll for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
