@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PaloAlto.dev | Elite AI-Driven Development</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --crimson: #8C1515;
+            --gold: #B8860B;
+            --black: #000000;
+            --white: #FFFFFF;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        .animate-slide-in {
+            animation: slideIn 0.8s ease-out forwards;
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, var(--crimson) 0%, #4A0404 100%);
+        }
+
+        .text-gradient {
+            background: linear-gradient(90deg, var(--gold) 0%, #D4AF37 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .card {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .service-card {
+            transition: all 0.3s ease;
+            border: 1px solid rgba(140, 21, 21, 0.1);
+        }
+
+        .service-card:hover {
+            border-color: var(--crimson);
+            transform: scale(1.02);
+        }
+
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--gold);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .custom-btn {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .custom-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.5s ease;
+        }
+
+        .custom-btn:hover::before {
+            left: 100%;
+        }
+
+        .carousel {
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+        }
+
+        .carousel-item {
+            scroll-snap-align: start;
+        }
+
+        @media (max-width: 768px) {
+            .hero-text {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-white text-black">
+    <!-- Navigation -->
+    <nav class="fixed w-full bg-white bg-opacity-90 backdrop-filter backdrop-blur-lg z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="text-2xl font-bold text-crimson">
+                    PaloAlto.dev
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#services" class="nav-link">Services</a>
+                    <a href="#portfolio" class="nav-link">Portfolio</a>
+                    <a href="#developers" class="nav-link">For Developers</a>
+                    <a href="#contact" class="nav-link">Contact</a>
+                </div>
+                <button class="md:hidden focus:outline-none">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient min-h-screen flex items-center relative overflow-hidden">
+        <div class="absolute inset-0">
+            <!-- Background video container -->
+            <div class="absolute inset-0 bg-black bg-opacity-50">
+                <!-- Add your video here -->
+                <video class="w-full h-full object-cover" autoplay loop muted playsinline>
+                    <source src="/path/to/your/video.mp4" type="video/mp4">
+                </video>
+            </div>
+        </div>
+        <div class="container mx-auto px-6 py-24 relative z-10">
+            <div class="max-w-4xl animate-fade-in">
+                <h1 class="text-6xl font-bold text-white mb-6">
+                    Elite AI-Driven Development for the Modern Era
+                </h1>
+                <p class="text-2xl text-gray-200 mb-12">
+                    Bridging Silicon Valley excellence with next-generation development solutions
+                </p>
+                <div class="flex flex-wrap gap-6">
+                    <button class="custom-btn bg-crimson text-white px-8 py-4 rounded-lg text-lg font-semibold">
+                        Partner With Us
+                    </button>
+                    <button class="custom-btn border-2 border-white text-white px-8 py-4 rounded-lg text-lg font-semibold">
+                        Join Our Developer Network
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-24 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold mb-16 text-center">Our Services</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="service-card p-8 rounded-lg">
+                    <i class="fas fa-robot text-4xl text-crimson mb-4"></i>
+                    <h3 class="text-2xl font-bold mb-4">AI Integration</h3>
+                    <p class="text-gray-600">Seamless integration of cutting-edge AI solutions into your existing workflows</p>
+                </div>
+                <div class="service-card p-8 rounded-lg">
+                    <i class="fas fa-code text-4xl text-crimson mb-4"></i>
+                    <h3 class="text-2xl font-bold mb-4">Full-Stack Development</h3>
+                    <p class="text-gray-600">End-to-end development services with modern tech stacks</p>
+                </div>
+                <div class="service-card p-8 rounded-lg">
+                    <i class="fas fa-graduation-cap text-4xl text-crimson mb-4"></i>
+                    <h3 class="text-2xl font-bold mb-4">Developer Training</h3>
+                    <p class="text-gray-600">Elite training programs for emerging tech talent</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="py-24 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold mb-16 text-center">Our Work</h2>
+            <div class="carousel flex overflow-x-auto gap-8 pb-8">
+                <!-- Add your portfolio items here -->
+                <div class="carousel-item flex-none w-96">
+                    <div class="bg-white rounded-lg overflow-hidden shadow-lg">
+                        <img src="/api/placeholder/400/300" alt="Project 1" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold mb-2">AI-Powered Analytics Platform</h3>
+                            <p class="text-gray-600">Advanced data analytics solution with real-time processing</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Add more portfolio items as needed -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Developer Section -->
+    <section id="developers" class="py-24 hero-gradient text-white">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-4xl font-bold mb-6">Join Our Elite Developer Network</h2>
+                    <p class="text-xl mb-8">Connect with innovative projects and accelerate your career growth in AI and full-stack development</p>
+                    <button class="custom-btn bg-white text-crimson px-8 py-4 rounded-lg text-lg font-semibold">
+                        Apply Now
+                    </button>
+                </div>
+                <div class="relative">
+                    <img src="/api/placeholder/600/400" alt="Developers" class="rounded-lg shadow-2xl">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-4xl font-bold mb-16 text-center">Get In Touch</h2>
+                <form class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Name</label>
+                        <input type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-crimson focus:ring focus:ring-crimson focus:ring-opacity-50">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Email</label>
+                        <input type="email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-crimson focus:ring focus:ring-crimson focus:ring-opacity-50">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Message</label>
+                        <textarea rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-crimson focus:ring focus:ring-crimson focus:ring-opacity-50"></textarea>
+                    </div>
+                    <button type="submit" class="w-full custom-btn bg-crimson text-white px-8 py-4 rounded-lg text-lg font-semibold">
+                        Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black text-white py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-2xl font-bold mb-4">PaloAlto.dev</h3>
+                    <p class="text-gray-400">Empowering innovation through elite development solutions</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#portfolio">Portfolio</a></li>
+                        <li><a href="#developers">For Developers</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Connect</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-2xl"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="text-2xl"><i class="fab fa-github"></i></a>
+                        <a href="#" class="text-2xl"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Location</h4>
+                    <p class="text-gray-400">Palo Alto, CA<br>United States</p>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 PaloAlto.dev. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Intersection Observer for fade-in animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-in');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('section > div').forEach((section) => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
