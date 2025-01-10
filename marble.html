@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -307,14 +306,33 @@
         }
 
         /* Footer */
-       footer {
+   footer {
+    position: relative;
     background: linear-gradient(180deg, #000000, #1e1e1e);
     text-align: center;
     padding: 3rem;
     margin-top: 4rem;
     color: var(--white);
+    overflow: hidden; /* Ensures the background doesn't overflow */
 }
 
+footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('marble2.png') no-repeat center center/cover;
+    opacity: 0.5;
+    z-index: 0;
+}
+
+footer p,
+footer .locations {
+    position: relative;
+    z-index: 1; /* Ensures the text appears above the image */
+}
         .locations {
             margin-top: 1rem;
             color: rgba(255, 255, 255, 0.7);
